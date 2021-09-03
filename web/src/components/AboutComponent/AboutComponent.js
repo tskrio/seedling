@@ -1,4 +1,4 @@
-import './aboutComponent.css'
+import './AboutComponent.css'
 const AboutComponent = () => {
   let altText =
     'Find me in ./web/src/components/AboutComponent/AboutComponent.js'
