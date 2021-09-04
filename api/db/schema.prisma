@@ -19,36 +19,7 @@ model User {
   name           String        @default("")
   hashedPassword String        @default("")
   salt           String        @default("")
-  AssignedTask   Task[]        @relation("assignedTo")
   GroupMember    GroupMember[]
-  TaskNote       TaskNote[]
-  CreatedTask    Task[]        @relation("createdBy")
-}
-
-model Task {
-  id                Int        @id @default(autoincrement())
-  createdAt         DateTime   @default(now())
-  createdBy         User       @relation("createdBy", fields: [createdById], references: [id])
-  createdById       Int
-  updatedAt         DateTime   @updatedAt
-  title             String
-  state             String     @default("new")
-  assignedTo        User?      @relation("assignedTo", fields: [assignedToId], references: [id])
-  assignedToId      Int?
-  TaskNote          TaskNote[]
-  assignmentGroup   Group?     @relation(fields: [assignmentGroupId], references: [id])
-  assignmentGroupId Int?
-}
-
-model TaskNote {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  note      String
-  task      Task     @relation(fields: [taskId], references: [id])
-  taskId    Int
-  User      User     @relation(fields: [userId], references: [id])
-  userId    Int
 }
 
 model Group {
@@ -57,7 +28,6 @@ model Group {
   updatedAt   DateTime      @updatedAt
   name        String
   description String
-  Task        Task[]
   GroupMember GroupMember[]
 }
 

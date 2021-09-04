@@ -2,6 +2,9 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import GroupForm from 'src/components/Group/GroupForm'
+import 'src/scaffold.css'
+import 'src/reset.css'
+import 'src/index.css'
 
 const CREATE_GROUP_MUTATION = gql`
   mutation CreateGroupMutation($input: CreateGroupInput!) {
