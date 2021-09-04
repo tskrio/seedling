@@ -7,5 +7,27 @@
   },
   "[prisma]": {
     "editor.formatOnSave": true
+  },
+  "files.exclude": {
+    "**/.idea": true,
+    "**/.DS_Store": true,
+    "**/.env": true,
+    "**/.netlify": true,
+    "**/.redwood": true,
+    "**/dev.db*": true,
+    "**/dist": true,
+    "**/dist-babel": true,
+    "**/node_modules": true,
+    "**/yarn-error.log": true,
+    "web/public/mockServiceWorker.js": true,
+    "web/types/graphql.d.ts": true,
+    "api/types/graphql.d.ts": true,
+    "node_modules/fs-capacitor/**/.DS_Store": true,
+    "node_modules/fs-capacitor/**/node_modules": true,
+    "node_modules/fs-capacitor/**/package-lock.json": true,
+    "node_modules/fs-capacitor/**/npm-debug.log": true,
+    "node_modules/fs-capacitor/**/yarn.lock": true,
+    "node_modules/fs-capacitor/**/yarn-error.log": true,
+    "node_modules/fs-capacitor/**/lib": true
   }
 }
