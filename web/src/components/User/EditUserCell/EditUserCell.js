@@ -8,8 +8,12 @@ export const QUERY = gql`
   query EditUserById($id: Int!) {
     user: user(id: $id) {
       id
+      createdAt
+      updatedAt
       email
       name
+      hashedPassword
+      salt
     }
   }
 `
@@ -17,8 +21,12 @@ const UPDATE_USER_MUTATION = gql`
   mutation UpdateUserMutation($id: Int!, $input: UpdateUserInput!) {
     updateUser(id: $id, input: $input) {
       id
+      createdAt
+      updatedAt
       email
       name
+      hashedPassword
+      salt
     }
   }
 `
@@ -26,7 +34,7 @@ const UPDATE_USER_MUTATION = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className="rw-cell-error">{error.message}</div>
 )
 
 export const Success = ({ user }) => {
@@ -38,6 +46,7 @@ export const Success = ({ user }) => {
   })
 
   const onSave = (input, id) => {
+    console.log('onSave of editusercell.js', input, id)
     updateUser({ variables: { id, input } })
   }
 

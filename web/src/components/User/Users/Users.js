@@ -62,8 +62,12 @@ const UsersList = ({ users }) => {
         <thead>
           <tr>
             <th>Id</th>
-            <th>Name</th>
+            <th>Created at</th>
+            <th>Updated at</th>
             <th>Email</th>
+            <th>Name</th>
+            <th>Hashed password</th>
+            <th>Salt</th>
             <th>&nbsp;</th>
           </tr>
         </thead>
@@ -71,8 +75,12 @@ const UsersList = ({ users }) => {
           {users.map((user) => (
             <tr key={user.id}>
               <td>{truncate(user.id)}</td>
-              <td>{truncate(user.name)}</td>
+              <td>{timeTag(user.createdAt)}</td>
+              <td>{timeTag(user.updatedAt)}</td>
               <td>{truncate(user.email)}</td>
+              <td>{truncate(user.name)}</td>
+              <td>{truncate(user.hashedPassword)}</td>
+              <td>{truncate(user.salt)}</td>
               <td>
                 <nav className="rw-table-actions">
                   <Link

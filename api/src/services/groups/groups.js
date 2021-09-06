@@ -36,8 +36,6 @@ export const deleteGroup = ({ id }) => {
 }
 
 export const Group = {
-  Task: (_obj, { root }) =>
-    db.group.findUnique({ where: { id: root.id } }).Task(),
   GroupMember: (_obj, { root }) =>
     db.group.findUnique({ where: { id: root.id } }).GroupMember(),
 }

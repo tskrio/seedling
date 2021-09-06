@@ -5,7 +5,6 @@ export const schema = gql`
     updatedAt: DateTime!
     name: String!
     description: String!
-    Task: [Task]!
     GroupMember: [GroupMember]!
   }
 

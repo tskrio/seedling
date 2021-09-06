@@ -11,10 +11,9 @@ export const users = () => {
 }
 
 export const user = async ({ id }) => {
-  let result = await db.user.findUnique({
+  return await db.user.findUnique({
     where: { id },
-  });
-  return result;
+  })
 }
 
 export const createUser = ({ input }) => {
@@ -23,15 +22,21 @@ export const createUser = ({ input }) => {
   })
 }
 
-export const updateUser = ({ id, input }) => {
-  return db.user.update({
+export const updateUser = async ({ id, input }) => {
+  return await db.user.update({
     data: input,
     where: { id },
   })
+
 }
 
 export const deleteUser = ({ id }) => {
   return db.user.delete({
     where: { id },
   })
+}
+
+export const User = {
+  GroupMember: (_obj, { root }) =>
+    db.user.findUnique({ where: { id: root.id } }).GroupMember(),
 }

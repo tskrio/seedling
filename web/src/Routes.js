@@ -8,10 +8,9 @@
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
 import { Set, Router, Route, Private } from '@redwoodjs/router'
+import UsersLayout from 'src/layouts/UsersLayout'
 import GroupMembersLayout from 'src/layouts/GroupMembersLayout'
 import GroupsLayout from 'src/layouts/GroupsLayout'
-import TasksLayout from 'src/layouts/TasksLayout'
-import UsersLayout from 'src/layouts/UsersLayout'
 import StandardLayout from './layouts/StandardLayout/StandardLayout'
 
 const Routes = () => {
@@ -23,12 +22,6 @@ const Routes = () => {
         <Route path="/" page={HomePage} name="home" />
         <Route path="/about" page={AboutPage} name="about" />
         <Private unauthenticated="home">
-          <Set wrap={TasksLayout}>
-            <Route path="/tasks/new" page={TaskNewTaskPage} name="newTask" />
-            <Route path="/tasks/{id:Int}/edit" page={TaskEditTaskPage} name="editTask" />
-            <Route path="/tasks/{id:Int}" page={TaskTaskPage} name="task" />
-            <Route path="/tasks" page={TaskTasksPage} name="tasks" />
-          </Set>
           <Set wrap={GroupsLayout}>
             <Route path="/groups/new" page={GroupNewGroupPage} name="newGroup" />
             <Route path="/groups/{id:Int}/edit" page={GroupEditGroupPage} name="editGroup" />

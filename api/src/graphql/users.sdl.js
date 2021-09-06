@@ -1,10 +1,13 @@
 export const schema = gql`
   type User {
     id: Int!
+    createdAt: DateTime!
+    updatedAt: DateTime!
     email: String!
     name: String!
     hashedPassword: String!
     salt: String!
+    GroupMember: [GroupMember]!
   }
 
   type Query {
@@ -14,12 +17,14 @@ export const schema = gql`
 
   input CreateUserInput {
     email: String!
+    name: String!
     hashedPassword: String!
     salt: String!
   }
 
   input UpdateUserInput {
     email: String
+    name: String
     hashedPassword: String
     salt: String
   }

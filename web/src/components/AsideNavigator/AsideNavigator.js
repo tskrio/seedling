@@ -15,9 +15,6 @@ const AsideNavigator = () => {
             <li>
               <Link to={routes.groups()}>Groups</Link>
             </li>
-            <li>
-              <Link to={routes.tasks()}>Tasks</Link>
-            </li>
           </ul>
         </aside>
       )}
