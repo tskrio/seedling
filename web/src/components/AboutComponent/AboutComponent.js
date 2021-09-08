@@ -1,5 +1,5 @@
 //import './AboutComponent.css'
-import styles from './AboutComponent.module.css'
+//import styles from './AboutComponent.module.css'
 const AboutComponent = () => {
   let altText =
     'Find me in ./web/src/components/AboutComponent/AboutComponent.js'
