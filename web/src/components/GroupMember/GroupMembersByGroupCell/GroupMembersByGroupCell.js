@@ -34,7 +34,9 @@ export const QUERY = gql`
 `
 export const Loading = () => <div>Loading...</div>
 
-export const Empty = () => <div>Empty</div>
+export const Empty = () => {
+  return <GroupMembersLayout />
+}
 
 export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
@@ -43,8 +45,9 @@ export const Failure = ({ error }) => (
 export const Success = ({ groupMembers }) => {
   //return <div>{JSON.stringify(groupMembers)}</div>
 
+  let query = `Where group = ${groupMembers[0].group.name}`
   return (
-    <GroupMembersLayout>
+    <GroupMembersLayout query={query}>
       <GroupMembers groupMembers={groupMembers} />
     </GroupMembersLayout>
   )

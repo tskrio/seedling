@@ -1,7 +1,7 @@
 import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 
-const GroupMembersLayout = ({ children }) => {
+const GroupMembersLayout = ({ children, query }) => {
   return (
     <div className="rw-scaffold">
       <Toaster />
@@ -11,6 +11,7 @@ const GroupMembersLayout = ({ children }) => {
             GroupMembers
           </Link>
         </h1>
+        <p>{query}</p>
         <Link
           to={routes.newGroupMember()}
           className="rw-button rw-button-green"

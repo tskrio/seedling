@@ -12,7 +12,15 @@ import { db } from './db'
 //      model accessor ─┘      unique id field name ─┘
 
 export const getCurrentUser = async (session) => {
-  return await db.user.findUnique({ where: { id: session.id } })
+  let foundUser = await db.user.findUnique({ where: { id: session.id } })
+  // TODO: Look up groups for the user
+  // TODO: Look up roles for the groups
+  // TODO: Put that stuff in the returnUser object
+  let returnUser = {
+    ...foundUser,
+    groupRoles: ['admin'], //hard coded for now
+  }
+  return returnUser
 }
 
 export const requireAuth = ({ role } = {}) => {

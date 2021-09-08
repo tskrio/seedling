@@ -8,6 +8,7 @@
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
 import { Set, Router, Route, Private } from '@redwoodjs/router'
+import GroupRolesLayout from 'src/layouts/GroupRolesLayout'
 import UsersLayout from 'src/layouts/UsersLayout'
 import GroupMembersLayout from 'src/layouts/GroupMembersLayout'
 import GroupsLayout from 'src/layouts/GroupsLayout'
@@ -39,6 +40,12 @@ const Routes = () => {
             <Route path="/group-members/{id:Int}/edit" page={GroupMemberEditGroupMemberPage} name="editGroupMember" />
             <Route path="/group-members/{id:Int}" page={GroupMemberGroupMemberPage} name="groupMember" />
             <Route path="/group-members" page={GroupMemberGroupMembersPage} name="groupMembers" />
+          </Set>
+          <Set wrap={GroupRolesLayout}>
+            <Route path="/group-roles/new" page={GroupRoleNewGroupRolePage} name="newGroupRole" />
+            <Route path="/group-roles/{id:Int}/edit" page={GroupRoleEditGroupRolePage} name="editGroupRole" />
+            <Route path="/group-roles/{id:Int}" page={GroupRoleGroupRolePage} name="groupRole" />
+            <Route path="/group-roles" page={GroupRoleGroupRolesPage} name="groupRoles" />
           </Set>
         </Private>
       </Set>

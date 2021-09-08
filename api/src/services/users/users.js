@@ -3,10 +3,20 @@ import { requireAuth } from 'src/lib/auth'
 
 // Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules) => {
-  rules.add(requireAuth)
+  rules.add(() => requireAuth({ role: ['deleteTask', 'admin'] }), {
+    only: ['deletePost'],
+  })
+  rules.add(() => requireAuth({ role: ['createTask'] }), {
+    only: ['createTask'],
+  })
+  rules.add(() => requireAuth({ role: ['readTask'] }), { only: ['readTask'] })
+  rules.add(() => requireAuth({ role: ['updateTask'] }), {
+    only: ['updateTask'],
+  })
 }
 
 export const users = () => {
+  //restrict
   return db.user.findMany()
 }
 
@@ -27,7 +37,6 @@ export const updateUser = async ({ id, input }) => {
     data: input,
     where: { id },
   })
-
 }
 
 export const deleteUser = ({ id }) => {
