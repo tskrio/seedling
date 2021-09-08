@@ -6,7 +6,7 @@ const AboutComponent = () => {
   return (
     <>
       <h1 alt={altText}>What is Tskr</h1>
-      <p className={styles.p}>
+      <p>
         Tskr is a open source, task and asset tracking application built on
         <a href="https://redwoodjs.com">RedwoodJS</a>. Imagine a low-cost task
         and asset tracking system where you define complex rules to execute the
