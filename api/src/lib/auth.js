@@ -12,15 +12,32 @@ import { db } from './db'
 //      model accessor ─┘      unique id field name ─┘
 
 export const getCurrentUser = async (session) => {
-  let foundUser = await db.user.findUnique({ where: { id: session.id } })
-  // TODO: Look up groups for the user
-  // TODO: Look up roles for the groups
-  // TODO: Put that stuff in the returnUser object
-  let returnUser = {
-    ...foundUser,
-    groupRoles: ['admin'], //hard coded for now
+  try {
+    //console.log('in /api/src/lib/auth.js', session)
+    let foundUser = await db.user.findUnique({ where: { id: session.id } })
+/*
+    let foundGroups = await db.group.findMany({
+      include: {
+        GroupRole: true,
+        GroupMember: true
+      }
+    });
+    */
+    //console.log('getCurrentUser foundUser', foundUser)
+    //console.log('getCurrentUser foundGroups', foundGroups)
+    // TODO: Look up groups for the user
+    // TODO: Look up roles for the groups
+    // TODO: Put that stuff in the returnUser object
+    let returnUser = {
+      ...foundUser,
+      groupRoles: ['admin'], //hard coded for now
+    }
+    //console.log('returnUser', returnUser)
+    return returnUser
+    //return session/*returnUser*/
+  } catch (error) {
+     return error
   }
-  return returnUser
 }
 
 export const requireAuth = ({ role } = {}) => {

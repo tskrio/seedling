@@ -7,6 +7,7 @@ export const schema = gql`
     userId: Int!
     group: Group!
     groupId: Int!
+    GroupRole: [GroupRole]
   }
 
   type Query {

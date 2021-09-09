@@ -1,29 +1,30 @@
 import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
+// import { requireAuth } from 'src/lib/auth'
 
 // Used when the environment variable REDWOOD_SECURE_SERVICES=1
-export const beforeResolver = (rules) => {
-  rules.add(() => requireAuth({ role: ['deleteTask', 'admin'] }), {
-    only: ['deletePost'],
-  })
-  rules.add(() => requireAuth({ role: ['createTask'] }), {
-    only: ['createTask'],
-  })
-  rules.add(() => requireAuth({ role: ['readTask'] }), { only: ['readTask'] })
-  rules.add(() => requireAuth({ role: ['updateTask'] }), {
-    only: ['updateTask'],
-  })
+export const beforeResolver = (/*rules*/) => {
+  // rules.add(() => requireAuth({ role: ['deleteTask', 'admin'] }), {
+  //   only: ['deletePost'],
+  // })
+  // rules.add(() => requireAuth({ role: ['createTask'] }), {
+  //   only: ['createTask'],
+  // })
+  // rules.add(() => requireAuth({ role: ['readTask'] }), { only: ['readTask'] })
+  // rules.add(() => requireAuth({ role: ['updateTask'] }), {
+  //   only: ['updateTask'],
+  // })
 }
 
 export const users = () => {
-  //restrict
   return db.user.findMany()
 }
 
 export const user = async ({ id }) => {
-  return await db.user.findUnique({
+  let user = await db.user.findUnique({
     where: { id },
   })
+  console.log('user', user);
+  return user;
 }
 
 export const createUser = ({ input }) => {

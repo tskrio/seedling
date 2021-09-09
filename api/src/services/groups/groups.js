@@ -7,12 +7,21 @@ export const beforeResolver = (rules) => {
 }
 
 export const groups = () => {
-  return db.group.findMany()
+  return db.group.findMany({
+    include: {
+      GroupRole: true,
+      GroupMember: true
+    }
+  })
 }
 
 export const group = ({ id }) => {
   return db.group.findUnique({
     where: { id },
+    include: {
+      GroupRole: true,
+      GroupMember: true
+    }
   })
 }
 

@@ -5,6 +5,7 @@ export const schema = gql`
     updatedAt: DateTime!
     name: String!
     description: String!
+    GroupRole: [GroupRole]
     GroupMember: [GroupMember]!
   }
 

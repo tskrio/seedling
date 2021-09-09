@@ -7,7 +7,11 @@ export const beforeResolver = (rules) => {
 }
 
 export const groupMembers = () => {
-  return db.groupMember.findMany()
+  return db.groupMember.findMany({
+    /*include: {
+      GroupRole: true
+    }*/
+  })
 }
 
 export const groupMembersByGroup = (id) => {

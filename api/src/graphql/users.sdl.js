@@ -7,7 +7,7 @@ export const schema = gql`
     name: String!
     hashedPassword: String!
     salt: String!
-    GroupMember: [GroupMember]!
+    GroupMember: [GroupMember!]
   }
 
   type Query {
