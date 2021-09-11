@@ -15,7 +15,7 @@ export const getCurrentUser = async (session) => {
   try {
     //console.log('in /api/src/lib/auth.js', session)
     let foundUser = await db.user.findUnique({ where: { id: session.id } })
-/*
+    /*
     let foundGroups = await db.group.findMany({
       include: {
         GroupRole: true,
@@ -36,7 +36,7 @@ export const getCurrentUser = async (session) => {
     return returnUser
     //return session/*returnUser*/
   } catch (error) {
-     return error
+    return error
   }
 }
 

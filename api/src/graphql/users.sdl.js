@@ -23,6 +23,7 @@ export const schema = gql`
   }
 
   input UpdateUserInput {
+    # This is whats needed to update a user
     email: String
     name: String
     hashedPassword: String
