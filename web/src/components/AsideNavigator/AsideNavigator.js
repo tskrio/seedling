@@ -1,7 +1,7 @@
 import { Link, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 const AsideNavigator = () => {
-const { isAuthenticated, currentUser, hasRole } = useAuth()
+  const { isAuthenticated, currentUser, hasRole } = useAuth()
   let altText =
     'Find me in ./web/src/components/AsideNavigator/AsideNavigator.js'
   //console.log(altText.split('/')[altText.split.length-1], 'isAuthenticated', isAuthenticated)
@@ -14,11 +14,18 @@ const { isAuthenticated, currentUser, hasRole } = useAuth()
             <li>
               <Link to={routes.users()}>Users</Link>
             </li>
+            {hasRole('groupRead') && (
+              <li>
+                <Link to={routes.groups()}>Groups</Link>
+              </li>
+            )}
+            {hasRole('userRoleRead') && (
+              <li>
+                <Link to={routes.userRoles()}>User Roles</Link>
+              </li>
+            )}
             <li>
-              <Link to={routes.groups()}>Groups</Link>
-            </li>
-            <li>
-            <p>"{JSON.stringify(currentUser)}"</p>
+              <p>"{JSON.stringify(currentUser)}"</p>
             </li>
           </ul>
         </aside>

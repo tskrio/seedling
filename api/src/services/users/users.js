@@ -16,15 +16,23 @@ export const beforeResolver = (/*rules*/) => {
 }
 
 export const users = () => {
-  return db.user.findMany()
+  return db.user.findMany({
+    //include: {
+    //UserRole: true,
+    //GroupMember: true,
+    //},
+  })
 }
 
 export const user = async ({ id }) => {
   let user = await db.user.findUnique({
     where: { id },
+    include: {
+      UserRole: true,
+    },
   })
-  console.log('user', user);
-  return user;
+  console.log('user', user)
+  return user
 }
 
 export const createUser = ({ input }) => {

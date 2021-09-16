@@ -8,8 +8,8 @@ export const schema = gql`
     hashedPassword: String!
     salt: String!
     GroupMember: [GroupMember!]
+    UserRole: [UserRole!]
   }
-
   type Query {
     users: [User!]!
     user(id: Int!): User

@@ -10,8 +10,8 @@ export const groups = () => {
   return db.group.findMany({
     include: {
       GroupRole: true,
-      GroupMember: true
-    }
+      GroupMember: true,
+    },
   })
 }
 
@@ -20,8 +20,8 @@ export const group = ({ id }) => {
     where: { id },
     include: {
       GroupRole: true,
-      GroupMember: true
-    }
+      GroupMember: true,
+    },
   })
 }
 

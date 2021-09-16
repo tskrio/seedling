@@ -15,6 +15,11 @@ export const getCurrentUser = async (session) => {
   try {
     //console.log('in /api/src/lib/auth.js', session)
     let foundUser = await db.user.findUnique({ where: { id: session.id } })
+    let userRoles = await db.userRole.findMany({
+      where: { userId: session.id },
+    })
+    console.log('from auth.js getting roles', userRoles)
+    let roles = userRoles.map((userRole) => userRole.role)
     /*
     let foundGroups = await db.group.findMany({
       include: {
@@ -29,8 +34,8 @@ export const getCurrentUser = async (session) => {
     // TODO: Look up roles for the groups
     // TODO: Put that stuff in the returnUser object
     let returnUser = {
+      roles,
       ...foundUser,
-      groupRoles: ['admin'], //hard coded for now
     }
     //console.log('returnUser', returnUser)
     return returnUser
