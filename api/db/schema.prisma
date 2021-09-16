@@ -22,9 +22,11 @@ model User {
   salt           String        @default("")
   //GroupMember    GroupMember[]
   UserRole       UserRole[]
+  GroupMember    GroupMember[]
 }
 
 enum Role {
+  admin
   taskCreate
   taskRead
   taskUpdate
@@ -41,6 +43,10 @@ enum Role {
   groupMemberRead
   groupMemberUpdate
   groupMemberDelete
+  groupRoleCreate
+  groupRoleRead
+  groupRoleUpdate
+  groupRoleDelete
   userRoleCreate
   userRoleRead
   userRoleUpdate
