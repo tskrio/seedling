@@ -1,7 +1,8 @@
 import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
-
+import { useAuth } from '@redwoodjs/auth'
 const UsersLayout = ({ children }) => {
+  const { isAuthenticated, currentUser, hasRole } = useAuth()
   return (
     <div className="rw-scaffold">
       <Toaster />
@@ -11,9 +12,11 @@ const UsersLayout = ({ children }) => {
             Users
           </Link>
         </h1>
-        <Link to={routes.newUser()} className="rw-button rw-button-green">
-          <div className="rw-button-icon">+</div> New User
-        </Link>
+        {hasRole('userRoleCreate') && (
+          <Link to={routes.newUser()} className="rw-button rw-button-green">
+            <div className="rw-button-icon">+</div> New User
+          </Link>
+        )}
       </header>
       <main className="rw-main">{children}</main>
     </div>

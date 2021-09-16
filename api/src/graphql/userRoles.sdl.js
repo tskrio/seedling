@@ -9,6 +9,7 @@ export const schema = gql`
   }
 
   enum Role {
+    admin
     taskCreate
     taskRead
     taskUpdate
@@ -25,6 +26,10 @@ export const schema = gql`
     groupMemberRead
     groupMemberUpdate
     groupMemberDelete
+    groupRoleCreate
+    groupRoleRead
+    groupRoleUpdate
+    groupRoleDelete
     userRoleCreate
     userRoleRead
     userRoleUpdate

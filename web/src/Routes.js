@@ -25,34 +25,64 @@ const Routes = () => {
         <Route path="/about" page={AboutPage} name="about" />
         <Private unauthenticated="home">
           <Set wrap={UserRolesLayout}>
-            <Route path="/user-roles/new" page={UserRoleNewUserRolePage} name="newUserRole" />
-            <Route path="/user-roles/{id:Int}/edit" page={UserRoleEditUserRolePage} name="editUserRole" />
-            <Route path="/user-roles/{id:Int}" page={UserRoleUserRolePage} name="userRole" />
-            <Route path="/user-roles" page={UserRoleUserRolesPage} name="userRoles" />
+            <Private unauthenticated="home" role={['admin', 'userRoleCreate']}>
+              <Route path="/user-roles/new" page={UserRoleNewUserRolePage} name="newUserRole" role={['admin', 'userRoleCreate']} />
+            </Private>
+            <Private unauthenticated="home" role={['admin', 'userRoleUpdate']}>
+              <Route path="/user-roles/{id:Int}/edit" page={UserRoleEditUserRolePage} name="editUserRole" role={['admin', 'userRoleUpdate']} />
+            </Private>
+            <Private unauthenticated="home" role={['admin', 'userRoleRead']}>
+              <Route path="/user-roles/{id:Int}" page={UserRoleUserRolePage} name="userRole" role={['admin', 'userRoleRead']} />
+              <Route path="/user-roles" page={UserRoleUserRolesPage} name="userRoles" role={['admin', 'userRoleRead']} />
+            </Private>
           </Set>
           <Set wrap={GroupsLayout}>
-            <Route path="/groups/new" page={GroupNewGroupPage} name="newGroup" />
-            <Route path="/groups/{id:Int}/edit" page={GroupEditGroupPage} name="editGroup" />
-            <Route path="/groups/{id:Int}" page={GroupGroupPage} name="group" />
-            <Route path="/groups" page={GroupGroupsPage} name="groups" /> d
+            <Private unauthenticated="home" role={['admin', 'groupCreate']}>
+              <Route path="/groups/new" page={GroupNewGroupPage} name="newGroup" />
+            </Private>
+            <Private unauthenticated="home" role={['admin', 'groupUpdate']}>
+              <Route path="/groups/{id:Int}/edit" page={GroupEditGroupPage} name="editGroup" />
+            </Private>
+            <Private unauthenticated="home" role={['admin', 'groupRead']}>
+              <Route path="/groups/{id:Int}" page={GroupGroupPage} name="group" />
+              <Route path="/groups" page={GroupGroupsPage} name="groups" />
+            </Private>
           </Set>
           <Set wrap={UsersLayout}>
-            <Route path="/users/new" page={UserNewUserPage} name="newUser" />
-            <Route path="/users/{id:Int}/edit" page={UserEditUserPage} name="editUser" />
-            <Route path="/users/{id:Int}" page={UserUserPage} name="user" />
-            <Route path="/users" page={UserUsersPage} name="users" />
+            <Private unauthenticated="home" role={['admin', 'userCreate']}>
+              <Route path="/users/new" page={UserNewUserPage} name="newUser" />
+            </Private>
+            <Private unauthenticated="home" role={['admin', 'userUpdate']}>
+              <Route path="/users/{id:Int}/edit" page={UserEditUserPage} name="editUser" />
+            </Private>
+            <Private unauthenticated="home" role={['admin', 'userRead']}>
+              <Route path="/users/{id:Int}" page={UserUserPage} name="user" />
+              <Route path="/users" page={UserUsersPage} name="users" />
+            </Private>
           </Set>
           <Set wrap={GroupMembersLayout}>
-            <Route path="/group-members/new" page={GroupMemberNewGroupMemberPage} name="newGroupMember" />
-            <Route path="/group-members/{id:Int}/edit" page={GroupMemberEditGroupMemberPage} name="editGroupMember" />
-            <Route path="/group-members/{id:Int}" page={GroupMemberGroupMemberPage} name="groupMember" />
-            <Route path="/group-members" page={GroupMemberGroupMembersPage} name="groupMembers" />
+            <Private unauthenticated="home" role={['admin', 'groupMemberCreate']}>
+              <Route path="/group-members/new" page={GroupMemberNewGroupMemberPage} name="newGroupMember" />
+            </Private>
+            <Private unauthenticated="home" role={['admin', 'groupMemberUpdate']}>
+              <Route path="/group-members/{id:Int}/edit" page={GroupMemberEditGroupMemberPage} name="editGroupMember" />
+            </Private>
+            <Private unauthenticated="home" role={['admin', 'groupMemberRead']}>
+              <Route path="/group-members/{id:Int}" page={GroupMemberGroupMemberPage} name="groupMember" />
+              <Route path="/group-members" page={GroupMemberGroupMembersPage} name="groupMembers" />
+            </Private>
           </Set>
           <Set wrap={GroupRolesLayout}>
-            <Route path="/group-roles/new" page={GroupRoleNewGroupRolePage} name="newGroupRole" />
-            <Route path="/group-roles/{id:Int}/edit" page={GroupRoleEditGroupRolePage} name="editGroupRole" />
-            <Route path="/group-roles/{id:Int}" page={GroupRoleGroupRolePage} name="groupRole" />
-            <Route path="/group-roles" page={GroupRoleGroupRolesPage} name="groupRoles" />
+            <Private unauthenticated="home" role={['admin', 'groupRoleCreate']}>
+              <Route path="/group-roles/new" page={GroupRoleNewGroupRolePage} name="newGroupRole" />
+            </Private>
+            <Private unauthenticated="home" role={['admin', 'groupRoleUpdate']}>
+              <Route path="/group-roles/{id:Int}/edit" page={GroupRoleEditGroupRolePage} name="editGroupRole" />
+            </Private>
+            <Private unauthenticated="home" role={['admin', 'groupRoleRead']}>
+              <Route path="/group-roles/{id:Int}" page={GroupRoleGroupRolePage} name="groupRole" />
+              <Route path="/group-roles" page={GroupRoleGroupRolesPage} name="groupRoles" />
+            </Private>
           </Set>
         </Private>
       </Set>
