@@ -2,7 +2,7 @@ import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
 const UsersLayout = ({ children }) => {
-  const { isAuthenticated, currentUser, hasRole } = useAuth()
+  const { hasRole } = useAuth()
   return (
     <div className="rw-scaffold">
       <Toaster />

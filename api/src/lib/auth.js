@@ -18,7 +18,7 @@ export const getCurrentUser = async (session) => {
     let userRoles = await db.userRole.findMany({
       where: { userId: session.id },
     })
-    console.log('from auth.js getting roles', userRoles)
+    //console.log('from auth.js getting roles', userRoles)
     let roles = userRoles.map((userRole) => userRole.role)
     /*
     let foundGroups = await db.group.findMany({

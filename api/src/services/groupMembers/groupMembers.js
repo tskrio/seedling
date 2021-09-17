@@ -4,6 +4,22 @@ import { requireAuth } from 'src/lib/auth'
 // Used when the environment variable REDWOOD_SECURE_SERVICES=1
 export const beforeResolver = (rules) => {
   rules.add(requireAuth)
+  // create
+  rules.add(() => requireAuth({ role: ['admin', 'groupMemberCreate'] }), {
+    only: ['createGroupMember'],
+  })
+  // read
+  rules.add(() => requireAuth({ role: ['admin', 'groupMemberRead'] }), {
+    only: ['groupMembers', 'groupMembersByGroup', 'groupMember'],
+  })
+  // update
+  rules.add(() => requireAuth({ role: ['admin', 'groupMemberUpdate'] }), {
+    only: ['updateGroupMember'],
+  })
+  // delete
+  rules.add(() => requireAuth({ role: ['admin', 'groupMemberDelete'] }), {
+    only: ['deleteGroupMember'],
+  })
 }
 
 export const groupMembers = () => {

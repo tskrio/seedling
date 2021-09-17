@@ -7,7 +7,7 @@ import {
   TextField,
   Submit,
 } from '@redwoodjs/forms'
-
+import UserSelectCell from 'src/components/UserSelectCell'
 const formatDatetime = (value) => {
   if (value) {
     return value.replace(/:\d{2}\.\d{3}\w/, '')
@@ -29,21 +29,7 @@ const UserRoleForm = (props) => {
           listClassName="rw-form-error-list"
         />
 
-        <Label
-          name="userId"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          User id
-        </Label>
-        <NumberField
-          name="userId"
-          defaultValue={props.userRole?.userId}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
-        />
-
+        <UserSelectCell label="User" defaultValue={props.userRole?.userId} />
         <FieldError name="userId" className="rw-field-error" />
 
         <Label
@@ -74,3 +60,21 @@ const UserRoleForm = (props) => {
 }
 
 export default UserRoleForm
+
+/**
+ *
+        <Label
+          name="userId"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          User id
+        </Label>
+        <NumberField
+          name="userId"
+          defaultValue={props.userRole?.userId}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: true }}
+        />
+ */

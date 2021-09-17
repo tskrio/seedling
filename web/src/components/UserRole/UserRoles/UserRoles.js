@@ -61,10 +61,9 @@ const UserRolesList = ({ userRoles }) => {
       <table className="rw-table">
         <thead>
           <tr>
-            <th>Id</th>
             <th>Created at</th>
             <th>Updated at</th>
-            <th>User id</th>
+            <th>User</th>
             <th>Role</th>
             <th>&nbsp;</th>
           </tr>
@@ -72,10 +71,9 @@ const UserRolesList = ({ userRoles }) => {
         <tbody>
           {userRoles.map((userRole) => (
             <tr key={userRole.id}>
-              <td>{truncate(userRole.id)}</td>
               <td>{timeTag(userRole.createdAt)}</td>
               <td>{timeTag(userRole.updatedAt)}</td>
-              <td>{truncate(userRole.userId)}</td>
+              <td>{truncate(userRole.user.name)}</td>
               <td>{truncate(userRole.role)}</td>
               <td>
                 <nav className="rw-table-actions">

@@ -9,6 +9,9 @@ export const QUERY = gql`
       createdAt
       updatedAt
       userId
+      user {
+        name
+      }
       role
     }
   }
