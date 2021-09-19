@@ -11,24 +11,24 @@ repository and add the tables you need to track.
 
 - [x] DONE: Signup (generated)
 - [x] DONE: Login (custom)
-- [ ] [WORK NOT STARTED: Logout](https://github.com/tskrio/jace/issues/2)
+- [ ] [WORK NOT STARTED: Logout](https://github.com/tskrio/tskrBase/issues/2)
 - [x] DONE: About
 - [x] DONE: NotFound
-- [ ] [WORK IN PROGRESS: Home](https://github.com/tskrio/jace/issues/3)
-- [ ] [WORK IN PROGRESS: Settings](https://github.com/tskrio/jace/issues/6)
+- [ ] [WORK IN PROGRESS: Home](https://github.com/tskrio/tskrBase/issues/3)
+- [ ] [WORK IN PROGRESS: Settings](https://github.com/tskrio/tskrBase/issues/6)
 ### Components
 
 - [x] DONE: LoginComponent
-- [ ] [WORK NOT STARTED: EnumSelect (reusable)](https://github.com/tskrio/jace/issues/7)
-- [ ] [WORK NOT STARTED: QuerySelect](https://github.com/tskrio/jace/issues/8)
-- [ ] [WORK IN PROGRESS: AsideNavigator](https://github.com/tskrio/jace/issues/9)
+- [ ] [WORK NOT STARTED: EnumSelect (reusable)](https://github.com/tskrio/tskrBase/issues/7)
+- [ ] [WORK NOT STARTED: QuerySelect](https://github.com/tskrio/tskrBase/issues/8)
+- [ ] [WORK IN PROGRESS: AsideNavigator](https://github.com/tskrio/tskrBase/issues/9)
 - [ ] WORK IN PROGRESS: RoleSelectCell (iterates over enum, make this more generic, replace with EnumSelect)
 - [ ] WORK IN PROGRESS: UserSelectCell (iterates over User, make this more generic, replace with QuerySelect)
-- [ ] [WORK NOT STARTED: ListCell (reusable) will replace TablePluralCell components](https://github.com/tskrio/jace/issues/10)
+- [ ] [WORK NOT STARTED: ListCell (reusable) will replace TablePluralCell components](https://github.com/tskrio/tskrBase/issues/10)
 
 ### Layouts
 
-- [x] [Standard Layout (reusable)](https://github.com/tskrio/jace/issues/5)
+- [x] [Standard Layout (reusable)](https://github.com/tskrio/tskrBase/issues/5)
 
 ### Base Tables
 
@@ -42,7 +42,7 @@ repository and add the tables you need to track.
 ### Role Based Access Control
 
 For each table secure Routes, Services, and Components.
-https://github.com/tskrio/jace/issues/11
+https://github.com/tskrio/tskrBase/issues/11
 
 - [ ] User
 - [ ] Group
@@ -55,19 +55,19 @@ https://github.com/tskrio/jace/issues/11
 ### Logic Rules
 
 For each service add before and after rules
-- [ ] [User](https://github.com/tskrio/jace/issues/12)
-  - [ ] [deleteRelatedUserRolesBeforeDelete](https://github.com/tskrio/jace/issues/17)
-  - [ ] [deleteRelatedGroupMembershipsBeforeDelete](https://github.com/tskrio/jace/issues/18)
-- [ ] [Group](https://github.com/tskrio/jace/issues/13)
-  - [ ] [removeGroupRolesBeforeDelete](https://github.com/tskrio/jace/issues/19)
-- [ ] [GroupRole](https://github.com/tskrio/jace/issues/14)
-  - [ ] [addRolesToUsersAfterCreate](https://github.com/tskrio/jace/issues/20)
-  - [ ] [removeRolesFromUsersAfterDelete](https://github.com/tskrio/jace/issues/21)
-- [ ] [UserRole](https://github.com/tskrio/jace/issues/15)
-  - [ ] [disallowDeleteIfRoleFromGroupBeforeDelete](https://github.com/tskrio/jace/issues/22)
-- [ ] [GroupMember](https://github.com/tskrio/jace/issues/16)
-  - [ ] [addRolesToUserAfterCreate](https://github.com/tskrio/jace/issues/23)
-  - [ ] [removeRolesFromUserAfterDelete](https://github.com/tskrio/jace/issues/24)
+- [ ] [User](https://github.com/tskrio/tskrBase/issues/12)
+  - [ ] [deleteRelatedUserRolesBeforeDelete](https://github.com/tskrio/tskrBase/issues/17)
+  - [ ] [deleteRelatedGroupMembershipsBeforeDelete](https://github.com/tskrio/tskrBase/issues/18)
+- [ ] [Group](https://github.com/tskrio/tskrBase/issues/13)
+  - [ ] [removeGroupRolesBeforeDelete](https://github.com/tskrio/tskrBase/issues/19)
+- [ ] [GroupRole](https://github.com/tskrio/tskrBase/issues/14)
+  - [ ] [addRolesToUsersAfterCreate](https://github.com/tskrio/tskrBase/issues/20)
+  - [ ] [removeRolesFromUsersAfterDelete](https://github.com/tskrio/tskrBase/issues/21)
+- [ ] [UserRole](https://github.com/tskrio/tskrBase/issues/15)
+  - [ ] [disallowDeleteIfRoleFromGroupBeforeDelete](https://github.com/tskrio/tskrBase/issues/22)
+- [ ] [GroupMember](https://github.com/tskrio/tskrBase/issues/16)
+  - [ ] [addRolesToUserAfterCreate](https://github.com/tskrio/tskrBase/issues/23)
+  - [ ] [removeRolesFromUserAfterDelete](https://github.com/tskrio/tskrBase/issues/24)
 
 ### Form Abstraction
 
