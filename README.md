@@ -1,45 +1,77 @@
 
-# Tskr
+# TskrBase
 
-Tskr is a open source, task and asset tracking application built on [RedwoodJS].
-Imagine a low-cost task and asset tracking system where you define complex rules
-to execute the business needs you have — that's Tskr. We are an opinionated
-system. We make the decisions so you don't have to.
-
-
+TskrBase is a open source system to allow for users, groups, and roles
+to be managed in one system. The idea here is, Start with this
+repository and add the tables you need to track.
 
 ## Features
 
-- Simple Role Based Access.(Not Implemented Yet)
-  What does that mean?
-  There's a lot of places you have to secure to ensure a safe system.
-  We've abstracted that down to one file.
-  If you want to change what roles have access to parts of Tskr, you
-  only need to edit [./api/src/lib/roles.js]
-- Rules.(Not Implemented Yet)
-  What are rules?
-  Rules are bits of code that can execute to make outbound calls,
-  update records, or modify what was submitted. Here are the default
-  ones on task.
-  - [Calculate Priority]
-  - [Email Assigned to]
-  - [Assign High Priorities to Hugh]
-  - [Log when something is deleted]
-  - [Update title to append \[Solved\]]
-- Responsive Email templating via MJML(Not Implemented Yet)
-- Mailgun integrated as the email service provider.(Not Implemented Yet)
-- Created with the [JAMStack] in mind.
-  This is a great way to spin up something that has low risk, low cost,
-  and a lot of potiental upsides.
+### Pages
 
-[./api/src/lib/roles.js]: https://github.com/jacebenson/rw-poc/blob/main/api/src/lib/roles.js
-[JAMStack]: https://www.netlify.com/jamstack/
-[Calculate Priority]:https://github.com/shiningblue7/tskr/blob/main/api/src/rules/tasks/create-update-calculate-priority.js
-[Email Assigned to]:https://github.com/shiningblue7/tskr/blob/main/api/src/rules/tasks/email-assigned-to.js
-[Assign High Priorities to Hugh]:https://github.com/shiningblue7/tskr/blob/main/api/src/rules/tasks/assign-high-priority.js
-[Log when something is deleted]:https://github.com/shiningblue7/tskr/blob/main/api/src/rules/tasks/log-when-something-is-deleted.js
-[Update title to append \[Solved\]]:https://github.com/shiningblue7/tskr/blob/main/api/src/rules/tasks/update-title-when-solved.js
+- [x] DONE: Signup (generated)
+- [x] DONE: Login (custom)
+- [ ] [WORK NOT STARTED: Logout](https://github.com/tskrio/jace/issues/2)
+- [x] DONE: About
+- [x] DONE: NotFound
+- [ ] [WORK IN PROGRESS: Home](https://github.com/tskrio/jace/issues/3)
+- [ ] [WORK IN PROGRESS: Settings](https://github.com/tskrio/jace/issues/6)
+### Components
 
+- [x] DONE: LoginComponent
+- [ ] [WORK NOT STARTED: EnumSelect (reusable)](https://github.com/tskrio/jace/issues/7)
+- [ ] [WORK NOT STARTED: QuerySelect](https://github.com/tskrio/jace/issues/8)
+- [ ] [WORK IN PROGRESS: AsideNavigator](https://github.com/tskrio/jace/issues/9)
+- [ ] WORK IN PROGRESS: RoleSelectCell (iterates over enum, make this more generic, replace with EnumSelect)
+- [ ] WORK IN PROGRESS: UserSelectCell (iterates over User, make this more generic, replace with QuerySelect)
+- [ ] [WORK NOT STARTED: ListCell (reusable) will replace TablePluralCell components](https://github.com/tskrio/jace/issues/10)
+
+### Layouts
+
+- [x] [Standard Layout (reusable)](https://github.com/tskrio/jace/issues/5)
+
+### Base Tables
+
+- [ ] User
+- [ ] Group
+- [ ] Role
+- [ ] GroupRole
+- [ ] UserRole
+- [ ] GroupMember
+
+### Role Based Access Control
+
+For each table secure Routes, Services, and Components.
+https://github.com/tskrio/jace/issues/11
+
+- [ ] User
+- [ ] Group
+- [ ] Role
+- [ ] GroupRole
+- [ ] UserRole
+- [ ] GroupMember
+
+
+### Logic Rules
+
+For each service add before and after rules
+- [ ] [User](https://github.com/tskrio/jace/issues/12)
+  - [ ] [deleteRelatedUserRolesBeforeDelete](https://github.com/tskrio/jace/issues/17)
+  - [ ] [deleteRelatedGroupMembershipsBeforeDelete](https://github.com/tskrio/jace/issues/18)
+- [ ] [Group](https://github.com/tskrio/jace/issues/13)
+  - [ ] [removeGroupRolesBeforeDelete](https://github.com/tskrio/jace/issues/19)
+- [ ] [GroupRole](https://github.com/tskrio/jace/issues/14)
+  - [ ] [addRolesToUsersAfterCreate](https://github.com/tskrio/jace/issues/20)
+  - [ ] [removeRolesFromUsersAfterDelete](https://github.com/tskrio/jace/issues/21)
+- [ ] [UserRole](https://github.com/tskrio/jace/issues/15)
+  - [ ] [disallowDeleteIfRoleFromGroupBeforeDelete](https://github.com/tskrio/jace/issues/22)
+- [ ] [GroupMember](https://github.com/tskrio/jace/issues/16)
+  - [ ] [addRolesToUserAfterCreate](https://github.com/tskrio/jace/issues/23)
+  - [ ] [removeRolesFromUserAfterDelete](https://github.com/tskrio/jace/issues/24)
+
+### Form Abstraction
+
+- [ ] Think about this will work
 ## Contributing
 
 Contributions are always welcome!
@@ -56,13 +88,13 @@ If you would like to work on an issue comment on it.
 ### Clone the project
 
 ```bash
-  git clone https://github.com/shiningblue7/tskr.git tskr
+  git clone https://github.com/tskrio/tskrbase.git tskr
 ```
 
 ### Go to the project directory
 
 ```bash
-  cd tskr
+  cd tskrbase
 ```
 
 ### Install dependencies
@@ -73,7 +105,7 @@ If you would like to work on an issue comment on it.
 
 ### Configure a PostgresDB
 
-1.  Goto [Railway] and provision a PostgreSQL project.
+1.  Provision a PostgreSQL project.
 2.  Click on PostgreSQL, then Connect.
 3.  Copy the Postgres Connection URL
 
@@ -102,11 +134,3 @@ Start the server
 ```bash
   yarn rw dev
 ```
-
-[Railway]: https://railway.app/
-
-## Acknowledgements
-
- - [RedwoodJS]
-
-[RedwoodJS]: https://redwoodjs.com/
