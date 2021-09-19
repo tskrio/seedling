@@ -3,6 +3,30 @@
 const AboutComponent = () => {
   let altText =
     'Find me in ./web/src/components/AboutComponent/AboutComponent.js'
+  let done = (
+    <>
+      <span role="img" aria-label="Check mark">
+        ✅
+      </span>{' '}
+      DONE:{' '}
+    </>
+  )
+  let notDone = (
+    <>
+      <span role="img" aria-label="X mark">
+        ❌
+      </span>{' '}
+      WORK NOT STARTED:{' '}
+    </>
+  )
+  let workInProgress = (
+    <>
+      <span role="img" aria-label="Hourglass">
+        ⏳
+      </span>{' '}
+      WORK IN PROGRESS:{' '}
+    </>
+  )
   return (
     <>
       <h1 alt={altText}>What is TskrBase</h1>
@@ -30,45 +54,80 @@ const AboutComponent = () => {
       <ul>
         <li>
           <details>
+            <summary>Pages</summary>
+            <ul>
+              <li>{done}Signup (generated)</li>
+              <li>{done}Login (custom)</li>
+              <li>{notDone}Logout</li>
+              <li>{done}About</li>
+              <li>{done}NotFound</li>
+              <li>{workInProgress}Home</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Components</summary>
+            <ul>
+              <li>{done}LoginComponent (custom)</li>
+              <li>{notDone}EnumSelect (reusable)</li>
+              <li>{notDone}QuerySelect</li>
+              <li>{workInProgress}AsideNavigator</li>
+              <li>
+                {workInProgress}RoleSelectCell (iterates over enum, make this
+                more generic, replace with EnumSelect)
+              </li>
+              <li>
+                {workInProgress}UserSelectCell (iterates over User, make this
+                more generic, replace with QuerySelect)
+              </li>
+              <li>
+                {notDone}ListCell (reusable) will replace TablePluralCell
+                components
+              </li>
+            </ul>
+          </details>
+
+          <details>
+            <summary>Layouts</summary>
+            <ul>
+              <li>Standard</li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Base user tables</summary>
+            <ul>
+              <li>
+                <details>
+                  <summary>User</summary>
+                  <p>Here we have the users who can use this system</p>
+                  <p>We track the name, email, and preferences here.</p>
+                </details>
+              </li>
+            </ul>
+          </details>
+          <details>
             <summary>
               Role Based Access. What does that mean? There&apos;s a lot of
               places you have to secure to ensure a safe system.
             </summary>
             <ul>
               <li>
-                <span role="img" aria-label="Check mark">
-                  ✅
-                </span>
-                DONE: Routes, Services, and Components are secured for the
+                {done}Routes, Services, and Components are secured for the
                 initial tables. Users, User Roles, Groups, Group Roles, and
                 Group Members.
               </li>
               <li>
-                <span role="img" aria-label="Check mark">
-                  ✅
-                </span>
-                DONE: When adding a user to a group, we add roles to the user
+                {done}When adding a user to a group, we add roles to the user
                 based on the group they are in.{' '}
-                <sup>We do not ensure they already have that role yet.</sup>
+                <sup>*We do not ensure they already have that role yet.*</sup>
               </li>
               <li>
-                <span
-                  role="img"
-                  aria-label="Red circle with a diagonal line through the middle"
-                >
-                  🚫
-                </span>
-                NOT DONE: If you add a role to the group, the role will be added
+                {notDone}If you add a role to the group, the role will be added
                 to all users in that group.
               </li>
               <li>
-                <span
-                  role="img"
-                  aria-label="Red circle with a diagonal line through the middle"
-                >
-                  🚫
-                </span>
-                NOT DONE: If you remove a role from the group, the role will be
+                {notDone}If you remove a role from the group, the role will be
                 removed from all users in that group.
               </li>
             </ul>
@@ -86,97 +145,35 @@ const AboutComponent = () => {
               <details>
                 <summary>GroupMember</summary>
                 <ul>
-                  <li>
-                    <span role="img" aria-label="Check mark">
-                      ✅
-                    </span>
-                    DONE: addRolesToUserAfterCreate
-                  </li>
-                  <li>
-                    <span
-                      role="img"
-                      aria-label="Red circle with a diagonal line through the middle"
-                    >
-                      🚫
-                    </span>
-                    NOT DONE:removeRolesFromUserAfterDelete
-                  </li>
+                  <li>{done} addRolesToUserAfterCreate</li>
+                  <li>{notDone} removeRolesFromUserAfterDelete</li>
                 </ul>
               </details>
               <details>
                 <summary>GroupRole</summary>
                 <ul>
-                  <li>
-                    <span
-                      role="img"
-                      aria-label="Red circle with a diagonal line through the middle"
-                    >
-                      🚫
-                    </span>
-                    NOT DONE:addRolesToUsersAfterCreate
-                  </li>
-                  <li>
-                    <span
-                      role="img"
-                      aria-label="Red circle with a diagonal line through the middle"
-                    >
-                      🚫
-                    </span>
-                    NOT DONE:removeRolesFromUsersAfterDelete
-                  </li>
+                  <li>{notDone}addRolesToUsersAfterCreate</li>
+                  <li>{notDone}removeRolesFromUsersAfterDelete</li>
                 </ul>
               </details>
               <details>
                 <summary>Group</summary>
                 <ul>
-                  <li>
-                    <span
-                      role="img"
-                      aria-label="Red circle with a diagonal line through the middle"
-                    >
-                      🚫
-                    </span>
-                    NOT DONE:removeGroupRolesAfterDelete
-                  </li>
+                  <li>{notDone}removeGroupRolesAfterDelete</li>
                 </ul>
               </details>
               <details>
                 <summary>UserRole</summary>
                 <ul>
-                  <li>
-                    <span
-                      role="img"
-                      aria-label="Red circle with a diagonal line through the middle"
-                    >
-                      🚫
-                    </span>
-                    NOT DONE:disallowDeleteIfRoleFromGroupBeforeDelete
-                  </li>
+                  <li>{notDone}disallowDeleteIfRoleFromGroupBeforeDelete</li>
                 </ul>
               </details>
 
               <details>
                 <summary>User</summary>
                 <ul>
-                  <li>
-                    <span
-                      role="img"
-                      aria-label="Red circle with a diagonal line through the middle"
-                    >
-                      🚫
-                    </span>
-                    NOT DONE:deleteRelatedUserRolesBeforeDelete
-                  </li>
-
-                  <li>
-                    <span
-                      role="img"
-                      aria-label="Red circle with a diagonal line through the middle"
-                    >
-                      🚫
-                    </span>
-                    NOT DONE:deleteRelatedGroupMembershipsBeforeDelete
-                  </li>
+                  <li>{notDone}deleteRelatedUserRolesBeforeDelete</li>
+                  <li>{notDone}deleteRelatedGroupMembershipsBeforeDelete</li>
                 </ul>
               </details>
             </ul>
@@ -190,15 +187,7 @@ const AboutComponent = () => {
               with.
             </p>
             <ul>
-              <li>
-                <span
-                  role="img"
-                  aria-label="Red circle with a diagonal line through the middle"
-                >
-                  🚫
-                </span>
-                NOT DONE: Form abstraction for all tables.
-              </li>
+              <li>{notDone}Form abstraction for all tables.</li>
             </ul>
           </details>
         </li>
