@@ -7,6 +7,7 @@ import {
   NumberField,
   Submit,
 } from '@redwoodjs/forms'
+import RoleSelectCell from 'src/components/RoleSelectCell'
 
 const formatDatetime = (value) => {
   if (value) {
@@ -29,23 +30,9 @@ const GroupRoleForm = (props) => {
           listClassName="rw-form-error-list"
         />
 
-        <Label
-          name="role"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Role
-        </Label>
-        <TextField
-          name="role"
-          defaultValue={props.groupRole?.role}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
-        />
-
         <FieldError name="role" className="rw-field-error" />
-
+        <RoleSelectCell label="Role" defaultValue={props.groupRole?.role} />
+        <FieldError name="role" className="rw-field-error" />
         <Label
           name="groupId"
           className="rw-label"
