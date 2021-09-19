@@ -1,4 +1,4 @@
-import { Link, routes } from '@redwoodjs/router'
+import { NavLink, Link, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 const AsideNavigator = () => {
   const { isAuthenticated, hasRole } = useAuth()
@@ -9,21 +9,27 @@ const AsideNavigator = () => {
   return (
     <>
       {isAuthenticated && (
-        <aside alt={altText}>
-          <ul>
+        <aside alt={altText} className="aside">
+          <ul className="navLinks">
             {hasRole(['userRead', 'admin']) && (
               <li>
-                <Link to={routes.users()}>Users</Link>
+                <NavLink to={routes.users()} activeClassName="active-page">
+                  Users
+                </NavLink>
               </li>
             )}
             {hasRole(['groupRead', 'admin']) && (
               <li>
-                <Link to={routes.groups()}>Groups</Link>
+                <NavLink to={routes.groups()} activeClassName="active-page">
+                  Groups
+                </NavLink>
               </li>
             )}
             {hasRole(['userRoleRead', 'admin']) && (
               <li>
-                <Link to={routes.userRoles()}>User Roles</Link>
+                <NavLink to={routes.userRoles()} activeClassName="active-page">
+                  User Roles
+                </NavLink>
               </li>
             )}
           </ul>
