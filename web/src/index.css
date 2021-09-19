@@ -68,7 +68,12 @@ a {
   transition: all 0.2s ease-out;
 }
 
-a:focus, a:hover {
+.aside-toggle {
+  border: 1px black solid;
+  float: right;
+  line-height: 82vh;
+}
+a:focus, a:hover, .active-page {
   color: black;
   background-color: #9dc0d7;
   box-shadow: 0 0 0 0.125rem currentColor;
@@ -117,6 +122,11 @@ aside {
   background-color: #979797;
   border-right: solid black 1px;
   grid-area: aside;
+}
+
+
+aside * {
+  display: inline-grid;
 }
 
 footer {
