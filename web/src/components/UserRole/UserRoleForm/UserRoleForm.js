@@ -44,41 +44,4 @@ const UserRoleForm = (props) => {
     </div>
   )
 }
-/**
- *
-        <Label
-          name="role"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Role
-        </Label>
-        <TextField
-          name="role"
-          defaultValue={props.userRole?.role}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
-        />
-
-
- */
 export default UserRoleForm
-
-/**
- *
-        <Label
-          name="userId"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          User id
-        </Label>
-        <NumberField
-          name="userId"
-          defaultValue={props.userRole?.userId}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
-        />
- */
