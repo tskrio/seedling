@@ -1,7 +1,7 @@
 import { SelectField, Label, FieldError } from '@redwoodjs/forms'
 
 export const QUERY = gql`
-  query FindUsers {
+  query UserSelectCell {
     users {
       id
       name
