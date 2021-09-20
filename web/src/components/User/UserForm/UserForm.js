@@ -80,21 +80,21 @@ const UserForm = (props) => {
         <FieldError name="hashedPassword" className="rw-field-error" />
 
         <Label
-          name="salt"
+          name="preferences"
           className="rw-label"
           errorClassName="rw-label rw-label-error"
         >
-          Salt
+          Preferences
         </Label>
         <TextField
-          name="salt"
-          defaultValue={props.user?.salt}
+          name="preferences"
+          defaultValue={props.user?.preferences}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
 
-        <FieldError name="salt" className="rw-field-error" />
+        <FieldError name="preferences" className="rw-field-error" />
 
         <div className="rw-button-group">
           <Submit disabled={props.loading} className="rw-button rw-button-blue">

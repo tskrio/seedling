@@ -5,11 +5,13 @@ export const schema = gql`
     updatedAt: DateTime!
     email: String!
     name: String!
+    preferences: JSON!
     hashedPassword: String!
     salt: String!
-    GroupMember: [GroupMember!]
-    UserRole: [UserRole!]
+    UserRole: [UserRole]!
+    GroupMember: [GroupMember]!
   }
+
   type Query {
     users: [User!]!
     user(id: Int!): User
@@ -18,21 +20,21 @@ export const schema = gql`
   input CreateUserInput {
     email: String!
     name: String!
+    preferences: JSON!
     hashedPassword: String!
     salt: String!
   }
 
   input UpdateUserInput {
-    # This is whats needed to update a user
     email: String
     name: String
+    preferences: JSON
     hashedPassword: String
     salt: String
   }
-
   type Mutation {
     createUser(input: CreateUserInput!): User!
-    updateUser(id: Int!, input: UpdateUserInput!): User!
+    updateUser(id: Int!, input: UpdateUserInput!): User
     deleteUser(id: Int!): User!
   }
 `

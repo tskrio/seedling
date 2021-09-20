@@ -34,5 +34,6 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ users }) => {
+  console.log('usesr from usersCell', users)
   return <Users users={users} />
 }
