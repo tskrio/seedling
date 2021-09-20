@@ -15,7 +15,7 @@
  * order dictates the order in the list of rules this will run
  * title is used for log statements
  * when is an array of when this rule can run expects 'before', or 'after'
- * type is an array of the type of db action this runs on epxects, 'create', 'read', 'update', or 'delete'
+ * type is an array of the type of db action this runs on expects, 'create', 'read', 'update', or 'delete'
  * file is for debugging
  * If title,order,when,type,command,active,file are missing rule will not run
  */
@@ -29,16 +29,22 @@ module.exports = {
         // If salt is already set, don't rehash
         current.salt = previous.salt
       }
-      if (current.hashedPassword !== previous.hashedPassword) {
-        let encryptedPassword = CryptoJS.PBKDF2(
-          current?.hashedPassword,
-          previous?.salt,
-          {
-            keySize: 256 / 32,
-          }
-        ).toString()
+      if (current.hashedPassword === '') {
+        //disallow deleting the password
+        current.hashedPassword = previous.hashedPassword
+      } else {
+        //legit password change
+        if (current.hashedPassword !== previous.hashedPassword) {
+          let encryptedPassword = CryptoJS.PBKDF2(
+            current?.hashedPassword,
+            previous?.salt,
+            {
+              keySize: 256 / 32,
+            }
+          ).toString()
 
-        current.hashedPassword = encryptedPassword
+          current.hashedPassword = encryptedPassword
+        }
       }
     } catch (e) {
       logger.error(e)

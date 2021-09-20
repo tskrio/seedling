@@ -25,24 +25,53 @@ export const beforeResolver = (rules) => {
   })
 }
 
-export const users = () => {
-  return db.user.findMany({
-    //include: {
-    //UserRole: true,
-    //GroupMember: true,
-    //},
+export const users = async () => {
+  let records = await db.user.findMany({})
+  let beforeReadRulesArr = util.loadRules(rules, 'before', 'read')
+  let readRecords = records.map((current) => {
+    beforeReadRulesArr.forEach((rule) => {
+      logger.info(`Starting Before Read Rule "${rule.title}" ${rule.order}`)
+      rule.command(current, null)
+      logger.info(`Ending Before Read Rule "${rule.title}"`)
+    })
+    return current
   })
+  let afterReadRulesArr = util.loadRules(rules, 'after', 'read')
+  records.forEach((current) => {
+    afterReadRulesArr.forEach((rule) => {
+      logger.info(`Starting After Read Rule "${rule.title}" ${rule.order}`)
+      rule.command(current, null)
+      logger.info(`Ending After Read Rule "${rule.title}"`)
+    })
+  })
+
+  console.log('readRecords', readRecords)
+  return readRecords
 }
 
 export const user = async ({ id }) => {
-  let user = await db.user.findUnique({
+  let beforeReadRulesArr = util.loadRules(rules, 'before', 'read')
+  let current = await db.user.findUnique({
     where: { id },
     include: {
       UserRole: true,
     },
   })
-  console.log('user', user)
-  return user
+  beforeReadRulesArr.forEach((rule) => {
+    logger.info(`Starting Before Read Rule "${rule.title}" ${rule.order}`)
+    rule.command(current, null)
+    for (var prop in current) {
+      logger.info(`  ${prop} "${current[prop]}"=>"${current[prop]}"`)
+    }
+    logger.info(`Ending Before Read Rule "${rule.title}"`)
+  })
+  let afterReadRulesArr = util.loadRules(rules, 'after', 'update')
+  afterReadRulesArr.forEach((rule) => {
+    logger.info(`Starting After Read Rule "${rule.title}" ${rule.order}`)
+    rule.command(current, null)
+    logger.info(`Ending After Read Rule "${rule.title}"`)
+  })
+  return current
 }
 
 export const createUser = async ({ input }) => {
@@ -55,6 +84,7 @@ export const createUser = async ({ input }) => {
     }
     logger.info(`Ending Before Create Rule "${rule.title}"`)
   })
+
   let create = await db.user.create({
     data: input,
   })
@@ -72,14 +102,11 @@ export const createUser = async ({ input }) => {
 }
 
 export const updateUser = async ({ id, input }) => {
-  console.log('in upateuser function')
-  let beforeCreateRulesArr = util.loadRules(rules, 'before', 'update')
+  let beforeUpdateRulesArr = util.loadRules(rules, 'before', 'update')
   let previous = await db.user.findUnique({
     where: { id },
   })
-  console.log('previous', previous)
-  console.log('beforeCreateRulesArr', beforeCreateRulesArr)
-  beforeCreateRulesArr.forEach((rule) => {
+  beforeUpdateRulesArr.forEach((rule) => {
     logger.info(`Starting Before Update Rule "${rule.title}" ${rule.order}`)
     rule.command(input, previous)
     for (var prop in input) {
@@ -92,25 +119,37 @@ export const updateUser = async ({ id, input }) => {
     where: { id },
   })
 
-  let afterCreateRulesArr = util.loadRules(rules, 'after', 'update')
-  afterCreateRulesArr.forEach((rule) => {
+  let afterUpdateRulesArr = util.loadRules(rules, 'after', 'update')
+  afterUpdateRulesArr.forEach((rule) => {
     logger.info(`Starting After Update Rule "${rule.title}" ${rule.order}`)
     rule.command(update, previous)
     logger.info(`Ending After Update Rule "${rule.title}"`)
   })
   return update
-  /*
-  return await db.user.update({
-    data: input,
-    where: { id },
-  })
-  */
 }
 
-export const deleteUser = ({ id }) => {
-  return db.user.delete({
+export const deleteUser = async ({ id }) => {
+  let beforeDeleteRulesArr = util.loadRules(rules, 'before', 'delete')
+  let previous = await db.user.findUnique({
     where: { id },
   })
+  beforeDeleteRulesArr.forEach((rule) => {
+    logger.info(`Starting Before Delete Rule "${rule.title}" ${rule.order}`)
+    rule.command(previous, null)
+    logger.info(`Ending Before Delete Rule "${rule.title}"`)
+  })
+  let deleteRecord = await db.user.delete({
+    data: previous,
+    where: { id },
+  })
+
+  let afterDeleteRulesArr = util.loadRules(rules, 'after', 'delete')
+  afterDeleteRulesArr.forEach((rule) => {
+    logger.info(`Starting After Delete Rule "${rule.title}" ${rule.order}`)
+    rule.command(previous, null)
+    logger.info(`Ending After Delete Rule "${rule.title}"`)
+  })
+  return deleteRecord
 }
 
 export const User = {
