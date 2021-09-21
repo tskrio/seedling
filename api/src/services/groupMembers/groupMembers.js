@@ -155,7 +155,6 @@ export const deleteGroupMember = async ({ id }) => {
     logger.info(`Ending Before Delete Rule "${rule.title}"`)
   })
   let deleteRecord = await db.groupMember.delete({
-    data: previous,
     where: { id },
   })
 
