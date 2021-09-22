@@ -1,7 +1,9 @@
 import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
+import { useAuth } from '@redwoodjs/auth'
 
 const GroupsLayout = ({ children }) => {
+  const { hasRole } = useAuth()
   return (
     <div className="rw-scaffold">
       <Toaster />
@@ -11,9 +13,11 @@ const GroupsLayout = ({ children }) => {
             Groups
           </Link>
         </h1>
-        <Link to={routes.newGroup()} className="rw-button rw-button-green">
-          <div className="rw-button-icon">+</div> New Group
-        </Link>
+        {hasRole(['groupCreate', 'admin']) && (
+          <Link to={routes.newGroup()} className="rw-button rw-button-green">
+            <div className="rw-button-icon">+</div> New Group
+          </Link>
+        )}
       </header>
       <main className="rw-main">{children}</main>
     </div>

@@ -21,39 +21,21 @@
  */
 //import { db } from 'src/lib/db' // Needed to do other CRUDs on other tables
 import { logger } from 'src/lib/logger'
-import CryptoJS from 'crypto-js'
 module.exports = {
-  command: async function (current, previous) {
+  command: async function (current /*previous*/) {
+    console.log('in removetest rule')
     try {
-      if (current.salt == '') {
-        // If salt is already set, don't rehash
-        current.salt = (Math.random() + 1).toString(36).substring(30)
-      }
-      if (current.hashedPassword === '') {
-        //disallow deleting the password
-        current.hashedPassword = previous.hashedPassword
-      } else {
-        //legit password change
-        if (current.hashedPassword !== previous.hashedPassword) {
-          let encryptedPassword = CryptoJS.PBKDF2(
-            current?.hashedPassword,
-            previous?.salt,
-            {
-              keySize: 256 / 32,
-            }
-          ).toString()
-
-          current.hashedPassword = encryptedPassword
-        }
+      if (current?.name?.includes('test')) {
+        current.name = current.name.replace('test', '')
       }
     } catch (e) {
       logger.error(e)
     }
   },
-  active: true,
+  active: false,
   order: 10,
-  title: 'update password and salt if changed',
+  title: 'test rule',
   when: ['before'],
-  type: ['update'],
+  type: ['update', 'create'],
   file: __filename,
 }

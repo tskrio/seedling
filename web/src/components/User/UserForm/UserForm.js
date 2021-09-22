@@ -5,6 +5,7 @@ import {
   Label,
   TextField,
   Submit,
+  PasswordField,
 } from '@redwoodjs/forms'
 
 const formatDatetime = (value) => {
@@ -34,7 +35,7 @@ function randomString(len, charSet) {
 
 const UserForm = (props) => {
   const onSubmit = (data) => {
-    console.log('onsave data', data)
+    //console.log('onsave data', data)
     /**Client RUles go here */
     if (data.preference) {
       data.preferences = data.preference
@@ -126,9 +127,9 @@ const UserForm = (props) => {
           className="rw-label"
           errorClassName="rw-label rw-label-error"
         >
-          Hashed password
+          Password
         </Label>
-        <TextField
+        <PasswordField
           name="hashedPassword"
           defaultValue={props.user?.hashedPassword}
           className="rw-input"

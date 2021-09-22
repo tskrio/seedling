@@ -32,15 +32,20 @@ const StandardLayout = ({ children }) => {
                 </Link>
               </li>
             )}
-            <li>
-              {isAuthenticated && currentUser && (
-                <a onClick={logOut}>
-                  <span alt={JSON.stringify(currentUser)}>
-                    Log Out {currentUser.name}
-                  </span>
-                </a>
-              )}
-            </li>
+            {isAuthenticated && currentUser && (
+              <>
+                <li>
+                  <Link to={routes.editUser({ id: currentUser.id })}>
+                    {currentUser.name}
+                  </Link>
+                </li>
+                <li>
+                  <a onClick={logOut}>
+                    <span alt={JSON.stringify(currentUser)}>Log Out</span>
+                  </a>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
       </header>

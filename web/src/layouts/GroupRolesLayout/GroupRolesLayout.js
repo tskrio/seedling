@@ -1,11 +1,9 @@
 import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
+import { useAuth } from '@redwoodjs/auth'
 
 const GroupRolesLayout = ({ children, query }) => {
-  console.log('in group roles layout')
-  console.log('in group roles layout w/props', query)
-  console.log('in group roles layout w/children', children)
-
+  const { hasRole } = useAuth()
   return (
     <div className="rw-scaffold">
       <Toaster />
@@ -16,9 +14,14 @@ const GroupRolesLayout = ({ children, query }) => {
           </Link>
         </h1>
         <p>{query}</p>
-        <Link to={routes.newGroupRole()} className="rw-button rw-button-green">
-          <div className="rw-button-icon">+</div> New GroupRole
-        </Link>
+        {hasRole(['groupRoleCreate', 'admin']) && (
+          <Link
+            to={routes.newGroupRole()}
+            className="rw-button rw-button-green"
+          >
+            <div className="rw-button-icon">+</div> New GroupRole
+          </Link>
+        )}
       </header>
       <main className="rw-main">{children}</main>
     </div>

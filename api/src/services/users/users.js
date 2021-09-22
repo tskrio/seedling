@@ -139,7 +139,6 @@ export const deleteUser = async ({ id }) => {
     logger.info(`Ending Before Delete Rule "${rule.title}"`)
   })
   let deleteRecord = await db.user.delete({
-    data: previous,
     where: { id },
   })
 
