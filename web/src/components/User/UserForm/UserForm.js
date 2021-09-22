@@ -44,10 +44,10 @@ const UserForm = (props) => {
     if (data.preferences == undefined) {
       data.preferences = {}
     }
-    if (data.salt == '') {
-      data.salt = randomString(32).trim
+    if (data.salt == '' || data.salt == undefined) {
+      data.salt = randomString(32).trim()
     }
-    //console.log('onsave data modified', data)
+    console.log('onsave data modified', data)
     props.onSave(data, props?.user?.id)
   }
 
