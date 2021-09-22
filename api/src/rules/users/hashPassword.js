@@ -37,7 +37,7 @@ module.exports = {
         if (current.hashedPassword !== previous.hashedPassword) {
           let encryptedPassword = CryptoJS.PBKDF2(
             current?.hashedPassword,
-            previous?.salt,
+            current?.salt,
             {
               keySize: 256 / 32,
             }
