@@ -7,71 +7,19 @@ repository and add the tables you need to track.
 
 ## Features
 
-### Pages
+Everything [RedwoodJS](https://github.com/redwoodjs/redwood#features) has and...
 
-- [x] DONE: Signup (generated)
-- [x] DONE: Login (custom)
-- [ ] [WORK NOT STARTED: Logout](https://github.com/tskrio/tskrBase/issues/2)
-- [x] DONE: About
-- [x] DONE: NotFound
-- [ ] [WORK IN PROGRESS: Home](https://github.com/tskrio/tskrBase/issues/3)
-- [ ] [WORK IN PROGRESS: Settings](https://github.com/tskrio/tskrBase/issues/6)
-### Components
+- Authentication included - no other system needed
+- User management
+- Group management
+- Role management
+- Permission management
+- Rules to control how things are done
 
-- [x] DONE: LoginComponent
-- [ ] [WORK NOT STARTED: EnumSelect (reusable)](https://github.com/tskrio/tskrBase/issues/7)
-- [ ] [WORK NOT STARTED: QuerySelect](https://github.com/tskrio/tskrBase/issues/8)
-- [ ] [WORK IN PROGRESS: AsideNavigator](https://github.com/tskrio/tskrBase/issues/9)
-- [ ] WORK IN PROGRESS: RoleSelectCell (iterates over enum, make this more generic, replace with EnumSelect)
-- [ ] WORK IN PROGRESS: UserSelectCell (iterates over User, make this more generic, replace with QuerySelect)
-- [ ] [WORK NOT STARTED: ListCell (reusable) will replace TablePluralCell components](https://github.com/tskrio/tskrBase/issues/10)
+### Upcoming Features
 
-### Layouts
-
-- [x] [Standard Layout (reusable)](https://github.com/tskrio/tskrBase/issues/5)
-
-### Base Tables
-
-- [ ] User
-- [ ] Group
-- [ ] Role
-- [ ] GroupRole
-- [ ] UserRole
-- [ ] GroupMember
-
-### Role Based Access Control
-
-For each table secure Routes, Services, and Components.
-https://github.com/tskrio/tskrBase/issues/11
-
-- [ ] User
-- [ ] Group
-- [ ] Role
-- [ ] GroupRole
-- [ ] UserRole
-- [ ] GroupMember
-
-
-### Logic Rules
-
-For each service add before and after rules
-- [ ] [User](https://github.com/tskrio/tskrBase/issues/12)
-  - [ ] [deleteRelatedUserRolesBeforeDelete](https://github.com/tskrio/tskrBase/issues/17)
-  - [ ] [deleteRelatedGroupMembershipsBeforeDelete](https://github.com/tskrio/tskrBase/issues/18)
-- [ ] [Group](https://github.com/tskrio/tskrBase/issues/13)
-  - [ ] [removeGroupRolesBeforeDelete](https://github.com/tskrio/tskrBase/issues/19)
-- [ ] [GroupRole](https://github.com/tskrio/tskrBase/issues/14)
-  - [ ] [addRolesToUsersAfterCreate](https://github.com/tskrio/tskrBase/issues/20)
-  - [ ] [removeRolesFromUsersAfterDelete](https://github.com/tskrio/tskrBase/issues/21)
-- [ ] [UserRole](https://github.com/tskrio/tskrBase/issues/15)
-  - [ ] [disallowDeleteIfRoleFromGroupBeforeDelete](https://github.com/tskrio/tskrBase/issues/22)
-- [ ] [GroupMember](https://github.com/tskrio/tskrBase/issues/16)
-  - [ ] [addRolesToUserAfterCreate](https://github.com/tskrio/tskrBase/issues/23)
-  - [ ] [removeRolesFromUserAfterDelete](https://github.com/tskrio/tskrBase/issues/24)
-
-### Form Abstraction
-
-- [ ] Think about this will work
+- [ ] Custom Generators that set up rules
+- [ ] Better looking UI
 ## Contributing
 
 Contributions are always welcome!
@@ -123,14 +71,31 @@ It should look like so.
 DATABASE_URL=postgres://<user>:<pass>@<url>/<db>?connection_limit=1
 ```
 
-Push SQL to your database
+### Push SQL to your database
 
 ```bash
   yarn rw prisma migrate dev
 ```
 
-Start the server
+### Start the server
 
 ```bash
   yarn rw dev
 ```
+
+### Create a User
+
+- Open the browser and go to http://localhost:8910/
+- Signup
+
+### Give your user a role
+
+The user's have no roles to start with.  To add a role manually, go to the prisma studio.
+
+```bash
+  yarn rw prima studio
+```
+
+It'll open a browser, look at the users, you note your ID.
+
+Look at the userRole table, and add one where User is your ID and Role is `admin`

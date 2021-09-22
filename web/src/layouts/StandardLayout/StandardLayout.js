@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 // web/src/layouts/BlogLayout/BlogLayout.js
 
-import { Link, routes } from '@redwoodjs/router'
+import { Link, navigate, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 import AsideNavigator from 'src/components/AsideNavigator/AsideNavigator'
 
@@ -40,7 +40,12 @@ const StandardLayout = ({ children }) => {
                   </Link>
                 </li>
                 <li>
-                  <a onClick={logOut}>
+                  <a
+                    onClick={async () => {
+                      await logOut()
+                      navigate('/')
+                    }}
+                  >
                     <span alt={JSON.stringify(currentUser)}>Log Out</span>
                   </a>
                 </li>
