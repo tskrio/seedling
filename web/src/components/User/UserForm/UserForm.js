@@ -5,6 +5,7 @@ import {
   Label,
   TextField,
   Submit,
+  PasswordField,
 } from '@redwoodjs/forms'
 
 const formatDatetime = (value) => {
@@ -13,9 +14,40 @@ const formatDatetime = (value) => {
   }
 }
 
+const titleCase = (str) => {
+  str = str.toLowerCase().split(' ')
+  for (var i = 0; i < str.length; i++) {
+    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1)
+  }
+  return str.join(' ')
+}
+
+function randomString(len, charSet) {
+  charSet =
+    charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  var randomString = ''
+  for (var i = 0; i < len; i++) {
+    var randomPoz = Math.floor(Math.random() * charSet.length)
+    randomString += charSet.substring(randomPoz, randomPoz + 1)
+  }
+  return randomString
+}
+
 const UserForm = (props) => {
   const onSubmit = (data) => {
-    console.log('onsave data', data)
+    //console.log('onsave data', data)
+    /**Client RUles go here */
+    if (data.preference) {
+      data.preferences = data.preference
+      delete data.preference
+    }
+    if (data.preferences == undefined) {
+      data.preferences = {}
+    }
+    if (data.salt == '') {
+      data.salt = randomString(32).trim
+    }
+    //console.log('onsave data modified', data)
     props.onSave(data, props?.user?.id)
   }
 
@@ -26,14 +58,14 @@ const UserForm = (props) => {
       preferenceFields.push(
         <div key={key}>
           <Label
-            name={'preference' + key}
+            name={'preference.' + key}
             className="rw-label"
             errorClassName="rw-label rw-label-error"
           >
-            {'preference' + key}
+            {key}
           </Label>
           <TextField
-            name={'preference' + key}
+            name={'preference.' + key}
             defaultValue={props?.user?.preferences[key]}
             className="rw-input"
             errorClassName="rw-input rw-input-error"
@@ -95,9 +127,9 @@ const UserForm = (props) => {
           className="rw-label"
           errorClassName="rw-label rw-label-error"
         >
-          Hashed password
+          Password
         </Label>
-        <TextField
+        <PasswordField
           name="hashedPassword"
           defaultValue={props.user?.hashedPassword}
           className="rw-input"
@@ -107,6 +139,21 @@ const UserForm = (props) => {
 
         <FieldError name="hashedPassword" className="rw-field-error" />
 
+        <FieldError name="preferences" className="rw-field-error" />
+        {preferenceFields}
+        <div className="rw-button-group">
+          <Submit disabled={props.loading} className="rw-button rw-button-blue">
+            Save
+          </Submit>
+        </div>
+      </Form>
+    </div>
+  )
+}
+
+export default UserForm
+
+/*
         <Label
           name="preferences"
           className="rw-label"
@@ -122,16 +169,21 @@ const UserForm = (props) => {
           validation={{ required: true }}
         />
 
-        <FieldError name="preferences" className="rw-field-error" />
-        {preferenceFields}
-        <div className="rw-button-group">
-          <Submit disabled={props.loading} className="rw-button rw-button-blue">
-            Save
-          </Submit>
-        </div>
-      </Form>
-    </div>
-  )
-}
 
-export default UserForm
+        <Label
+          name="salt"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Salt
+        </Label>
+        <TextField
+          name="salt"
+          defaultValue={props.user?.salt}
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+          validation={{ required: false }}
+        />
+
+        <FieldError name="salt" className="rw-field-error" />
+        */

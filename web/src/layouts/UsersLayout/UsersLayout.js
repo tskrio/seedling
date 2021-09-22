@@ -12,7 +12,7 @@ const UsersLayout = ({ children }) => {
             Users
           </Link>
         </h1>
-        {hasRole('userRoleCreate') && (
+        {hasRole(['userCreate', 'admin']) && (
           <Link to={routes.newUser()} className="rw-button rw-button-green">
             <div className="rw-button-icon">+</div> New User
           </Link>
