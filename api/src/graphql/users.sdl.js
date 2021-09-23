@@ -8,7 +8,6 @@ export const schema = gql`
     preferences: JSON!
     hashedPassword: String!
     salt: String!
-    UserRole: [UserRole]!
     GroupMember: [GroupMember]!
   }
 

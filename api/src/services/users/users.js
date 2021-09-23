@@ -53,9 +53,6 @@ export const user = async ({ id }) => {
   let beforeReadRulesArr = util.loadRules(rules, 'before', 'read')
   let current = await db.user.findUnique({
     where: { id },
-    include: {
-      UserRole: true,
-    },
   })
   beforeReadRulesArr.forEach((rule) => {
     logger.info(`Starting Before Read Rule "${rule.title}" ${rule.order}`)
@@ -152,8 +149,6 @@ export const deleteUser = async ({ id }) => {
 }
 
 export const User = {
-  UserRole: (_obj, { root }) =>
-    db.user.findUnique({ where: { id: root.id } }).UserRole(),
   GroupMember: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).GroupMember(),
 }
