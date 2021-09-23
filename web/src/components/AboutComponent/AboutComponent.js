@@ -3,198 +3,110 @@
 const AboutComponent = () => {
   let altText =
     'Find me in ./web/src/components/AboutComponent/AboutComponent.js'
-  let done = (
-    <>
-      <span role="img" aria-label="Check mark">
-        ✅
-      </span>{' '}
-      DONE:{' '}
-    </>
-  )
-  let notDone = (
-    <>
-      <span role="img" aria-label="X mark">
-        ❌
-      </span>{' '}
-      WORK NOT STARTED:{' '}
-    </>
-  )
-  let workInProgress = (
-    <>
-      <span role="img" aria-label="Hourglass">
-        ⏳
-      </span>{' '}
-      WORK IN PROGRESS:{' '}
-    </>
-  )
   return (
     <>
       <h1 alt={altText}>What is TskrBase</h1>
       <p>
-        TskrBase is a open source system to allow for users, groups, and roles
-        to be managed in one system. The idea here is, Start with this
-        repository and add the tables you need to track.
-      </p>
-      <p>
-        This will be the base for the Tskr system. Tskr will add Tasks to this
-        mix.
+        TskrBase is a minimal RedwoodJS template to get started with Rules,
+        Authentication, Roles and Role based Access Control.
       </p>
       <p>
         Imagine a low-cost system where you define complex rules to execute the
         business needs you have — that&apos;s Tskr. We are an opinionated
         system. We make the decisions so you don&apos;t have to.
       </p>
-      <h2>What TskrBase is built on</h2>
+      <p>
+        Built on RedwoodJS, this repo focuses on Rules, Authentication, Roles,
+        and Role based access control.
+      </p>
+      <h2>Logins</h2>
       <ul>
-        <li>RedwoodJS (React, Prisma, GraphQL, and Postgres)</li>
-        <li>RedwoodJS&apos;s dbAuth</li>
-        <li>Role Based Access Control managed within TskrBase</li>
+        <li>admin@example.com admin</li>
+        <li>manager@example.com manager</li>
+        <li>employee@example.com employee</li>
       </ul>
       <h2>Features</h2>
       <ul>
         <li>
           <details>
-            <summary>Pages</summary>
-            <ul>
-              <li>{done}Signup (generated)</li>
-              <li>{done}Login (custom)</li>
-              <li>{notDone}Logout</li>
-              <li>{done}About</li>
-              <li>{done}NotFound</li>
-              <li>{workInProgress}Home</li>
-            </ul>
-          </details>
-          <details>
-            <summary>Components</summary>
-            <ul>
-              <li>{done}LoginComponent (custom)</li>
-              <li>{notDone}EnumSelect (reusable)</li>
-              <li>{notDone}QuerySelect</li>
-              <li>{workInProgress}AsideNavigator</li>
-              <li>
-                {workInProgress}RoleSelectCell (iterates over enum, make this
-                more generic, replace with EnumSelect)
-              </li>
-              <li>
-                {workInProgress}UserSelectCell (iterates over User, make this
-                more generic, replace with QuerySelect)
-              </li>
-              <li>
-                {notDone}ListCell (reusable) will replace TablePluralCell
-                components
-              </li>
-            </ul>
-          </details>
-
-          <details>
-            <summary>Layouts</summary>
-            <ul>
-              <li>Standard</li>
-            </ul>
-          </details>
-        </li>
-        <li>
-          <details>
-            <summary>Base user tables</summary>
-            <ul>
-              <li>
-                <details>
-                  <summary>User</summary>
-                  <p>Here we have the users who can use this system</p>
-                  <p>We track the name, email, and preferences here.</p>
-                </details>
-              </li>
-            </ul>
-          </details>
-          <details>
-            <summary>
-              Role Based Access. What does that mean? There&apos;s a lot of
-              places you have to secure to ensure a safe system.
-            </summary>
-            <ul>
-              <li>
-                {done}Routes, Services, and Components are secured for the
-                initial tables. Users, User Roles, Groups, Group Roles, and
-                Group Members.
-              </li>
-              <li>
-                {done}When adding a user to a group, we add roles to the user
-                based on the group they are in.{' '}
-                <sup>*We do not ensure they already have that role yet.*</sup>
-              </li>
-              <li>
-                {notDone}If you add a role to the group, the role will be added
-                to all users in that group.
-              </li>
-              <li>
-                {notDone}If you remove a role from the group, the role will be
-                removed from all users in that group.
-              </li>
-            </ul>
-          </details>
-        </li>
-        <li>
-          <details>
-            <summary>
-              Logic Rules. What are rules? Rules are bits of code that can
-              execute to make outbound calls, update records, or modify what was
-              submitted.
-            </summary>
-            <p>Here&apos;s the default rules for each table to start with.</p>
-            <ul>
-              <details>
-                <summary>GroupMember</summary>
-                <ul>
-                  <li>{done} addRolesToUserAfterCreate</li>
-                  <li>{notDone} removeRolesFromUserAfterDelete</li>
-                </ul>
-              </details>
-              <details>
-                <summary>GroupRole</summary>
-                <ul>
-                  <li>{notDone}addRolesToUsersAfterCreate</li>
-                  <li>{notDone}removeRolesFromUsersAfterDelete</li>
-                </ul>
-              </details>
-              <details>
-                <summary>Group</summary>
-                <ul>
-                  <li>{notDone}removeGroupRolesAfterDelete</li>
-                </ul>
-              </details>
-
-              <details>
-                <summary>User</summary>
-                <ul>
-                  <li>{notDone}deleteRelatedGroupMembershipsBeforeDelete</li>
-                </ul>
-              </details>
-            </ul>
-          </details>
-        </li>
-        <li>
-          <details>
-            <summary>Form Abstraction</summary>
+            <summary>Rules</summary>
             <p>
-              We use the form abstraction pattern to make forms easier to work
-              with.
+              Rules are the scripts that control what happens during an
+              interaction. What kinds of interactions?
             </p>
             <ul>
-              <li>{notDone}Form abstraction for all tables.</li>
+              <li>Create</li>
+              <li>Read</li>
+              <li>Update</li>
+              <li>Delete</li>
+              <li>(Future) Login</li>
+              <li>(Future) Logout</li>
+              <li>(Future) Navigate</li>
+            </ul>
+            <p>
+              Rules can modify the incoming data and outgoing data.
+              <br />
+              You can have rules that limit who can see data in columns (see
+              Hide Email)
+              <br />
+              You can have rules that create records when another record is
+              created.
+              <br />
+              You can have rules that update data before they write to the
+              database.
+            </p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Authentication</summary>
+            <p>
+              Authentication is a key part here. TskrBase has opted for dbAuth,
+              however, you could replace that pretty simply. This allows for a
+              fork of the repo to get up and running with minimal set up.
+              TskrBase has taken the opinion that Email is the login.
+            </p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Tables</summary>
+            <p>
+              Tables are important piece of this and so TskrBase has only a few
+              tables. All tables adhere to this standard.
+            </p>
+            <ul>
+              <li>Each table has a id, createdAt and updatedAt column.</li>
+              <li>Column names are camel case.</li>
+              <li>
+                References are named after the Source table. E.g.
+                GroupMember.User
+              </li>
             </ul>
           </details>
         </li>
         <li>
-          <p>
-            Created with the
-            <a href="https://www.netlify.com/jamstack/">JAMStack</a> in mind,
-            this is a great way to spin up something that has low risk, low
-            cost, and a lot of potential upsides.
-          </p>
+          <details>
+            <summary>Roles</summary>
+            <p>
+              Roles are currently declared in the table schema. `admin` is the
+              only role that doesn&apos;t follow the pattern of the CRUD roles.
+              Roles are named in camelCase table then level. e.g. taskCreate
+            </p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>Role Based Access Controls</summary>
+            <p>
+              Everything above is built to support Role Based Access
+              Controls.Access can be granted in the application to
+            </p>
+          </details>
         </li>
       </ul>
       <h2>I&apos;m in, where do I start?</h2>
-      <a href="https://github.com/shiningblue7/tskr#contributing">
+      <a href="https://github.com/tskrio/tskrBase#contributing">
         Contributing docs
       </a>
     </>
