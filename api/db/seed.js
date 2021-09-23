@@ -27,7 +27,7 @@ async function main() {
       {
         id: 2,
         email: 'manager@example.com',
-        name: 'Employee',
+        name: 'Manager',
         hashedPassword:
           '1fb011ee31f9ba8c46810a7ad6b2526ea0b9ce010d77f9811ff45ebdb41f651a',
         salt: '3cf4869a5702089b232bc3d2dac15001',
