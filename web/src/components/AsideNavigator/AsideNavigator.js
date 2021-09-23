@@ -1,4 +1,4 @@
-import { NavLink, Link, routes } from '@redwoodjs/router'
+import { NavLink, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 const AsideNavigator = () => {
   const { isAuthenticated, hasRole } = useAuth()
@@ -22,13 +22,6 @@ const AsideNavigator = () => {
               <li>
                 <NavLink to={routes.groups()} activeClassName="active-page">
                   Groups
-                </NavLink>
-              </li>
-            )}
-            {hasRole(['userRoleRead', 'admin']) && (
-              <li>
-                <NavLink to={routes.userRoles()} activeClassName="active-page">
-                  User Roles
                 </NavLink>
               </li>
             )}

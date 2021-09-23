@@ -162,17 +162,10 @@ const AboutComponent = () => {
                   <li>{notDone}removeGroupRolesAfterDelete</li>
                 </ul>
               </details>
-              <details>
-                <summary>UserRole</summary>
-                <ul>
-                  <li>{notDone}disallowDeleteIfRoleFromGroupBeforeDelete</li>
-                </ul>
-              </details>
 
               <details>
                 <summary>User</summary>
                 <ul>
-                  <li>{notDone}deleteRelatedUserRolesBeforeDelete</li>
                   <li>{notDone}deleteRelatedGroupMembershipsBeforeDelete</li>
                 </ul>
               </details>
@@ -196,7 +189,7 @@ const AboutComponent = () => {
             Created with the
             <a href="https://www.netlify.com/jamstack/">JAMStack</a> in mind,
             this is a great way to spin up something that has low risk, low
-            cost, and a lot of potiental upsides.
+            cost, and a lot of potential upsides.
           </p>
         </li>
       </ul>

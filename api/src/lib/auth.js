@@ -1,7 +1,7 @@
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/api'
 import { db } from './db'
 
-// The session object sent in as the first arugment to getCurrentUser() will
+// The session object sent in as the first argument to getCurrentUser() will
 // have a single key `id` containing the unique ID of the logged in user
 // (whatever field you set as `authFields.id` in your auth function config).
 // You'll need to update the call to `db` below if you use a different model
@@ -13,26 +13,20 @@ import { db } from './db'
 
 export const getCurrentUser = async (session) => {
   try {
-    //console.log('in /api/src/lib/auth.js', session)
+    // look up the user by the session id
     let foundUser = await db.user.findUnique({ where: { id: session.id } })
-    let userRoles = await db.userRole.findMany({
+    // look up the group memberships of the user
+    let foundGroups = await db.groupMember.findMany({
       where: { userId: session.id },
     })
-    //console.log('from auth.js getting roles', userRoles)
-    let roles = userRoles.map((userRole) => userRole.role)
-    /*
-    let foundGroups = await db.group.findMany({
-      include: {
-        GroupRole: true,
-        GroupMember: true
-      }
-    });
-    */
-    //console.log('getCurrentUser foundUser', foundUser)
-    //console.log('getCurrentUser foundGroups', foundGroups)
-    // TODO: Look up groups for the user
-    // TODO: Look up roles for the groups
-    // TODO: Put that stuff in the returnUser object
+    // look up the roles of the groups the user is a member of
+    let foundGroupRoles = await db.groupRole.findMany({
+      where: {
+        groupId: { in: foundGroups.map((group) => group.groupId) },
+      },
+    })
+    // assign the roles to the user
+    let roles = foundGroupRoles.map((groupRole) => groupRole.role)
     let returnUser = {
       roles,
       ...foundUser,

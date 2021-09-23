@@ -8,7 +8,6 @@
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
 import { Set, Router, Route, Private } from '@redwoodjs/router'
-import UserRolesLayout from 'src/layouts/UserRolesLayout'
 import GroupRolesLayout from 'src/layouts/GroupRolesLayout'
 import UsersLayout from 'src/layouts/UsersLayout'
 import GroupMembersLayout from 'src/layouts/GroupMembersLayout'
@@ -24,18 +23,6 @@ const Routes = () => {
         <Route path="/" page={HomePage} name="home" />
         <Route path="/about" page={AboutPage} name="about" />
         <Private unauthenticated="home">
-          <Set wrap={UserRolesLayout}>
-            <Private unauthenticated="home" role={['admin', 'userRoleCreate']}>
-              <Route path="/user-roles/new" page={UserRoleNewUserRolePage} name="newUserRole" role={['admin', 'userRoleCreate']} />
-            </Private>
-            <Private unauthenticated="home" role={['admin', 'userRoleUpdate']}>
-              <Route path="/user-roles/{id:Int}/edit" page={UserRoleEditUserRolePage} name="editUserRole" role={['admin', 'userRoleUpdate']} />
-            </Private>
-            <Private unauthenticated="home" role={['admin', 'userRoleRead']}>
-              <Route path="/user-roles/{id:Int}" page={UserRoleUserRolePage} name="userRole" role={['admin', 'userRoleRead']} />
-              <Route path="/user-roles" page={UserRoleUserRolesPage} name="userRoles" role={['admin', 'userRoleRead']} />
-            </Private>
-          </Set>
           <Set wrap={GroupsLayout}>
             <Private unauthenticated="home" role={['admin', 'groupCreate']}>
               <Route path="/groups/new" page={GroupNewGroupPage} name="newGroup" />
