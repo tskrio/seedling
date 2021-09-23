@@ -1,7 +1,7 @@
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes } from '@redwoodjs/router'
-
+import { useAuth } from '@redwoodjs/auth'
 import { QUERY } from 'src/components/User/UsersCell'
 
 const DELETE_USER_MUTATION = gql`
@@ -55,7 +55,7 @@ const UsersList = ({ users }) => {
       deleteUser({ variables: { id } })
     }
   }
-
+  const { isAuthenticated, hasRole } = useAuth()
   return (
     <div className="rw-segment rw-table-wrapper-responsive">
       <table className="rw-table">
@@ -92,21 +92,26 @@ const UsersList = ({ users }) => {
                   >
                     Show
                   </Link>
-                  <Link
-                    to={routes.editUser({ id: user.id })}
-                    title={'Edit user ' + user.id}
-                    className="rw-button rw-button-small rw-button-blue"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    type="button"
-                    title={'Delete user ' + user.id}
-                    className="rw-button rw-button-small rw-button-red"
-                    onClick={() => onDeleteClick(user.id)}
-                  >
-                    Delete
-                  </button>
+
+                  {hasRole(['userUpdate', 'admin']) && (
+                    <Link
+                      to={routes.editUser({ id: user.id })}
+                      title={'Edit user ' + user.id}
+                      className="rw-button rw-button-small rw-button-blue"
+                    >
+                      Edit
+                    </Link>
+                  )}
+                  {hasRole(['userDelete', 'admin']) && (
+                    <button
+                      type="button"
+                      title={'Delete user ' + user.id}
+                      className="rw-button rw-button-small rw-button-red"
+                      onClick={() => onDeleteClick(user.id)}
+                    >
+                      Delete
+                    </button>
+                  )}
                 </nav>
               </td>
             </tr>
