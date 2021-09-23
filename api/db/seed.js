@@ -20,16 +20,25 @@ async function main() {
         id: 1,
         email: 'admin@example.com',
         name: 'Admin',
+        hashedPassword:
+          '5f5f56d40b9ae6bf2abfd7804e97e607f9d7432feebb6371849f2676a5058999',
+        salt: '881aed4f5703af38eaaab6e788d8e860',
       },
       {
         id: 2,
         email: 'manager@example.com',
         name: 'Employee',
+        hashedPassword:
+          '1fb011ee31f9ba8c46810a7ad6b2526ea0b9ce010d77f9811ff45ebdb41f651a',
+        salt: '3cf4869a5702089b232bc3d2dac15001',
       },
       {
         id: 3,
         email: 'employee@example.com',
         name: 'Employee',
+        hashedPassword:
+          '01328ad2d2463d077f3e2f5dace839eff9eaf86e6d41b2d579df8c33a552f594',
+        salt: '3e6780c35a4e5ad17aafc7a6230b1163',
       },
     ],
     skipDuplicates: true, // Supported with Postgres database
