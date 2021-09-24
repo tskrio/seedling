@@ -105,6 +105,9 @@ a:focus:visited {
   line-height: 1.7;
   text-rendering: optimizeLegibility;
 }
+aside, main {
+  transition: all .2s ease-in-out;
+}
 .off-canvas aside {
   transform: translateX(calc(var(--sidebar-width) -10 * -1));
 }
