@@ -1,0 +1,10 @@
+# Commands to start on workspace startup
+tasks:
+  - init: yarn install
+    command: yarn rw dev
+# Ports to expose on workspace startup
+ports:
+  - port: 8910
+    onOpen: open-preview
+  - port: 8911
+    onOpen: ignore
