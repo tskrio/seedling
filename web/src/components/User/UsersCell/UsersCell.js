@@ -1,5 +1,6 @@
 import { Link, routes } from '@redwoodjs/router'
 import Table from 'src/components/Table/Table'
+import { UPDATE_USER_MUTATION } from 'src/components/User/EditUserCell'
 
 export const QUERY = gql`
   query FindUsers {
@@ -67,6 +68,7 @@ export const Success = ({ users }) => {
         meta={meta}
         query={QUERY}
         deleteMutation={DELETE_USER_MUTATION}
+        updateUserMutation={UPDATE_USER_MUTATION}
       />
     </>
   )
