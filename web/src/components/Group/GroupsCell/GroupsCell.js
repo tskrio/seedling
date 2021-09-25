@@ -34,6 +34,11 @@ export const Failure = ({ error }) => (
 export const Success = ({ groups }) => {
   let meta = {
     title: 'Groups',
+    routes: {
+      newItem: 'newGroup',
+      view: 'group',
+      edit: 'editGroup',
+    },
     labels: {
       single: 'group',
       multiple: 'groups',

@@ -48,7 +48,7 @@ const Table = ({ data, meta, query, deleteMutation }) => {
                 <td key={column.key}>
                   {columnIndex === 0 ? (
                     <>
-                      <Link to={routes.group({ id: row.id })}>
+                      <Link to={routes[meta.routes.view]({ id: row.id })}>
                         {row[column.key]}
                       </Link>
                     </>
@@ -65,7 +65,7 @@ const Table = ({ data, meta, query, deleteMutation }) => {
               <td key="actions">
                 <div className="table-actions">
                   <Link
-                    to={routes.editGroup({ id: row[meta.key] })}
+                    to={routes[meta.routes.edit]({ id: row[meta.key] })}
                     title={
                       'Edit ' + row[meta.display] + ' ' + meta.labels.single
                     }
@@ -90,7 +90,7 @@ const Table = ({ data, meta, query, deleteMutation }) => {
           ))}
           <tr>
             <td colSpan={meta.columns.length + 1}>
-              <Link to={routes.newGroup()}>
+              <Link to={routes[meta.routes.newItem]()}>
                 Create new {meta.labels.single}
               </Link>
             </td>

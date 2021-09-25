@@ -1,6 +1,5 @@
 import { Link, routes } from '@redwoodjs/router'
 import Table from 'src/components/Table/Table'
-import Users from 'src/components/User/Users'
 
 export const QUERY = gql`
   query FindUsers {
@@ -36,6 +35,11 @@ export const Failure = ({ error }) => (
 export const Success = ({ users }) => {
   let meta = {
     title: 'Users',
+    routes: {
+      newItem: 'newUser',
+      view: 'user',
+      edit: 'editUser',
+    },
     labels: {
       single: 'user',
       multiple: 'users',
