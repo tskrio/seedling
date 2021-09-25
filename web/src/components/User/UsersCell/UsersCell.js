@@ -1,5 +1,5 @@
 import { Link, routes } from '@redwoodjs/router'
-
+import Table from 'src/components/Table/Table'
 import Users from 'src/components/User/Users'
 
 export const QUERY = gql`
@@ -34,6 +34,43 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ users }) => {
-  console.log('usesr from usersCell', users)
-  return <Users users={users} />
+  let meta = {
+    title: 'Users',
+    labels: {
+      single: 'user',
+      multiple: 'users',
+    },
+    key: 'id',
+    display: 'name',
+    columns: [
+      { key: 'name', label: 'Name', type: 'string' },
+      { key: 'email', label: 'Email', type: 'string' },
+      { key: 'createdAt', label: 'Created', type: 'date' },
+      { key: 'updatedAt', label: 'Updated', type: 'date' },
+    ],
+  }
+  const DELETE_USER_MUTATION = gql`
+    mutation DeleteUserMutation($id: Int!) {
+      deleteUser(id: $id) {
+        id
+      }
+    }
+  `
+  return (
+    <>
+      <Table
+        data={users}
+        meta={meta}
+        query={QUERY}
+        deleteMutation={DELETE_USER_MUTATION}
+      />
+    </>
+  )
 }
+
+/*
+    <>
+      <Table data={users} meta={meta} />
+      <Users users={users} />
+    </>
+    */

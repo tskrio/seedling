@@ -12,7 +12,7 @@ const StandardLayout = ({ children }) => {
 
   return (
     <>
-      <header>
+      <header data-grid-area="header">
         <nav>
           <ul>
             <li>
@@ -55,10 +55,10 @@ const StandardLayout = ({ children }) => {
         </nav>
       </header>
       <AsideNavigator />
-      <main>
+      <main data-grid-area="main">
         <article>{children}</article>
       </main>
-      <footer>
+      <footer data-grid-area="footer">
         <ul>
           <li>
             Made with{' '}
