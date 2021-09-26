@@ -11,9 +11,9 @@ export const schema = gql`
   }
 
   type Query {
-    groupMembers: [GroupMember!]!
-    groupMember(id: Int!): GroupMember
-    groupMembersByGroup(id: Int!): [GroupMember!]!
+    groupMembers: [GroupMember!]! @requireAuth
+    groupMember(id: Int!): GroupMember @requireAuth
+    groupMembersByGroup(id: Int!): [GroupMember!]! @requireAuth
   }
 
   input CreateGroupMemberInput {
@@ -27,8 +27,9 @@ export const schema = gql`
   }
 
   type Mutation {
-    createGroupMember(input: CreateGroupMemberInput!): GroupMember!
+    createGroupMember(input: CreateGroupMemberInput!): GroupMember! @requireAuth
     updateGroupMember(id: Int!, input: UpdateGroupMemberInput!): GroupMember!
-    deleteGroupMember(id: Int!): GroupMember!
+      @requireAuth
+    deleteGroupMember(id: Int!): GroupMember! @requireAuth
   }
 `

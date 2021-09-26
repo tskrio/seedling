@@ -29,9 +29,9 @@ export const schema = gql`
   }
 
   type Query {
-    groupRoles: [GroupRole!]!
-    groupRole(id: Int!): GroupRole
-    groupRolesByGroup(id: Int!): [GroupRole!]!
+    groupRoles: [GroupRole!]! @requireAuth
+    groupRole(id: Int!): GroupRole @requireAuth
+    groupRolesByGroup(id: Int!): [GroupRole!]! @requireAuth
   }
 
   input CreateGroupRoleInput {
@@ -45,8 +45,9 @@ export const schema = gql`
   }
 
   type Mutation {
-    createGroupRole(input: CreateGroupRoleInput!): GroupRole!
+    createGroupRole(input: CreateGroupRoleInput!): GroupRole! @requireAuth
     updateGroupRole(id: Int!, input: UpdateGroupRoleInput!): GroupRole!
-    deleteGroupRole(id: Int!): GroupRole!
+      @requireAuth
+    deleteGroupRole(id: Int!): GroupRole! @requireAuth
   }
 `

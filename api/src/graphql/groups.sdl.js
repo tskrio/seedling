@@ -10,8 +10,8 @@ export const schema = gql`
   }
 
   type Query {
-    groups: [Group!]!
-    group(id: Int!): Group
+    groups: [Group!]! @requireAuth
+    group(id: Int!): Group @requireAuth
   }
 
   input CreateGroupInput {
@@ -25,8 +25,8 @@ export const schema = gql`
   }
 
   type Mutation {
-    createGroup(input: CreateGroupInput!): Group!
-    updateGroup(id: Int!, input: UpdateGroupInput!): Group!
-    deleteGroup(id: Int!): Group!
+    createGroup(input: CreateGroupInput!): Group! @requireAuth
+    updateGroup(id: Int!, input: UpdateGroupInput!): Group! @requireAuth
+    deleteGroup(id: Int!): Group! @requireAuth
   }
 `
