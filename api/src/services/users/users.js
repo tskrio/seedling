@@ -26,7 +26,7 @@ export const users = async () => {
     })
   })
 
-  console.log('readRecords', readRecords)
+  //console.log('readRecords', readRecords)
   return readRecords
 }
 

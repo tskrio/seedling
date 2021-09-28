@@ -48,7 +48,7 @@ export const groupMembersByGroup = async (id) => {
     })
   })
 
-  console.log('readRecords', readRecords)
+  //console.log('readRecords', readRecords)
   return readRecords
 }
 
