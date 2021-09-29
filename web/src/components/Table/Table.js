@@ -2,10 +2,11 @@ import { useMutation } from '@redwoodjs/web'
 import { Link, routes } from '@redwoodjs/router'
 import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
+import { UPDATE_USER_MUTATION } from 'src/components/User/EditUserCell'
 const Table = ({ data, meta, query, deleteMutation, updateMutation }) => {
   const { currentUser } = useAuth()
   let altText = 'Find me in ./web/src/components/Table/Table.js'
-  const [updateUserPreferences] = useMutation(updateMutation, {
+  const [updateUserPreferences] = useMutation(UPDATE_USER_MUTATION, {
     onCompleted: () => {
       toast.success('User preferences updated.')
     },
@@ -25,6 +26,16 @@ const Table = ({ data, meta, query, deleteMutation, updateMutation }) => {
       deleteGroup({ variables: { id } })
     }
   }
+
+  const getProps = (path, context) => {
+    context = context || this
+    path = path.split('.')
+    path.forEach((pathString, index)=>{
+      context = context[path[index]]
+    })
+    return context
+  }
+
   const timeTag = (datetime) => {
     return (
       <time dateTime={datetime} title={datetime}>
@@ -55,15 +66,17 @@ const Table = ({ data, meta, query, deleteMutation, updateMutation }) => {
       </thead>
     )
   }
-  let tableCell = (type, value) => {
+let tableCell = (type, row, key) => {
     if (type === 'date') {
-      return timeTag(value)
+        return timeTag(row[key])
     } else if (type === 'boolean') {
-      return value ? 'Yes' : 'No'
+        return row[key] ? 'Yes' : 'No'
+    } else if (type === 'reference') {
+        return getProps(key, row)
     } else {
-      return value
+        return row[key]
     }
-  }
+}
   let tableBodyRows = (rows, columns) => {
     return (
       <tbody>
@@ -76,14 +89,14 @@ const Table = ({ data, meta, query, deleteMutation, updateMutation }) => {
                     return (
                       <td key={column.key}>
                         <Link to={routes[meta.routes.view]({ id: row.id })}>
-                          {tableCell(column.type, row[column.key])}
+                          {tableCell(column.type, row, column.key)}
                         </Link>
                       </td>
                     )
                   } else {
                     return (
                       <td key={column.key}>
-                        {tableCell(column.type, row[column.key])}
+                        {tableCell(column.type, row, column.key)}
                       </td>
                     )
                   }

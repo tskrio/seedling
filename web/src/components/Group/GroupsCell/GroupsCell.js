@@ -66,7 +66,6 @@ export const Success = ({ groups }) => {
         meta={meta}
         query={QUERY}
         deleteMutation={DELETE_GROUP_MUTATION}
-        updateMutation={UPDATE_GROUP_MUTATION}
       />
     </>
   )
