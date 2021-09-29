@@ -1,6 +1,6 @@
 import { Link, routes } from '@redwoodjs/router'
 import Table from 'src/components/Table/Table'
-import { UPDATE_USER_MUTATION } from 'src/components/User/EditUserCell'
+import { UPDATE_GROUP_MUTATION } from 'src/components/Group/EditGroupCell'
 
 export const QUERY = gql`
   query FindGroups {
@@ -66,15 +66,8 @@ export const Success = ({ groups }) => {
         meta={meta}
         query={QUERY}
         deleteMutation={DELETE_GROUP_MUTATION}
-        updateUserMutation={UPDATE_USER_MUTATION}
+        updateMutation={UPDATE_GROUP_MUTATION}
       />
     </>
   )
 }
-/**
- * <>
-      {JSON.stringify(groups)}
-      <Table data={groups} meta={meta} />
-      <Groups groups={groups} />
-    </>
- */

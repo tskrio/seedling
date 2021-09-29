@@ -10,8 +10,6 @@ export const QUERY = gql`
       updatedAt
       email
       name
-      hashedPassword
-      salt
     }
   }
 `
@@ -68,15 +66,8 @@ export const Success = ({ users }) => {
         meta={meta}
         query={QUERY}
         deleteMutation={DELETE_USER_MUTATION}
-        updateUserMutation={UPDATE_USER_MUTATION}
+        updateMutation={UPDATE_USER_MUTATION}
       />
     </>
   )
 }
-
-/*
-    <>
-      <Table data={users} meta={meta} />
-      <Users users={users} />
-    </>
-    */

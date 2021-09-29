@@ -80,8 +80,6 @@ const UsersList = ({ users }) => {
               <td>{timeTag(user.updatedAt)}</td>
               <td>{truncate(user.email)}</td>
               <td>{truncate(user.name)}</td>
-              <td>{truncate(user.hashedPassword)}</td>
-              <td>{truncate(user.salt)}</td>
               <td>{truncate(user.preferences)}</td>
               <td>
                 <nav className="rw-table-actions">

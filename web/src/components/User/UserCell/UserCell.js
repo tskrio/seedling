@@ -8,8 +8,6 @@ export const QUERY = gql`
       updatedAt
       email
       name
-      hashedPassword
-      salt
       preferences
     }
   }

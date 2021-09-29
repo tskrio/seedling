@@ -3,17 +3,17 @@ export const schema = gql`
     id: Int!
     createdAt: DateTime!
     updatedAt: DateTime!
-    email: String! @maskedEmail
+    email: String!
     name: String!
-    preferences: JSON! @requireAuth(roles: ["NOONE"])
-    hashedPassword: String! @requireAuth(roles: ["NOONE"])
-    salt: String! @requireAuth(roles: ["NOONE"])
+    preferences: JSON!
+    hashedPassword: String!
+    salt: String!
     GroupMember: [GroupMember]!
   }
 
   type Query {
     users: [User!]! @requireAuth
-    user(id: Int!): User @requireAuth(roles: ["NOONE"])
+    user(id: Int!): User @skipAuth
   }
 
   input CreateUserInput {

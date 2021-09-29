@@ -2,10 +2,10 @@ import { useMutation } from '@redwoodjs/web'
 import { Link, routes } from '@redwoodjs/router'
 import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
-const Table = ({ data, meta, query, deleteMutation, updateUserMutation }) => {
+const Table = ({ data, meta, query, deleteMutation, updateMutation }) => {
   const { currentUser } = useAuth()
   let altText = 'Find me in ./web/src/components/Table/Table.js'
-  const [updateUserPreferences] = useMutation(updateUserMutation, {
+  const [updateUserPreferences] = useMutation(updateMutation, {
     onCompleted: () => {
       toast.success('User preferences updated.')
     },

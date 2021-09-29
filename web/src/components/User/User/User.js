@@ -74,14 +74,6 @@ const User = ({ user }) => {
               <th>Name</th>
               <td>{user.name}</td>
             </tr>
-            <tr>
-              <th>Hashed password</th>
-              <td>{user.hashedPassword}</td>
-            </tr>
-            <tr>
-              <th>Salt</th>
-              <td>{user.salt}</td>
-            </tr>
           </tbody>
         </table>
       </div>

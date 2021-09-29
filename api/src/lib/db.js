@@ -2,21 +2,13 @@
 // for options.
 
 import { PrismaClient } from '@prisma/client'
-
 import { emitLogLevels, handlePrismaLogging } from '@redwoodjs/api/logger'
-
 import { logger } from './logger'
-
-import rules from 'src/rules/**/**.{js,ts}'
-console.log('rules.length', rules.length)
-console.log('rules', rules)
-
-import rules2 from 'src/middlewares/**/**.{js,ts}'
-console.log('rules2.length', rules2.length)
-console.log('rules2', rules2)
+import rules from 'src/middlewares/**/**.{js,ts}'
 /*
  * Instance of the Prisma Client
  */
+
 export const db = new PrismaClient({
   log: emitLogLevels(['info', 'warn', 'error']),
 })
@@ -27,6 +19,11 @@ handlePrismaLogging({
   logLevels: ['info', 'warn', 'error'],
 })
 
+let rulesArr = Object.keys(rules).map((k) => rules[k]) //from obj to arr of objs
+rulesArr.sort((a, b) => a.order - b.order) //order rules asc
+rulesArr = rulesArr.filter((rule) => {
+  return rule.active === true
+})
 let modelQueries = [
   { group: 'create', queries: ['create', 'createMany', 'upsert'] },
   { group: 'read', queries: ['findUnique', 'findFirst', 'findMany'] },
@@ -37,34 +34,38 @@ let modelQueries = [
 let green = (str) => {
   return `\u001b[1;32m${str}\u001b[0m`
 }
-//console.log(modelQueries)
 async function main() {
   /***********************************/
   /* MIDDLEWARE */
   /***********************************/
-  //console.log(rules)
+  console.log('context', context)
 
   db.$use(async (params, next) => {
-    console.log('params', params)
     const before = Date.now()
     modelQueries.forEach((modelQuery) => {
+      //loop over the create, read, update, delete, other groupings
       modelQuery.queries.forEach((query) => {
+        //loop over the FindUnique, insert, update, delete methods in those groupings
         if (params.action === query) {
           logger.info(
             `MW BEFORE: ${green(params.model)} ${modelQuery.group} ${green(
               params.action
             )}`
           )
-          console.log('MIDDLEWARE BEFORE params.args', params.args)
-          //if (params.args?.data?.name) {
-          //params.args.data.name = 'This is your name'
-          /*rules.forEach((rule) => {
-              if (rule.type.includes(modelQuery.group)) {
-                logger.info(`MW RULE: ${rule.file}`)
-                params = rule.command(params.args?.data)
-              }
-            })*/
-          //}
+          rulesArr.forEach(async (rule) => {
+            if (rule.type.includes(modelQuery.group)) {
+              //if the rule type (array) includes the grouping (crud)
+              console.log(
+                `${green('Started ')} Order: ${rule.order} rule ${rule.name}`,
+                JSON.stringify(params, null, 2)
+              )
+              params = await rule.command(params)
+              console.log(
+                `${green('Finished')} Order: ${rule.order} rule ${rule.name}`,
+                JSON.stringify(params, null, 2)
+              )
+            }
+          })
         }
       })
     })
@@ -73,7 +74,7 @@ async function main() {
     console.log(
       `Query ${params.model}.${params.action} took ${after - before}ms`
     )
-    console.log('MIDDLEWARE AFTER params.args', params.args)
+    //console.log('MIDDLEWARE AFTER params.args', params.args)
     return result
   })
 }

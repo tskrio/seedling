@@ -53,15 +53,6 @@ enum Role {
   userRoleDelete
 }
 
-//model UserRole {
-//  id        Int      @id @default(autoincrement())
-//  createdAt DateTime @default(now())
-//  updatedAt DateTime @updatedAt
-//  user      User     @relation(name: "UserRole", fields: [userId], references: [id])
-//  userId    Int
-//  role      Role
-//}
-
 model Group {
   id          Int           @id @default(autoincrement())
   createdAt   DateTime      @default(now())

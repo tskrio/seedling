@@ -12,7 +12,7 @@ export const QUERY = gql`
       updatedAt
       email
       name
-      hashedPassword
+
       preferences
     }
   }
@@ -25,8 +25,6 @@ export const UPDATE_USER_MUTATION = gql`
       updatedAt
       email
       name
-      hashedPassword
-      salt
       preferences
     }
   }
