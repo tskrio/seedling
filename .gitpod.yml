@@ -1,7 +1,7 @@
 # Commands to start on workspace startup
 tasks:
   - init: yarn install
-    command: yarn rw dev
+    command: yarn rw dev --forward="--client-web-socket-url $(gp url 8910 | sed -e "s/https/wss/g")"
 # Ports to expose on workspace startup
 ports:
   - port: 8911
