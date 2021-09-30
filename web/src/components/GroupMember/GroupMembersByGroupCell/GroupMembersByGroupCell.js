@@ -1,5 +1,6 @@
 import GroupMembers from 'src/components/GroupMember/GroupMembers'
 import GroupMembersLayout from 'src/layouts/GroupMembersLayout'
+import Table from 'src/components/Table/Table'
 export const beforeQuery = (props) => {
   //console.log('variables', props)
   props.id = props.groupID.id
@@ -10,6 +11,14 @@ export const beforeQuery = (props) => {
   }
 }
 
+import { UPDATE_GROUP_MEMBER_MUTATION } from 'src/components/GroupMember/EditGroupMemberCell'
+const DELETE_GROUP_MEMBER_MUTATION = gql`
+  mutation DeleteGroupMemberMutation($id: Int!) {
+    deleteGroupMember(id: $id) {
+      id
+    }
+  }
+`
 export const QUERY = gql`
   query getGroupMembersFromGroup($id: Int!) {
     groupMembers: groupMembersByGroup(id: $id) {
@@ -43,12 +52,49 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ groupMembers }) => {
-  //return <div>{JSON.stringify(groupMembers)}</div>
+  // let query = `Where group = ${groupMembers[0].group.name}`
+  // return (
+  //   <GroupMembersLayout query={query}>
+  //     <GroupMembers groupMembers={groupMembers} />
+  //   </GroupMembersLayout>
+  // )
 
-  let query = `Where group = ${groupMembers[0].group.name}`
+  let meta = {
+    title: 'Group Members',
+    routes: {
+      newItem: 'newGroupMember',
+      view: 'groupMember',
+      edit: 'editGroupMember',
+    },
+    labels: {
+      single: 'groupmember',
+      multiple: 'groupmembers',
+    },
+    key: 'id',
+    display: 'name',
+    columns: [
+      { key: 'user.name', label: 'User', type: 'reference' },
+      { key: 'group.name', label: 'Group', type: 'reference' },
+      { key: 'createdAt', label: 'Created', type: 'date' },
+      { key: 'updatedAt', label: 'Updated', type: 'date' },
+    ],
+  }
+  const DELETE_GROUP_MUTATION = gql`
+    mutation DeleteGroupMutation($id: Int!) {
+      deleteGroup(id: $id) {
+        id
+      }
+    }
+  `
   return (
-    <GroupMembersLayout query={query}>
-      <GroupMembers groupMembers={groupMembers} />
-    </GroupMembersLayout>
+    <>
+      <Table
+        data={groupMembers}
+        meta={meta}
+        query={QUERY}
+        deleteMutation={DELETE_GROUP_MEMBER_MUTATION}
+      />
+    </>
   )
+
 }

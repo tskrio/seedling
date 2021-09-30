@@ -1,29 +1,8 @@
 import { db } from 'src/lib/db'
-import { requireAuth } from 'src/lib/auth'
+//import { requireAuth } from 'src/lib/auth'
 import { logger } from 'src/lib/logger'
 import * as util from 'src/lib/rulesUtil'
 import rules from 'src/rules/groups/**.{js,ts}'
-
-// Used when the environment variable REDWOOD_SECURE_SERVICES=1
-export const beforeResolver = (rules) => {
-  rules.add(requireAuth)
-  // create
-  rules.add(() => requireAuth({ role: ['admin', 'groupCreate'] }), {
-    only: ['createGroup'],
-  })
-  // read
-  rules.add(() => requireAuth({ role: ['admin', 'groupRead'] }), {
-    only: ['groups', 'group'],
-  })
-  // update
-  rules.add(() => requireAuth({ role: ['admin', 'groupUpdate'] }), {
-    only: ['updateGroup'],
-  })
-  // delete
-  rules.add(() => requireAuth({ role: ['admin', 'groupDelete'] }), {
-    only: ['deleteGroup'],
-  })
-}
 
 export const groups = async () => {
   let records = await db.group.findMany({

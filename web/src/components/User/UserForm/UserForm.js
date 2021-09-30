@@ -22,17 +22,6 @@ const titleCase = (str) => {
   return str.join(' ')
 }
 
-function randomString(len, charSet) {
-  charSet =
-    charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  var randomString = ''
-  for (var i = 0; i < len; i++) {
-    var randomPoz = Math.floor(Math.random() * charSet.length)
-    randomString += charSet.substring(randomPoz, randomPoz + 1)
-  }
-  return randomString
-}
-
 const UserForm = (props) => {
   const onSubmit = (data) => {
     //console.log('onsave data', data)
@@ -43,9 +32,6 @@ const UserForm = (props) => {
     }
     if (data.preferences == undefined) {
       data.preferences = {}
-    }
-    if (data.salt == '' || data.salt == undefined) {
-      data.salt = randomString(32).trim()
     }
     console.log('onsave data modified', data)
     props.onSave(data, props?.user?.id)

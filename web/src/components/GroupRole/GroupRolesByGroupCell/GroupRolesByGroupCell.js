@@ -1,5 +1,7 @@
 import GroupRoles from 'src/components/GroupRole/GroupRoles'
 import GroupRolesLayout from 'src/layouts/GroupRolesLayout'
+
+import Table from 'src/components/Table/Table'
 export const beforeQuery = (props) => {
   console.log('variables', props)
   props.id = props.groupID.id
@@ -36,11 +38,47 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ groupRoles }) => {
-  //return <div>{JSON.stringify(groupRoles)}</div>
-  let query = `Where group = ${groupRoles[0].group.name}`
+  // let query = `Where group = ${groupRoles[0].group.name}`
+  // return (
+  //   <GroupRolesLayout query={query}>
+  //     <GroupRoles groupRoles={groupRoles} />
+  //   </GroupRolesLayout>
+  // )
+  let meta = {
+    title: 'Group Roles',
+    routes: {
+      newItem: 'newGroupRole',
+      view: 'groupRole',
+      edit: 'editGroupRole',
+    },
+    labels: {
+      single: 'grouperole',
+      multiple: 'grouproles',
+    },
+    key: 'id',
+    display: 'name',
+    columns: [
+      { key: 'role', label: 'Role', type: 'string' },
+      { key: 'group.name', label: 'Group', type: 'reference' },
+      { key: 'createdAt', label: 'Created', type: 'date' },
+      { key: 'updatedAt', label: 'Updated', type: 'date' },
+    ],
+  }
+const DELETE_GROUP_ROLE_MUTATION = gql`
+  mutation DeleteGroupRoleMutation($id: Int!) {
+    deleteGroupRole(id: $id) {
+      id
+    }
+  }
+`
   return (
-    <GroupRolesLayout query={query}>
-      <GroupRoles groupRoles={groupRoles} />
-    </GroupRolesLayout>
+    <>
+      <Table
+        data={groupRoles}
+        meta={meta}
+        query={QUERY}
+        deleteMutation={DELETE_GROUP_ROLE_MUTATION}
+      />
+    </>
   )
 }

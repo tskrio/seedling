@@ -12,12 +12,12 @@ export const QUERY = gql`
       updatedAt
       email
       name
-      hashedPassword
+
       preferences
     }
   }
 `
-const UPDATE_USER_MUTATION = gql`
+export const UPDATE_USER_MUTATION = gql`
   mutation UpdateUserMutation($id: Int!, $input: UpdateUserInput!) {
     updateUser(id: $id, input: $input) {
       id
@@ -25,8 +25,6 @@ const UPDATE_USER_MUTATION = gql`
       updatedAt
       email
       name
-      hashedPassword
-      salt
       preferences
     }
   }

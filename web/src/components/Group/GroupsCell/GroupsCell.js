@@ -1,6 +1,6 @@
 import { Link, routes } from '@redwoodjs/router'
-
-import Groups from 'src/components/Group/Groups'
+import Table from 'src/components/Table/Table'
+import { UPDATE_GROUP_MUTATION } from 'src/components/Group/EditGroupCell'
 
 export const QUERY = gql`
   query FindGroups {
@@ -32,5 +32,41 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ groups }) => {
-  return <Groups groups={groups} />
+  let meta = {
+    title: 'Groups',
+    routes: {
+      newItem: 'newGroup',
+      view: 'group',
+      edit: 'editGroup',
+    },
+    labels: {
+      single: 'group',
+      multiple: 'groups',
+    },
+    key: 'id',
+    display: 'name',
+    columns: [
+      { key: 'name', label: 'Name', type: 'string' },
+      { key: 'description', label: 'Description', type: 'string' },
+      { key: 'createdAt', label: 'Created', type: 'date' },
+      { key: 'updatedAt', label: 'Updated', type: 'date' },
+    ],
+  }
+  const DELETE_GROUP_MUTATION = gql`
+    mutation DeleteGroupMutation($id: Int!) {
+      deleteGroup(id: $id) {
+        id
+      }
+    }
+  `
+  return (
+    <>
+      <Table
+        data={groups}
+        meta={meta}
+        query={QUERY}
+        deleteMutation={DELETE_GROUP_MUTATION}
+      />
+    </>
+  )
 }
