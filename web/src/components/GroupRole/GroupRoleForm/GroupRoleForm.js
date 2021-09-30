@@ -8,6 +8,7 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 import RoleSelect from 'src/components/RoleSelect'
+import { useLocation } from '@redwoodjs/router'
 
 const formatDatetime = (value) => {
   if (value) {
@@ -16,6 +17,8 @@ const formatDatetime = (value) => {
 }
 
 const GroupRoleForm = (props) => {
+  const { search } = useLocation()
+  let params = new URLSearchParams(search)
   const onSubmit = (data) => {
     props.onSave(data, props?.groupRole?.id)
   }
@@ -68,7 +71,7 @@ const GroupRoleForm = (props) => {
         </Label>
         <NumberField
           name="groupId"
-          defaultValue={props.groupRole?.groupId}
+          defaultValue={props.groupRole?.groupId || params.get('groupId')}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
           validation={{ required: true }}

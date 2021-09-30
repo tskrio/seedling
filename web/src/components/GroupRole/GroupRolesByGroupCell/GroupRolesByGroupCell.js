@@ -1,7 +1,7 @@
-import GroupRoles from 'src/components/GroupRole/GroupRoles'
 import GroupRolesLayout from 'src/layouts/GroupRolesLayout'
 
 import Table from 'src/components/Table/Table'
+import { routes } from '@redwoodjs/router'
 export const beforeQuery = (props) => {
   console.log('variables', props)
   props.id = props.groupID.id
@@ -47,9 +47,15 @@ export const Success = ({ groupRoles }) => {
   let meta = {
     title: 'Group Roles',
     routes: {
-      newItem: 'newGroupRole',
-      view: 'groupRole',
-      edit: 'editGroupRole',
+      newItem: () => {
+        return routes.newGroupRole({ groupId: groupRoles[0].group.id })
+      },
+      view: (prop) => {
+        return routes.groupRole(prop)
+      },
+      edit: (prop) => {
+        return routes.editGroupRole(prop)
+      },
     },
     labels: {
       single: 'grouperole',
@@ -64,13 +70,13 @@ export const Success = ({ groupRoles }) => {
       { key: 'updatedAt', label: 'Updated', type: 'date' },
     ],
   }
-const DELETE_GROUP_ROLE_MUTATION = gql`
-  mutation DeleteGroupRoleMutation($id: Int!) {
-    deleteGroupRole(id: $id) {
-      id
+  const DELETE_GROUP_ROLE_MUTATION = gql`
+    mutation DeleteGroupRoleMutation($id: Int!) {
+      deleteGroupRole(id: $id) {
+        id
+      }
     }
-  }
-`
+  `
   return (
     <>
       <Table

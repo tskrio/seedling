@@ -3,7 +3,7 @@ import { Link, routes } from '@redwoodjs/router'
 import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
 import { UPDATE_USER_MUTATION } from 'src/components/User/EditUserCell'
-const Table = ({ data, meta, query, deleteMutation, updateMutation }) => {
+const Table = ({ data, meta, query, deleteMutation }) => {
   const { currentUser } = useAuth()
   let altText = 'Find me in ./web/src/components/Table/Table.js'
   const [updateUserPreferences] = useMutation(UPDATE_USER_MUTATION, {
@@ -30,7 +30,7 @@ const Table = ({ data, meta, query, deleteMutation, updateMutation }) => {
   const getProps = (path, context) => {
     context = context || this
     path = path.split('.')
-    path.forEach((pathString, index)=>{
+    path.forEach((pathString, index) => {
       context = context[path[index]]
     })
     return context
@@ -66,17 +66,17 @@ const Table = ({ data, meta, query, deleteMutation, updateMutation }) => {
       </thead>
     )
   }
-let tableCell = (type, row, key) => {
+  let tableCell = (type, row, key) => {
     if (type === 'date') {
-        return timeTag(row[key])
+      return timeTag(row[key])
     } else if (type === 'boolean') {
-        return row[key] ? 'Yes' : 'No'
+      return row[key] ? 'Yes' : 'No'
     } else if (type === 'reference') {
-        return getProps(key, row)
+      return getProps(key, row)
     } else {
-        return row[key]
+      return row[key]
     }
-}
+  }
   let tableBodyRows = (rows, columns) => {
     return (
       <tbody>
@@ -88,7 +88,7 @@ let tableCell = (type, row, key) => {
                   if (columnIndex === 0) {
                     return (
                       <td key={column.key}>
-                        <Link to={routes[meta.routes.view]({ id: row.id })}>
+                        <Link to={meta.routes.view({ id: row.id })}>
                           {tableCell(column.type, row, column.key)}
                         </Link>
                       </td>
@@ -106,7 +106,7 @@ let tableCell = (type, row, key) => {
               <td key="actions">
                 <div className="table-actions">
                   <Link
-                    to={routes[meta.routes.edit]({ id: row[meta.key] })}
+                    to={meta.routes.edit({ id: row[meta.key] })}
                     title={
                       'Edit ' + row[meta.display] + ' ' + meta.labels.single
                     }
@@ -132,7 +132,7 @@ let tableCell = (type, row, key) => {
         })}
         <tr>
           <td colSpan={meta.columns.length + 1}>
-            <Link to={routes[meta.routes.newItem]()}>
+            <Link to={meta.routes.newItem()}>
               Create new {meta.labels.single}
             </Link>
           </td>

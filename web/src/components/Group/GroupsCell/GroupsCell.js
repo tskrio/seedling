@@ -1,6 +1,5 @@
 import { Link, routes } from '@redwoodjs/router'
 import Table from 'src/components/Table/Table'
-import { UPDATE_GROUP_MUTATION } from 'src/components/Group/EditGroupCell'
 
 export const QUERY = gql`
   query FindGroups {
@@ -35,9 +34,15 @@ export const Success = ({ groups }) => {
   let meta = {
     title: 'Groups',
     routes: {
-      newItem: 'newGroup',
-      view: 'group',
-      edit: 'editGroup',
+      newItem: (prop) => {
+        return routes.newGroup(prop)
+      },
+      view: (prop) => {
+        return routes.group(prop)
+      },
+      edit: (prop) => {
+        return routes.editGroup(prop)
+      },
     },
     labels: {
       single: 'group',

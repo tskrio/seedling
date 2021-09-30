@@ -17,15 +17,15 @@ module.exports = {
       //if were given a password, we make a new salt, hash it and set both salt and hash
       if (incomingData?.args?.data) {
         let hashedPassword = incomingData.args.data.hashedPassword
-        if(hashedPassword){
-        console.log('in hashpassword is set... assume it needs hashing')
+        if (hashedPassword) {
+          console.log('in hashpassword is set... assume it needs hashing')
 
-        let salt = randomString(30)
-        incomingData.args.data.salt = salt.toString()
-        let encryptedPassword = CryptoJS.PBKDF2(
-          hashedPassword, salt, { keySize: 256 / 32, }
-          ).toString()
-        incomingData.args.data.hashedPassword = encryptedPassword
+          let salt = randomString(30)
+          incomingData.args.data.salt = salt.toString()
+          let encryptedPassword = CryptoJS.PBKDF2(hashedPassword, salt, {
+            keySize: 256 / 32,
+          }).toString()
+          incomingData.args.data.hashedPassword = encryptedPassword
         } else {
           //hashpassword is empty.. lets not set this.
           delete incomingData.args.data.hashedPassword
@@ -40,7 +40,7 @@ module.exports = {
   order: 10,
   title: 'hash password on update',
   when: ['before'],
-  type: ['update'],
+  type: ['update', 'create'],
   name: 'hashpassword',
   file: __filename,
 }

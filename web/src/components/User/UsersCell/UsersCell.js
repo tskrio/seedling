@@ -35,9 +35,15 @@ export const Success = ({ users }) => {
   let meta = {
     title: 'Users',
     routes: {
-      newItem: 'newUser',
-      view: 'user',
-      edit: 'editUser',
+      newItem: () => {
+        return routes.newUser()
+      },
+      view: (prop) => {
+        return routes.user(prop)
+      },
+      edit: (prop) => {
+        return routes.editUser(prop)
+      },
     },
     labels: {
       single: 'user',

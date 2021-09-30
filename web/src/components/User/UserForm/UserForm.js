@@ -7,6 +7,7 @@ import {
   Submit,
   PasswordField,
 } from '@redwoodjs/forms'
+import { useLocation } from '@redwoodjs/router'
 
 const formatDatetime = (value) => {
   if (value) {
@@ -23,6 +24,10 @@ const titleCase = (str) => {
 }
 
 const UserForm = (props) => {
+  const { search } = useLocation()
+  let params = new URLSearchParams(search)
+
+  console.log(props)
   const onSubmit = (data) => {
     //console.log('onsave data', data)
     /**Client RUles go here */
@@ -83,7 +88,7 @@ const UserForm = (props) => {
         </Label>
         <TextField
           name="email"
-          defaultValue={props.user?.email}
+          defaultValue={props.user?.email || params.get('email')}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
@@ -100,7 +105,7 @@ const UserForm = (props) => {
         </Label>
         <TextField
           name="name"
-          defaultValue={props.user?.name}
+          defaultValue={props.user?.name || params.get('name')}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
           validation={{ required: true }}

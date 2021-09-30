@@ -21,7 +21,7 @@ export const schema = gql`
     name: String!
     preferences: JSON!
     hashedPassword: String!
-    salt: String!
+    salt: String
   }
 
   input UpdateUserInput {
