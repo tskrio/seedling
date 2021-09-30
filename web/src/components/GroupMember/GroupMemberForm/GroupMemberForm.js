@@ -6,7 +6,7 @@ import {
   NumberField,
   Submit,
 } from '@redwoodjs/forms'
-
+import { useLocation } from '@redwoodjs/router'
 const formatDatetime = (value) => {
   if (value) {
     return value.replace(/:\d{2}\.\d{3}\w/, '')
@@ -14,6 +14,8 @@ const formatDatetime = (value) => {
 }
 
 const GroupMemberForm = (props) => {
+  const { search } = useLocation()
+  let params = new URLSearchParams(search)
   const onSubmit = (data) => {
     props.onSave(data, props?.groupMember?.id)
   }
@@ -37,7 +39,7 @@ const GroupMemberForm = (props) => {
         </Label>
         <NumberField
           name="userId"
-          defaultValue={props.groupMember?.userId}
+          defaultValue={props.groupMember?.userId || params.get('userId')}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
@@ -54,7 +56,7 @@ const GroupMemberForm = (props) => {
         </Label>
         <NumberField
           name="groupId"
-          defaultValue={props.groupMember?.groupId}
+          defaultValue={props.groupMember?.groupId || params.get('groupId')}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
           validation={{ required: true }}

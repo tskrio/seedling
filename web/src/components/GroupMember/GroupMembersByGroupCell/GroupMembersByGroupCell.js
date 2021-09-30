@@ -1,4 +1,4 @@
-import GroupMembers from 'src/components/GroupMember/GroupMembers'
+import { routes } from '@redwoodjs/router'
 import GroupMembersLayout from 'src/layouts/GroupMembersLayout'
 import Table from 'src/components/Table/Table'
 export const beforeQuery = (props) => {
@@ -11,7 +11,6 @@ export const beforeQuery = (props) => {
   }
 }
 
-import { UPDATE_GROUP_MEMBER_MUTATION } from 'src/components/GroupMember/EditGroupMemberCell'
 const DELETE_GROUP_MEMBER_MUTATION = gql`
   mutation DeleteGroupMemberMutation($id: Int!) {
     deleteGroupMember(id: $id) {
@@ -62,9 +61,15 @@ export const Success = ({ groupMembers }) => {
   let meta = {
     title: 'Group Members',
     routes: {
-      newItem: 'newGroupMember',
-      view: 'groupMember',
-      edit: 'editGroupMember',
+      newItem: (prop) => {
+        return routes.newGroupMember({ groupId: groupMembers[0].group.id })
+      },
+      view: (prop) => {
+        return routes.groupMember(prop)
+      },
+      edit: (prop) => {
+        return routes.editGroupMember(prop)
+      },
     },
     labels: {
       single: 'groupmember',
@@ -79,13 +84,6 @@ export const Success = ({ groupMembers }) => {
       { key: 'updatedAt', label: 'Updated', type: 'date' },
     ],
   }
-  const DELETE_GROUP_MUTATION = gql`
-    mutation DeleteGroupMutation($id: Int!) {
-      deleteGroup(id: $id) {
-        id
-      }
-    }
-  `
   return (
     <>
       <Table
@@ -96,5 +94,4 @@ export const Success = ({ groupMembers }) => {
       />
     </>
   )
-
 }
