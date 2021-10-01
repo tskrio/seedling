@@ -42,7 +42,7 @@ const GroupMemberForm = (props) => {
           defaultValue={props.groupMember?.userId || params.get('userId')}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
+          config={{ required: true }}
         />
 
         <FieldError name="userId" className="rw-field-error" />
@@ -59,7 +59,7 @@ const GroupMemberForm = (props) => {
           defaultValue={props.groupMember?.groupId || params.get('groupId')}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
+          config={{ required: true }}
         />
 
         <FieldError name="groupId" className="rw-field-error" />

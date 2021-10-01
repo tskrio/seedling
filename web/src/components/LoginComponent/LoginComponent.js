@@ -79,7 +79,7 @@ const LoginComponent = () => {
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
-                    validation={{
+                    config={{
                       required: {
                         value: true,
                         message: 'Password is required',

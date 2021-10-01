@@ -74,7 +74,7 @@ const GroupRoleForm = (props) => {
           defaultValue={props.groupRole?.groupId || params.get('groupId')}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
+          config={{ required: true }}
         />
 
         <FieldError name="groupId" className="rw-field-error" />

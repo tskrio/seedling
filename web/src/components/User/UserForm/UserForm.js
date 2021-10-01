@@ -60,7 +60,7 @@ const UserForm = (props) => {
             defaultValue={props?.user?.preferences[key]}
             className="rw-input"
             errorClassName="rw-input rw-input-error"
-            validation={{ required: false }}
+            config={{ required: false }}
           />
 
           <FieldError name={'preference.' + key} className="rw-field-error" />
@@ -91,7 +91,7 @@ const UserForm = (props) => {
           defaultValue={props.user?.email || params.get('email')}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
+          config={{ required: true }}
         />
 
         <FieldError name="email" className="rw-field-error" />
@@ -108,7 +108,7 @@ const UserForm = (props) => {
           defaultValue={props.user?.name || params.get('name')}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
+          config={{ required: true }}
         />
 
         <FieldError name="name" className="rw-field-error" />
@@ -125,7 +125,7 @@ const UserForm = (props) => {
           defaultValue={props.user?.hashedPassword}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
-          validation={{ required: false }}
+          config={{ required: false }}
         />
 
         <FieldError name="hashedPassword" className="rw-field-error" />
