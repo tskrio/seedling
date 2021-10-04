@@ -60,7 +60,6 @@ const LoginPage = () => {
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     ref={usernameRef}
-
                   />
 
                   <FieldError name="username" className="rw-field-error" />
@@ -79,7 +78,7 @@ const LoginPage = () => {
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
-                    validation={{
+                    config={{
                       required: {
                         value: true,
                         message: 'Password is required',

@@ -62,7 +62,7 @@ const SignupPage = () => {
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     ref={usernameRef}
-                    validation={{
+                    config={{
                       required: {
                         value: true,
                         message: 'Email is required',
@@ -85,7 +85,7 @@ const SignupPage = () => {
                     name="name"
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
-                    validation={{
+                    config={{
                       required: {
                         value: true,
                         message: 'Name is required',
@@ -109,7 +109,7 @@ const SignupPage = () => {
                     className="rw-input"
                     errorClassName="rw-input rw-input-error"
                     autoComplete="current-password"
-                    validation={{
+                    config={{
                       required: {
                         value: true,
                         message: 'Password is required',

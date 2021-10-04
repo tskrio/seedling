@@ -44,7 +44,7 @@ export const Success = ({ label, defaultValue, users }) => {
         defaultValue={defaultValue}
         className="rw-input"
         errorClassName="rw-input rw-input-error"
-        validation={{ required: true }}
+        config={{ required: true }}
       >
         <option value="">Pick One</option>
         {options}

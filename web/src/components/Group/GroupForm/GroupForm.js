@@ -40,7 +40,7 @@ const GroupForm = (props) => {
           defaultValue={props.group?.name}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
+          config={{ required: true }}
         />
 
         <FieldError name="name" className="rw-field-error" />
@@ -57,7 +57,7 @@ const GroupForm = (props) => {
           defaultValue={props.group?.description}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
+          config={{ required: true }}
         />
 
         <FieldError name="description" className="rw-field-error" />
