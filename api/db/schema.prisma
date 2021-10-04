@@ -1,15 +1,12 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
-generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = "native"
-}
-
-// Define your own datamodels here and run `yarn redwood prisma migrate dev`
-// to create migrations for them and apply to your dev DB.
 
 model User {
   id             Int           @id @default(autoincrement())
@@ -20,9 +17,36 @@ model User {
   preferences    Json          @default("{}")
   hashedPassword String        @default("")
   salt           String        @default("")
-  //GroupMember    GroupMember[]
-  //UserRole       UserRole[]    @relation(name: "UserRole")
-  GroupMember    GroupMember[] @relation(name: "UserGroupMember")
+  GroupMember    GroupMember[] @relation("UserGroupMember")
+}
+
+model Group {
+  id          Int           @id @default(autoincrement())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  name        String
+  description String
+  GroupMember GroupMember[]
+  GroupRole   GroupRole[]
+}
+
+model GroupMember {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    Int
+  groupId   Int
+  group     Group    @relation(fields: [groupId], references: [id])
+  user      User     @relation("UserGroupMember", fields: [userId], references: [id])
+}
+
+model GroupRole {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role      String
+  groupId   Int
+  group     Group    @relation(fields: [groupId], references: [id])
 }
 
 enum Role {
@@ -51,33 +75,4 @@ enum Role {
   userRoleRead
   userRoleUpdate
   userRoleDelete
-}
-
-model Group {
-  id          Int           @id @default(autoincrement())
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  name        String
-  description String
-  GroupMember GroupMember[]
-  GroupRole   GroupRole[]
-}
-
-model GroupMember {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(name: "UserGroupMember", fields: [userId], references: [id])
-  userId    Int
-  group     Group    @relation(fields: [groupId], references: [id])
-  groupId   Int
-}
-
-model GroupRole {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  role      String
-  group     Group    @relation(fields: [groupId], references: [id])
-  groupId   Int
 }
