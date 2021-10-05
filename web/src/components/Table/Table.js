@@ -1,8 +1,9 @@
 import { useMutation } from '@redwoodjs/web'
-import { Link, routes } from '@redwoodjs/router'
+import { Link } from '@redwoodjs/router'
 import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
 import { UPDATE_USER_MUTATION } from 'src/components/User/EditUserCell'
+import UserPreferencesModal from 'src/components/UserPreferencesModal'
 const Table = ({ data, meta, query, deleteMutation }) => {
   const { currentUser } = useAuth()
   let altText = 'Find me in ./web/src/components/Table/Table.js'
@@ -47,6 +48,7 @@ const Table = ({ data, meta, query, deleteMutation }) => {
     )
   }
   let tableHeaderRow = (columns) => {
+    console.log('tableHeaderRow Columns', columns)
     return (
       <thead>
         <tr>
@@ -59,8 +61,12 @@ const Table = ({ data, meta, query, deleteMutation }) => {
             )
           })}
           <th key="actions">
-            Actions ...
+            Actions
             <button onClick={resetUserFields}>Reset Columns</button>
+            <UserPreferencesModal
+              allColumns={meta.columns}
+              myColumns={columns}
+            />
           </th>
         </tr>
       </thead>
@@ -141,10 +147,21 @@ const Table = ({ data, meta, query, deleteMutation }) => {
     )
   }
   let filteredColumns = (columns, userColumns) => {
+    console.log('columns', typeof columns, columns)
+    console.log('userColumns', typeof userColumns, userColumns)
     if (userColumns) {
-      return columns.filter((column) => {
-        return userColumns.includes(column.key)
+      if (typeof userColumns === 'string') {
+        userColumns = userColumns.split(',')
+      }
+      let userColumnsArr = []
+      userColumns.forEach((columnName) => {
+        columns.forEach((column) => {
+          if (column.key === columnName) {
+            userColumnsArr.push(column)
+          }
+        })
       })
+      return userColumnsArr
     } else {
       return columns
     }
@@ -201,8 +218,7 @@ const Table = ({ data, meta, query, deleteMutation }) => {
   return (
     <div src={altText}>
       <h2>{meta.title}</h2>
-      <div>Query?</div>
-      <div>
+      <div className="hidden">
         Fields from User preferences:
         {JSON.stringify(currentUser.preferences[meta.labels.single + 'Fields'])}
         <br />
