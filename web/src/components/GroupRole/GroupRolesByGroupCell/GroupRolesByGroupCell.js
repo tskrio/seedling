@@ -3,7 +3,7 @@ import GroupRolesLayout from 'src/layouts/GroupRolesLayout'
 import Table from 'src/components/Table/Table'
 import { routes } from '@redwoodjs/router'
 export const beforeQuery = (props) => {
-  console.log('variables', props)
+  //console.log('variables', props)
   props.id = props.groupID.id
   return {
     variables: props,

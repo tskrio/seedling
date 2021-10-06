@@ -3,6 +3,8 @@ import { Link } from '@redwoodjs/router'
 import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
 import { UPDATE_USER_MUTATION } from 'src/components/User/EditUserCell'
+import TableHeaderColumn from 'src/components/TableHeaderColumn'
+import TableCell from 'src/components/TableCell'
 import UserPreferencesModal from 'src/components/UserPreferencesModal'
 const Table = ({ data, meta, query, deleteMutation }) => {
   const { currentUser } = useAuth()
@@ -10,6 +12,9 @@ const Table = ({ data, meta, query, deleteMutation }) => {
   const [updateUserPreferences] = useMutation(UPDATE_USER_MUTATION, {
     onCompleted: () => {
       toast.success('User preferences updated.')
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
   const [deleteGroup] = useMutation(deleteMutation, {
@@ -22,44 +27,52 @@ const Table = ({ data, meta, query, deleteMutation }) => {
     refetchQueries: [{ query: query }],
     awaitRefetchQueries: true,
   })
+  let filteredColumns = (columns, userColumns) => {
+    //console.log('columns', typeof columns, columns)
+    //console.log('userColumns', typeof userColumns, userColumns)
+    if (userColumns) {
+      if (typeof userColumns === 'string') {
+        userColumns = userColumns.split(',')
+      }
+      let userColumnsArr = []
+      userColumns.forEach((columnName) => {
+        columns.forEach((column) => {
+          if (column.key === columnName) {
+            userColumnsArr.push(column)
+          }
+        })
+      })
+      return userColumnsArr
+    } else {
+      return columns
+    }
+  }
+  let usersColumns = filteredColumns(
+    meta.columns,
+    currentUser.preferences[meta.labels.single + 'Fields']
+  )
   const onDeleteClick = (id, display) => {
     if (confirm('Are you sure you want to delete group ' + display + '?')) {
       deleteGroup({ variables: { id } })
     }
   }
 
-  const getProps = (path, context) => {
-    context = context || this
-    path = path.split('.')
-    path.forEach((pathString, index) => {
-      context = context[path[index]]
-    })
-    return context
-  }
-
-  const timeTag = (datetime) => {
-    return (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime)
-          .toLocaleString('en-CA', { hour12: false })
-          .replace(',', '')
-          .replace(/:\d{2}$/, ' ')}
-      </time>
-    )
-  }
   let tableHeaderRow = (columns) => {
-    console.log('tableHeaderRow Columns', columns)
     return (
       <thead>
         <tr>
-          {columns.map((column) => {
+          {columns.map((column, index) => {
             return (
-              <th key={column.key}>
-                {column.label}
-                <button onClick={() => removeField(column.key)}>Remove</button>
-              </th>
+              <TableHeaderColumn
+                key={index}
+                column={column}
+                meta={meta}
+                query={query}
+                userColumns={usersColumns}
+              />
             )
           })}
+
           <th key="actions">
             Actions
             <button onClick={resetUserFields}>Reset Columns</button>
@@ -71,17 +84,6 @@ const Table = ({ data, meta, query, deleteMutation }) => {
         </tr>
       </thead>
     )
-  }
-  let tableCell = (type, row, key) => {
-    if (type === 'date') {
-      return timeTag(row[key])
-    } else if (type === 'boolean') {
-      return row[key] ? 'Yes' : 'No'
-    } else if (type === 'reference') {
-      return getProps(key, row)
-    } else {
-      return row[key]
-    }
   }
   let tableBodyRows = (rows, columns) => {
     return (
@@ -95,14 +97,22 @@ const Table = ({ data, meta, query, deleteMutation }) => {
                     return (
                       <td key={column.key}>
                         <Link to={meta.routes.view({ id: row.id })}>
-                          {tableCell(column.type, row, column.key)}
+                          <TableCell
+                            type={column.type}
+                            row={row}
+                            column={column}
+                          />
                         </Link>
                       </td>
                     )
                   } else {
                     return (
                       <td key={column.key}>
-                        {tableCell(column.type, row, column.key)}
+                        <TableCell
+                          type={column.type}
+                          row={row}
+                          column={column}
+                        />
                       </td>
                     )
                   }
@@ -146,52 +156,7 @@ const Table = ({ data, meta, query, deleteMutation }) => {
       </tbody>
     )
   }
-  let filteredColumns = (columns, userColumns) => {
-    console.log('columns', typeof columns, columns)
-    console.log('userColumns', typeof userColumns, userColumns)
-    if (userColumns) {
-      if (typeof userColumns === 'string') {
-        userColumns = userColumns.split(',')
-      }
-      let userColumnsArr = []
-      userColumns.forEach((columnName) => {
-        columns.forEach((column) => {
-          if (column.key === columnName) {
-            userColumnsArr.push(column)
-          }
-        })
-      })
-      return userColumnsArr
-    } else {
-      return columns
-    }
-  }
-  let usersColumns = filteredColumns(
-    meta.columns,
-    currentUser.preferences[meta.labels.single + 'Fields']
-  )
-  let removeField = (field) => {
-    console.log('removing field', field, usersColumns)
-    let newColumns = usersColumns.filter((column) => {
-      return column.key !== field
-    })
-    console.log('newColumns', newColumns)
-    let justColumns = newColumns.map((column) => {
-      return column.key
-    })
-    currentUser.preferences[meta.labels.single + 'Fields'] = justColumns
-    updateUserPreferences({
-      variables: {
-        id: currentUser.id,
-        input: { preferences: currentUser.preferences },
-      },
-      // This refetches the query on the list page. Read more about other ways to
-      // update the cache over here:
-      // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
-      refetchQueries: [{ query: query }],
-      awaitRefetchQueries: true,
-    })
-  }
+
   let resetUserFields = () => {
     //updateUser ({id, input})
     //{"groupFields":["createdAt","name"]}

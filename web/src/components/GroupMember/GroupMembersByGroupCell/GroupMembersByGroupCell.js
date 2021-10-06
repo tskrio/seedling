@@ -2,7 +2,7 @@ import { routes } from '@redwoodjs/router'
 import GroupMembersLayout from 'src/layouts/GroupMembersLayout'
 import Table from 'src/components/Table/Table'
 export const beforeQuery = (props) => {
-  //console.log('variables', props)
+  console.log('variables', props)
   props.id = props.groupID.id
   return {
     variables: props,
@@ -83,6 +83,7 @@ export const Success = ({ groupMembers }) => {
       { key: 'createdAt', label: 'Created', type: 'date' },
       { key: 'updatedAt', label: 'Updated', type: 'date' },
     ],
+    beforeQuery: beforeQuery,
   }
   return (
     <>
