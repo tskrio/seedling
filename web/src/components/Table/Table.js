@@ -157,6 +157,7 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
                     return (
                       <td key={column.key}>
                         {tableCell(column.type, row, column.key)}
+                        {/*TODO: Add Context menu here...*/}
                       </td>
                     )
                   }
@@ -262,11 +263,8 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
   let showActions = (key) => {
     let menu = document.getElementById(key)
     menu.classList.toggle('hidden')
-    console.log(key + '')
     let button = document.getElementById(key + '._button')
     button.classList.toggle('hidden')
-    console.log('showActions', key)
-    console.log('this', this)
   }
   return (
     <div src={altText}>
