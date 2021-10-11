@@ -1,0 +1,67 @@
+/* How the Aside and Main allow expansion */
+.off-canvas aside {
+  transform: translateX(calc(var(--sidebar-width) -10 * -1));
+}
+.off-canvas main {
+  width: calc(100% + var(--sidebar-width));
+  transform: translateX(calc(var(--sidebar-width) * -1));
+}
+
+/* When an element has error on it, it will be red */
+
+.error {
+  color: red;
+}
+
+input.error, textarea.error {
+  border: 1px solid red;
+}
+
+/* ? */
+
+.hidden {
+  display: none;
+}
+
+
+.left {
+  display: block;
+  float: left;
+
+}
+.right {
+  align-content: center;
+  float: right;
+  height: 100%;
+}
+.far-right {
+  margin-right: -1rem;
+  align-content: center;
+  float: right;
+  height: 100%;
+}
+
+
+
+.rw-segment-header {
+  display: block;
+}
+
+.sections-split {
+  display: grid;
+}
+
+.leftHalf {
+  grid-column: 1 / span 2;
+}
+.rightHalf {
+  grid-column: 3 / span 2;
+}
+
+.card {
+  width: 225px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.2);
+  display: inline-block;
+  margin-right: 15px;
+}

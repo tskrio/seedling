@@ -89,6 +89,7 @@ export const Success = ({ groupMembers }) => {
       <Table
         data={groupMembers}
         meta={meta}
+        queryVariables={{ id: groupMembers[0].group.id }} // I don't know how to get the groupID from the query... so if there's a result, refresh the page
         query={QUERY}
         deleteMutation={DELETE_GROUP_MEMBER_MUTATION}
       />
