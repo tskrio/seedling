@@ -3,6 +3,9 @@ tasks:
   - name: Dev Server
     init: |
       openMode: split-left
+      nvm install 14
+      nvm use 14
+      nvm alias default 14
       eval $(gp env -e RWJS_DEV_API_URL="http://localhost")
       yarn install
     command: |
@@ -13,7 +16,7 @@ tasks:
   - name: Terminal
     openMode: split-right
     command: |
-      echo -e "\n\n\033[94m ======================================================" && echo -e "\n\033[33m ⌛ Please wait until the dev server is running on the right-side terminal. \n "rw-test-app" is being generated & linked with latest framework code. \n\nIf you make further changes to the framework..." &&  echo -e "\033[33mRun \033[92m'yarn rwfw project:sync'\033[33m to watch & sync changes into the test project" &&  echo -e "\n\033[94m ======================================================\n\n"
+      echo -e "\n\n\033[94m ======================================================" && echo -e "\n\033[33m ⌛ Please wait until the dev server is running on the left-side terminal. \n " &&  echo -e "\n\033[94m ======================================================\n\n"
 # Ports to expose on workspace startup
 ports:
   - port: 8911
