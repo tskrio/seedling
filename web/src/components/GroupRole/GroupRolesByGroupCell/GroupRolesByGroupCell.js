@@ -69,6 +69,7 @@ export const Success = ({ groupRoles }) => {
       { key: 'createdAt', label: 'Created', type: 'date' },
       { key: 'updatedAt', label: 'Updated', type: 'date' },
     ],
+    createRoles: ['groupRoleCreate']
   }
   const DELETE_GROUP_ROLE_MUTATION = gql`
     mutation DeleteGroupRoleMutation($id: Int!) {

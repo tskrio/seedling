@@ -230,7 +230,7 @@ input.error, textarea.error {
 }
 .off-canvas main {
   width: calc(100% + var(--sidebar-width));
-  transform: translateX(calc(var(--sidebar-width) * -1));
+  transform: translateX(calc(var(--sidebar-width) -2 * -1));
 }
 
 .hidden {

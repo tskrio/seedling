@@ -57,6 +57,7 @@ export const Success = ({ users }) => {
       { key: 'createdAt', label: 'Created', type: 'date' },
       { key: 'updatedAt', label: 'Updated', type: 'date' },
     ],
+    createRoles: ['userCreate']
   }
   const DELETE_USER_MUTATION = gql`
     mutation DeleteUserMutation($id: Int!) {

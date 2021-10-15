@@ -13,7 +13,7 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
   } else {
     queryList = JSON.stringify(queryVariables)
   }
-  const { currentUser } = useAuth()
+  const { currentUser, hasRole } = useAuth()
   //console.log(data)
   let altText = 'Find me in ./web/src/components/Table/Table.js'
   const [updateUserPreferences] = useMutation(UPDATE_USER_MUTATION, {
@@ -21,7 +21,10 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
       toast.success('User preferences updated.')
     },
   })
-  const [deleteGroup] = useMutation(deleteMutation, {
+  const [deleteRecord] = useMutation(deleteMutation, {
+    onError: () =>{
+      toast.error(`${meta.labels.single} not deleted - error occured`)
+    },
     onCompleted: () => {
       toast.success(`${meta.labels.single} deleted`)
     },
@@ -32,8 +35,8 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
     awaitRefetchQueries: true,
   })
   const onDeleteClick = (id, display) => {
-    if (confirm('Are you sure you want to delete group ' + display + '?')) {
-      deleteGroup({ variables: { id } })
+    if (confirm(`Are you sure you want to delete ${display}?`)) {
+      deleteRecord({ variables: { id } })
     }
   }
 
@@ -88,7 +91,12 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
                     </li>
                     <li>
                       <button onClick={() => removeField(column.key)}>
-                        Remove
+                        Hide {column.label}
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => toast.success(`MOCK:Sorted ${column.key} Ascending`)}>
+                        Sort Ascending
                       </button>
                     </li>
                   </ul>
@@ -191,6 +199,7 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
             </tr>
           )
         })}
+        {(hasRole(meta.createRoles.concat(['admin'])))&& (
         <tr>
           <td colSpan={meta.columns.length + 1}>
             <Link to={meta.routes.newItem()}>
@@ -198,6 +207,7 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
             </Link>
           </td>
         </tr>
+        )}
       </tbody>
     )
   }
@@ -270,6 +280,14 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
     <div src={altText}>
       <header className="rw-header">
         <h2>{meta.title}</h2>
+        {hasRole(['groupRoleCreate', 'admin']) && (
+          <Link
+            to={routes.newGroupRole()}
+            className="rw-button rw-button-green"
+          >
+            <div className="rw-button-icon">+</div> New {meta.labels.single}
+          </Link>
+        )}
       </header>
       <div>Query: {queryList}</div>
       <table>
