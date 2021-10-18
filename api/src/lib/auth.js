@@ -40,24 +40,19 @@ export const getCurrentUser = async (session) => {
   }
 }
 
-export const requireAuth = ({ role } = {}) => {
+export const requireAuth = ({ role }) => {
+  logger.debug('in /lib/auth.js role', role)
+  console.log('in /lib/auth.js role', role)
+  logger.debug(context.currentUser.roles)
+
   if (!context.currentUser) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
 
-  if (
-    typeof role !== 'undefined' &&
-    typeof role === 'string' &&
-    !context.currentUser.roles?.includes(role)
-  ) {
+  if (typeof role !== 'undefined' && !context.currentUser.roles?.includes(role)) {
     throw new ForbiddenError("You don't have access to do that.")
   }
 
-  if (
-    typeof role !== 'undefined' &&
-    Array.isArray(role) &&
-    !context.currentUser.roles?.some((r) => role.includes(r))
-  ) {
-    throw new ForbiddenError("You don't have access to do that.")
-  }
+
+
 }

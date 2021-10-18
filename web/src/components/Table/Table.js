@@ -3,27 +3,40 @@ import { Link, routes } from '@redwoodjs/router'
 import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
 import { UPDATE_USER_MUTATION } from 'src/components/User/EditUserCell'
-const Table = ({ data, meta, query, deleteMutation }) => {
-  const { currentUser } = useAuth()
+
+import './table.css'
+const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
+  let queryList
+  if (typeof queryVariables === 'undefined') {
+    queryVariables = {}
+    queryList = ''
+  } else {
+    queryList = JSON.stringify(queryVariables)
+  }
+  const { currentUser, hasRole } = useAuth()
+  //console.log(data)
   let altText = 'Find me in ./web/src/components/Table/Table.js'
   const [updateUserPreferences] = useMutation(UPDATE_USER_MUTATION, {
     onCompleted: () => {
       toast.success('User preferences updated.')
     },
   })
-  const [deleteGroup] = useMutation(deleteMutation, {
+  const [deleteRecord] = useMutation(deleteMutation, {
+    onError: () =>{
+      toast.error(`${meta.labels.single} not deleted - error occured`)
+    },
     onCompleted: () => {
       toast.success(`${meta.labels.single} deleted`)
     },
     // This refetches the query on the list page. Read more about other ways to
     // update the cache over here:
     // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
-    refetchQueries: [{ query: query }],
+    refetchQueries: [{ query: query, variables: queryVariables }],
     awaitRefetchQueries: true,
   })
   const onDeleteClick = (id, display) => {
-    if (confirm('Are you sure you want to delete group ' + display + '?')) {
-      deleteGroup({ variables: { id } })
+    if (confirm(`Are you sure you want to delete ${display}?`)) {
+      deleteRecord({ variables: { id } })
     }
   }
 
@@ -53,14 +66,69 @@ const Table = ({ data, meta, query, deleteMutation }) => {
           {columns.map((column) => {
             return (
               <th key={column.key}>
-                {column.label}
-                <button onClick={() => removeField(column.key)}>Remove</button>
+                <span>{column.label}</span>
+                <span className="context-menu">
+                  <button
+                    id={meta.labels.single + '.' + column.key + '._button'}
+                    onClick={() =>
+                      showActions(meta.labels.single + '.' + column.key)
+                    }
+                  >
+                    ⋮
+                  </button>
+                  <ul
+                    id={meta.labels.single + '.' + column.key}
+                    className="hidden"
+                  >
+                    <li>
+                      <button
+                        onClick={() =>
+                          showActions(meta.labels.single + '.' + column.key)
+                        }
+                      >
+                        Close Menu
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => removeField(column.key)}>
+                        Hide {column.label}
+                      </button>
+                    </li>
+                    <li>
+                      <button onClick={() => toast.success(`MOCK:Sorted ${column.key} Ascending`)}>
+                        Sort Ascending
+                      </button>
+                    </li>
+                  </ul>
+                </span>
               </th>
             )
           })}
           <th key="actions">
-            Actions ...
-            <button onClick={resetUserFields}>Reset Columns</button>
+            <span>Actions</span>
+            <span className="context-menu">
+              <button
+                className=""
+                id={meta.labels.single + '._actions._button'}
+                onClick={() => showActions(meta.labels.single + '._actions')}
+              >
+                ⋮
+              </button>
+              <ul id={meta.labels.single + '._actions'} className="hidden">
+                <li>
+                  <button
+                    onClick={() =>
+                      showActions(meta.labels.single + '._actions')
+                    }
+                  >
+                    Close Menu
+                  </button>
+                </li>
+                <li>
+                  <button onClick={resetUserFields}>Reset Columns</button>
+                </li>
+              </ul>
+            </span>
           </th>
         </tr>
       </thead>
@@ -97,6 +165,7 @@ const Table = ({ data, meta, query, deleteMutation }) => {
                     return (
                       <td key={column.key}>
                         {tableCell(column.type, row, column.key)}
+                        {/*TODO: Add Context menu here...*/}
                       </td>
                     )
                   }
@@ -130,6 +199,7 @@ const Table = ({ data, meta, query, deleteMutation }) => {
             </tr>
           )
         })}
+        {(hasRole(meta.createRoles.concat(['admin'])))&& (
         <tr>
           <td colSpan={meta.columns.length + 1}>
             <Link to={meta.routes.newItem()}>
@@ -137,6 +207,7 @@ const Table = ({ data, meta, query, deleteMutation }) => {
             </Link>
           </td>
         </tr>
+        )}
       </tbody>
     )
   }
@@ -158,11 +229,12 @@ const Table = ({ data, meta, query, deleteMutation }) => {
     let newColumns = usersColumns.filter((column) => {
       return column.key !== field
     })
-    console.log('newColumns', newColumns)
+    //console.log('newColumns', newColumns)
     let justColumns = newColumns.map((column) => {
       return column.key
     })
     currentUser.preferences[meta.labels.single + 'Fields'] = justColumns
+    //console.log('queryVariables', queryVariables)
     updateUserPreferences({
       variables: {
         id: currentUser.id,
@@ -171,7 +243,7 @@ const Table = ({ data, meta, query, deleteMutation }) => {
       // This refetches the query on the list page. Read more about other ways to
       // update the cache over here:
       // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
-      refetchQueries: [{ query: query }],
+      refetchQueries: [{ query: query, variables: queryVariables }],
       awaitRefetchQueries: true,
     })
   }
@@ -182,9 +254,9 @@ const Table = ({ data, meta, query, deleteMutation }) => {
       typeof currentUser.preferences[meta.labels.single + 'Fields'] !==
       'undefined'
     ) {
-      console.log(currentUser)
+      //console.log(currentUser)
       delete currentUser.preferences[meta.labels.single + 'Fields']
-      console.log(currentUser)
+      //console.log(currentUser)
       updateUserPreferences({
         variables: {
           id: currentUser.id,
@@ -193,22 +265,31 @@ const Table = ({ data, meta, query, deleteMutation }) => {
         // This refetches the query on the list page. Read more about other ways to
         // update the cache over here:
         // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
-        refetchQueries: [{ query: query }],
+        refetchQueries: [{ query: query, variables: queryVariables }],
         awaitRefetchQueries: true,
       })
     }
   }
+  let showActions = (key) => {
+    let menu = document.getElementById(key)
+    menu.classList.toggle('hidden')
+    let button = document.getElementById(key + '._button')
+    button.classList.toggle('hidden')
+  }
   return (
     <div src={altText}>
-      <h2>{meta.title}</h2>
-      <div>Query?</div>
-      <div>
-        Fields from User preferences:
-        {JSON.stringify(currentUser.preferences[meta.labels.single + 'Fields'])}
-        <br />
-        Fields after filtering:
-        {JSON.stringify(usersColumns)}
-      </div>
+      <header className="rw-header">
+        <h2>{meta.title}</h2>
+        {hasRole(['groupRoleCreate', 'admin']) && (
+          <Link
+            to={routes.newGroupRole()}
+            className="rw-button rw-button-green"
+          >
+            <div className="rw-button-icon">+</div> New {meta.labels.single}
+          </Link>
+        )}
+      </header>
+      <div>Query: {queryList}</div>
       <table>
         {tableHeaderRow(usersColumns)}
         {tableBodyRows(data, usersColumns)}

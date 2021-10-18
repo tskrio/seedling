@@ -1,7 +1,22 @@
 # Commands to start on workspace startup
 tasks:
-  - init: yarn install
-    command: yarn rw dev --forward="--client-web-socket-url $(gp url 8910 | sed -e "s/https/wss/g")"
+  - name: Dev Server
+    init: |
+      openMode: split-left
+      nvm install 14
+      nvm use 14
+      nvm alias default 14
+      eval $(gp env -e RWJS_DEV_API_URL="http://localhost")
+      yarn install
+    command: |
+      nvm install 14
+      nvm use 14
+      nvm alias default 14
+      yarn rw dev --forward="--client-web-socket-url $(gp url 8910 | sed -e "s/https/wss/g")"
+  - name: Terminal
+    openMode: split-right
+    command: |
+      echo -e "\n\n\033[94m ======================================================" && echo -e "\n\033[33m ⌛ Please wait until the dev server is running on the left-side terminal. \n " &&  echo -e "\n\033[94m ======================================================\n\n"
 # Ports to expose on workspace startup
 ports:
   - port: 8911

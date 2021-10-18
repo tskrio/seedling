@@ -107,6 +107,7 @@ export const updateUser = async ({ id, input }) => {
 }
 
 export const deleteUser = async ({ id }) => {
+  console.log('delete observed');
   let beforeDeleteRulesArr = util.loadRules(rules, 'before', 'delete')
   let previous = await db.user.findUnique({
     where: { id },

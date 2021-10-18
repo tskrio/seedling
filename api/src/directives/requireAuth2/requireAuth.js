@@ -11,7 +11,7 @@ export const schema = gql`
 
 const validate = ({ directiveArgs }) => {
   const { roles } = directiveArgs
-
+logger.info('in requireAuth directive',roles)
   applicationRequireAuth({ roles })
 }
 

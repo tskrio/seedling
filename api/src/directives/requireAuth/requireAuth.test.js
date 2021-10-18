@@ -8,11 +8,9 @@ describe('requireAuth directive', () => {
     expect(getDirectiveName(requireAuth.schema)).toBe('requireAuth')
   })
 
-  it('requireAuth has stub implementation. Should not throw when current user', () => {
-    // If you want to set values in context, pass it through e.g.
-    // mockRedwoodDirective(requireAuth, { context: { currentUser: { id: 1, name: 'Lebron McGretzky' } }})
-    const mockExecution = mockRedwoodDirective(requireAuth, { context: {} })
+  it('has a requireAuth throws an error if validation does not pass', () => {
+    const mockExecution = mockRedwoodDirective(requireAuth, {})
 
-    expect(mockExecution).not.toThrowError()
+    expect(mockExecution).toThrowError('Implementation missing for requireAuth')
   })
 })
