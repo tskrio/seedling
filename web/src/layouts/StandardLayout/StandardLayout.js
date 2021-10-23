@@ -6,7 +6,12 @@
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 import AsideNavigator from 'src/components/AsideNavigator/AsideNavigator'
-
+//import LanguagePicker from 'src/components/LanguagePicker/LanguagePicker'
+/**
+ *<li>
+  <LanguagePicker currentLanguage={currentUser.language || "en"}/>
+  </li>
+ */
 const StandardLayout = ({ children }) => {
   const { logOut, isAuthenticated, currentUser } = useAuth()
 
@@ -34,7 +39,7 @@ const StandardLayout = ({ children }) => {
             )}
             {isAuthenticated && currentUser && (
               <>
-                <li>
+              <li>
                   <Link to={routes.editUser({ id: currentUser.id })}>
                     {currentUser.name}
                   </Link>
