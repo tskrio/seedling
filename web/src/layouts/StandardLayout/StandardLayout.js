@@ -26,7 +26,7 @@ const StandardLayout = ({ children }) => {
               </Link>
             </li>
             <li>
-              <a href="https://github.com/tskrio/tskr">
+              <a href="https://github.com/tskrio/tskrBase">
                 <em>Fork</em>
               </a>
             </li>
@@ -39,7 +39,7 @@ const StandardLayout = ({ children }) => {
             )}
             {isAuthenticated && currentUser && (
               <>
-              <li>
+                <li>
                   <Link to={routes.editUser({ id: currentUser.id })}>
                     {currentUser.name}
                   </Link>
