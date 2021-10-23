@@ -13,9 +13,5 @@
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
     "root": true
-  },
-  "engines": {
-    "node": "14.x",
-    "yarn": "1.x"
   }
 }
