@@ -6,12 +6,7 @@
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 import AsideNavigator from 'src/components/AsideNavigator/AsideNavigator'
-//import LanguagePicker from 'src/components/LanguagePicker/LanguagePicker'
-/**
- *<li>
-  <LanguagePicker currentLanguage={currentUser.language || "en"}/>
-  </li>
- */
+
 const StandardLayout = ({ children }) => {
   const { logOut, isAuthenticated, currentUser } = useAuth()
 
@@ -26,7 +21,7 @@ const StandardLayout = ({ children }) => {
               </Link>
             </li>
             <li>
-              <a href="https://github.com/tskrio/tskrBase">
+              <a href="https://github.com/tskrio/tskr">
                 <em>Fork</em>
               </a>
             </li>

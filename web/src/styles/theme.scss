@@ -1,15 +1,12 @@
 
 :root {
-  --color-brand-black:       #0f1711;
-
-  --color-brand-green-light: #70804e;
-  --color-brand-green:       #25391b;
-
-  --color-brand-blue-light:  #c0e8f9;
-  --color-brand-blue:        #3a526b;
-
-  --color-brand-brown-light: #937254;
-  --color-brand-brown:       #5b371c;
+  --color-primary-hue: 260;
+  --color-primary: hsl(var(--color-primary-hue), 85%, 60%);
+  --color-light: white;
+  --color-text: hsl(var(--color-primary-hue), 15%, 30%);
+  --gray-medium: hsl(var(--color-primary-hue), 15%, 75%);
+  --gray-light: hsl(var(--color-primary-hue), 15%, 90%);
+  --background-body: hsl(var(--color-primary-hue), 5%, 98%);
 }
 
 @media (prefers-color-scheme: dark) {
