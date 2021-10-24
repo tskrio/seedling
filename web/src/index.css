@@ -9,6 +9,7 @@
   --sidebar-width: 200px;
 }
 
+
 * {
   margin: 0;
   padding: 0;
@@ -209,15 +210,16 @@ input.error, textarea.error {
 
 
 h2 {
-font-weight: 550;
-}
+  font-weight: 550;
+  }
 
 
 .off-canvas aside {
-  transform: translateX(calc(var(--sidebar-width) 10 * 1));
+  transform: translateX(calc(var(--sidebar-width) -10 * -1));
 }
 .off-canvas main {
   width: calc(100% + var(--sidebar-width));
+  /*transform: translateX(calc(var(--sidebar-width) -2 * -1));*/
   transform: translateX(calc(var(--sidebar-width) * -.9 ));
 }
 .floatLeft {
@@ -240,9 +242,8 @@ font-weight: 550;
 .right {
   align-content: center;
   float: right;
+  height: 100%;
 }
-
-
 
 
 ul {
