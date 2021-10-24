@@ -62,7 +62,7 @@ If you would like to work on an issue comment on it.
       |---|---|---|
       | DATABASE_URL | yourName/tskrBase | Connection String from above |
       | SESSION_SECRET | yourName/tskrBase | Well set this later |
-3.  [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer/)
+3.  [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer)
 5.  When the terminal comes do the following.
 6.  Push your schema to your database via `yarn rw prisma migrate dev`.
 4.  Generate a new secret via `yarn rw g secret`.
