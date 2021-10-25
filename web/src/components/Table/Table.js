@@ -22,7 +22,7 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
     },
   })
   const [deleteRecord] = useMutation(deleteMutation, {
-    onError: () =>{
+    onError: () => {
       toast.error(`${meta.labels.single} not deleted - error occured`)
     },
     onCompleted: () => {
@@ -95,7 +95,11 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
                       </button>
                     </li>
                     <li>
-                      <button onClick={() => toast.success(`MOCK:Sorted ${column.key} Ascending`)}>
+                      <button
+                        onClick={() =>
+                          toast.success(`MOCK:Sorted ${column.key} Ascending`)
+                        }
+                      >
                         Sort Ascending
                       </button>
                     </li>
@@ -199,14 +203,14 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
             </tr>
           )
         })}
-        {(hasRole(meta.createRoles.concat(['admin'])))&& (
-        <tr>
-          <td colSpan={meta.columns.length + 1}>
-            <Link to={meta.routes.newItem()}>
-              Create new {meta.labels.single}
-            </Link>
-          </td>
-        </tr>
+        {hasRole(meta.createRoles.concat(['admin'])) && (
+          <tr>
+            <td colSpan={meta.columns.length + 1}>
+              <Link to={meta.routes.newItem()}>
+                Create new {meta.labels.single}
+              </Link>
+            </td>
+          </tr>
         )}
       </tbody>
     )
@@ -280,9 +284,9 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
     <div src={altText}>
       <header className="rw-header">
         <h2>{meta.title}</h2>
-        {hasRole(['groupRoleCreate', 'admin']) && (
+        {hasRole(meta.createRoles.concat(['admin'])) && (
           <Link
-            to={routes.newGroupRole()}
+            to={meta.routes.newItem()}
             className="rw-button rw-button-green"
           >
             <div className="rw-button-icon">+</div> New {meta.labels.single}
