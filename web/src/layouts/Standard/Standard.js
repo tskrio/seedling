@@ -1,13 +1,8 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-// web/src/layouts/BlogLayout/BlogLayout.js
-
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 import AsideNavigator from 'src/components/AsideNavigator/AsideNavigator'
 
-const StandardLayout = ({ children }) => {
+const Standard = ({ children }) => {
   const { logOut, isAuthenticated, currentUser } = useAuth()
 
   return (
@@ -21,7 +16,7 @@ const StandardLayout = ({ children }) => {
               </Link>
             </li>
             <li>
-              <a href="https://github.com/tskrio/tskr">
+              <a href="https://github.com/tskrio/tskrBase">
                 <em>Fork</em>
               </a>
             </li>
@@ -76,4 +71,4 @@ const StandardLayout = ({ children }) => {
   )
 }
 
-export default StandardLayout
+export default Standard

@@ -149,7 +149,7 @@
   line-height: inherit;
 }
 .rw-button.rw-button-green {
-  background-color: #48bb78;
+  background-color: #007631;
   color: #fff;
 }
 .rw-button.rw-button-green:hover {
@@ -157,14 +157,14 @@
   color: #fff;
 }
 .rw-button.rw-button-blue {
-  background-color: #3182ce;
+  background-color: #004a8f;
   color: #fff;
 }
 .rw-button.rw-button-blue:hover {
   background-color: #2b6cb0;
 }
 .rw-button.rw-button-red {
-  background-color: #e53e3e;
+  background-color: #b50000;
   color: #fff;
 }
 .rw-button.rw-button-red:hover {

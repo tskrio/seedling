@@ -83,7 +83,10 @@ export const Success = ({ groupMembers }) => {
       { key: 'createdAt', label: 'Created', type: 'date' },
       { key: 'updatedAt', label: 'Updated', type: 'date' },
     ],
-    createRoles: ['groupMemberCreate']
+    createRoles: ['groupMemberCreate'],
+    readRoles: ['groupMemberRead'],
+    updateRoles: ['groupMemberUpdate'],
+    deleteRoles: ['groupMemberDelete'],
   }
   return (
     <>

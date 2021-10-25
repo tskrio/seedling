@@ -9,12 +9,14 @@ const AsideNavigator = () => {
   let toggleSidebar = () => {
     //console.log('toggleSidebar')
     document.querySelector('#redwood-app').classList.toggle('off-canvas')
-    document.querySelector('#restoreSidebar').classList.toggle('hidden')
+    document.querySelector('#aside-left').classList.toggle('left')
+    document.querySelector('#aside-right').classList.toggle('left')
+    document.querySelector('#aside-right').classList.toggle('right')
   }
   return (
     <>
       <aside data-grid-area="aside" src={altText} className="aside">
-        <div className="left">
+        <div id="aside-left" className="left">
           {isAuthenticated && (
             <ul className="navLinks">
               {hasRole(['userRead', 'admin']) && (
@@ -34,11 +36,8 @@ const AsideNavigator = () => {
             </ul>
           )}
         </div>
-        <div className="right">
-          <span onClick={toggleSidebar}>◀</span>
-        </div>
-        <div id="restoreSidebar" className="far-right">
-          <span onClick={toggleSidebar}>▶</span>
+        <div id="aside-right" className="right full-height">
+          <span onClick={toggleSidebar}>&harr;</span>
         </div>
       </aside>
     </>

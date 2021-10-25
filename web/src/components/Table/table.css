@@ -1,5 +1,6 @@
 .context-menu {
   display: float;
+  padding: 0 0.5rem 0 0.5rem;
 }
 .context-menu > button {
   display: inline;

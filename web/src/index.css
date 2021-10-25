@@ -1,30 +1,14 @@
 :root {
-  --body-width: 50rem;
-  --background-color: whitesmoke;
-  --background-color-aside: #d8bfd8;
-  --header-footer-background: PowderBlue;
-  --text-color: Black;
-  --link-color: DarkBlue;
+  --color-brand-black:       #0f1711;
+  --color-brand-brown:       #c6bab1;
+  --color-brand-white:       #ced8d9;
+  --color-brand-blue-alt:    #caecf9;
+  --color-brand-blue:        #8ecef5;
+  --color-brand-green:       #b2cccf;
+
   --sidebar-width: 200px;
 }
 
-html[data-theme='light'] {
-  --background-color: whitesmoke;
-  --header-footer-background: PowderBlue;
-  --text-color: Black;
-  --link-color: DarkBlue;
-  --dark-toggle: none;
-  --light-toggle: inline-block;
-}
-
-html[data-theme='dark'] {
-  --background-color: DarkSlateGray;
-  --header-footer-background: MidnightBlue;
-  --text-color: Gainsboro;
-  --link-color: LightBlue;
-  --dark-toggle: inline-block;
-  --light-toggle: none;
-}
 
 * {
   margin: 0;
@@ -34,8 +18,8 @@ html[data-theme='dark'] {
 
 
 #redwood-app {
-  background-color: whitesmokes;
-  color: #2d2d35;
+  background-color: var(--color-brand-white);
+  color: var(--color-brand-black);
   grid-template-areas:
    "nav nav"
    "aside main"
@@ -56,9 +40,7 @@ html[data-theme='dark'] {
   padding: 1rem;
   grid-area: nav;
   border-bottom: solid black 1px;
-}
-header {
-  background-color: var(--header-footer-background);
+  background-color: var(--color-brand-blue-alt);
 }
 nav > ul {
 
@@ -76,7 +58,7 @@ nav > ul {
 main {
   grid-area: main;
   padding: 2rem;
-  background-color: var(--background-color);
+  background-color: var(--color-brand-green);
 }
 main > article > ol {
   display: grid;
@@ -93,7 +75,7 @@ main > article > ol {
 }
 aside {
   padding-top: 1rem;
-  background-color: var(--background-color-aside);
+  background-color: var(--color-brand-white);
   border-right: solid black 1px;
 }
 
@@ -112,7 +94,7 @@ aside * {
 
 footer {
   border-top: solid black 1px;
-background-color: var(--header-footer-background);
+background-color: var(--color-brand-brown);
 }
 
 footer > ul {
@@ -131,7 +113,8 @@ table {
   width: 100%;
 }
 thead {
-  background-color: #d8bfd8;
+  background-color: var(--color-brand-brown);
+  font-weight: 550;
 }
 th {
   padding-left: .5rem;
@@ -143,15 +126,15 @@ tr {
 }
 
 tbody > tr:nth-child(even) {
-  background-color: GhostWhite;
+  background-color: var(--color-brand-brown);
 }
 
 tbody > tr:nth-child(odd) {
-  background-color: AliceBlue;
+  background-color: var(--color-brand-white);
 }
 
 tbody > tr:hover {
-  background-color: MistyRose;
+  background-color: var(--color-brand-blue);
 }
 
 td {
@@ -171,6 +154,10 @@ td {
 }
 /* Article */
 
+article {
+  background-color: var(--color-brand-blue-alt);
+  padding: 1rem;
+}
 
 
 /*Links*/
@@ -181,6 +168,7 @@ a {
   color: #003052;
   border-bottom: 0.125rem solid currentColor;
   padding: 0 0.125rem 0.125rem;
+  margin: 0 0.125rem 0 0.125rem;
   border-radius: 0.125rem;
   transition: all 0.2s ease-out;
 }
@@ -222,7 +210,9 @@ input.error, textarea.error {
 
 
 
-
+h2 {
+  font-weight: 550;
+  }
 
 
 .off-canvas aside {
@@ -230,14 +220,21 @@ input.error, textarea.error {
 }
 .off-canvas main {
   width: calc(100% + var(--sidebar-width));
-  transform: translateX(calc(var(--sidebar-width) -2 * -1));
+  /*transform: translateX(calc(var(--sidebar-width) -2 * -1));*/
+  transform: translateX(calc(var(--sidebar-width) * -.9 ));
 }
-
+.floatLeft {
+  display: float !important;
+  float: left;
+}
 .hidden {
   display: none;
 }
 
-
+.full-height {
+  height: 100%;
+  align-content: center;
+}
 .left {
   display: block;
   float: left;
@@ -248,14 +245,6 @@ input.error, textarea.error {
   float: right;
   height: 100%;
 }
-.far-right {
-  margin-right: -1rem;
-  align-content: center;
-  float: right;
-  height: 100%;
-}
-
-
 
 
 ul {
