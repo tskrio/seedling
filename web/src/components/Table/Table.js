@@ -160,9 +160,7 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
                   if (columnIndex === 0) {
                     return (
                       <td key={column.key}>
-                        <Link to={meta.routes.view({ id: row.id })}>
-                          {tableCell(column.type, row, column.key)}
-                        </Link>
+                        {tableCell(column.type, row, column.key)}
                       </td>
                     )
                   } else {
@@ -178,26 +176,48 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
               })}
               <td key="actions">
                 <div className="table-actions">
-                  <Link
-                    to={meta.routes.edit({ id: row[meta.key] })}
-                    title={
-                      'Edit ' + row[meta.display] + ' ' + meta.labels.single
-                    }
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    type="button"
-                    title={
-                      'Delete ' + row[meta.display] + ' ' + meta.labels.single
-                    }
-                    className="table-action-delete"
-                    onClick={() =>
-                      onDeleteClick(row[meta.key], row[meta.display])
-                    }
-                  >
-                    Delete
-                  </button>
+                  {hasRole(meta.readRoles.concat(['admin'])) && (
+                    <span>
+                      <Link
+                        className="rw-button rw-button-green"
+                        to={meta.routes.view({ id: row.id })}
+                      >
+                        View
+                      </Link>
+                    </span>
+                  )}
+                  {hasRole(meta.updateRoles.concat(['admin'])) && (
+                    <span>
+                      <Link
+                        className="rw-button rw-button-blue"
+                        to={meta.routes.edit({ id: row[meta.key] })}
+                        title={
+                          'Edit ' + row[meta.display] + ' ' + meta.labels.single
+                        }
+                      >
+                        Edit
+                      </Link>
+                    </span>
+                  )}
+                  {hasRole(meta.deleteRoles.concat(['admin'])) && (
+                    <span>
+                      <button
+                        type="button"
+                        title={
+                          'Delete ' +
+                          row[meta.display] +
+                          ' ' +
+                          meta.labels.single
+                        }
+                        className="rw-button rw-button-red"
+                        onClick={() =>
+                          onDeleteClick(row[meta.key], row[meta.display])
+                        }
+                      >
+                        Delete
+                      </button>
+                    </span>
+                  )}
                 </div>
               </td>
             </tr>
@@ -205,9 +225,15 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
         })}
         {hasRole(meta.createRoles.concat(['admin'])) && (
           <tr>
-            <td colSpan={meta.columns.length + 1}>
-              <Link to={meta.routes.newItem()}>
-                Create new {meta.labels.single}
+            {columns.map((column, index) => {
+              return <td key={index}></td>
+            })}
+            <td>
+              <Link
+                to={meta.routes.newItem()}
+                className="rw-button rw-button-green"
+              >
+                <div className="rw-button-icon">+</div> New {meta.labels.single}
               </Link>
             </td>
           </tr>
@@ -284,14 +310,6 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
     <div src={altText}>
       <header className="rw-header">
         <h2>{meta.title}</h2>
-        {hasRole(meta.createRoles.concat(['admin'])) && (
-          <Link
-            to={meta.routes.newItem()}
-            className="rw-button rw-button-green"
-          >
-            <div className="rw-button-icon">+</div> New {meta.labels.single}
-          </Link>
-        )}
       </header>
       <div>Query: {queryList}</div>
       <table>

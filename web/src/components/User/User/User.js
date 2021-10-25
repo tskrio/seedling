@@ -1,7 +1,7 @@
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'
-
+import { useAuth } from '@redwoodjs/auth'
 const DELETE_USER_MUTATION = gql`
   mutation DeleteUserMutation($id: Int!) {
     deleteUser(id: $id) {
@@ -31,6 +31,7 @@ const checkboxInputTag = (checked) => {
 }
 
 const User = ({ user }) => {
+  const { hasRole } = useAuth()
   const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
     onCompleted: () => {
       toast.success('User deleted')
@@ -78,19 +79,23 @@ const User = ({ user }) => {
         </table>
       </div>
       <nav className="rw-button-group">
-        <Link
-          to={routes.editUser({ id: user.id })}
-          className="rw-button rw-button-blue"
-        >
-          Edit
-        </Link>
-        <button
-          type="button"
-          className="rw-button rw-button-red"
-          onClick={() => onDeleteClick(user.id)}
-        >
-          Delete
-        </button>
+        {hasRole(['userUpdate', 'admin']) && (
+          <Link
+            to={routes.editUser({ id: user.id })}
+            className="rw-button rw-button-blue"
+          >
+            Edit
+          </Link>
+        )}
+        {hasRole(['userDelete', 'admin']) && (
+          <button
+            type="button"
+            className="rw-button rw-button-red"
+            onClick={() => onDeleteClick(user.id)}
+          >
+            Delete
+          </button>
+        )}
       </nav>
     </>
   )

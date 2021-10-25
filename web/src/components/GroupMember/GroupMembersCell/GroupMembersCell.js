@@ -69,6 +69,10 @@ export const Success = ({ groupMembers }) => {
       { key: 'createdAt', label: 'Created', type: 'date' },
       { key: 'updatedAt', label: 'Updated', type: 'date' },
     ],
+    createRoles: ['groupMemberCreate'],
+    readRoles: ['groupMemberRead'],
+    updateRoles: ['groupMemberUpdate'],
+    deleteRoles: ['groupMemberDelete'],
   }
   return (
     <>
@@ -81,5 +85,4 @@ export const Success = ({ groupMembers }) => {
     </>
   )
   //return <GroupMembers groupMembers={groupMembers} />
-
 }

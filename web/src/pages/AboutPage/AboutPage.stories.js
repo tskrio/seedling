@@ -1,29 +1,26 @@
 import AboutPage from './AboutPage'
 import { standard } from './AboutPage.mock'
-import StandardLayout from 'src/layouts/StandardLayout'
+import Standard from 'src/layouts/Standard'
 import 'src/scaffold.css'
 import 'src/reset.css'
 import 'src/index.css'
 export const generated = () => {
   return (
     <StandardLayout>
-
       <AboutPage />
     </StandardLayout>
   )
 }
 
 export const loggedin = () => {
-    return (
-    <StandardLayout  {...standard()}>
+  return (
+    <Standard {...standard()}>
       <AboutPage />
-    </StandardLayout>
+    </Standard>
   )
 }
 
-
 export default { title: 'Pages/AboutPage' }
-
 
 //export const empty = () => {
 //  return Empty ? <Empty /> : null
@@ -36,4 +33,3 @@ export default { title: 'Pages/AboutPage' }
 //export const success = () => {
 //  return Success ? <Success {...standard()} /> : null
 //}
-

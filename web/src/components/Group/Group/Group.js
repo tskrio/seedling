@@ -1,7 +1,7 @@
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'
-
+import { useAuth } from '@redwoodjs/auth'
 const DELETE_GROUP_MUTATION = gql`
   mutation DeleteGroupMutation($id: Int!) {
     deleteGroup(id: $id) {
@@ -31,6 +31,7 @@ const timeTag = (datetime) => {
 }*/
 
 const Group = ({ group }) => {
+  const { hasRole } = useAuth()
   const [deleteGroup] = useMutation(DELETE_GROUP_MUTATION, {
     onCompleted: () => {
       toast.success('Group deleted')
@@ -78,19 +79,23 @@ const Group = ({ group }) => {
         </table>
       </div>
       <nav className="rw-button-group">
-        <Link
-          to={routes.editGroup({ id: group.id })}
-          className="rw-button rw-button-blue"
-        >
-          Edit
-        </Link>
-        <button
-          type="button"
-          className="rw-button rw-button-red"
-          onClick={() => onDeleteClick(group.id)}
-        >
-          Delete
-        </button>
+        {hasRole(['groupUpdate', 'admin']) && (
+          <Link
+            to={routes.editGroup({ id: group.id })}
+            className="rw-button rw-button-blue"
+          >
+            Edit
+          </Link>
+        )}
+        {hasRole(['groupDelete', 'admin']) && (
+          <button
+            type="button"
+            className="rw-button rw-button-red"
+            onClick={() => onDeleteClick(group.id)}
+          >
+            Delete
+          </button>
+        )}
       </nav>
     </>
   )

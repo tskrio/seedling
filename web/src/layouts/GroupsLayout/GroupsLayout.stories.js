@@ -1,11 +1,11 @@
-import StandardLayout from '../StandardLayout'
+import Standard from '../Standard'
 import GroupsLayout from './GroupsLayout'
 
 export const generated = () => {
   return (
-    <StandardLayout>
+    <Standard>
       <GroupsLayout />
-    </StandardLayout>
+    </Standard>
   )
 }
 

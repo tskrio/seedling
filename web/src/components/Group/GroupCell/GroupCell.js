@@ -1,6 +1,7 @@
 import Group from 'src/components/Group/Group'
 import GroupMembersByGroupCell from 'src/components/GroupMember/GroupMembersByGroupCell'
 import GroupRolesByGroupCell from 'src/components/GroupRole/GroupRolesByGroupCell'
+import { useAuth } from '@redwoodjs/auth'
 
 export const QUERY = gql`
   query FindGroupById($id: Int!) {
@@ -23,11 +24,14 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ group }) => {
+  const { hasRole } = useAuth()
   return (
     <>
       <Group group={group} />
       <GroupMembersByGroupCell groupID={group} />
-      <GroupRolesByGroupCell groupID={group} />
+      {hasRole(['groupRoleRead', 'admin']) && (
+        <GroupRolesByGroupCell groupID={group} />
+      )}
     </>
   )
 }

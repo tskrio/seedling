@@ -168,6 +168,7 @@ a {
   color: #003052;
   border-bottom: 0.125rem solid currentColor;
   padding: 0 0.125rem 0.125rem;
+  margin: 0 0.125rem 0 0.125rem;
   border-radius: 0.125rem;
   transition: all 0.2s ease-out;
 }
