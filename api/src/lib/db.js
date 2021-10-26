@@ -54,16 +54,21 @@ async function main() {
           )
           rulesArr.forEach(async (rule) => {
             if (rule.type.includes(modelQuery.group)) {
-              //if the rule type (array) includes the grouping (crud)
-              console.log(
-                `${green('Started ')} Order: ${rule.order} rule ${rule.name}`,
-                JSON.stringify(params, null, 2)
-              )
-              params = await rule.command(params)
-              console.log(
-                `${green('Finished')} Order: ${rule.order} rule ${rule.name}`,
-                JSON.stringify(params, null, 2)
-              )
+              if (params?.__abort == true) {
+                console.log('rule is skipped', rule.name);
+                return;
+              } else {
+                //if the rule type (array) includes the grouping (crud)
+                console.log(
+                  `${green('Started ')} Order: ${rule.order} rule ${rule.name}`,
+                  JSON.stringify(params, null, 2)
+                )
+                params = await rule.command(params)
+                console.log(
+                  `${green('Finished')} Order: ${rule.order} rule ${rule.name}`,
+                  JSON.stringify(params, null, 2)
+                )
+              }
             }
           })
         }
