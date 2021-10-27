@@ -6,66 +6,50 @@ import rules from 'src/rules/users/**.{js,ts}'
 // Used when the environment variable REDWOOD_SECURE_SERVICES=1
 
 export const users = async () => {
-  await util.runBeforeRules(rules, 'before', 'read')
-  if (input?._error) {
-    throw new UserInputError(input._error.message);
-  }
-  let readRecords = await db.user.findMany({})
+  let records = await db.user.findMany({})
 
-  util.runAfterRules(id, input, rules);
+  let readRecords = records.map((current) => {
+    util.runRules('user', current.id, null, rules, 'read', 'before');
+    return current
+  })
+
+  records.forEach((current) => {
+    util.runRules('user', current.id, null, rules, 'read', 'after');
+    return current
+  })
+
   return readRecords
 }
 
 export const user = async ({ id }) => {
-  await util.runBeforeRules(rules, 'before', 'read')
-  if (input?._error) {
-    throw new UserInputError(input._error.message);
-  }
   let current = await db.user.findUnique({
     where: { id },
   })
-  util.runAfterRules(id, input, rules);
+  util.runRules('user', id, null, rules, 'read', 'before');
+  util.runRules('user', id, null, rules, 'read', 'after');
   return current
 }
 
-export const createUser = async ({ input }) => {
-  await util.runBeforeRules(id, input, rules, 'user');
-  if (input?._error) {
-    throw new UserInputError(input._error.message);
-  }
-
-  let create = await db.user.create({
-    data: input,
-  })
-
-  util.runAfterRules(id, input, rules);
-  return create
-  /*return db.user.create({
-    data: input,
-  })*/
-}
-
 export const updateUser = async ({ id, input }) => {
-  await util.runBeforeRules(id, input, rules, 'user');
-  console.log('input ', input);
-  if (input?._error) {
-    throw new UserInputError(input._error.message);
+  //var modifiedInput = await util.runBeforeRules(id, input, rules, 'user');
+  var modifiedInput = await util.runRules('user', id, input, rules, 'update', 'before');
+  console.log('input ', modifiedInput);
+  if (modifiedInput?._error) {
+    throw new UserInputError(modifiedInput._error.message);
   }
   let update = await db.user.update({
-    data: input,
+    data: modifiedInput,
     where: { id },
   })
 
-  util.runAfterRules(id, input, rules);
+  util.runRules('user', id, input, rules, 'update', 'after');
   return update
 }
 
 export const deleteUser = async ({ id }) => {
-  let previous = await db.user.findUnique({
-    where: { id },
-  })
-  await util.runBeforeRules(id, input, rules, 'user');
-  if (input?._error) {
+  await util.runRules('user', id, null, rules, 'delete', 'before');
+  //await util.runBeforeRules(input, rules, 'user', record);
+  if (modifiedInput?._error) {
     throw new UserInputError(input._error.message);
   }
 
@@ -73,7 +57,7 @@ export const deleteUser = async ({ id }) => {
     where: { id },
   })
 
-  util.runAfterRules(id, input, rules);
+  await util.runRules('user', id, null, rules, 'after', 'before');
   return deleteRecord
 }
 
