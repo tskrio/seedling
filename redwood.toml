@@ -6,6 +6,7 @@
 # https://redwoodjs.com/docs/app-configuration-redwood-toml
 
 [web]
+  title = "TskrBase"
   port = 8910
   apiProxyPath = "/.netlify/functions"
 [api]

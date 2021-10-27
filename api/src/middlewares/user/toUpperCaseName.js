@@ -14,7 +14,7 @@ module.exports = {
     console.log('ENDING toUpperCaseName RULE')
     return await incomingData
   },
-  active: true,
+  active: false,
   order: 40,
   when: ['before'],
   type: ['update'],

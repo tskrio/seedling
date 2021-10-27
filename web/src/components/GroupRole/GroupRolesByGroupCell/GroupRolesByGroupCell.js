@@ -3,7 +3,7 @@ import GroupRolesLayout from 'src/layouts/GroupRolesLayout'
 import Table from 'src/components/Table/Table'
 import { routes } from '@redwoodjs/router'
 export const beforeQuery = (props) => {
-  console.log('variables', props)
+  //console.log('variables', props)
   props.id = props.groupID.id
   return {
     variables: props,
@@ -58,8 +58,8 @@ export const Success = ({ groupRoles }) => {
       },
     },
     labels: {
-      single: 'grouperole',
-      multiple: 'grouproles',
+      single: 'Group Role',
+      multiple: 'Group Roles',
     },
     key: 'id',
     display: 'name',
@@ -69,6 +69,10 @@ export const Success = ({ groupRoles }) => {
       { key: 'createdAt', label: 'Created', type: 'date' },
       { key: 'updatedAt', label: 'Updated', type: 'date' },
     ],
+    createRoles: ['groupRoleCreate'],
+    readRoles: ['groupRoleRead'],
+    updateRoles: ['groupRoleUpdate'],
+    deleteRoles: ['groupRoleDelete'],
   }
   const DELETE_GROUP_ROLE_MUTATION = gql`
     mutation DeleteGroupRoleMutation($id: Int!) {
@@ -82,6 +86,7 @@ export const Success = ({ groupRoles }) => {
       <Table
         data={groupRoles}
         meta={meta}
+        queryVariables={{ id: groupRoles[0].group.id }} // I don't know how to get the groupID from the query... so if there's a result, refresh the page
         query={QUERY}
         deleteMutation={DELETE_GROUP_ROLE_MUTATION}
       />

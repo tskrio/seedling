@@ -12,14 +12,14 @@ import GroupRolesLayout from 'src/layouts/GroupRolesLayout'
 import UsersLayout from 'src/layouts/UsersLayout'
 import GroupMembersLayout from 'src/layouts/GroupMembersLayout'
 import GroupsLayout from 'src/layouts/GroupsLayout'
-import StandardLayout from './layouts/StandardLayout/StandardLayout'
+import Standard from './layouts/Standard/Standard'
 
 const Routes = () => {
   return (
     <Router>
       <Route path="/login" page={LoginPage} name="login" />
       <Route path="/signup" page={SignupPage} name="signup" />
-      <Set wrap={StandardLayout}>
+      <Set wrap={Standard}>
         <Route path="/logout" page={LogoutPage} name="logout" />
         <Route path="/" page={HomePage} name="home" />
         <Route path="/about" page={AboutPage} name="about" />

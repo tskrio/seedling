@@ -47,28 +47,23 @@ async function main() {
       modelQuery.queries.forEach((query) => {
         //loop over the FindUnique, insert, update, delete methods in those groupings
         if (params.action === query) {
-          logger.info(
+          /*logger.info(
             `MW BEFORE: ${green(params.model)} ${modelQuery.group} ${green(
               params.action
             )}`
-          )
+          )*/
           rulesArr.forEach(async (rule) => {
             if (rule.type.includes(modelQuery.group)) {
-              if (params?.__abort == true) {
-                console.log('rule is skipped', rule.name);
-                return;
-              } else {
-                //if the rule type (array) includes the grouping (crud)
-                console.log(
-                  `${green('Started ')} Order: ${rule.order} rule ${rule.name}`,
-                  JSON.stringify(params, null, 2)
-                )
-                params = await rule.command(params)
-                console.log(
-                  `${green('Finished')} Order: ${rule.order} rule ${rule.name}`,
-                  JSON.stringify(params, null, 2)
-                )
-              }
+              //if the rule type (array) includes the grouping (crud)
+              /*console.log(
+                `${green('Started ')} Order: ${rule.order} rule ${rule.name}`,
+                JSON.stringify(params, null, 2)
+              )*/
+              params = await rule.command(params)
+              /*console.log(
+                `${green('Finished')} Order: ${rule.order} rule ${rule.name}`,
+                JSON.stringify(params, null, 2)
+              )*/
             }
           })
         }
@@ -76,9 +71,9 @@ async function main() {
     })
     const result = await next(params)
     const after = Date.now()
-    console.log(
+    /*console.log(
       `Query ${params.model}.${params.action} took ${after - before}ms`
-    )
+    )*/
     //console.log('MIDDLEWARE AFTER params.args', params.args)
     return result
   })

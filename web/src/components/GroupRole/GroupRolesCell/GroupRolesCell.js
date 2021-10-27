@@ -1,15 +1,15 @@
-import GroupRoles from 'src/components/GroupRole/GroupRoles'
-import GroupRolesLayout from 'src/layouts/GroupRolesLayout'
+import Table from 'src/components/Table/Table'
+import { routes } from '@redwoodjs/router'
 export const beforeQuery = (props) => {
   console.log('variables', props)
-  /*props.id = props.groupID.id
-  return {
-    variables: props,
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'cache-first',
-  }*/
 }
-
+const DELETE_GROUP_ROLE_MUTATION = gql`
+  mutation DeleteGroupRoleMutation($id: Int!) {
+    deleteGroupRole(id: $id) {
+      id
+    }
+  }
+`
 export const QUERY = gql`
   query FindGroupRoles {
     groupRoles {
@@ -35,11 +35,49 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ groupRoles }) => {
-  //  return <div>{JSON.stringify(groupRoles)}</div>
-
+  //return <div>{JSON.stringify(groupRoles)}</div>
+  //
+  //return (
+  //    <GroupRoles groupRoles={groupRoles} />
+  //)
+  let meta = {
+    title: 'Group Roles',
+    routes: {
+      newItem: () => {
+        return routes.newGroupRole()
+      },
+      view: (prop) => {
+        return routes.groupRole(prop)
+      },
+      edit: (prop) => {
+        return routes.editGroupRole(prop)
+      },
+    },
+    labels: {
+      single: 'grouprole',
+      multiple: 'grouproles',
+    },
+    key: 'id',
+    display: 'name',
+    columns: [
+      { key: 'role', label: 'Role', type: 'string' },
+      { key: 'group.name', label: 'Group', type: 'reference' },
+      { key: 'createdAt', label: 'Created', type: 'date' },
+      { key: 'updatedAt', label: 'Updated', type: 'date' },
+    ],
+    createRoles: ['groupRoleCreate'],
+    readRoles: ['groupRoleRead'],
+    updateRoles: ['groupRoleUpdate'],
+    deleteRoles: ['groupRoleDelete'],
+  }
   return (
-    <GroupRolesLayout>
-      <GroupRoles groupRoles={groupRoles} />
-    </GroupRolesLayout>
+    <>
+      <Table
+        data={groupRoles}
+        meta={meta}
+        query={QUERY}
+        deleteMutation={DELETE_GROUP_ROLE_MUTATION}
+      />
+    </>
   )
 }

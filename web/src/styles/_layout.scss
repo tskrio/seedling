@@ -1,0 +1,16 @@
+#redwood-app > header {
+  padding: 1rem;
+  grid-area: nav;
+  border-bottom: solid black 1px;
+}
+[data-grid-area='aside'] {
+  grid-area: aside;
+}
+[data-grid-area='aside'],  [data-grid-area='main']{
+  transition: all .2s ease-in-out;
+}
+
+/* Footer */
+[data-grid-area='footer'] {
+  grid-area: footer;
+}

@@ -1,0 +1,50 @@
+
+:root {
+  --color-primary-hue: 260;
+  --color-primary: hsl(var(--color-primary-hue), 85%, 60%);
+  --color-light: white;
+  --color-text: hsl(var(--color-primary-hue), 15%, 30%);
+  --gray-medium: hsl(var(--color-primary-hue), 15%, 75%);
+  --gray-light: hsl(var(--color-primary-hue), 15%, 90%);
+  --background-body: hsl(var(--color-primary-hue), 5%, 98%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: hsl(var(--color-primary-hue), 85%, 30%);
+    --color-light: hsl(var(--color-primary-hue), 85%, 90%);
+    --color-text: hsl(var(--color-primary-hue), 15%, 80%);
+    --gray-light: hsl(var(--color-primary-hue), 15%, 15%);
+    --background-body: hsl(var(--color-primary-hue), 2%, 8%);
+    --card-background: transparent;
+
+    .card--stats {
+      background-image: linear-gradient(
+        hsl(var(--chart-color), 85%, 15%),
+        hsl(var(--color-primary-hue), 5%, 10%)
+      );
+
+      dt {
+        --tl: 75%;
+      }
+    }
+  }
+}
+
+body {
+  background-color: var(--background-body);
+  color: var(--color-text);
+}
+
+.background-primary {
+  background-color: var(--color-primary);
+  color: var(--color-light);
+}
+
+.background-gray-light {
+  background-color: var(--gray-light);
+}
+
+.background-gray-medium {
+  background-color: var(--gray-medium);
+}

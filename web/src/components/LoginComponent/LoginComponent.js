@@ -30,8 +30,8 @@ const LoginComponent = () => {
 
   const onSubmit = async (data) => {
     const response = await logIn({ ...data })
-    if (response.message) {
-      toast.error(response.message)
+    if (response.error) {
+      toast.error(response.error)
     } else {
       toast.success('Welcome back!')
     }
