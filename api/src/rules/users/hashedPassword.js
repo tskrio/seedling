@@ -15,28 +15,24 @@ module.exports = {
   command: async function (incomingData) {
     try {
       //if were given a password, we make a new salt, hash it and set both salt and hash
-      if (incomingData?.args?.data) {
-        let hashedPassword = incomingData.args.data.hashedPassword
-        if (hashedPassword) {
-          console.log('in hashpassword is set... assume it needs hashing')
-
+      let hashedPassword = incomingData?.hashedPassword;
+      if (hashedPassword) {
           let salt = randomString(30)
-          incomingData.args.data.salt = salt.toString()
+          incomingData.salt = salt.toString()
           let encryptedPassword = CryptoJS.PBKDF2(hashedPassword, salt, {
             keySize: 256 / 32,
           }).toString()
-          incomingData.args.data.hashedPassword = encryptedPassword
-        } else {
+          incomingData.hashedPassword = encryptedPassword
+      } else {
           //hashpassword is empty.. lets not set this.
-          delete incomingData.args.data.hashedPassword
-        }
+          delete incomingData.hashedPassword
       }
     } catch (e) {
       logger.error(e)
     }
     return await incomingData
   },
-  active: false,
+  active: true,
   order: 10,
   title: 'hash password on update',
   when: ['before'],
