@@ -86,8 +86,16 @@ export const groupMembersByGroup = async (id) => {
   let readRecords = records.map((current) => {
     return current
   })
+  return readRecords
+}
 
-  //console.log('readRecords', readRecords)
+export const groupMembersByUser = async (id) => {
+  let records = await db.groupMember.findMany({
+    where: { user: id },
+  })
+  let readRecords = records.map((current) => {
+    return current
+  })
   return readRecords
 }
 

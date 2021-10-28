@@ -1,4 +1,5 @@
 import User from 'src/components/User/User'
+import GroupMembersByUserCell from 'src/components/GroupMember/GroupMembersByUserCell'
 
 export const QUERY = gql`
   query FindUserById($id: Int!) {
@@ -22,5 +23,10 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ user }) => {
-  return <User user={user} />
+  return (
+    <>
+      <User user={user} />
+      <GroupMembersByUserCell userID={user} />
+    </>
+  )
 }
