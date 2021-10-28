@@ -14,6 +14,7 @@ export const schema = gql`
     groupMembers: [GroupMember!]! @requireAuth
     groupMember(id: Int!): GroupMember @requireAuth
     groupMembersByGroup(id: Int!): [GroupMember!]! @requireAuth
+    groupMembersByUser(id: Int!): [GroupMember!]! @requireAuth
   }
 
   input CreateGroupMemberInput {

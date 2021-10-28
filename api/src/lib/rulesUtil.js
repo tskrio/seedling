@@ -1,6 +1,4 @@
 import { logger } from 'src/lib/logger'
-import { db } from 'src/lib/db'
-import { UserInputError } from '@redwoodjs/graphql-server'
 
 
 let _loadRules = (rules, when, type) => {

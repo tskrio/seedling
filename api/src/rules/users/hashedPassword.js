@@ -1,6 +1,5 @@
 import { logger } from 'src/lib/logger'
 import CryptoJS from 'crypto-js'
-import { db } from 'src/lib/db'
 function randomString(len, charSet) {
   charSet =
     charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
