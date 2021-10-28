@@ -32,7 +32,7 @@ export const schema = gql`
     salt: String
   }
   type Mutation {
-    createUser(input: CreateUserInput!): User! @requireAuth(roles: ["userCreate"])
+    createUser(input: CreateUserInput!): User! @requireAuth(roles: ["userCreate", "admin"])
     updateUser(id: Int!, input: UpdateUserInput!): User @requireAuth(roles: ["userUpdate", "admin"])
     deleteUser(id: Int!): User! @requireAuth(roles: ["userDelete", "admin"])
   }
