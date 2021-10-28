@@ -18,6 +18,6 @@ module.exports = {
   order: 30,
   when: ['before'],
   type: ['create','update'],
-  name: 'properCaseName',
+  title: 'properCaseName',
   file: __filename,
 }
