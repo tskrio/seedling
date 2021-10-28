@@ -62,7 +62,7 @@ export const Success = ({ groupMembers }) => {
     title: 'Group Members',
     routes: {
       newItem: (prop) => {
-        return routes.newGroupMember({ groupId: groupMembers[0].group.id })
+        return routes.newGroupMember({ userId: groupMembers[0].user.id })
       },
       view: (prop) => {
         return routes.groupMember(prop)
@@ -76,7 +76,7 @@ export const Success = ({ groupMembers }) => {
       multiple: 'groupmembers',
     },
     key: 'id',
-    display: 'name',
+    display: 'id',
     columns: [
       { key: 'user.name', label: 'User', type: 'reference' },
       { key: 'group.name', label: 'Group', type: 'reference' },
