@@ -33,8 +33,9 @@ Jace</p>
       `
         let mail = {
           from: `Tskr <jace@${process.env.MAILGUN_DOMAIN}>`,
+          'h:Reply-To': `Jace <jace@tskr.io>`,
           to: email,
-          subject: `${email} just made an account!`,
+          subject: `Welcome to Tskr`,
           html: html,
         }
         mailgun.messages().send(mail, function (error, body) {
