@@ -32,7 +32,7 @@ Jace</p>
       If you'd like to poke around the site you can do so at <a href="https://tskrbase.tskr.io">tskrbase.tskr.io</a>
       `
         let mail = {
-          from: `Tskr <tskr@${process.env.MAILGUN_DOMAIN}>`,
+          from: `Tskr <jace@${process.env.MAILGUN_DOMAIN}>`,
           to: email,
           subject: `${email} just made an account!`,
           html: html,
