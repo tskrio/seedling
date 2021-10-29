@@ -223,6 +223,9 @@ h2 {
   /*transform: translateX(calc(var(--sidebar-width) -2 * -1));*/
   transform: translateX(calc(var(--sidebar-width) * -.9 ));
 }
+#toggleSidebar {
+  cursor: pointer;
+}
 .floatLeft {
   display: float !important;
   float: left;
