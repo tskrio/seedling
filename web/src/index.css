@@ -219,9 +219,12 @@ h2 {
   transform: translateX(calc(var(--sidebar-width) -10 * -1));
 }
 .off-canvas main {
-  width: calc(100% + var(--sidebar-width));
+  width: calc(94.3% + var(--sidebar-width));
   /*transform: translateX(calc(var(--sidebar-width) -2 * -1));*/
   transform: translateX(calc(var(--sidebar-width) * -.9 ));
+}
+#toggleSidebar {
+  cursor: pointer;
 }
 .floatLeft {
   display: float !important;
