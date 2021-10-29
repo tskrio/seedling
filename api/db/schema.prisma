@@ -9,15 +9,17 @@ datasource db {
 }
 
 model User {
-  id             Int           @id @default(autoincrement())
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  email          String        @unique
-  name           String        @default("")
-  preferences    Json          @default("{}")
-  hashedPassword String        @default("")
-  salt           String        @default("")
-  GroupMember    GroupMember[] @relation("UserGroupMember")
+  id                  Int           @id @default(autoincrement())
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  email               String        @unique
+  name                String        @default("")
+  preferences         Json          @default("{}")
+  hashedPassword      String        @default("")
+  salt                String        @default("")
+  GroupMember         GroupMember[] @relation("UserGroupMember")
+  resetToken          String? // <--- new
+  resetTokenExpiresAt DateTime? // <--- new
 }
 
 model Group {

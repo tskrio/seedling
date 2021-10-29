@@ -8,7 +8,7 @@
 [web]
   title = "TskrBase"
   port = 8910
-  apiProxyPath = "/.netlify/functions"
+  apiUrl = "/.netlify/functions"
 [api]
   port = 8911
 [browser]
