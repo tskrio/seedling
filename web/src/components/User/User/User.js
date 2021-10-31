@@ -57,7 +57,6 @@ const User = ({ user }) => {
   var preferenceFields = []
   if (user?.preferences) {
     for (let key in user?.preferences) {
-      console.log(`${key}: ${user?.preferences[key]}`)
       preferenceFields.push(
         <label
           key={key}
@@ -207,10 +206,10 @@ const User = ({ user }) => {
           </h2>
           <fieldset className="mb-3 bg-white shadow-lg rounded text-gray-600">
             <label className="flex border-b border-gray-200 h-12 py-3 items-center">
-              <span className="text-right px-2">Card</span>
+              <span className="text-right px-2 w-1/6">Card</span>
               <input
                 name="card"
-                className="focus:outline-none px-3 w-full"
+                className="focus:outline-none px-3 w-5/6"
                 placeholder="Card number MM/YY CVC"
                 required=""
               />
@@ -219,21 +218,23 @@ const User = ({ user }) => {
           </fieldset>
         </section>
       </div>
-      <button
-        className="submit-button px-4 py-3 rounded-full bg-blue-400 hover:bg-blue-700 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors"
-        to={routes.editUser({ id: user.id })}
-      >
-        Save
-      </button>
-      {hasRole(['userDelete', 'admin']) && (
+      <div className="flex">
         <button
-          type="button"
-          className="submit-button px-4 py-3 rounded-full bg-red-400 hover:bg-red-700 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors"
-          onClick={() => onDeleteClick(user.id)}
+          className="submit-button px-4 py-3 rounded-full bg-blue-400 hover:bg-blue-700 text-white focus:ring focus:outline-none w-2/3 text-xl font-semibold transition-colors"
+          to={routes.editUser({ id: user.id })}
         >
-          Delete
+          Save
         </button>
-      )}
+        {hasRole(['userDelete', 'admin']) && (
+          <button
+            type="button"
+            className="submit-button px-4 py-3 rounded-full bg-red-400 hover:bg-red-700 text-white focus:ring focus:outline-none w-1/3 text-xl font-semibold transition-colors"
+            onClick={() => onDeleteClick(user.id)}
+          >
+            Delete
+          </button>
+        )}
+      </div>
     </>
   )
 }

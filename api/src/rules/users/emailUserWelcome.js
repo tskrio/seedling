@@ -1,10 +1,14 @@
 import { logger } from 'src/lib/logger'
-//import { Mailgun } from 'mailgun-js'
+import { apiProperties } from 'src/lib/apiProperties'
 let Mailgun = require('mailgun-js')
 module.exports = {
   command: async function (incomingData) {
     try {
-      if (process.env.MAILGUN_API_KEY && process.env.MAILGUN_DOMAIN) {
+      if (
+        process.env.MAILGUN_API_KEY &&
+        process.env.MAILGUN_DOMAIN &&
+        apiProperties.email.active
+      ) {
         let mailgun = new Mailgun({
           apiKey: process.env.MAILGUN_API_KEY,
           domain: process.env.MAILGUN_DOMAIN,
@@ -47,7 +51,9 @@ Jace</p>
           }
         })
       } else {
-        logger.error('MAILGUN_API_KEY or MAILGUN_DOMAIN not set')
+        logger.error(
+          `__filename mail not sent systemProperites.email.action=${systemProperties.email.active}`
+        )
       }
     } catch (e) {
       logger.error(e)
