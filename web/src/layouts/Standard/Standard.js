@@ -1,13 +1,13 @@
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 import AsideNavigator from 'src/components/AsideNavigator/AsideNavigator'
+import Navbar from 'src/components/Navbar/Navbar'
+import NavSidebar from 'src/components/NavSidebar/NavSidebar'
 
 const Standard = ({ children }) => {
   const { logOut, isAuthenticated, currentUser } = useAuth()
-
-  return (
-    <>
-      <header data-grid-area="header">
+  /*
+<header data-grid-area="header">
         <nav>
           <ul>
             <li>
@@ -16,7 +16,7 @@ const Standard = ({ children }) => {
               </Link>
             </li>
             <li>
-              <a href="https://github.com/tskrio/tskrBase">
+              <a href="https://github.com/tskrio/tskr">
                 <em>Fork</em>
               </a>
             </li>
@@ -49,11 +49,20 @@ const Standard = ({ children }) => {
           </ul>
         </nav>
       </header>
-      <AsideNavigator />
-      <main data-grid-area="main">
-        <article>{children}</article>
-      </main>
-      <footer data-grid-area="footer">
+      */
+  return (
+    <>
+      <Navbar />
+      {isAuthenticated && currentUser && <NavSidebar>{children}</NavSidebar>}
+      {!isAuthenticated && <>{children}</>}
+    </>
+  )
+}
+
+export default Standard
+
+/**
+ <footer>
         <ul>
           <li>
             Made with{' '}
@@ -67,8 +76,4 @@ const Standard = ({ children }) => {
           </li>
         </ul>
       </footer>
-    </>
-  )
-}
-
-export default Standard
+ */

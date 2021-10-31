@@ -8,6 +8,7 @@ export const schema = gql`
     preferences: JSON!
     hashedPassword: String!
     salt: String!
+    md5Email: String!
     GroupMember: [GroupMember]!
   }
 
@@ -32,8 +33,10 @@ export const schema = gql`
     salt: String
   }
   type Mutation {
-    createUser(input: CreateUserInput!): User! @requireAuth(roles: ["userCreate", "admin"])
-    updateUser(id: Int!, input: UpdateUserInput!): User @requireAuth(roles: ["userUpdate", "admin"])
+    createUser(input: CreateUserInput!): User!
+      @requireAuth(roles: ["userCreate", "admin"])
+    updateUser(id: Int!, input: UpdateUserInput!): User
+      @requireAuth(roles: ["userUpdate", "admin"])
     deleteUser(id: Int!): User! @requireAuth(roles: ["userDelete", "admin"])
   }
 `
