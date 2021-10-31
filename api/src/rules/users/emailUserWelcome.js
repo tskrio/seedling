@@ -52,7 +52,7 @@ Jace</p>
         })
       } else {
         logger.error(
-          `__filename mail not sent systemProperites.email.action=${systemProperties.email.active}`
+          `__filename mail not sent apiProperties.email.action=${apiProperties.email.active}`
         )
       }
     } catch (e) {
