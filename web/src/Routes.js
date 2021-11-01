@@ -43,10 +43,10 @@ const Routes = () => {
               <Route path="/users/new" page={UserNewUserPage} name="newUser" />
             </Private>
             <Private unauthenticated="home" role={['admin', 'userUpdate']}>
-              <Route path="/users/{id:Int}/edit" page={UserEditUserPage} name="editUser" />
+              <Route path="/users/{id:Int}" page={UserEditUserPage} name="user" />
             </Private>
             <Private unauthenticated="home" role={['admin', 'userRead']}>
-              <Route path="/users/{id:Int}" page={UserUserPage} name="user" />
+              {/*<Route path="/users/{id:Int}" page={UserUserPage} name="user" />*/}
               <Route path="/users" page={UserUsersPage} name="users" />
             </Private>
           </Set>

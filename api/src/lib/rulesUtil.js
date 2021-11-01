@@ -1,8 +1,7 @@
 import { logger } from 'src/lib/logger'
 
-
 let _loadRules = (rules, when, type) => {
-  let rulesArr = Object.keys(rules).map((k) => rules[k]) //from obj to arr of objs
+  let rulesArr = Object.keys(rules).map((k) => rules[k]) //convert object to array
   rulesArr.sort((a, b) => a.order - b.order) //order rules asc
   rulesArr = rulesArr.filter((rule) => {
     let requiredFields = [
@@ -40,7 +39,6 @@ let _loadRules = (rules, when, type) => {
   return rulesArr
 }
 
-
 /*
   run  rule against the input that is being passed with the passed rule type and when
   @param [string] dbName: name of the table
@@ -51,15 +49,17 @@ let _loadRules = (rules, when, type) => {
   @param [string] when rule should be executed
   @return [object] modified input
 */
-export const runRules = async(dbName, id,input, rules, ruleType, when) => {
+export const runRules = async (dbName, id, input, rules, ruleType, when) => {
   //load all the rules for before
   let rulesArr = loadRules(rules, when, ruleType)
 
   //run all rules against input
   rulesArr.forEach((rule) => {
-    if (input?._error ) {
-      logger.info(`error detected stopping at ${when} rule "${rule.title}" ${rule.order}`)
-      return;
+    if (input?._error) {
+      logger.info(
+        `error detected stopping at ${when} rule "${rule.title}" ${rule.order}`
+      )
+      return
     }
 
     logger.info(`Starting ${when} Update Rule "${rule.title}" ${rule.order}`)

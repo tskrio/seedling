@@ -7,29 +7,25 @@ import {
   Submit,
   PasswordField,
 } from '@redwoodjs/forms'
-import { useLocation } from '@redwoodjs/router'
-
-const formatDatetime = (value) => {
-  if (value) {
-    return value.replace(/:\d{2}\.\d{3}\w/, '')
+import { toast } from '@redwoodjs/web/toast'
+import { useMutation } from '@redwoodjs/web'
+import { Link, routes, navigate, useLocation } from '@redwoodjs/router'
+import { useAuth } from '@redwoodjs/auth'
+const DELETE_USER_MUTATION = gql`
+  mutation DeleteUserMutation($id: Int!) {
+    deleteUser(id: $id) {
+      id
+    }
   }
-}
-
-const titleCase = (str) => {
-  str = str.toLowerCase().split(' ')
-  for (var i = 0; i < str.length; i++) {
-    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1)
-  }
-  return str.join(' ')
-}
-
+`
 const UserForm = (props) => {
+  const { hasRole } = useAuth()
   const { search } = useLocation()
   let params = new URLSearchParams(search)
 
   console.log(props)
   const onSubmit = (data) => {
-    //console.log('onsave data', data)
+    //console.log('on save data', data)
     /**Client RUles go here */
     if (data.preference) {
       data.preferences = data.preference
@@ -38,8 +34,20 @@ const UserForm = (props) => {
     if (data.preferences == undefined) {
       data.preferences = {}
     }
-    console.log('onsave data modified', data)
+    console.log('on save data modified', data)
     props.onSave(data, props?.user?.id)
+  }
+  const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
+    onCompleted: () => {
+      toast.success('User deleted')
+      navigate(routes.users())
+    },
+  })
+
+  const onDeleteClick = (id) => {
+    if (confirm('Are you sure you want to delete user ' + id + '?')) {
+      deleteUser({ variables: { id } })
+    }
   }
 
   var preferenceFields = []
@@ -68,113 +76,136 @@ const UserForm = (props) => {
       )
     }
   }
-
-  return (
-    <div className="rw-form-wrapper">
-      <Form onSubmit={onSubmit} error={props.error}>
-        <FormError
-          error={props.error}
-          wrapperClassName="rw-form-error-wrapper"
-          titleClassName="rw-form-error-title"
-          listClassName="rw-form-error-list"
-        />
-
-        <Label
-          name="email"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Email
-        </Label>
-        <TextField
-          name="email"
-          defaultValue={props.user?.email || params.get('email')}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          config={{ required: true }}
-        />
-
-        <FieldError name="email" className="rw-field-error" />
-
-        <Label
-          name="name"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Name
-        </Label>
-        <TextField
-          name="name"
-          defaultValue={props.user?.name || params.get('name')}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          config={{ required: true }}
-        />
-
-        <FieldError name="name" className="rw-field-error" />
-
-        <Label
-          name="hashedPassword"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Password
-        </Label>
-        <PasswordField
-          name="hashedPassword"
-          defaultValue={props.user?.hashedPassword}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          config={{ required: false }}
-        />
-
-        <FieldError name="hashedPassword" className="rw-field-error" />
-
-        <FieldError name="preferences" className="rw-field-error" />
-        {preferenceFields}
-        <div className="rw-button-group">
-          <Submit disabled={props.loading} className="rw-button rw-button-blue">
-            Save
-          </Submit>
+  let formLabelClass = 'flex border-b border-gray-200 h-12 py-3 items-center'
+  let formLabelClassError =
+    'flex border-b border-gray-200 h-12 py-3 items-center'
+  let formTextFieldClass = 'focus:outline-none px-3 w-5/6'
+  let labelAndFieldList = (fieldArray) => {
+    console.log(props)
+    return fieldArray.map((field) => {
+      return (
+        <div key={field.name}>
+          <Label
+            name={field.name}
+            className={formLabelClass}
+            errorClassName={formLabelClassError}
+          >
+            <span className="text-right px-2 w-1/6">{field.prettyName}</span>
+            {field.readOnly ? (
+              <span className="text-left px-2 w-5/6">
+                {props?.user?.[field.name]}
+              </span>
+            ) : field.type === 'PasswordField' ? (
+              <PasswordField
+                name={field.name}
+                className={formTextFieldClass}
+                errorClassName={formTextFieldClass}
+                placeholder={field.placeHolder}
+                config={{ required: field.required }}
+              />
+            ) : (
+              <TextField
+                name={field.name}
+                defaultValue={
+                  props?.user?.[field.name] || params.get(field.name)
+                }
+                className={formTextFieldClass}
+                errorClassName={formTextFieldClass}
+                placeholder={field.placeHolder}
+                config={{ required: field.required }}
+              />
+            )}
+          </Label>
         </div>
-      </Form>
-    </div>
+      )
+    })
+  }
+  return (
+    <>
+      <div className="rounded-md">
+        <Link
+          to={routes.users()}
+          className="text-sm leading-5 font-medium text-gray-500 hover:text-gray-900 focus:outline-none focus:underline transition ease-in-out duration-150"
+        >
+          Back to users
+        </Link>
+        <Form onSubmit={onSubmit} error={props.error}>
+          <FormError
+            error={props.error}
+            wrapperClassName="rw-form-error-wrapper"
+            titleClassName="rw-form-error-title"
+            listClassName="rw-form-error-list"
+          />
+          <section>
+            <h2 className="uppercase tracking-wide text-lg font-semibold text-gray-700 my-2">
+              {props.user?.name || 'New User'}
+            </h2>
+            <fieldset className="mb-3 bg-white shadow-lg rounded text-gray-600">
+              {labelAndFieldList(
+                (() => {
+                  let returnArray = []
+                  if (props.user?.id) {
+                    returnArray.push({
+                      name: 'id',
+                      prettyName: 'ID',
+                      readOnly: true,
+                    })
+                  }
+                  returnArray.push(
+                    {
+                      name: 'name',
+                      prettyName: 'Name',
+                      readOnly: false,
+                    },
+                    {
+                      name: 'email',
+                      prettyName: 'Email',
+                      readOnly: false,
+                    },
+                    {
+                      name: 'hashedPassword',
+                      prettyName: 'Password',
+                      readOnly: false,
+                      placeHolder: 'Leave blank to keep current password',
+                      type: 'PasswordField',
+                    },
+                    {
+                      name: 'createdAt',
+                      prettyName: 'Created At',
+                      readOnly: true,
+                    },
+                    {
+                      name: 'updatedAt',
+                      prettyName: 'Updated At',
+                      readOnly: true,
+                    }
+                  )
+                  return returnArray
+                })()
+              )}
+            </fieldset>
+          </section>
+          <div className="flex">
+            <Submit
+              disabled={props.loading}
+              className="submit-button px-4 py-3 rounded-full bg-blue-400 hover:bg-blue-700 text-white focus:ring focus:outline-none w-2/3 text-xl font-semibold transition-colors"
+            >
+              Save
+            </Submit>
+            {hasRole(['userDelete', 'admin']) && (
+              <button
+                type="button"
+                className="submit-button px-4 py-3 rounded-full bg-red-400 hover:bg-red-700 text-white focus:ring focus:outline-none w-1/3 text-xl font-semibold transition-colors"
+                onClick={() => onDeleteClick(props?.user.id)}
+              >
+                Delete
+              </button>
+            )}
+          </div>
+        </Form>
+      </div>
+    </>
   )
 }
 
 export default UserForm
-
-/*
-        <Label
-          name="preferences"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Preferences
-        </Label>
-        <TextField
-          name="preferences"
-          defaultValue={JSON.stringify(props.user?.preferences)}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: true }}
-        />
-
-
-        <Label
-          name="salt"
-          className="rw-label"
-          errorClassName="rw-label rw-label-error"
-        >
-          Salt
-        </Label>
-        <TextField
-          name="salt"
-          defaultValue={props.user?.salt}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          validation={{ required: false }}
-        />
-
-        <FieldError name="salt" className="rw-field-error" />
-        */

@@ -3,13 +3,14 @@ import { logger } from 'src/lib/logger'
 module.exports = {
   command: async function (incomingData) {
     try {
-      var data = incomingData.hashedPassword;
-      if (data.length === 0){ // if password is empty, remove it.
+      var data = incomingData.hashedPassword
+      if (data.length === 0) {
+        // if password is empty, remove it.
         delete incomingData.hashedPassword
       } else if (data.length < 4) {
         incomingData._error = {
-          abort : true,
-          message : 'Password not long enough.  Update not saved'
+          abort: true,
+          message: 'Password not long enough.  Update not saved',
         }
       }
     } catch (e) {
