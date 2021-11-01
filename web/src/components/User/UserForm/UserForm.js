@@ -90,7 +90,9 @@ const UserForm = (props) => {
             className={formLabelClass}
             errorClassName={formLabelClassError}
           >
-            <span className="text-right px-2 w-1/6">{field.prettyName}</span>
+            <span className="whitespace-nowrap text-right px-2 w-1/6">
+              {field.prettyName}
+            </span>
             {field.readOnly ? (
               <span className="text-left px-2 w-5/6">
                 {props?.user?.[field.name]}
@@ -101,6 +103,7 @@ const UserForm = (props) => {
                 className={formTextFieldClass}
                 errorClassName={formTextFieldClass}
                 placeholder={field.placeHolder}
+                autoComplete={'new-password'}
                 config={{ required: field.required }}
               />
             ) : (

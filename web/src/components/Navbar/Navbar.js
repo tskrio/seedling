@@ -82,7 +82,7 @@ const Navbar = () => {
           <button
             className="navbar-burger self-center mr-12 xl:hidden"
             onClick={() => {
-              document.querySelector('#navSideBar').classList.toggle('hidden')
+              document.querySelector('#navSideBar').classList.toggle(['hidden'])
             }}
           >
             <svg
