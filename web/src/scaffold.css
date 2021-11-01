@@ -321,3 +321,25 @@
   text-align: center;
   flex-basis: 100%;
 }
+
+.rw-input-error:focus {
+  outline: none;
+  border-color: #c53030;
+  box-shadow: 0 0 5px #c53030;
+}
+.rw-toast {
+  background-color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+.rw-forgot-link {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  text-align: right;
+  margin-top: 0.1rem;
+}
+.rw-forgot-link:hover {
+  font-size: 0.75rem;
+  color: #4299e1;
+}

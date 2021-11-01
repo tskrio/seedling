@@ -2,6 +2,16 @@ import { DbAuthHandler } from '@redwoodjs/api'
 import { db } from 'src/lib/db'
 
 export const handler = async (event, context) => {
+  const forgotPasswordOptions = {
+    handler: (user) => {
+      return user
+    },
+    expires: 60 * 60 * 24,
+    errors: {
+      usernameNotFound: 'Username not found',
+      usernameRequired: 'Username is required',
+    },
+  }
   const loginOptions = {
     // login.handler() is called after finding the user that matches the
     // username/password provided at login, but before actually considering them
@@ -30,7 +40,18 @@ export const handler = async (event, context) => {
     // How long a user will remain logged in, in seconds
     expires: 60 * 60 * 24 * 365 * 10,
   }
-
+  const resetPasswordOptions = {
+    handler: (user) => {
+      return true
+    },
+    allowReusedPassword: true,
+    errors: {
+      resetTokenExpired: 'resetToken is expired',
+      resetTokenInvalid: 'resetToken is invalid',
+      resetTokenRequired: 'resetToken is required',
+      reusedPassword: 'Must choose a new password',
+    },
+  }
   const signupOptions = {
     // Whatever you want to happen to your data on new user signup. Redwood will
     // check for duplicate usernames before calling this handler. At a minimum
@@ -81,9 +102,13 @@ export const handler = async (event, context) => {
       username: 'email',
       hashedPassword: 'hashedPassword',
       salt: 'salt',
+      resetToken: 'resetToken', // <--- new
+      resetTokenExpiresAt: 'resetTokenExpiresAt', // <--- new
     },
 
+    forgotPassword: forgotPasswordOptions,
     login: loginOptions,
+    resetPassword: resetPasswordOptions,
     signup: signupOptions,
   })
 
