@@ -2,6 +2,7 @@ import { UserInputError } from '@redwoodjs/graphql-server'
 import { db } from 'src/lib/db'
 import * as util from 'src/lib/rulesUtil'
 import rules from 'src/rules/users/**.{js,ts}'
+import CryptoJS from 'crypto-js'
 let table = 'user'
 
 export const users = async () => {
@@ -83,4 +84,5 @@ export const deleteUser = async ({ id }) => {
 export const User = {
   GroupMember: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).GroupMember(),
+  md5Email: (_args, { root }) => CryptoJS.MD5(root.email).toString(),
 }

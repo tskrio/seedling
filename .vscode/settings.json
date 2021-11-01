@@ -29,5 +29,6 @@
     "node_modules/fs-capacitor/**/yarn.lock": true,
     "node_modules/fs-capacitor/**/yarn-error.log": true,
     "node_modules/fs-capacitor/**/lib": true
-  }
+  },
+  "files.eol": "\n"
 }

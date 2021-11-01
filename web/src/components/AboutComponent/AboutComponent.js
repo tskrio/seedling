@@ -5,9 +5,9 @@ const AboutComponent = () => {
     'Find me in ./web/src/components/AboutComponent/AboutComponent.js'
   return (
     <>
-      <h1 alt={altText}>What is TskrBase</h1>
+      <h1 alt={altText}>What is Tskr</h1>
       <p>
-        TskrBase is a minimal RedwoodJS template to get started with Rules,
+        Tskr is a minimal RedwoodJS template to get started with Rules,
         Authentication, Roles and Role based Access Control.
       </p>
       <p>
@@ -61,10 +61,10 @@ const AboutComponent = () => {
           <details>
             <summary>Authentication</summary>
             <p>
-              Authentication is a key part here. TskrBase has opted for dbAuth,
+              Authentication is a key part here. Tskr has opted for dbAuth,
               however, you could replace that pretty simply. This allows for a
-              fork of the repo to get up and running with minimal set up.
-              TskrBase has taken the opinion that Email is the login.
+              fork of the repo to get up and running with minimal set up. Tskr
+              has taken the opinion that Email is the login.
             </p>
           </details>
         </li>
@@ -72,7 +72,7 @@ const AboutComponent = () => {
           <details>
             <summary>Tables</summary>
             <p>
-              Tables are important piece of this and so TskrBase has only a few
+              Tables are important piece of this and so Tskr has only a few
               tables. All tables adhere to this standard.
             </p>
             <ul>
@@ -106,7 +106,7 @@ const AboutComponent = () => {
         </li>
       </ul>
       <h2>I&apos;m in, where do I start?</h2>
-      <a href="https://github.com/tskrio/tskrBase#contributing">
+      <a href="https://github.com/tskrio/tskr#contributing">
         Contributing docs
       </a>
     </>

@@ -3,6 +3,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 
 import UserForm from 'src/components/User/UserForm'
+import GroupMembersByUserCell from 'src/components/GroupMember/GroupMembersByUserCell'
 
 export const QUERY = gql`
   query EditUserById($id: Int!) {
@@ -12,7 +13,6 @@ export const QUERY = gql`
       updatedAt
       email
       name
-
       preferences
     }
   }
@@ -45,18 +45,16 @@ export const Success = ({ user }) => {
   })
 
   const onSave = (input, id) => {
-    console.log('onSave of editusercell.js', input, id)
+    console.log(`onSave of edit`, input, id)
     updateUser({ variables: { id, input } })
   }
 
   return (
     <div className="rw-segment">
-      <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">Edit User {user.id}</h2>
-      </header>
       <div className="rw-segment-main">
         <UserForm user={user} onSave={onSave} error={error} loading={loading} />
       </div>
+      <GroupMembersByUserCell userID={user} />
     </div>
   )
 }

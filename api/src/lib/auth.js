@@ -1,6 +1,7 @@
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 import { db } from './db'
 import { logger } from './logger'
+import CryptoJS from 'crypto-js'
 
 // The session object sent in as the first argument to getCurrentUser() will
 // have a single key `id` containing the unique ID of the logged in user
@@ -28,9 +29,11 @@ export const getCurrentUser = async (session) => {
     })
     // assign the roles to the user
     let roles = foundGroupRoles.map((groupRole) => groupRole.role)
+    // get the hashed email for gravatar
     let returnUser = {
       roles,
       ...foundUser,
+      md5Email: CryptoJS.MD5(foundUser.email).toString(),
     }
     //console.log('returnUser', returnUser)
     return returnUser
@@ -44,7 +47,7 @@ export const getCurrentUser = async (session) => {
  *
  * @returns {boolean} - If the currentUser is authenticated
  */
- export const isAuthenticated = () => {
+export const isAuthenticated = () => {
   return !!context.currentUser
 }
 
@@ -61,7 +64,7 @@ export const getCurrentUser = async (session) => {
  * @returns {boolean} - Returns true if the currentUser is logged in and assigned one of the given roles,
  * or when no roles are provided to check against. Otherwise returns false.
  */
- export const hasRole = ({ roles }) => {
+export const hasRole = ({ roles }) => {
   if (!isAuthenticated()) {
     return false
   }
@@ -96,7 +99,7 @@ export const getCurrentUser = async (session) => {
  *
  * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
  */
- export const requireAuth = ({ roles }) => {
+export const requireAuth = ({ roles }) => {
   if (!isAuthenticated()) {
     throw new AuthenticationError("You don't have permission to do that.")
   }

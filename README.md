@@ -1,7 +1,7 @@
 
-# TskrBase
+# Tskr
 
-TskrBase is a 0 to Low cost solution to track records and make automation accessible to everyone.
+Tskr is a 0 to Low cost solution to track records and make automation accessible to everyone.
 
 ## Features
 
@@ -60,8 +60,8 @@ If you would like to work on an issue comment on it.
 4.  Set up your [environment variables](https://gitpod.io/variables) in gitpod.
       |Name|Scope|Value|
       |---|---|---|
-      | DATABASE_URL | yourName/tskrBase | Connection String from above |
-      | SESSION_SECRET | yourName/tskrBase | Well set this later |
+      | DATABASE_URL | yourName/tskr | Connection String from above |
+      | SESSION_SECRET | yourName/tskr | Well set this later |
 3.  [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer)
 5.  When the terminal comes do the following.
 6.  Push your schema to your database via `yarn rw prisma migrate dev`.
@@ -74,11 +74,11 @@ If you would like to work on an issue comment on it.
 1.  Fork the Repository.
 2.  Clone your fork
     ```bash
-    git clone https://github.com/tskrio/tskrbase.git tskr
+    git clone https://github.com/tskrio/tskr.git tskr
     ```
 3. Go to the project directory
    ```bash
-   cd tskrbase
+   cd tskr
    ```
 4. Install dependencies
    ```bash
