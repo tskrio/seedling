@@ -1,8 +1,8 @@
 import { render } from '@redwoodjs/testing/web'
-import { Loading, Empty, Failure, Success } from './RoleSelectCell'
-import { standard } from './RoleSelectCell.mock'
+import { Loading, Empty, Failure, Success } from './RoleSelect'
+import { standard } from './RoleSelect.mock'
 
-describe('RoleSelectCell', () => {
+describe('RoleSelect', () => {
   it('renders Loading successfully', () => {
     expect(() => {
       render(<Loading />)

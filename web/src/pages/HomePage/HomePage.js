@@ -1,15 +1,5 @@
-import AboutComponent from 'src/components/AboutComponent/AboutComponent'
-import LoginComponent from 'src/components/LoginComponent/LoginComponent'
+import Login from 'src/components/Login'
 const HomePage = () => {
-  return (
-    <main className="rw-main sections-split">
-      <section className="leftHalf">
-        <AboutComponent />
-      </section>
-      <section className="rightHalf">
-        <LoginComponent />
-      </section>
-    </main>
-  )
+  return <Login />
 }
 export default HomePage

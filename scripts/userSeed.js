@@ -36,5 +36,3 @@ export const users = [
     },
   },
 ]
-//reyservicenow@gmail.com
-//crash180@gmail.com

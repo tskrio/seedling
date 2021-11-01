@@ -1,11 +1,11 @@
 import { render } from '@redwoodjs/testing/web'
 
-import SideBarToggle from './SideBarToggle'
+import Login from './Login'
 
-describe('SideBarToggle', () => {
+describe('Login', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<SideBarToggle />)
+      render(<Login />)
     }).not.toThrow()
   })
 })
