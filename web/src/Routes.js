@@ -42,7 +42,7 @@ const Routes = () => {
             <Private unauthenticated="home" role={['admin', 'userCreate']}>
               <Route path="/users/new" page={UserNewUserPage} name="newUser" />
             </Private>
-            <Private unauthenticated="home" role={['admin', 'userUpdate']}>
+            <Private unauthenticated="home" role={['admin', 'userUpdate', 'userRead']}>
               <Route path="/users/{id:Int}" page={UserEditUserPage} name="user" />
             </Private>
             <Private unauthenticated="home" role={['admin', 'userRead']}>

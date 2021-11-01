@@ -1,7 +1,7 @@
 export const webProperties = (() => {
   return {
     avatars: {
-      active: false,
+      active: true,
       /**
        * @param {*} hash
        * @returns image
@@ -10,9 +10,9 @@ export const webProperties = (() => {
        * https://avatars.dicebear.com/v2/jdenticon/{hash}.svg
        * https://www.gravatar.com/avatar/${hash}?s=260&d=retro
        */
-      //image: (hash) => `https://www.gravatar.com/avatar/${hash}?s=260&d=retro`,
+      image: (hash) => `https://www.gravatar.com/avatar/${hash}?s=260&d=retro`,
       //image: (hash) => `https://avatars.dicebear.com/v2/jdenticon/${hash}.svg`,
-      image: (hash) => `https://unicornify.pictures/avatar/${hash}?s=128`,
+      //image: (hash) => `https://unicornify.pictures/avatar/${hash}?s=128`,
     },
   }
 })()

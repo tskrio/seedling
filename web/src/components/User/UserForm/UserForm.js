@@ -115,6 +115,7 @@ const UserForm = (props) => {
                 className={formTextFieldClass}
                 errorClassName={formTextFieldClass}
                 placeholder={field.placeHolder}
+                readOnly={hasRole(['admin', 'userUpdate']) !== true}
                 config={{ required: field.required }}
               />
             )}
