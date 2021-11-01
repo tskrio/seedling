@@ -94,7 +94,7 @@ const NavSidebar = ({ children }) => {
               </NavLink>
             </li>
           )}
-          {hasRole(['grpupRead', 'admin']) && (
+          {hasRole(['groupRead', 'admin']) && (
             <li>
               <NavLink
                 to={routes.groups()}
