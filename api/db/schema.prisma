@@ -1,6 +1,7 @@
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native"]
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native"]
+  previewFeatures = ["referentialActions"]
 }
 
 datasource db {
@@ -38,8 +39,8 @@ model GroupMember {
   updatedAt DateTime @updatedAt
   userId    Int
   groupId   Int
-  group     Group    @relation(fields: [groupId], references: [id])
-  user      User     @relation("UserGroupMember", fields: [userId], references: [id])
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user      User     @relation("UserGroupMember", fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model GroupRole {
@@ -48,33 +49,5 @@ model GroupRole {
   updatedAt DateTime @updatedAt
   role      String
   groupId   Int
-  group     Group    @relation(fields: [groupId], references: [id])
-}
-
-enum Role {
-  admin
-  taskCreate
-  taskRead
-  taskUpdate
-  taskDelete
-  userCreate
-  userRead
-  userUpdate
-  userDelete
-  groupCreate
-  groupRead
-  groupUpdate
-  groupDelete
-  groupMemberCreate
-  groupMemberRead
-  groupMemberUpdate
-  groupMemberDelete
-  groupRoleCreate
-  groupRoleRead
-  groupRoleUpdate
-  groupRoleDelete
-  userRoleCreate
-  userRoleRead
-  userRoleUpdate
-  userRoleDelete
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
 }
