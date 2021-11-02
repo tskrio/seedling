@@ -50,31 +50,3 @@ model GroupRole {
   groupId   Int
   group     Group    @relation(fields: [groupId], references: [id])
 }
-
-enum Role {
-  admin
-  taskCreate
-  taskRead
-  taskUpdate
-  taskDelete
-  userCreate
-  userRead
-  userUpdate
-  userDelete
-  groupCreate
-  groupRead
-  groupUpdate
-  groupDelete
-  groupMemberCreate
-  groupMemberRead
-  groupMemberUpdate
-  groupMemberDelete
-  groupRoleCreate
-  groupRoleRead
-  groupRoleUpdate
-  groupRoleDelete
-  userRoleCreate
-  userRoleRead
-  userRoleUpdate
-  userRoleDelete
-}
