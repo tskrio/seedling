@@ -17,9 +17,9 @@ model User {
   preferences         Json          @default("{}")
   hashedPassword      String        @default("")
   salt                String        @default("")
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
   GroupMember         GroupMember[] @relation("UserGroupMember")
-  resetToken          String? // <--- new
-  resetTokenExpiresAt DateTime? // <--- new
 }
 
 model Group {
