@@ -73,6 +73,10 @@ export const Success = ({ users }) => {
     }
   `
   const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
+    onError: (error) => {
+      console.log('onError', error, error.message)
+      toast.error(error.message || `error occured`)
+    },
     onCompleted: () => {
       toast.success('User deleted')
       navigate(routes.users())

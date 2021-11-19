@@ -3,26 +3,23 @@ import { logger } from 'src/lib/logger'
 module.exports = {
   active: true,
   order: 1,
-  title: 'enforce Password',
   when: ['before'],
   operation: ['update', 'create'],
   table: 'user',
   file: __filename,
-  command: async function (incomingData) {
+  command: async function ({ input, status }) {
     try {
-      var data = incomingData.hashedPassword
+      var data = input.hashedPassword
       if (data.length === 0) {
         // if password is empty, remove it.
-        delete incomingData.hashedPassword
+        delete input.hashedPassword
       } else if (data.length < 4) {
-        incomingData._error = {
-          abort: true,
-          message: 'Password not long enough.  Update not saved',
-        }
+        status.code = 'error'
+        status.message = 'Password not long enough.  Update not saved'
       }
     } catch (e) {
       logger.error(e)
     }
-    return await incomingData
+    return await { input, status }
   },
 }

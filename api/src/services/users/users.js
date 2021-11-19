@@ -16,11 +16,17 @@ import CryptoJS from 'crypto-js'
 let table = 'user'
 export const createUser = async ({ input }) => {
   try {
-    executeBeforeCreateRules(table, input)
-    let createdRecord = await db[table].create({
-      data: input,
+    let result = await executeBeforeCreateRules(table, {
+      input,
+      status: { code: 'success', message: '' },
     })
-    executeAfterCreateRules(table, createdRecord)
+    if (result.status.code !== 'success') {
+      throw new UserInputError(result.status.message)
+    }
+    let createdRecord = await db[table].create({
+      data: result.input,
+    })
+    createdRecord = executeAfterCreateRules(table, createdRecord)
     return createdRecord
   } catch (error) {
     throw new UserInputError(error.message)
@@ -29,7 +35,12 @@ export const createUser = async ({ input }) => {
 
 export const users = async () => {
   try {
-    executeBeforeReadAllRules(table)
+    let result = await executeBeforeReadAllRules(table, {
+      status: { code: 'success', message: '' },
+    })
+    if (result.status.code !== 'success') {
+      throw new UserInputError(result.status.message)
+    }
     let readRecords = await db[table].findMany({})
     readRecords = executeAfterReadAllRules(table, readRecords)
     return readRecords
@@ -40,7 +51,13 @@ export const users = async () => {
 
 export const user = async ({ id }) => {
   try {
-    executeBeforeReadRules(table, id)
+    let result = await executeBeforeReadRules(table, {
+      id,
+      status: { code: 'success', message: '' },
+    })
+    if (result.status.code !== 'success') {
+      throw new UserInputError(result.status.message)
+    }
     let readRecord = await db[table].findUnique({
       where: { id },
     })
@@ -53,9 +70,16 @@ export const user = async ({ id }) => {
 
 export const updateUser = async ({ id, input }) => {
   try {
-    executeBeforeUpdateRules(table, id, input)
+    let result = await executeBeforeUpdateRules(table, {
+      id,
+      input,
+      status: { code: 'success', message: '' },
+    })
+    if (result.status.code !== 'success') {
+      throw new UserInputError(result.status.message)
+    }
     let updatedRecord = await db[table].update({
-      data: input,
+      data: result.input,
       where: { id },
     })
     updatedRecord = executeAfterUpdateRules(table, updatedRecord)
@@ -67,14 +91,20 @@ export const updateUser = async ({ id, input }) => {
 
 export const deleteUser = async ({ id }) => {
   try {
-    executeBeforeDeleteRules(table, id)
+    let result = await executeBeforeDeleteRules(table, {
+      id,
+      status: { code: 'success', message: '' },
+    })
+    if (result.status.code !== 'success') {
+      throw new UserInputError(result.status.message)
+    }
     let deletedRecord = await db[table].delete({
       where: { id },
     })
     deletedRecord = executeAfterDeleteRules(table, deletedRecord)
     return deletedRecord
   } catch (error) {
-    throw UserInputError(error.message)
+    throw new UserInputError(error.message)
   }
 }
 

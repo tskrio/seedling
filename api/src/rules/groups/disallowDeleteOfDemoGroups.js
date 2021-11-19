@@ -1,19 +1,20 @@
 const { db } = require('../../lib/db')
+
 module.exports = {
   active: true,
-  order: 1,
+  order: 101,
   when: ['before'],
   operation: ['delete'],
-  table: 'user',
+  table: 'group',
   file: __filename,
   command: async function ({ id, status }) {
-    let record = await db.user.findUnique({
+    let record = await db.group.findUnique({
       where: { id },
     })
     if (
-      record.email == 'admin@example.com' ||
-      record.email == 'manager@example.com' ||
-      record.email == 'employee@example.com'
+      record.name == 'Administrators' ||
+      record.name == 'Managers' ||
+      record.name == 'Employees'
     ) {
       status.code = 'failure'
       status.message = `${record.name} are protected, cannot delete`

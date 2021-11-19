@@ -4,21 +4,20 @@ module.exports = {
   order: 30,
   when: ['before'],
   operation: ['create', 'update'],
-  title: 'properCaseName',
   table: 'user',
   file: __filename,
-  command: async function (incomingData) {
+  command: async function ({ input, status }) {
     try {
-      if (incomingData?.name) {
-        let name = incomingData.name
+      if (input?.name) {
+        let name = input.name
         let firstCharacter = name.charAt(0)
         if (firstCharacter !== firstCharacter.toUpperCase()) {
-          incomingData.name = name[0].toUpperCase() + name.substring(1)
+          input.name = name[0].toUpperCase() + name.substring(1)
         }
       }
     } catch (e) {
       logger.error(e)
     }
-    return await incomingData
+    return await { input, status }
   },
 }

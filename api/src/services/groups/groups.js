@@ -16,13 +16,15 @@ let table = 'group'
 
 export const createGroup = async ({ input }) => {
   try {
-    input = await executeBeforeCreateRules(table, input)
-    console.log(input)
-    if (input._error) {
-      throw new UserInputError(input._error)
+    let result = await executeBeforeCreateRules(table, {
+      input,
+      status: { code: 'success', message: '' },
+    })
+    if (result.status.code !== 'success') {
+      throw new UserInputError(result.status.message)
     }
     let createdRecord = await db[table].create({
-      data: input,
+      data: result.input,
     })
     createdRecord = executeAfterCreateRules(table, createdRecord)
     return createdRecord
@@ -33,7 +35,12 @@ export const createGroup = async ({ input }) => {
 
 export const groups = async () => {
   try {
-    executeBeforeReadAllRules(table)
+    let result = await executeBeforeReadAllRules(table, {
+      status: { code: 'success', message: '' },
+    })
+    if (result.status.code !== 'success') {
+      throw new UserInputError(result.status.message)
+    }
     let readRecords = await db[table].findMany({
       include: {
         GroupRole: true,
@@ -49,7 +56,13 @@ export const groups = async () => {
 
 export const group = async ({ id }) => {
   try {
-    executeBeforeReadRules(table, id)
+    let result = await executeBeforeReadRules(table, {
+      id,
+      status: { code: 'success', message: '' },
+    })
+    if (result.status.code !== 'success') {
+      throw new UserInputError(result.status.message)
+    }
     let readRecord = await db[table].findUnique({
       where: { id },
       include: {
@@ -66,9 +79,16 @@ export const group = async ({ id }) => {
 
 export const updateGroup = async ({ id, input }) => {
   try {
-    executeBeforeUpdateRules(table, id, input)
+    let result = await executeBeforeUpdateRules(table, {
+      id,
+      input,
+      status: { code: 'success', message: '' },
+    })
+    if (result.status.code !== 'success') {
+      throw new UserInputError(result.status.message)
+    }
     let updatedRecord = await db[table].update({
-      data: input,
+      data: result.input,
       where: { id },
     })
     updatedRecord = executeAfterUpdateRules(table, updatedRecord)
@@ -80,14 +100,20 @@ export const updateGroup = async ({ id, input }) => {
 
 export const deleteGroup = async ({ id }) => {
   try {
-    executeBeforeDeleteRules(table, id)
+    let result = await executeBeforeDeleteRules(table, {
+      id,
+      status: { code: 'success', message: '' },
+    })
+    if (result.status.code !== 'success') {
+      throw new UserInputError(result.status.message)
+    }
     let deletedRecord = await db[table].delete({
       where: { id },
     })
     deletedRecord = executeAfterDeleteRules(table, deletedRecord)
     return deletedRecord
   } catch (error) {
-    throw UserInputError(error.message)
+    throw new UserInputError(error.message)
   }
 }
 
