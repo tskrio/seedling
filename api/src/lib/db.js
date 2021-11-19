@@ -4,7 +4,6 @@
 import { PrismaClient } from '@prisma/client'
 import { emitLogLevels, handlePrismaLogging } from '@redwoodjs/api/logger'
 import { logger } from './logger'
-//import middlewares from 'src/middlewares/**/**.{js,ts}'
 /*
  * Instance of the Prisma Client
  */
@@ -18,7 +17,3 @@ handlePrismaLogging({
   logger,
   logLevels: ['info', 'warn', 'error'],
 })
-
-async function main() {}
-
-main()
