@@ -1,7 +1,7 @@
 import { logger } from 'src/lib/logger'
 import allRules from 'src/rules/**/**.{js,ts}'
 //console.log(allRules)
-let loadRules = (allRules, table, when, operation) => {
+let loadRules = async (allRules, table, when, operation) => {
   let arrRules = Object.keys(allRules).map((k) => allRules[k])
   arrRules.sort((a, b) => a.order - b.order)
   console.log(`1. loaded ${arrRules.length} for ${table} ${when} ${operation}`)
@@ -45,10 +45,11 @@ let loadRules = (allRules, table, when, operation) => {
     }
   })
   console.log(`3. loaded ${arrRules.length} for ${table} ${when} ${operation}`)
+  return (await arrRules) || []
 }
 export const executeBeforeCreateRules = async (table, input) => {
   let rules = await loadRules(allRules, table, 'before', 'create')
-  if (rules) {
+  if (rules.length > 0) {
     console.log(rules)
     rules.forEach(async (rule) => {
       await rule.command(input)
@@ -58,7 +59,7 @@ export const executeBeforeCreateRules = async (table, input) => {
 }
 export const executeAfterCreateRules = async (table, record) => {
   let rules = loadRules(allRules, table, 'after', 'create')
-  if (rules) {
+  if (rules.length > 0) {
     rules.forEach((rule) => {
       record = rule.command(record)
     })
@@ -69,7 +70,7 @@ export const executeBeforeReadAllRules = async (table) => {
   //console.log('in executeBeforeReadAllRules')
   let rules = loadRules(allRules, table, 'before', 'readall')
   //console.log(rules)
-  if (rules) {
+  if (rules.length > 0) {
     rules.forEach((rule) => {
       rule.command()
     })
@@ -78,7 +79,7 @@ export const executeBeforeReadAllRules = async (table) => {
 }
 export const executeAfterReadAllRules = async (table, records) => {
   let rules = loadRules(allRules, table, 'after', 'readall')
-  if (rules) {
+  if (rules.length > 0) {
     rules.forEach((rule) => {
       records = rule.command(records)
     })
@@ -87,7 +88,7 @@ export const executeAfterReadAllRules = async (table, records) => {
 }
 export const executeBeforeReadRules = async (table, id) => {
   let rules = loadRules(allRules, table, 'before', 'read')
-  if (rules) {
+  if (rules.length > 0) {
     rules.forEach((rule) => {
       id = rule.command(id)
     })
@@ -96,7 +97,7 @@ export const executeBeforeReadRules = async (table, id) => {
 }
 export const executeAfterReadRules = async (table, record) => {
   let rules = loadRules(allRules, table, 'after', 'read')
-  if (rules) {
+  if (rules.length > 0) {
     rules.forEach((rule) => {
       record = rule.command(record)
     })
@@ -105,7 +106,7 @@ export const executeAfterReadRules = async (table, record) => {
 }
 export const executeBeforeUpdateRules = async (table, input) => {
   let rules = loadRules(allRules, table, 'before', 'update')
-  if (rules) {
+  if (rules.length > 0) {
     rules.forEach((rule) => {
       input = rule.command(input)
     })
@@ -114,7 +115,7 @@ export const executeBeforeUpdateRules = async (table, input) => {
 }
 export const executeAfterUpdateRules = async (table, record) => {
   let rules = loadRules(allRules, table, 'after', 'update')
-  if (rules) {
+  if (rules.length > 0) {
     rules.forEach((rule) => {
       record = rule.command(record)
     })
@@ -123,7 +124,7 @@ export const executeAfterUpdateRules = async (table, record) => {
 }
 export const executeBeforeDeleteRules = async (table, id) => {
   let rules = loadRules(allRules, table, 'before', 'delete')
-  if (rules) {
+  if (rules.length > 0) {
     rules.forEach((rule) => {
       id = rule.command(id)
     })
@@ -132,7 +133,7 @@ export const executeBeforeDeleteRules = async (table, id) => {
 }
 export const executeAfterDeleteRules = async (table, record) => {
   let rules = loadRules(allRules, table, 'after', 'delete')
-  if (rules) {
+  if (rules.length > 0) {
     rules.forEach((rule) => {
       record = rule.command(record)
     })

@@ -19,7 +19,7 @@ export const createGroup = async ({ input }) => {
     input = await executeBeforeCreateRules(table, input)
     console.log(input)
     if (input._error) {
-      throw input._error
+      throw new UserInputError(input._error)
     }
     let createdRecord = await db[table].create({
       data: input,

@@ -9,7 +9,12 @@ module.exports = {
   table: 'group',
   file: __filename,
   command: async function (input) {
-    input._error = 'Noooo!'
-    return input
+    try {
+      console.log('in group rule')
+      input._error = 'setbyrule'
+    } catch (e) {
+      throw 'test'
+    }
+    return await input
   },
 }
