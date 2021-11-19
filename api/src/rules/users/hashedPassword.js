@@ -11,31 +11,30 @@ function randomString(len, charSet) {
   return randomString
 }
 module.exports = {
-  command: async function (incomingData) {
+  active: true,
+  order: 10,
+  when: ['before'],
+  operation: ['update', 'create'],
+  table: 'user',
+  file: __filename,
+  command: async function ({ input, status }) {
     try {
       //if were given a password, we make a new salt, hash it and set both salt and hash
-      let hashedPassword = incomingData?.hashedPassword;
+      let hashedPassword = input?.hashedPassword
       if (hashedPassword) {
-          let salt = randomString(30)
-          incomingData.salt = salt.toString()
-          let encryptedPassword = CryptoJS.PBKDF2(hashedPassword, salt, {
-            keySize: 256 / 32,
-          }).toString()
-          incomingData.hashedPassword = encryptedPassword
+        let salt = randomString(30)
+        input.salt = salt.toString()
+        let encryptedPassword = CryptoJS.PBKDF2(hashedPassword, salt, {
+          keySize: 256 / 32,
+        }).toString()
+        input.hashedPassword = encryptedPassword
       } else {
-          //hashpassword is empty.. lets not set this.
-          delete incomingData.hashedPassword
+        //hashpassword is empty.. lets not set this.
+        delete input.hashedPassword
       }
     } catch (e) {
       logger.error(e)
     }
-    return await incomingData
+    return await { input, status }
   },
-  active: true,
-  order: 10,
-  title: 'hash password on update',
-  when: ['before'],
-  type: ['update', 'create'],
-  name: 'hashpassword',
-  file: __filename,
 }

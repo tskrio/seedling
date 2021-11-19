@@ -2,7 +2,13 @@ import { logger } from 'src/lib/logger'
 import { apiProperties } from 'src/lib/apiProperties'
 let Mailgun = require('mailgun-js')
 module.exports = {
-  command: async function (incomingData) {
+  active: true,
+  order: 100,
+  when: ['after'],
+  operation: ['create'],
+  file: __filename,
+  table: 'user',
+  command: async function ({ input, status }) {
     try {
       if (
         process.env.MAILGUN_API_KEY &&
@@ -13,8 +19,8 @@ module.exports = {
           apiKey: process.env.MAILGUN_API_KEY,
           domain: process.env.MAILGUN_DOMAIN,
         })
-        let email = incomingData.email
-        let name = incomingData.name
+        let email = input.email
+        let name = input.name
         let html = `<h1>Welcome ${name}</h1>
 <p>I am thrilled that you're here. You’ll love automating your work with Tskr. </p>
 <p>Tskr was designed to get you tracking your stuff quickly in a way where it's your data end to end.</p>
@@ -58,13 +64,6 @@ Jace</p>
     } catch (e) {
       logger.error(e)
     }
-    return await incomingData
+    return await { input, status }
   },
-  active: true,
-  order: 100,
-  title: 'Email User about their account',
-  when: ['after'],
-  type: ['create'],
-  name: __filename,
-  file: __filename,
 }

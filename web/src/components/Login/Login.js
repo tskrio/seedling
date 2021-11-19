@@ -1,3 +1,4 @@
+import { Toaster, toast } from '@redwoodjs/web/toast'
 import { useEffect, useRef } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 import { Link, navigate, routes } from '@redwoodjs/router'
@@ -24,18 +25,18 @@ const Login = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    console.log(data)
+    toast.loading()
     const response = await logIn({ ...data })
     if (response.error) {
-      //toast.error(response.error)
+      toast.error(response.error)
     } else {
       navigate(routes.home())
-      //toast.success('Welcome back!')
     }
   }
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12">
+      <Toaster />
       <div className="p-10 xs:p-0 mx-auto md:w-full md:max-w-md">
         <h1 className="font-bold text-center text-2xl mb-5">Welcome To Tskr</h1>
         <div className="bg-white shadow w-full rounded-lg divide-y divide-gray-200">

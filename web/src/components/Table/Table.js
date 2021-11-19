@@ -22,8 +22,11 @@ const Table = ({ data, meta, query, queryVariables, deleteMutation }) => {
     },
   })
   const [deleteRecord] = useMutation(deleteMutation, {
-    onError: () => {
-      toast.error(`${meta.labels.single} not deleted - error occured`)
+    onError: (error) => {
+      console.log('onError', error, error.message)
+      toast.error(
+        error.message || `${meta.labels.single} not deleted - error occured`
+      )
     },
     onCompleted: () => {
       toast.success(`${meta.labels.single} deleted`)
