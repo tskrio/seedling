@@ -2,6 +2,13 @@ import { logger } from 'src/lib/logger'
 import { apiProperties } from 'src/lib/apiProperties'
 let Mailgun = require('mailgun-js')
 module.exports = {
+  active: true,
+  order: 100,
+  title: 'Email User about their account',
+  when: ['after'],
+  operation: ['create'],
+  file: __filename,
+  table: 'user',
   command: async function (incomingData) {
     try {
       if (
@@ -60,11 +67,4 @@ Jace</p>
     }
     return await incomingData
   },
-  active: true,
-  order: 100,
-  title: 'Email User about their account',
-  when: ['after'],
-  type: ['create'],
-  name: __filename,
-  file: __filename,
 }

@@ -1,6 +1,13 @@
 import { logger } from 'src/lib/logger'
 
 module.exports = {
+  active: true,
+  order: 1,
+  title: 'enforce Password',
+  when: ['before'],
+  operation: ['update', 'create'],
+  table: 'user',
+  file: __filename,
   command: async function (incomingData) {
     try {
       var data = incomingData.hashedPassword
@@ -18,11 +25,4 @@ module.exports = {
     }
     return await incomingData
   },
-  active: true,
-  order: 1,
-  title: 'enforce Password',
-  when: ['before'],
-  type: ['update', 'create'],
-  name: __filename,
-  file: __filename,
 }

@@ -5,7 +5,6 @@ import { PrismaClient } from '@prisma/client'
 import { emitLogLevels, handlePrismaLogging } from '@redwoodjs/api/logger'
 import { logger } from './logger'
 import middlewares from 'src/middlewares/**/**.{js,ts}'
-import { ForbiddenError } from '@redwoodjs/graphql-server'
 /*
  * Instance of the Prisma Client
  */
@@ -32,9 +31,9 @@ let modelQueries = [
   { group: 'delete', queries: ['delete', 'deleteMany'] },
   { group: 'other', queries: ['count', 'aggregate', 'groupBy'] },
 ]
-let green = (str) => {
-  return `\u001b[1;32m${str}\u001b[0m`
-}
+// let green = (str) => {
+//   return `\u001b[1;32m${str}\u001b[0m`
+// }
 
 async function main() {
   /***********************************/
@@ -43,55 +42,49 @@ async function main() {
   /***********************************/
 
   console.log('context', context)
-
+  /*
   db.$use(async (params, next) => {
-    try {
-      const before = Date.now()
-      modelQueries.forEach((modelQuery) => {
-        //loop over the create, read, update, delete, other groupings
-        modelQuery.queries.forEach((query) => {
-          //loop over the FindUnique, insert, update, delete methods in those groupings
-          if (params.action === query) {
-            /*logger.info(
-            `MW BEFORE: ${green(params.model)} ${modelQuery.group} ${green(
-              params.action
-            )}`
-          )*/
-            if (params.args.data.name == 'Gamers') {
-              throw 'this is an issue'
+    //const before = Date.now()
+    modelQueries.forEach((modelQuery) => {
+      //loop over the create, read, update, delete, other groupings
+      modelQuery.queries.forEach((query) => {
+        //loop over the FindUnique, insert, update, delete methods in those groupings
+        if (params.action === query) {
+          // logger.info(
+          //   `MW BEFORE: ${green(params.model)} ${modelQuery.group} ${green(
+          //     params.action
+          //   )}`
+          // )
+          middlewaresArr.forEach(async (middleware) => {
+            if (middleware.type.includes(modelQuery.group)) {
+              //if the rule type (array) includes the grouping (crud)
+              // console.log(
+              //   `${green('Started ')} Order: ${rule.order} rule ${rule.name}`,
+              //   JSON.stringify(params, null, 2)
+              // )
+              params = await middleware.command(params)
+
+              // console.log(
+              //   `${green('Finished')} Order: ${rule.order} rule ${rule.name}`,
+              //   JSON.stringify(params, null, 2)
+              // )
             }
-            middlewaresArr.forEach(async (middleware) => {
-              if (middleware.type.includes(modelQuery.group)) {
-                //if the rule type (array) includes the grouping (crud)
-                /*console.log(
-                `${green('Started ')} Order: ${rule.order} rule ${rule.name}`,
-                JSON.stringify(params, null, 2)
-              )*/
-                params = await middleware.command(params)
-                console.log('params', params)
-
-                /*console.log(
-                `${green('Finished')} Order: ${rule.order} rule ${rule.name}`,
-                JSON.stringify(params, null, 2)
-              )*/
-              }
-            })
-          }
-        })
+          })
+        }
       })
+    })
+    console.log('before params', JSON.stringify(params, '', ''))
+    const result = await next(params)
+    console.log('_after params', JSON.stringify(params, '', ''))
 
-      const result = await next(params)
-
-      const after = Date.now()
-      /*console.log(
-      `Query ${params.model}.${params.action} took ${after - before}ms`
-    )*/
-      //console.log('MIDDLEWARE AFTER params.args', params.args)
-      return result
-    } catch (err) {
-      console.error('in catch', err)
-      return await next(err)
-    }
+    // const after = Date.now()
+    // console.log(
+    //  `Query ${params.model}.${params.action} took ${after - before}ms`
+    // )
+    // console.log('MIDDLEWARE AFTER params.args', params.args)
+    return result
   })
+  */
 }
+
 main()
