@@ -1,9 +1,5 @@
-import { UserInputError } from '@redwoodjs/graphql-server'
 import { db } from 'src/lib/db'
-import * as util from 'src/lib/rulesUtil'
-import rules from 'src/rules/groups/**.{js,ts}'
-let table = 'group'
-
+import { ForbiddenError } from '@redwoodjs/graphql-server'
 export const groups = async () => {
   let records = await db.group.findMany({
     include: {
@@ -11,15 +7,7 @@ export const groups = async () => {
       GroupMember: true,
     },
   })
-  let readRecords = records.map((current) => {
-    util.runRules(table, current.id, null, rules, 'read', 'before')
-    return current
-  })
-  records.forEach((current) => {
-    util.runRules(table, current.id, null, rules, 'read', 'after')
-    return current
-  })
-  return readRecords
+  return records
 }
 
 export const group = async ({ id }) => {
@@ -30,59 +18,36 @@ export const group = async ({ id }) => {
       GroupMember: true,
     },
   })
-  util.runRules(table, id, null, rules, 'read', 'before')
-  util.runRules(table, id, null, rules, 'read', 'after')
   return current
 }
 
 export const updateGroup = async ({ id, input }) => {
-  var modifiedInput = await util.runRules(
-    table,
-    id,
-    input,
-    rules,
-    'update',
-    'before'
-  )
-  if (modifiedInput?._error) {
-    throw new UserInputError(modifiedInput._error.message)
-  }
   let update = await db.group.update({
     data: input,
     where: { id },
   })
-  util.runRules(table, id, input, rules, 'update', 'after')
   return update
 }
 
 export const createGroup = async ({ input }) => {
-  var modifiedInput = await util.runRules(
-    table,
-    null,
-    input,
-    rules,
-    'create',
-    'before'
-  )
-  if (modifiedInput?._error) {
-    throw new UserInputError(modifiedInput._error.message)
+  try {
+    console.log('BEFORE createGroup from service', input)
+
+    let create = await db.group.create({
+      data: input,
+    })
+    console.log('AFTER createGroup from service', create)
+    return create
+  } catch (e) {
+    console.log(e)
+    throw new ForbiddenError('Error')
   }
-  let create = await db.group.create({
-    data: input,
-  })
-  util.runRules(table, null, input, rules, 'create', 'after')
-  return create
 }
 
 export const deleteGroup = async ({ id }) => {
-  let output = await util.runRules(table, id, null, rules, 'delete', 'before')
-  if (output?._error) {
-    throw new UserInputError(output._error.message)
-  }
   let deleteRecord = await db.group.delete({
     where: { id },
   })
-  await util.runRules(table, id, null, rules, 'after', 'before')
   return deleteRecord
 }
 

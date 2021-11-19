@@ -50,6 +50,9 @@ let _loadRules = (rules, when, type) => {
   @return [object] modified input
 */
 export const runRules = async (dbName, id, input, rules, ruleType, when) => {
+  if (input === null) {
+    input = {}
+  }
   //load all the rules for before
   let rulesArr = loadRules(rules, when, ruleType)
 
