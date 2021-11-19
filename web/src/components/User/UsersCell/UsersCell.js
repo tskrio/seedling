@@ -35,36 +35,6 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ users }) => {
-  //let meta = {
-  //  title: 'Users',
-  //  routes: {
-  //    newItem: () => {
-  //      return routes.newUser()
-  //    },
-  //    view: (prop) => {
-  //      return routes.user(prop)
-  //    },
-  //    edit: (prop) => {
-  //      return routes.editUser(prop)
-  //    },
-  //  },
-  //  labels: {
-  //    single: 'user',
-  //    multiple: 'users',
-  //  },
-  //  key: 'id',
-  //  display: 'name',
-  //  columns: [
-  //    { key: 'name', label: 'Name', type: 'string' },
-  //    { key: 'email', label: 'Email', type: 'string' },
-  //    { key: 'createdAt', label: 'Created', type: 'date' },
-  //    { key: 'updatedAt', label: 'Updated', type: 'date' },
-  //  ],
-  //  createRoles: ['userCreate'],
-  //  readRoles: ['userRead'],
-  //  updateRoles: ['userUpdate'],
-  //  deleteRoles: ['userDelete'],
-  //}
   const DELETE_USER_MUTATION = gql`
     mutation DeleteUserMutation($id: Int!) {
       deleteUser(id: $id) {
