@@ -67,16 +67,33 @@ export const Success = ({ groupMembers }) => {
     // update the cache over here:
     // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
     refetchQueries: [
-      { query: QUERY, variables: { id: groupMembers[0].group.id } },
+      {
+        query: QUERY,
+        variables: {
+          id: groupMembers[0].group.id,
+          /*not sure how to get the query variables */
+        },
+      },
     ],
     awaitRefetchQueries: true,
   })
   const onDeleteClick = (id, display) => {
     if (confirm(`Are you sure you want to delete ${display}?`)) {
       deleteRecord({ variables: { id } })
+      console.log('groupMembers.length', groupMembers.length)
+      let newGroupMembers = groupMembers.filter((groupMember) => {
+        console.log(id === groupMember.id, id, groupMember)
+        if (groupMember.id === id) {
+          return false
+        } else {
+          return true
+        }
+      })
+      //data = React.useMemo(() => groupMembers, []) // doesnt work
+      console.log(`deleted id: ${id}`, newGroupMembers)
     }
   }
-  console.log(groupMembers)
+  console.log('groupMembers', groupMembers)
   groupMembers = groupMembers.map((groupMember) => {
     return {
       ...groupMember,
@@ -89,7 +106,7 @@ export const Success = ({ groupMembers }) => {
                 to={routes.editGroupMember({ id: groupMember.id })}
                 title={'Edit group membership'}
               >
-                Edit group membership {groupMember.groupId}
+                Edit {groupMember.group.name} group membership
               </Link>
             </span>
           )}
@@ -99,9 +116,14 @@ export const Success = ({ groupMembers }) => {
                 type="button"
                 title={'Delete group membership'}
                 className="rw-button rw-button-red"
-                onClick={() => onDeleteClick(groupMember.id, 'Delete')}
+                onClick={() =>
+                  onDeleteClick(
+                    groupMember.id,
+                    `${groupMember.group.name} membership`
+                  )
+                }
               >
-                Delete group membership {groupMember.groupId}
+                Delete {groupMember.group.name} group membership
               </button>
             </span>
           )}
