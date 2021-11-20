@@ -8,14 +8,12 @@ module.exports = {
   table: 'group',
   file: __filename,
   command: async function ({ input, status }) {
-    let words = input?.name.split(' ')
-    words.forEach(async (word) => {
-      let wordLower = word.toLowerCase()
-      if (pluralize(wordLower) === wordLower) {
-        status.code = 'error'
-        status.message = 'disallow plural names'
-      }
-    })
+    if (pluralize(input?.name) !== input?.name) {
+      status.code = 'error'
+      status.message = `Groups are for the many, try "${pluralize(
+        input.name
+      )}" plural.`
+    }
     return await { input, status }
   },
 }

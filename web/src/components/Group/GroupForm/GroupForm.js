@@ -6,7 +6,8 @@ import {
   TextField,
   Submit,
 } from '@redwoodjs/forms'
-
+import Chance from 'chance'
+const chance = new Chance()
 const formatDatetime = (value) => {
   if (value) {
     return value.replace(/:\d{2}\.\d{3}\w/, '')
@@ -37,7 +38,10 @@ const GroupForm = (props) => {
         </Label>
         <TextField
           name="name"
-          defaultValue={props.group?.name}
+          defaultValue={
+            props.group?.name ||
+            `${chance.state({ full: true })} ${chance.profession()}s`
+          }
           className="rw-input"
           errorClassName="rw-input rw-input-error"
           config={{ required: true }}
@@ -54,7 +58,7 @@ const GroupForm = (props) => {
         </Label>
         <TextField
           name="description"
-          defaultValue={props.group?.description}
+          defaultValue={props.group?.description || chance.sentence()}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
           config={{ required: true }}
