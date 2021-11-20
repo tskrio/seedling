@@ -9,8 +9,6 @@ module.exports = {
     if (input.name == 'test') {
       status.code = 'failure'
       status.message = 'no groups named test'
-    } else {
-      input.name = input.name.toUpperCase()
     }
   },
 }
