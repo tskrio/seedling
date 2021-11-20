@@ -23,7 +23,6 @@ const UserForm = (props) => {
   const { search } = useLocation()
   let params = new URLSearchParams(search)
 
-  console.log(props)
   const onSubmit = (data) => {
     //console.log('on save data', data)
     /**Client RUles go here */
@@ -81,7 +80,6 @@ const UserForm = (props) => {
     'flex border-b border-gray-200 h-12 py-3 items-center'
   let formTextFieldClass = 'focus:outline-none px-3 w-5/6'
   let labelAndFieldList = (fieldArray) => {
-    console.log(props)
     return fieldArray.map((field) => {
       return (
         <div key={field.name}>
