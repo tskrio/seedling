@@ -1,7 +1,7 @@
 import { routes } from '@redwoodjs/router'
 import TableComponent from 'src/components/TableComponent'
 export const beforeQuery = (props) => {
-  console.log('variables', props)
+  //console.log('variables', props)
 }
 const DELETE_GROUP_ROLE_MUTATION = gql`
   mutation DeleteGroupRoleMutation($id: Int!) {
