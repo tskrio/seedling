@@ -26,14 +26,6 @@ const UserForm = (props) => {
   const onSubmit = (data) => {
     //console.log('on save data', data)
     /**Client RUles go here */
-    if (data.preference) {
-      data.preferences = data.preference
-      delete data.preference
-    }
-    if (data.preferences == undefined) {
-      data.preferences = {}
-    }
-    console.log('on save data modified', data)
     props.onSave(data, props?.user?.id)
   }
   const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
@@ -49,32 +41,6 @@ const UserForm = (props) => {
     }
   }
 
-  var preferenceFields = []
-  if (props?.user?.preferences) {
-    for (let key in props?.user?.preferences) {
-      console.log(`${key}: ${props?.user?.preferences[key]}`)
-      preferenceFields.push(
-        <div key={key}>
-          <Label
-            name={'preference.' + key}
-            className="rw-label"
-            errorClassName="rw-label rw-label-error"
-          >
-            {key}
-          </Label>
-          <TextField
-            name={'preference.' + key}
-            defaultValue={props?.user?.preferences[key]}
-            className="rw-input"
-            errorClassName="rw-input rw-input-error"
-            config={{ required: false }}
-          />
-
-          <FieldError name={'preference.' + key} className="rw-field-error" />
-        </div>
-      )
-    }
-  }
   let formLabelClass = 'flex border-b border-gray-200 h-12 py-3 items-center'
   let formLabelClassError =
     'flex border-b border-gray-200 h-12 py-3 items-center'

@@ -30,11 +30,8 @@ const Routes = () => {
             <Private unauthenticated="home" role={['admin', 'groupCreate']}>
               <Route path="/groups/new" page={GroupNewGroupPage} name="newGroup" />
             </Private>
-            <Private unauthenticated="home" role={['admin', 'groupUpdate']}>
-              <Route path="/groups/{id:Int}/edit" page={GroupEditGroupPage} name="editGroup" />
-            </Private>
-            <Private unauthenticated="home" role={['admin', 'groupRead']}>
-              <Route path="/groups/{id:Int}" page={GroupGroupPage} name="group" />
+            <Private unauthenticated="home" role={['admin', 'groupUpdate', 'groupRead']}>
+              <Route path="/groups/{id:Int}" page={GroupEditGroupPage} name="group" />
               <Route path="/groups" page={GroupGroupsPage} name="groups" />
             </Private>
           </Set>
@@ -44,9 +41,6 @@ const Routes = () => {
             </Private>
             <Private unauthenticated="home" role={['admin', 'userUpdate', 'userRead']}>
               <Route path="/users/{id:Int}" page={UserEditUserPage} name="user" />
-            </Private>
-            <Private unauthenticated="home" role={['admin', 'userRead']}>
-              {/*<Route path="/users/{id:Int}" page={UserUserPage} name="user" />*/}
               <Route path="/users" page={UserUsersPage} name="users" />
             </Private>
           </Set>
@@ -54,11 +48,8 @@ const Routes = () => {
             <Private unauthenticated="home" role={['admin', 'groupMemberCreate']}>
               <Route path="/group-members/new" page={GroupMemberNewGroupMemberPage} name="newGroupMember" />
             </Private>
-            <Private unauthenticated="home" role={['admin', 'groupMemberUpdate']}>
-              <Route path="/group-members/{id:Int}/edit" page={GroupMemberEditGroupMemberPage} name="editGroupMember" />
-            </Private>
-            <Private unauthenticated="home" role={['admin', 'groupMemberRead']}>
-              <Route path="/group-members/{id:Int}" page={GroupMemberGroupMemberPage} name="groupMember" />
+            <Private unauthenticated="home" role={['admin', 'groupMemberUpdate', 'groupMemberRead']}>
+              <Route path="/group-members/{id:Int}" page={GroupMemberEditGroupMemberPage} name="groupMember" />
               <Route path="/group-members" page={GroupMemberGroupMembersPage} name="groupMembers" />
             </Private>
           </Set>
@@ -66,11 +57,8 @@ const Routes = () => {
             <Private unauthenticated="home" role={['admin', 'groupRoleCreate']}>
               <Route path="/group-roles/new" page={GroupRoleNewGroupRolePage} name="newGroupRole" />
             </Private>
-            <Private unauthenticated="home" role={['admin', 'groupRoleUpdate']}>
-              <Route path="/group-roles/{id:Int}/edit" page={GroupRoleEditGroupRolePage} name="editGroupRole" />
-            </Private>
-            <Private unauthenticated="home" role={['admin', 'groupRoleRead']}>
-              <Route path="/group-roles/{id:Int}" page={GroupRoleGroupRolePage} name="groupRole" />
+            <Private unauthenticated="home" role={['admin', 'groupRoleUpdate', 'groupRoleRead']}>
+              <Route path="/group-roles/{id:Int}" page={GroupRoleEditGroupRolePage} name="groupRole" />
               <Route path="/group-roles" page={GroupRoleGroupRolesPage} name="groupRoles" />
             </Private>
           </Set>

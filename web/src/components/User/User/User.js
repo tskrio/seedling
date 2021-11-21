@@ -10,7 +10,7 @@ const DELETE_USER_MUTATION = gql`
   }
 `
 
-const User = ({ user }) => {
+const User2 = ({ user }) => {
   const { hasRole } = useAuth()
   const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
     onCompleted: () => {
@@ -158,4 +158,4 @@ const User = ({ user }) => {
   )
 }
 
-export default User
+export default User2

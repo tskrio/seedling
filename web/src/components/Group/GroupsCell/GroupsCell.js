@@ -67,7 +67,7 @@ export const Success = ({ groups }) => {
   }
   let recordRoutes = {
     editRecord: (prop) => {
-      return routes.editGroup(prop)
+      return routes.group(prop)
     },
     createRecord: () => {
       return routes.newGroup()
