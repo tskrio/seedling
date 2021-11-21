@@ -1,4 +1,4 @@
-import { routes } from '@redwoodjs/router'
+import { useParams, Link, routes } from '@redwoodjs/router'
 import TableComponent from 'src/components/TableComponent'
 import GroupRolesLayout from 'src/layouts/GroupRolesLayout'
 const DELETE_GROUP_ROLE_MUTATION = gql`
@@ -36,7 +36,15 @@ export const QUERY = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => {
-  return <GroupRolesLayout />
+  const { id } = useParams()
+  return (
+    <div className="rw-text-center">
+      {`No Group Roles yet.`}
+      <Link to={routes.newGroupRole({ groupId: id })} className="rw-link">
+        {'Create one?'}
+      </Link>
+    </div>
+  )
 }
 
 export const Failure = ({ error }) => (
@@ -44,6 +52,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ groupRoles }) => {
+  let title = 'Group Roles by Group'
   let columns = [
     {
       Header: 'Created At',
@@ -89,6 +98,7 @@ export const Success = ({ groupRoles }) => {
   let queryVariables = {}
   return (
     <TableComponent
+      title={title}
       columns={columns}
       data={data}
       queries={queries}

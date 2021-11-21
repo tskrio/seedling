@@ -1,4 +1,3 @@
-import Table from 'src/components/Table/Table'
 import { routes } from '@redwoodjs/router'
 import TableComponent from 'src/components/TableComponent'
 export const beforeQuery = (props) => {
@@ -36,6 +35,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ groupRoles }) => {
+  let title = 'Group Roles'
   let columns = [
     {
       Header: 'Created At',
@@ -81,6 +81,7 @@ export const Success = ({ groupRoles }) => {
   let queryVariables = {}
   return (
     <TableComponent
+      title={title}
       columns={columns}
       data={data}
       queries={queries}

@@ -1,5 +1,4 @@
-import { routes } from '@redwoodjs/router'
-import GroupMembersLayout from 'src/layouts/GroupMembersLayout'
+import { useParams, Link, routes } from '@redwoodjs/router'
 import TableComponent from 'src/components/TableComponent'
 export const beforeQuery = (props) => {
   //console.log('variables', props)
@@ -43,13 +42,22 @@ export const QUERY = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => {
-  return <GroupMembersLayout />
+  const { id } = useParams()
+  return (
+    <div className="rw-text-center">
+      {`No Group Members yet.`}
+      <Link to={routes.newGroupMember({ groupId: id })} className="rw-link">
+        {'Create one?'}
+      </Link>
+    </div>
+  )
 }
 
 export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 export const Success = ({ groupMembers }) => {
+  let title = 'Group Members By Group'
   let columns = [
     {
       Header: 'Created At',
@@ -95,6 +103,7 @@ export const Success = ({ groupMembers }) => {
   let queryVariables = {}
   return (
     <TableComponent
+      title={title}
       columns={columns}
       data={data}
       queries={queries}
