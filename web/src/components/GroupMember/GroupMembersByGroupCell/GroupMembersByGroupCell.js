@@ -1,6 +1,6 @@
 import { routes } from '@redwoodjs/router'
 import GroupMembersLayout from 'src/layouts/GroupMembersLayout'
-import Table from 'src/components/Table/Table'
+import TableComponent from 'src/components/TableComponent'
 export const beforeQuery = (props) => {
   //console.log('variables', props)
   props.id = props.groupID.id
@@ -49,54 +49,59 @@ export const Empty = () => {
 export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
-
 export const Success = ({ groupMembers }) => {
-  // let query = `Where group = ${groupMembers[0].group.name}`
-  // return (
-  //   <GroupMembersLayout query={query}>
-  //     <GroupMembers groupMembers={groupMembers} />
-  //   </GroupMembersLayout>
-  // )
-
-  let meta = {
-    title: 'Group Members',
-    routes: {
-      newItem: (prop) => {
-        return routes.newGroupMember({ groupId: groupMembers[0].group.id })
-      },
-      view: (prop) => {
-        return routes.groupMember(prop)
-      },
-      edit: (prop) => {
-        return routes.editGroupMember(prop)
-      },
+  let columns = [
+    {
+      Header: 'Created At',
+      accessor: 'createdAt', // accessor is the "key" in the data
     },
-    labels: {
-      single: 'groupmember',
-      multiple: 'groupmembers',
+    {
+      Header: 'Updated At',
+      accessor: 'updatedAt',
     },
-    key: 'id',
-    display: 'name',
-    columns: [
-      { key: 'user.name', label: 'User', type: 'reference' },
-      { key: 'group.name', label: 'Group', type: 'reference' },
-      { key: 'createdAt', label: 'Created', type: 'date' },
-      { key: 'updatedAt', label: 'Updated', type: 'date' },
-    ],
-    createRoles: ['groupMemberCreate'],
-    readRoles: ['groupMemberRead'],
-    updateRoles: ['groupMemberUpdate'],
-    deleteRoles: ['groupMemberDelete'],
+    {
+      Header: 'User',
+      accessor: 'user.name',
+    },
+    {
+      Header: 'Group',
+      accessor: 'group.name',
+    },
+    {
+      Header: 'Actions',
+      accessor: 'actions',
+    },
+  ]
+  let data = groupMembers
+  let queries = {
+    QUERY: QUERY,
+    DELETEMUTATION: DELETE_GROUP_MEMBER_MUTATION,
   }
+  let recordRoutes = {
+    editRecord: (prop) => {
+      return routes.editGroupMember(prop)
+    },
+    createRecord: () => {
+      return routes.newGroupMember({ groupId: groupMembers[0].group.id })
+    },
+  }
+  let display = 'id'
+  let roles = {
+    createRecord: ['groupMemberCreate'],
+    updateRecord: ['groupMemberUpdate'],
+    readRecord: ['groupMemberRead'],
+    deleteRecord: ['groupMemberDelete'],
+  }
+  let queryVariables = {}
   return (
-    <>
-      <Table
-        data={groupMembers}
-        meta={meta}
-        queryVariables={{ id: groupMembers[0].group.id }} // I don't know how to get the groupID from the query... so if there's a result, refresh the page
-        query={QUERY}
-        deleteMutation={DELETE_GROUP_MEMBER_MUTATION}
-      />
-    </>
+    <TableComponent
+      columns={columns}
+      data={data}
+      queries={queries}
+      routes={recordRoutes}
+      display={display}
+      roles={roles}
+      queryVariables={queryVariables}
+    />
   )
 }

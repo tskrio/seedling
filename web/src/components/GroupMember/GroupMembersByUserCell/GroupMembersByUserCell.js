@@ -229,45 +229,4 @@ export const Success = ({ groupMembers }) => {
       </tbody>
     </table>
   )
-  // let meta = {
-  //   title: 'Group Members',
-  //   routes: {
-  //     newItem: (prop) => {
-  //       return routes.newGroupMember({ userId: groupMembers[0].user.id })
-  //     },
-  //     view: (prop) => {
-  //       return routes.groupMember(prop)
-  //     },
-  //     edit: (prop) => {
-  //       return routes.editGroupMember(prop)
-  //     },
-  //   },
-  //   labels: {
-  //     single: 'groupmember',
-  //     multiple: 'groupmembers',
-  //   },
-  //   key: 'id',
-  //   display: 'id',
-  //   columns: [
-  //     { key: 'user.name', label: 'User', type: 'reference' },
-  //     { key: 'group.name', label: 'Group', type: 'reference' },
-  //     { key: 'createdAt', label: 'Created', type: 'date' },
-  //     { key: 'updatedAt', label: 'Updated', type: 'date' },
-  //   ],
-  //   createRoles: ['groupMemberCreate'],
-  //   readRoles: ['groupMemberRead'],
-  //   updateRoles: ['groupMemberUpdate'],
-  //   deleteRoles: ['groupMemberDelete'],
-  // }
-  // return (
-  //   <>
-  //     <Table
-  //       data={groupMembers}
-  //       meta={meta}
-  //       queryVariables={{ id: groupMembers[0].group.id }} // I don't know how to get the groupID from the query... so if there's a result, refresh the page
-  //       query={QUERY}
-  //       deleteMutation={DELETE_GROUP_MEMBER_MUTATION}
-  //     />
-  //   </>
-  // )
 }
