@@ -1,7 +1,7 @@
-import Table from 'src/components/Table/Table'
 import { routes } from '@redwoodjs/router'
+import TableComponent from 'src/components/TableComponent'
 export const beforeQuery = (props) => {
-  console.log('variables', props)
+  //console.log('variables', props)
 }
 const DELETE_GROUP_ROLE_MUTATION = gql`
   mutation DeleteGroupRoleMutation($id: Int!) {
@@ -35,49 +35,60 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ groupRoles }) => {
-  //return <div>{JSON.stringify(groupRoles)}</div>
-  //
-  //return (
-  //    <GroupRoles groupRoles={groupRoles} />
-  //)
-  let meta = {
-    title: 'Group Roles',
-    routes: {
-      newItem: () => {
-        return routes.newGroupRole()
-      },
-      view: (prop) => {
-        return routes.groupRole(prop)
-      },
-      edit: (prop) => {
-        return routes.editGroupRole(prop)
-      },
+  let title = 'Group Roles'
+  let columns = [
+    {
+      Header: 'Created At',
+      accessor: 'createdAt', // accessor is the "key" in the data
     },
-    labels: {
-      single: 'grouprole',
-      multiple: 'grouproles',
+    {
+      Header: 'Updated At',
+      accessor: 'updatedAt',
     },
-    key: 'id',
-    display: 'name',
-    columns: [
-      { key: 'role', label: 'Role', type: 'string' },
-      { key: 'group.name', label: 'Group', type: 'reference' },
-      { key: 'createdAt', label: 'Created', type: 'date' },
-      { key: 'updatedAt', label: 'Updated', type: 'date' },
-    ],
-    createRoles: ['groupRoleCreate'],
-    readRoles: ['groupRoleRead'],
-    updateRoles: ['groupRoleUpdate'],
-    deleteRoles: ['groupRoleDelete'],
+    {
+      Header: 'Group',
+      accessor: 'group.name',
+    },
+    {
+      Header: 'Role',
+      accessor: 'role',
+    },
+    {
+      Header: 'Actions',
+      accessor: 'actions',
+    },
+  ]
+  let data = groupRoles
+  let queries = {
+    QUERY: QUERY,
+    DELETEMUTATION: DELETE_GROUP_ROLE_MUTATION,
   }
+  let recordRoutes = {
+    editRecord: (prop) => {
+      return routes.editGroupRole(prop)
+    },
+    createRecord: () => {
+      return routes.newGroupRole()
+    },
+  }
+  let display = 'id'
+  let roles = {
+    createRecord: ['groupRoleCreate'],
+    updateRecord: ['groupRoleUpdate'],
+    readRecord: ['groupRoleRead'],
+    deleteRecord: ['groupRoleDelete'],
+  }
+  let queryVariables = {}
   return (
-    <>
-      <Table
-        data={groupRoles}
-        meta={meta}
-        query={QUERY}
-        deleteMutation={DELETE_GROUP_ROLE_MUTATION}
-      />
-    </>
+    <TableComponent
+      title={title}
+      columns={columns}
+      data={data}
+      queries={queries}
+      routes={recordRoutes}
+      display={display}
+      roles={roles}
+      queryVariables={queryVariables}
+    />
   )
 }

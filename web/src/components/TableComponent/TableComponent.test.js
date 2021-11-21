@@ -1,11 +1,11 @@
 import { render } from '@redwoodjs/testing/web'
 
-import Table from './Table'
+import TableComponent from './TableComponent'
 
-describe('Table', () => {
+describe('TableComponent', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<Table />)
+      render(<TableComponent />)
     }).not.toThrow()
   })
 })

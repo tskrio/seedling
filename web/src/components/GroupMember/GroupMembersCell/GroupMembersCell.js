@@ -1,6 +1,6 @@
 import { Link, routes } from '@redwoodjs/router'
-import Table from 'src/components/Table/Table'
-import GroupMembers from 'src/components/GroupMember/GroupMembers'
+import TableComponent from 'src/components/TableComponent'
+
 const DELETE_GROUP_MEMBER_MUTATION = gql`
   mutation DeleteGroupMemberMutation($id: Int!) {
     deleteGroupMember(id: $id) {
@@ -31,7 +31,7 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => {
   return (
     <div className="rw-text-center">
-      {'No groupMembers yet. '}
+      {`No Group Members yet.`}
       <Link to={routes.newGroupMember()} className="rw-link">
         {'Create one?'}
       </Link>
@@ -44,45 +44,60 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ groupMembers }) => {
-  let meta = {
-    title: 'Group Members',
-    routes: {
-      newItem: (prop) => {
-        return routes.newGroupMember()
-      },
-      view: (prop) => {
-        return routes.groupMember(prop)
-      },
-      edit: (prop) => {
-        return routes.editGroupMember(prop)
-      },
+  let title = 'Group Members'
+  let columns = [
+    {
+      Header: 'Created At',
+      accessor: 'createdAt', // accessor is the "key" in the data
     },
-    labels: {
-      single: 'groupmember',
-      multiple: 'groupmembers',
+    {
+      Header: 'Updated At',
+      accessor: 'updatedAt',
     },
-    key: 'id',
-    display: 'name',
-    columns: [
-      { key: 'user.name', label: 'User', type: 'reference' },
-      { key: 'group.name', label: 'Group', type: 'reference' },
-      { key: 'createdAt', label: 'Created', type: 'date' },
-      { key: 'updatedAt', label: 'Updated', type: 'date' },
-    ],
-    createRoles: ['groupMemberCreate'],
-    readRoles: ['groupMemberRead'],
-    updateRoles: ['groupMemberUpdate'],
-    deleteRoles: ['groupMemberDelete'],
+    {
+      Header: 'User',
+      accessor: 'user.name',
+    },
+    {
+      Header: 'Group',
+      accessor: 'group.name',
+    },
+    {
+      Header: 'Actions',
+      accessor: 'actions',
+    },
+  ]
+  let data = groupMembers
+  let queries = {
+    QUERY: QUERY,
+    DELETEMUTATION: DELETE_GROUP_MEMBER_MUTATION,
   }
+  let recordRoutes = {
+    editRecord: (prop) => {
+      return routes.editGroupMember(prop)
+    },
+    createRecord: () => {
+      return routes.newGroupMember()
+    },
+  }
+  let display = 'id'
+  let roles = {
+    createRecord: ['groupMemberCreate'],
+    updateRecord: ['groupMemberUpdate'],
+    readRecord: ['groupMemberRead'],
+    deleteRecord: ['groupMemberDelete'],
+  }
+  let queryVariables = {}
   return (
-    <>
-      <Table
-        data={groupMembers}
-        meta={meta}
-        query={QUERY}
-        deleteMutation={DELETE_GROUP_MEMBER_MUTATION}
-      />
-    </>
+    <TableComponent
+      title={title}
+      columns={columns}
+      data={data}
+      queries={queries}
+      routes={recordRoutes}
+      display={display}
+      roles={roles}
+      queryVariables={queryVariables}
+    />
   )
-  //return <GroupMembers groupMembers={groupMembers} />
 }

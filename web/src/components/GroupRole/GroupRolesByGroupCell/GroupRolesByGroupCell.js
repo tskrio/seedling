@@ -1,7 +1,13 @@
+import { useParams, Link, routes } from '@redwoodjs/router'
+import TableComponent from 'src/components/TableComponent'
 import GroupRolesLayout from 'src/layouts/GroupRolesLayout'
-
-import Table from 'src/components/Table/Table'
-import { routes } from '@redwoodjs/router'
+const DELETE_GROUP_ROLE_MUTATION = gql`
+  mutation DeleteGroupRoleMutation($id: Int!) {
+    deleteGroupRole(id: $id) {
+      id
+    }
+  }
+`
 export const beforeQuery = (props) => {
   //console.log('variables', props)
   props.id = props.groupID.id
@@ -30,7 +36,15 @@ export const QUERY = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => {
-  return <GroupRolesLayout />
+  const { id } = useParams()
+  return (
+    <div className="rw-text-center">
+      {`No Group Roles yet.`}
+      <Link to={routes.newGroupRole({ groupId: id })} className="rw-link">
+        {'Create one?'}
+      </Link>
+    </div>
+  )
 }
 
 export const Failure = ({ error }) => (
@@ -38,58 +52,108 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ groupRoles }) => {
-  // let query = `Where group = ${groupRoles[0].group.name}`
-  // return (
-  //   <GroupRolesLayout query={query}>
-  //     <GroupRoles groupRoles={groupRoles} />
-  //   </GroupRolesLayout>
-  // )
-  let meta = {
-    title: 'Group Roles',
-    routes: {
-      newItem: () => {
-        return routes.newGroupRole({ groupId: groupRoles[0].group.id })
-      },
-      view: (prop) => {
-        return routes.groupRole(prop)
-      },
-      edit: (prop) => {
-        return routes.editGroupRole(prop)
-      },
+  let title = 'Group Roles by Group'
+  let columns = [
+    {
+      Header: 'Created At',
+      accessor: 'createdAt', // accessor is the "key" in the data
     },
-    labels: {
-      single: 'Group Role',
-      multiple: 'Group Roles',
+    {
+      Header: 'Updated At',
+      accessor: 'updatedAt',
     },
-    key: 'id',
-    display: 'name',
-    columns: [
-      { key: 'role', label: 'Role', type: 'string' },
-      { key: 'group.name', label: 'Group', type: 'reference' },
-      { key: 'createdAt', label: 'Created', type: 'date' },
-      { key: 'updatedAt', label: 'Updated', type: 'date' },
-    ],
-    createRoles: ['groupRoleCreate'],
-    readRoles: ['groupRoleRead'],
-    updateRoles: ['groupRoleUpdate'],
-    deleteRoles: ['groupRoleDelete'],
+    {
+      Header: 'Group',
+      accessor: 'group.name',
+    },
+    {
+      Header: 'Role',
+      accessor: 'role',
+    },
+    {
+      Header: 'Actions',
+      accessor: 'actions',
+    },
+  ]
+  let data = groupRoles
+  let queries = {
+    QUERY: QUERY,
+    DELETEMUTATION: DELETE_GROUP_ROLE_MUTATION,
   }
-  const DELETE_GROUP_ROLE_MUTATION = gql`
-    mutation DeleteGroupRoleMutation($id: Int!) {
-      deleteGroupRole(id: $id) {
-        id
-      }
-    }
-  `
+  let recordRoutes = {
+    editRecord: (prop) => {
+      return routes.editGroupRole(prop)
+    },
+    createRecord: () => {
+      return routes.newGroupRole()
+    },
+  }
+  let display = 'id'
+  let roles = {
+    createRecord: ['groupRoleCreate'],
+    updateRecord: ['groupRoleUpdate'],
+    readRecord: ['groupRoleRead'],
+    deleteRecord: ['groupRoleDelete'],
+  }
+  let queryVariables = {}
   return (
-    <>
-      <Table
-        data={groupRoles}
-        meta={meta}
-        queryVariables={{ id: groupRoles[0].group.id }} // I don't know how to get the groupID from the query... so if there's a result, refresh the page
-        query={QUERY}
-        deleteMutation={DELETE_GROUP_ROLE_MUTATION}
-      />
-    </>
+    <TableComponent
+      title={title}
+      columns={columns}
+      data={data}
+      queries={queries}
+      routes={recordRoutes}
+      display={display}
+      roles={roles}
+      queryVariables={queryVariables}
+    />
   )
+  //  let meta = {
+  //    title: 'Group Roles',
+  //    routes: {
+  //      newItem: () => {
+  //        return routes.newGroupRole({ groupId: groupRoles[0].group.id })
+  //      },
+  //      view: (prop) => {
+  //        return routes.groupRole(prop)
+  //      },
+  //      edit: (prop) => {
+  //        return routes.editGroupRole(prop)
+  //      },
+  //    },
+  //    labels: {
+  //      single: 'Group Role',
+  //      multiple: 'Group Roles',
+  //    },
+  //    key: 'id',
+  //    display: 'name',
+  //    columns: [
+  //      { key: 'role', label: 'Role', type: 'string' },
+  //      { key: 'group.name', label: 'Group', type: 'reference' },
+  //      { key: 'createdAt', label: 'Created', type: 'date' },
+  //      { key: 'updatedAt', label: 'Updated', type: 'date' },
+  //    ],
+  //    createRoles: ['groupRoleCreate'],
+  //    readRoles: ['groupRoleRead'],
+  //    updateRoles: ['groupRoleUpdate'],
+  //    deleteRoles: ['groupRoleDelete'],
+  //  }
+  //  const DELETE_GROUP_ROLE_MUTATION = gql`
+  //    mutation DeleteGroupRoleMutation($id: Int!) {
+  //      deleteGroupRole(id: $id) {
+  //        id
+  //      }
+  //    }
+  //  `
+  //  return (
+  //    <>
+  //      <Table
+  //        data={groupRoles}
+  //        meta={meta}
+  //        queryVariables={{ id: groupRoles[0].group.id }} // I don't know how to get the groupID from the query... so if there's a result, refresh the page
+  //        query={QUERY}
+  //        deleteMutation={DELETE_GROUP_ROLE_MUTATION}
+  //      />
+  //    </>
+  //  )
 }
