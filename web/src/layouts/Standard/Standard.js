@@ -7,8 +7,9 @@ const Standard = ({ children }) => {
   return (
     <>
       <Navbar />
-      {isAuthenticated && currentUser && <NavSidebar>{children}</NavSidebar>}
-      {!isAuthenticated && <>{children}</>}
+      {/*{isAuthenticated && currentUser && <NavSidebar>{children}</NavSidebar>}*/}
+      {/*{!isAuthenticated && <>{children}</>}*/}
+      <NavSidebar>{children}</NavSidebar>
     </>
   )
 }

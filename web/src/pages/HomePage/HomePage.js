@@ -1,5 +1,5 @@
-import Login from 'src/components/Login'
+import AboutComponent from 'src/components/AboutComponent'
 const HomePage = () => {
-  return <Login />
+  return <AboutComponent />
 }
 export default HomePage

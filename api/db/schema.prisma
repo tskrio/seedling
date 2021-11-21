@@ -8,22 +8,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model WaitList {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  variables Json     @default("{name: \"\", interest: \"\"}")
-  email     String
-  status    String
-}
-
 model User {
   id                  Int           @id @default(autoincrement())
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
   email               String        @unique
   name                String        @default("")
-  preferences         Json          @default("{}")
   hashedPassword      String        @default("")
   salt                String        @default("")
   resetToken          String?

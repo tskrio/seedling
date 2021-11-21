@@ -1,8 +1,11 @@
 import {
   Form,
   FormError,
+  FieldError,
   Label,
+  DatetimeLocalField,
   TextField,
+  TextAreaField,
   Submit,
   PasswordField,
 } from '@redwoodjs/forms'
@@ -10,25 +13,22 @@ import { toast } from '@redwoodjs/web/toast'
 import { useMutation } from '@redwoodjs/web'
 import { Link, routes, navigate, useLocation } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
-const DELETE_USER_MUTATION = gql`
-  mutation DeleteUserMutation($id: Int!) {
-    deleteUser(id: $id) {
-      id
-    }
-  }
-`
-const UserForm = (props) => {
+const FormComponent = (props) => {
+  console.log('props', props)
+  console.log('record', props.record)
+  console.log('fields', props.fields)
+  console.log('roles', props.roles)
+  console.log('onSave', props.onSave)
+  console.log('mutations', props.mutations)
   const { hasRole } = useAuth()
   const { search } = useLocation()
   let params = new URLSearchParams(search)
-
   const onSubmit = (data) => {
     //console.log('on save data', data)
     /**Client RUles go here */
-    data.preferences = {}
-    props.onSave(data, props?.user?.id)
+    props.onSave(data, props?.record?.id)
   }
-  const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
+  const [deleteRecord] = useMutation(props.mutations.deleteRecord, {
     onCompleted: () => {
       toast.success('User deleted')
       navigate(routes.users())
@@ -37,7 +37,7 @@ const UserForm = (props) => {
 
   const onDeleteClick = (id) => {
     if (confirm('Are you sure you want to delete user ' + id + '?')) {
-      deleteUser({ variables: { id } })
+      deleteRecord({ variables: { id } })
     }
   }
 
@@ -45,8 +45,38 @@ const UserForm = (props) => {
   let formLabelClassError =
     'flex border-b border-gray-200 h-12 py-3 items-center'
   let formTextFieldClass = 'focus:outline-none px-3 w-5/6'
-  let labelAndFieldList = (fieldArray) => {
-    return fieldArray.map((field) => {
+  let labelAndFieldList = () => {
+    return props.fields.map((field) => {
+      field.html = (
+        <TextField
+          name={field.name}
+          defaultValue={props?.record?.[field.name] || params.get(field.name)}
+          className={formTextFieldClass}
+          errorClassName={formTextFieldClass}
+          placeholder={field.placeHolder}
+          readOnly={hasRole(['admin', 'userUpdate']) !== true}
+          config={{ required: field.required }}
+        />
+      )
+      if (field.type === 'dateTime') {
+        //2018-06-12T19:30"
+        let dateArr = props?.record?.[field.name].split(':')
+        let modifiedDate = `${dateArr[0]}:${dateArr[1]}`
+        field.html = (
+          <>
+            {modifiedDate}
+            <DatetimeLocalField
+              name={field.name}
+              value={modifiedDate || params.get(field.name)}
+              className={formTextFieldClass}
+              errorClassName={formTextFieldClass}
+              placeholder={field.placeHolder}
+              readOnly={hasRole(['admin', 'userUpdate']) !== true}
+              config={{ required: field.required }}
+            />
+          </>
+        )
+      }
       return (
         <div key={field.name}>
           <Label
@@ -59,7 +89,7 @@ const UserForm = (props) => {
             </span>
             {field.readOnly ? (
               <span className="text-left px-2 w-5/6">
-                {props?.user?.[field.name]}
+                {props?.record?.[field.name]}
               </span>
             ) : field.type === 'PasswordField' ? (
               <PasswordField
@@ -71,17 +101,7 @@ const UserForm = (props) => {
                 config={{ required: field.required }}
               />
             ) : (
-              <TextField
-                name={field.name}
-                defaultValue={
-                  props?.user?.[field.name] || params.get(field.name)
-                }
-                className={formTextFieldClass}
-                errorClassName={formTextFieldClass}
-                placeholder={field.placeHolder}
-                readOnly={hasRole(['admin', 'userUpdate']) !== true}
-                config={{ required: field.required }}
-              />
+              field.html
             )}
           </Label>
         </div>
@@ -92,10 +112,10 @@ const UserForm = (props) => {
     <>
       <div className="rounded-md">
         <Link
-          to={routes.users()}
+          to={routes.groups()}
           className="text-sm leading-5 font-medium text-gray-500 hover:text-gray-900 focus:outline-none focus:underline transition ease-in-out duration-150"
         >
-          Back to users
+          Back to groups
         </Link>
         <Form onSubmit={onSubmit} error={props.error}>
           <FormError
@@ -106,48 +126,19 @@ const UserForm = (props) => {
           />
           <section>
             <h2 className="uppercase tracking-wide text-lg font-semibold text-gray-700 my-2">
-              {props.user?.name || 'New User'}
+              {props.record?.name || 'New Group'}
             </h2>
             <fieldset className="mb-3 bg-white shadow-lg rounded text-gray-600">
               {labelAndFieldList(
                 (() => {
                   let returnArray = []
-                  if (props.user?.id) {
+                  if (props.record?.id) {
                     returnArray.push({
                       name: 'id',
                       prettyName: 'ID',
                       readOnly: true,
                     })
                   }
-                  returnArray.push(
-                    {
-                      name: 'name',
-                      prettyName: 'Name',
-                      readOnly: false,
-                    },
-                    {
-                      name: 'email',
-                      prettyName: 'Email',
-                      readOnly: false,
-                    },
-                    {
-                      name: 'hashedPassword',
-                      prettyName: 'Password',
-                      readOnly: false,
-                      placeHolder: 'Leave blank to keep current password',
-                      type: 'PasswordField',
-                    },
-                    {
-                      name: 'createdAt',
-                      prettyName: 'Created At',
-                      readOnly: true,
-                    },
-                    {
-                      name: 'updatedAt',
-                      prettyName: 'Updated At',
-                      readOnly: true,
-                    }
-                  )
                   return returnArray
                 })()
               )}
@@ -160,11 +151,11 @@ const UserForm = (props) => {
             >
               Save
             </Submit>
-            {hasRole(['userDelete', 'admin']) && (
+            {hasRole(props.roles.delete.concat(['admin'])) && (
               <button
                 type="button"
                 className="submit-button px-4 py-3 rounded-full bg-red-400 hover:bg-red-700 text-white focus:ring focus:outline-none w-1/3 text-xl font-semibold transition-colors"
-                onClick={() => onDeleteClick(props?.user.id)}
+                onClick={() => onDeleteClick(props?.record.id)}
               >
                 Delete
               </button>
@@ -176,4 +167,4 @@ const UserForm = (props) => {
   )
 }
 
-export default UserForm
+export default FormComponent
