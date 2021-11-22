@@ -8,19 +8,20 @@ module.exports = {
   operation: ['create'],
   file: __filename,
   table: 'user',
-  command: async function ({ input, status }) {
+  command: async function ({ record, status }) {
     try {
       if (
         process.env.MAILGUN_API_KEY &&
         process.env.MAILGUN_DOMAIN &&
-        apiProperties.email.active
+        apiProperties.email.active &&
+        record.email.indexOf('@example.com') == -1
       ) {
         let mailgun = new Mailgun({
           apiKey: process.env.MAILGUN_API_KEY,
           domain: process.env.MAILGUN_DOMAIN,
         })
-        let email = input.email
-        let name = input.name
+        let email = record.email
+        let name = record.name
         let html = `<h1>Welcome ${name}</h1>
 <p>I am thrilled that you're here. You’ll love automating your work with Tskr. </p>
 <p>Tskr was designed to get you tracking your stuff quickly in a way where it's your data end to end.</p>
@@ -34,6 +35,7 @@ Jace</p>
 <p>Shoot me a response and I'll help however I can.  If you'd rather jump into here's some links.</p>
 <ul>
   <li><a href="https://github.com/tskrio/tskr/issues/new?body=%0A%0A%0A---%0AI%27m+a+human.+Please+be+nice.">Give us feedback</a></li>
+  <li><a href="mailto:jace@tskr.io">Shoot me an email with your thoughts</a></li>
   <li><a href="https://github.com/tskrio/tskr/">Contribute to the codebase</a></li>
   <li><a href="https://github.com/tskrio/docs/">Contribute to the documentation</a></li>
   <li><a href="https://github.com/tskrio/tskr/issues/new?body=%0A%0A%0A---%0AI%27m+a+human.+Please+be+nice.">Contribute to the design</a></li>
@@ -43,7 +45,7 @@ Jace</p>
       `
         let mail = {
           from: `Tskr <jace@${process.env.MAILGUN_DOMAIN}>`,
-          'h:Reply-To': `Jace <jace@tskr.io>`,
+          //'h:Reply-To': 'jace@tskr.io',//not working
           to: email,
           subject: `Welcome to Tskr`,
           html: html,
@@ -64,6 +66,6 @@ Jace</p>
     } catch (e) {
       logger.error(e)
     }
-    return await { input, status }
+    return await { record, status }
   },
 }

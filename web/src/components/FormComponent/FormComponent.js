@@ -25,20 +25,22 @@ const FormComponent = (props) => {
   const { search } = useLocation()
   let params = new URLSearchParams(search)
   const onSubmit = (data) => {
-    //console.log('on save data', data)
+    console.log('on save data', data)
     /**Client RUles go here */
     props.onSave(data, props?.record?.id)
   }
-  const [deleteRecord] = useMutation(props.mutations.deleteRecord, {
-    onCompleted: () => {
-      toast.success('User deleted')
-      navigate(routes.users())
-    },
-  })
+  if (props.mutations?.deleteRecord) {
+    const [deleteRecord] = useMutation(props.mutations.deleteRecord, {
+      onCompleted: () => {
+        toast.success('User deleted')
+        navigate(routes.users())
+      },
+    })
 
-  const onDeleteClick = (id) => {
-    if (confirm('Are you sure you want to delete user ' + id + '?')) {
-      deleteRecord({ variables: { id } })
+    const onDeleteClick = (id) => {
+      if (confirm('Are you sure you want to delete user ' + id + '?')) {
+        deleteRecord({ variables: { id } })
+      }
     }
   }
   let formLabelClass = 'flex border-b border-gray-200 h-12 py-3 items-center'
@@ -228,13 +230,13 @@ const FormComponent = (props) => {
               {labelAndFieldList(
                 (() => {
                   let returnArray = []
-                  if (props.record?.id) {
+                  /*if (props.record?.id) {
                     returnArray.push({
                       name: 'id',
                       prettyName: 'ID',
                       readOnly: true,
                     })
-                  }
+                  }*/
                   return returnArray
                 })()
               )}
