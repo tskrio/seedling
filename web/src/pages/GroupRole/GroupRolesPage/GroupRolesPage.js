@@ -1,7 +1,11 @@
 import GroupRolesCell from 'src/components/GroupRole/GroupRolesCell'
 
 const GroupRolesPage = () => {
-  return <GroupRolesCell />
+  return (
+    <>
+      <GroupRolesCell />
+    </>
+  )
 }
 
 export default GroupRolesPage

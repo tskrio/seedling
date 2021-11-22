@@ -1,4 +1,4 @@
-import { useTable } from 'react-table'
+import { useTable, useSortBy } from 'react-table'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
@@ -28,46 +28,35 @@ const TableComponent = ({
     return {
       ...row,
       actions: (
-        <>
+        <div className="flex">
           {hasRole(roles.updateRecord.concat(['admin'])) && (
-            <span>
+            <span className="p-1 w-full">
               <Link
                 className="rw-button rw-button-blue"
                 to={routes.editRecord({ id: row.id })}
                 title={`Edit ${row[display]}`}
               >
-                Edit {row[display]}
+                Edit
               </Link>
             </span>
           )}
           {hasRole(roles.deleteRecord.concat(['admin'])) && (
-            <span>
+            <span className="p-1 w-full">
               <button
                 type="button"
                 title={'Delete ' + row[display]}
-                className="rw-button rw-button-red"
+                className="rw-button rw-button-red w-full"
                 onClick={() => onDeleteClick(row.id, `${row[display]}`)}
               >
-                Delete {row[display]}
+                Delete
               </button>
             </span>
           )}
-        </>
+        </div>
       ),
     }
   })
-  if (hasRole(roles.createRecord.concat(['admin']))) {
-    data.push({
-      actions: (
-        <Link
-          className="rw-button rw-button-green"
-          to={routes.createRecord({ id: queryVariables })}
-        >
-          New Record
-        </Link>
-      ),
-    })
-  }
+
   columns = React.useMemo(() => columns, [])
   data = React.useMemo(() => data, [])
   const [deleteRecord] = useMutation(queries.DELETEMUTATION, {
@@ -99,10 +88,28 @@ const TableComponent = ({
     }
   }
 
-  const tableInstance = useTable({ columns, data })
+  const tableInstance = useTable({ columns, data }, useSortBy)
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance
 
+  /**
+     * if (hasRole(roles.createRecord.concat(['admin']))) {
+    data.push({
+      actions: (
+        <div className="flex">
+          <span className="pt-1 pl-1 pr-1 w-full">
+            <Link
+              className="rw-button rw-button-green"
+              to={routes.createRecord({ id: queryVariables })}
+            >
+              New Record
+            </Link>
+          </span>
+        </div>
+      ),
+    })
+  }
+     */
   return (
     <>
       <div className="bg-white pb-4 px-4 rounded-md w-full">
@@ -166,11 +173,23 @@ const TableComponent = ({
                       // Loop over the headers in each row
                       headerGroup.headers.map((column) => (
                         // Apply the header cell props
-                        <th key={column.key} {...column.getHeaderProps()}>
+                        <th
+                          key={column.key}
+                          {...column.getHeaderProps(
+                            column.getSortByToggleProps()
+                          )}
+                        >
                           {
                             // Render the header
                             column.render('Header')
                           }
+                          <span>
+                            {column.isSorted
+                              ? column.isSortedDesc
+                                ? ' Z➡️A'
+                                : ' A➡️Z'
+                              : ''}
+                          </span>
                         </th>
                       ))
                     }
