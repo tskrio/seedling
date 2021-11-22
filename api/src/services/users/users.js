@@ -23,11 +23,15 @@ export const createUser = async ({ input }) => {
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
-    let createdRecord = await db[table].create({
+    let record = await db[table].create({
       data: result.input,
     })
-    createdRecord = executeAfterCreateRules(table, createdRecord)
-    return createdRecord
+    let afterResult = await executeAfterCreateRules(table, {
+      record,
+      status: { code: 'success', message: '' },
+    })
+    console.log('returning record', record)
+    return afterResult.record
   } catch (error) {
     throw new UserInputError(error.message)
   }

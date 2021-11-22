@@ -91,7 +91,7 @@ export const Success = ({ user }) => {
       prettyName: 'Email',
     },
     {
-      name: 'password',
+      name: 'hashedPassword',
       prettyName: 'Password',
       type: 'password',
       placeHolder: 'Only set this if you want to change it',

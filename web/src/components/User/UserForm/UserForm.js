@@ -126,7 +126,7 @@ const UserForm = (props) => {
                     },
                     {
                       name: 'email',
-                      prettyName: 'Email',
+                      prettyName: 'Em?ail',
                       readOnly: false,
                     },
                     {
