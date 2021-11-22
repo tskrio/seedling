@@ -1,7 +1,7 @@
-import NewGroupRole from 'src/components/GroupRole/NewGroupRole'
+import NewGroupRoleCell from 'src/components/GroupRole/NewGroupRoleCell'
 
 const NewGroupRolePage = () => {
-  return <NewGroupRole />
+  return <NewGroupRoleCell />
 }
 
 export default NewGroupRolePage

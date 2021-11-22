@@ -1,7 +1,7 @@
-import NewGroupMember from 'src/components/GroupMember/NewGroupMember'
+import NewGroupMemberCell from 'src/components/GroupMember/NewGroupMemberCell'
 
 const NewGroupMemberPage = () => {
-  return <NewGroupMember />
+  return <NewGroupMemberCell />
 }
 
 export default NewGroupMemberPage

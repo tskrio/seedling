@@ -80,7 +80,18 @@ export const Success = ({ groupMembers }) => {
       accessor: 'actions',
     },
   ]
-  let data = groupMembers
+
+  let data = groupMembers.map((groupMember) => {
+    return {
+      ...groupMember,
+      createdAt: new Date(
+        groupMember.createdAt
+      ).toLocaleString(/**TODO: User preference! */),
+      updatedAt: new Date(
+        groupMember.createdAt
+      ).toLocaleString(/**TODO: User preference! */),
+    }
+  })
   let queries = {
     QUERY: QUERY,
     DELETEMUTATION: DELETE_GROUP_MEMBER_MUTATION,

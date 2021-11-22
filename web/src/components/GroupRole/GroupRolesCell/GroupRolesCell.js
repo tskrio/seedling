@@ -58,7 +58,18 @@ export const Success = ({ groupRoles }) => {
       accessor: 'actions',
     },
   ]
-  let data = groupRoles
+
+  let data = groupRoles.map((groupRole) => {
+    return {
+      ...groupRole,
+      createdAt: new Date(
+        groupRole.createdAt
+      ).toLocaleString(/**TODO: User preference! */),
+      updatedAt: new Date(
+        groupRole.createdAt
+      ).toLocaleString(/**TODO: User preference! */),
+    }
+  })
   let queries = {
     QUERY: QUERY,
     DELETEMUTATION: DELETE_GROUP_ROLE_MUTATION,

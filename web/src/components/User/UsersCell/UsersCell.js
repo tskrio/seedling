@@ -1,6 +1,4 @@
 import { Link, routes } from '@redwoodjs/router'
-import { webProperties } from 'src/lib/webProperties'
-import { useAuth } from '@redwoodjs/auth'
 import TableComponent from 'src/components/TableComponent'
 const DELETE_USER_MUTATION = gql`
   mutation DeleteUserMutation($id: Int!) {
@@ -39,14 +37,6 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ users }) => {
-  const { getCurrentUser } = useAuth()
-  console.log('getCurrentUser', getCurrentUser().email)
-  // privacy for avatars... on a system level check if enabled
-  if (webProperties.avatars.active) {
-    console.log('avatars are a go!')
-    // now lets check if the logged in user wants avatars
-  }
-
   let title = 'Users'
   let columns = [
     {
@@ -70,7 +60,17 @@ export const Success = ({ users }) => {
       accessor: 'actions',
     },
   ]
-  let data = users
+  let data = users.map((user) => {
+    return {
+      ...user,
+      createdAt: new Date(
+        user.createdAt
+      ).toLocaleString(/**TODO: User preference! */),
+      updatedAt: new Date(
+        user.createdAt
+      ).toLocaleString(/**TODO: User preference! */),
+    }
+  })
   let queries = {
     QUERY: QUERY,
     DELETEMUTATION: DELETE_USER_MUTATION,
