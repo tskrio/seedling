@@ -19,6 +19,17 @@ model User {
   resetToken          String?
   resetTokenExpiresAt DateTime?
   GroupMember         GroupMember[] @relation("UserGroupMember")
+  Preference          Preference[]  @relation("UserPreference")
+}
+
+model Preference {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  entity    String
+  value     String?
+  userId    Int
+  user      User     @relation("UserPreference", fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Group {

@@ -79,7 +79,7 @@ const GroupMember = ({ groupMember }) => {
       </div>
       <nav className="rw-button-group">
         <Link
-          to={routes.editGroupMember({ id: groupMember.id })}
+          to={routes.groupMember({ id: groupMember.id })}
           className="rw-button rw-button-blue"
         >
           Edit

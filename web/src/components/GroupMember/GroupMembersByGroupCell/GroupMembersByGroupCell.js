@@ -87,7 +87,7 @@ export const Success = ({ groupMembers }) => {
   }
   let recordRoutes = {
     editRecord: (prop) => {
-      return routes.editGroupMember(prop)
+      return routes.groupMember(prop)
     },
     createRecord: () => {
       return routes.newGroupMember({ groupId: groupMembers[0].group.id })

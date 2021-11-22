@@ -2,7 +2,7 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
-import GroupForm from 'src/components/Group/GroupForm'
+
 const DELETE_GROUP_MUTATION = gql`
   mutation DeleteGroupMutation($id: Int!) {
     deleteGroup(id: $id) {
@@ -68,8 +68,18 @@ export const Success = ({ group }) => {
       prettyName: 'ID',
       readOnly: true,
     },
-    { name: 'createdAt', prettyName: 'Created At', type: 'dateTime' },
-    { name: 'updatedAt', prettyName: 'Updated At' },
+    {
+      name: 'createdAt',
+      prettyName: 'Created At',
+      readOnly: true,
+      type: 'dateTime',
+    },
+    {
+      name: 'updatedAt',
+      prettyName: 'Updated At',
+      readOnly: true,
+      type: 'dateTime',
+    },
     {
       name: 'name',
       prettyName: 'Name',
@@ -77,8 +87,8 @@ export const Success = ({ group }) => {
     {
       name: 'description',
       prettyName: 'Description',
-      type: 'dateTime',
-      //type: 'textArea',
+      //type: 'dateTime',
+      type: 'textArea',
     },
   ]
   const roles = {
@@ -101,21 +111,4 @@ export const Success = ({ group }) => {
       returnLink={routes.groups()}
     />
   )
-  //  return (
-  //    <div className="rw-segment">
-  //      <header className="rw-segment-header">
-  //        <h2 className="rw-heading rw-heading-secondary">
-  //          Edit Group {group.id}
-  //        </h2>
-  //      </header>
-  //      <div className="rw-segment-main">
-  //        <GroupForm
-  //          group={group}
-  //          onSave={onSave}
-  //          error={error}
-  //          loading={loading}
-  //        />
-  //      </div>
-  //    </div>
-  //  )
 }

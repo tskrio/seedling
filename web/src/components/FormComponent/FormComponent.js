@@ -1,10 +1,11 @@
 import {
   Form,
   FormError,
-  FieldError,
   Label,
-  DatetimeLocalField,
+  DateField,
+  TimeField,
   TextField,
+  SelectField,
   TextAreaField,
   Submit,
   PasswordField,
@@ -14,12 +15,12 @@ import { useMutation } from '@redwoodjs/web'
 import { Link, routes, navigate, useLocation } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 const FormComponent = (props) => {
-  console.log('props', props)
-  console.log('record', props.record)
-  console.log('fields', props.fields)
-  console.log('roles', props.roles)
-  console.log('onSave', props.onSave)
-  console.log('mutations', props.mutations)
+  //console.log('props', props)
+  //console.log('record', props.record)
+  //console.log('fields', props.fields)
+  //console.log('roles', props.roles)
+  //console.log('onSave', props.onSave)
+  //console.log('mutations', props.mutations)
   const { hasRole } = useAuth()
   const { search } = useLocation()
   let params = new URLSearchParams(search)
@@ -40,42 +41,127 @@ const FormComponent = (props) => {
       deleteRecord({ variables: { id } })
     }
   }
-
   let formLabelClass = 'flex border-b border-gray-200 h-12 py-3 items-center'
   let formLabelClassError =
     'flex border-b border-gray-200 h-12 py-3 items-center'
   let formTextFieldClass = 'focus:outline-none px-3 w-5/6'
   let labelAndFieldList = () => {
     return props.fields.map((field) => {
-      field.html = (
-        <TextField
-          name={field.name}
-          defaultValue={props?.record?.[field.name] || params.get(field.name)}
-          className={formTextFieldClass}
-          errorClassName={formTextFieldClass}
-          placeholder={field.placeHolder}
-          readOnly={hasRole(['admin', 'userUpdate']) !== true}
-          config={{ required: field.required }}
-        />
-      )
-      if (field.type === 'dateTime') {
-        //2018-06-12T19:30"
-        let dateArr = props?.record?.[field.name].split(':')
-        let modifiedDate = `${dateArr[0]}:${dateArr[1]}`
+      if (field.readOnly) {
+        field.html = (() => {
+          if (field.type === 'dateTime') {
+            return (
+              <span className="text-left px-2 w-5/6">
+                {
+                  new Date(
+                    props?.record?.[field.name]
+                  ).toLocaleString(/**TODO: User preference! */)
+                }
+              </span>
+            )
+          } else {
+            return (
+              <span className="text-left px-2 w-5/6">
+                {props?.record?.[field.name]}
+              </span>
+            )
+          }
+        })()
+      } else {
         field.html = (
-          <>
-            {modifiedDate}
-            <DatetimeLocalField
+          <TextField
+            name={field.name}
+            defaultValue={props?.record?.[field.name] || params.get(field.name)}
+            className={formTextFieldClass}
+            errorClassName={formTextFieldClass}
+            placeholder={field.placeHolder}
+            readOnly={hasRole(['admin', 'userUpdate']) !== true}
+            config={{ required: field.required }}
+          />
+        )
+        if (field.type === 'dateTime') {
+          //2018-06-12T19:30"
+          var dateTemp = new Date(props?.record?.[field.name])
+          console.log(props?.record?.[field.name])
+          let year = dateTemp.getFullYear()
+          let month = (dateTemp.getMonth() + 1).toString().padStart(2, 0)
+          let date = dateTemp.getDate().toString().padStart(2, 0)
+          let hour = dateTemp.getHours().toString().padStart(2, 0)
+          let minute = dateTemp.getMinutes().toString().padStart(2, 0)
+          let dateOnly = `${year}-${month}-${date}`
+          let timeOnly = `${hour}:${minute}`
+          //try {
+          //  console.log(timeOnly.split('.'))
+          //} catch (e) {
+          //  console.log(e)
+          //}
+          field.html = (
+            <>
+              <TextField
+                name={field.name}
+                defaultValue={
+                  `${dateOnly}T${timeOnly}.000Z` || params.get(field.name)
+                }
+                className={formTextFieldClass}
+                errorClassName={formTextFieldClass}
+                placeholder={field.placeHolder}
+                config={{ required: field.required }}
+              />
+              <DateField
+                name={field.name + '-date'}
+                defaultValue={dateOnly || params.get(field.name)}
+                className={formTextFieldClass}
+                errorClassName={formTextFieldClass}
+                placeholder={field.placeHolder}
+                readOnly={hasRole(['admin', 'userUpdate']) !== true}
+                config={{ required: field.required }}
+              />
+              <TimeField
+                name={field.name + '-time'}
+                defaultValue={timeOnly || params.get(field.name)}
+                className={formTextFieldClass}
+                errorClassName={formTextFieldClass}
+                placeholder={field.placeHolder}
+                readOnly={hasRole(['admin', 'userUpdate']) !== true}
+                config={{ required: field.required }}
+              />
+            </>
+          )
+        }
+        if (field.type === 'textArea') {
+          field.html = (
+            <TextAreaField
               name={field.name}
-              value={modifiedDate || params.get(field.name)}
+              defaultValue={
+                props?.record?.[field.name] || params.get(field.name)
+              }
               className={formTextFieldClass}
               errorClassName={formTextFieldClass}
               placeholder={field.placeHolder}
               readOnly={hasRole(['admin', 'userUpdate']) !== true}
               config={{ required: field.required }}
             />
-          </>
-        )
+          )
+        }
+        if (field.type === 'reference') {
+          let options = field.data.map((option) => {
+            return (
+              <option key={option[field.value]} value={option[field.value]}>
+                {option[field.display]}
+              </option>
+            )
+          })
+          field.html = (
+            <SelectField
+              name={field.name}
+              defaultValue={
+                props?.record?.[field.name] || params.get(field.name)
+              }
+            >
+              {options}
+            </SelectField>
+          )
+        }
       }
       return (
         <div key={field.name}>
@@ -88,9 +174,7 @@ const FormComponent = (props) => {
               {field.prettyName}
             </span>
             {field.readOnly ? (
-              <span className="text-left px-2 w-5/6">
-                {props?.record?.[field.name]}
-              </span>
+              field.html
             ) : field.type === 'PasswordField' ? (
               <PasswordField
                 name={field.name}
@@ -112,10 +196,10 @@ const FormComponent = (props) => {
     <>
       <div className="rounded-md">
         <Link
-          to={routes.groups()}
+          to={props.returnLink}
           className="text-sm leading-5 font-medium text-gray-500 hover:text-gray-900 focus:outline-none focus:underline transition ease-in-out duration-150"
         >
-          Back to groups
+          Back to list
         </Link>
         <Form onSubmit={onSubmit} error={props.error}>
           <FormError
@@ -126,7 +210,7 @@ const FormComponent = (props) => {
           />
           <section>
             <h2 className="uppercase tracking-wide text-lg font-semibold text-gray-700 my-2">
-              {props.record?.name || 'New Group'}
+              {props.record?.name || props.record?.id || ''}
             </h2>
             <fieldset className="mb-3 bg-white shadow-lg rounded text-gray-600">
               {labelAndFieldList(

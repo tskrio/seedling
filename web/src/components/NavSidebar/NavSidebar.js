@@ -101,11 +101,7 @@ const NavSidebar = ({ children }) => {
         {isAuthenticated && (
           <div className="w-full h-full bg-white rounded p-3 shadow-lg">
             <div className="flex items-center space-x-4 p-2 mb-5">
-              <img
-                className="h-12 rounded-full"
-                src={`http://www.gravatar.com/avatar/${currentUser.md5Email}?s=260&d=mp`}
-                alt="{currentUser.name}"
-              />
+              {icons.profile}
 
               <div>
                 <h4 className="font-semibold text-lg text-gray-700 capitalize font-poppins tracking-wide">

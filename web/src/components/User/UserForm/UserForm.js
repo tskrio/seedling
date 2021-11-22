@@ -25,7 +25,6 @@ const UserForm = (props) => {
   const onSubmit = (data) => {
     //console.log('on save data', data)
     /**Client RUles go here */
-    data.preferences = {}
     props.onSave(data, props?.user?.id)
   }
   const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
