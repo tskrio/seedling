@@ -111,8 +111,8 @@ const TableComponent = ({
   }
      */
   return (
-    <>
-      <div className="bg-white pb-4 px-4 rounded-md w-full">
+    <div className="pt-4">
+      <div className="bg-white pb-4 px-4 rounded-md w-full shadow-lg">
         {/**Title Below */}
         <div className="flex justify-between w-full pt-6 ">
           <p className="ml-3"> {title}</p>
@@ -232,6 +232,16 @@ const TableComponent = ({
             </tbody>
           </table>
         </div>
+        <div className="flex flex-row-reverse">
+          <span className="p-1 w-full">
+            <Link
+              className="rw-button rw-button-green w-full"
+              to={routes.createRecord({ id: queryVariables })}
+            >
+              New Record
+            </Link>
+          </span>
+        </div>
         {/**Pagination Below */}
         <div
           id="pagination"
@@ -254,7 +264,6 @@ const TableComponent = ({
               />
             </g>
           </svg>
-
           <p className="leading-relaxed cursor-pointer mx-2 text-blue-600 hover:text-blue-600 text-sm">
             1
           </p>
@@ -287,7 +296,7 @@ const TableComponent = ({
         </div>
         {/**Pagination Above */}
       </div>
-    </>
+    </div>
   )
 }
 

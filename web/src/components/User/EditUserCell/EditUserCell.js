@@ -1,7 +1,7 @@
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
-
+import FormComponent from 'src/components/FormComponent'
 import UserForm from 'src/components/User/UserForm'
 import GroupMembersByUserCell from 'src/components/GroupMember/GroupMembersByUserCell'
 
@@ -27,7 +27,13 @@ export const UPDATE_USER_MUTATION = gql`
     }
   }
 `
-
+const DELETE_USER_MUTATION = gql`
+  mutation DeleteUserMutation($id: Int!) {
+    deleteUser(id: $id) {
+      id
+    }
+  }
+`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }) => (
@@ -46,13 +52,72 @@ export const Success = ({ user }) => {
     console.log(`onSave of edit`, input, id)
     updateUser({ variables: { id, input } })
   }
+  const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
+    onCompleted: () => {
+      toast.success('User deleted')
+      navigate(routes.users())
+    },
+  })
 
+  const onDelete = (id) => {
+    if (confirm('Are you sure you want to delete user ' + id + '?')) {
+      deleteUser({ variables: { id } })
+    }
+  }
+  const fields = [
+    {
+      name: 'id',
+      prettyName: 'ID',
+      readOnly: true,
+    },
+    {
+      name: 'createdAt',
+      prettyName: 'Created At',
+      readOnly: true,
+      type: 'dateTime',
+    },
+    {
+      name: 'updatedAt',
+      prettyName: 'Updated At',
+      readOnly: true,
+      type: 'dateTime',
+    },
+    {
+      name: 'name',
+      prettyName: 'Name',
+    },
+    {
+      name: 'email',
+      prettyName: 'Email',
+    },
+    {
+      name: 'password',
+      prettyName: 'Password',
+      type: 'password',
+      placeHolder: 'Only set this if you want to change it',
+    },
+  ]
+  const roles = {
+    update: ['userUpdate'],
+    delete: ['userDelete'],
+  }
+  const mutations = {
+    deleteRecord: DELETE_USER_MUTATION,
+  }
   return (
-    <div className="rw-segment">
-      <div className="rw-segment-main">
-        <UserForm user={user} onSave={onSave} error={error} loading={loading} />
-      </div>
+    <>
+      <FormComponent
+        record={user}
+        fields={fields}
+        roles={roles}
+        onSave={onSave}
+        onDelete={onDelete}
+        mutations={mutations}
+        loading={loading}
+        error={error}
+        returnLink={routes.groups()}
+      />
       <GroupMembersByUserCell userID={user} />
-    </div>
+    </>
   )
 }

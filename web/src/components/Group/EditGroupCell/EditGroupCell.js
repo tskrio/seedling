@@ -2,7 +2,7 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
-
+import GroupMembersByGroupCell from 'src/components/GroupMember/GroupMembersByGroupCell'
 const DELETE_GROUP_MUTATION = gql`
   mutation DeleteGroupMutation($id: Int!) {
     deleteGroup(id: $id) {
@@ -99,16 +99,19 @@ export const Success = ({ group }) => {
     deleteRecord: DELETE_GROUP_MUTATION,
   }
   return (
-    <FormComponent
-      record={group}
-      fields={fields}
-      roles={roles}
-      onSave={onSave}
-      onDelete={onDelete}
-      mutations={mutations}
-      loading={loading}
-      error={error}
-      returnLink={routes.groups()}
-    />
+    <>
+      <FormComponent
+        record={group}
+        fields={fields}
+        roles={roles}
+        onSave={onSave}
+        onDelete={onDelete}
+        mutations={mutations}
+        loading={loading}
+        error={error}
+        returnLink={routes.groups()}
+      />
+      <GroupMembersByGroupCell groupID={group} />
+    </>
   )
 }
