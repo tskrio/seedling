@@ -1,6 +1,6 @@
 import { Link, NavLink, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
-
+import { CookieBanner } from '@palmabit/react-cookie-law'
 const NavSidebar = ({ children }) => {
   const { isAuthenticated, hasRole, currentUser } = useAuth()
   const icons = {
@@ -96,121 +96,131 @@ const NavSidebar = ({ children }) => {
     ),
   }
   return (
-    <div className="flex flex-wrap bg-gray-100 w-full h-screen">
-      <div id="navSideBar" className="hidden xl:block xl:h-screen w-6/6">
-        {isAuthenticated && (
-          <div className="w-full h-full bg-white rounded p-3 shadow-lg">
-            <div className="flex items-center space-x-4 p-2 mb-5">
-              {icons.profile}
+    <>
+      <CookieBanner
+        message="We use cookies for authentication purposes, to use this side either accept that or don't use it."
+        wholeDomain={true}
+        onAccept={() => {}}
+        onAcceptPreferences={() => {}}
+        onAcceptStatistics={() => {}}
+        onAcceptMarketing={() => {}}
+      />
 
-              <div>
-                <h4 className="font-semibold text-lg text-gray-700 capitalize font-poppins tracking-wide">
-                  <Link to={routes.user({ id: currentUser.id })}>
-                    {currentUser.name}
-                  </Link>
-                </h4>
+      <div className="flex flex-wrap bg-gray-100 w-full h-screen">
+        <div id="navSideBar" className="hidden xl:block xl:h-screen w-6/6">
+          {isAuthenticated && (
+            <div className="w-full h-full bg-white rounded p-3 shadow-lg">
+              <div className="flex items-center space-x-4 p-2 mb-5">
+                {icons.profile}
+
+                <div>
+                  <h4 className="font-semibold text-lg text-gray-700 capitalize font-poppins tracking-wide">
+                    <Link to={routes.user({ id: currentUser.id })}>
+                      {currentUser.name}
+                    </Link>
+                  </h4>
+                </div>
               </div>
-            </div>
-            <ul className="space-y-2 text-sm">
-              {/**Dashboard */}
-              <li>
-                <NavLink
-                  to={routes.about()}
-                  activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
-                  className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
-                >
-                  <span className="text-gray-600">{icons.dashboard}</span>
-                  <span>Dashboard</span>
-                </NavLink>
-              </li>
-              {/**Profile */}
-              <li>
-                <NavLink
-                  to={routes.user({ id: currentUser.id })}
-                  activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
-                  className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
-                >
-                  <span className="text-gray-600">{icons.profile}</span>
-                  <span>My profile</span>
-                </NavLink>
-              </li>
-              {/**Users */}
-              {hasRole(['userRead', 'admin']) && (
+              <ul className="space-y-2 text-sm">
+                {/**Dashboard */}
                 <li>
                   <NavLink
-                    to={routes.users()}
+                    to={routes.about()}
                     activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
                     className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
                   >
-                    <span className="text-gray-600">{icons.users}</span>
-                    <span>Users</span>
+                    <span className="text-gray-600">{icons.dashboard}</span>
+                    <span>Dashboard</span>
                   </NavLink>
                 </li>
-              )}
-              {/**Groups */}
-              {hasRole(['groupRead', 'admin']) && (
+                {/**Profile */}
                 <li>
                   <NavLink
-                    to={routes.groups()}
+                    to={routes.user({ id: currentUser.id })}
                     activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
                     className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
                   >
-                    <span className=" text-gray-600">{icons.groups}</span>
-                    <span>Groups</span>
+                    <span className="text-gray-600">{icons.profile}</span>
+                    <span>My profile</span>
                   </NavLink>
                 </li>
-              )}
-              {/**Group members */}
-              {hasRole(['groupMemberRead', 'admin']) && (
+                {/**Users */}
+                {hasRole(['userRead', 'admin']) && (
+                  <li>
+                    <NavLink
+                      to={routes.users()}
+                      activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
+                      className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
+                    >
+                      <span className="text-gray-600">{icons.users}</span>
+                      <span>Users</span>
+                    </NavLink>
+                  </li>
+                )}
+                {/**Groups */}
+                {hasRole(['groupRead', 'admin']) && (
+                  <li>
+                    <NavLink
+                      to={routes.groups()}
+                      activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
+                      className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
+                    >
+                      <span className=" text-gray-600">{icons.groups}</span>
+                      <span>Groups</span>
+                    </NavLink>
+                  </li>
+                )}
+                {/**Group members */}
+                {hasRole(['groupMemberRead', 'admin']) && (
+                  <li>
+                    <NavLink
+                      to={routes.groupMembers()}
+                      activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
+                      className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
+                    >
+                      <span className=" text-gray-600">{icons.list}</span>
+                      <span>Group Members</span>
+                    </NavLink>
+                  </li>
+                )}
+                {/**Group roles */}
+                {hasRole(['groupRoleRead', 'admin']) && (
+                  <li>
+                    <NavLink
+                      to={routes.groupRoles()}
+                      activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
+                      className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
+                    >
+                      <span className=" text-gray-600">{icons.list}</span>
+                      <span>Group Roles</span>
+                    </NavLink>
+                  </li>
+                )}
                 <li>
-                  <NavLink
-                    to={routes.groupMembers()}
-                    activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
+                  <a
+                    href="/#"
                     className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
                   >
-                    <span className=" text-gray-600">{icons.list}</span>
-                    <span>Group Members</span>
-                  </NavLink>
+                    <span className="text-gray-600">{icons.settings}</span>
+                    <span>Settings</span>
+                  </a>
                 </li>
-              )}
-              {/**Group roles */}
-              {hasRole(['groupRoleRead', 'admin']) && (
                 <li>
-                  <NavLink
-                    to={routes.groupRoles()}
-                    activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
+                  <Link
+                    to={routes.resetPassword()}
                     className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
                   >
-                    <span className=" text-gray-600">{icons.list}</span>
-                    <span>Group Roles</span>
-                  </NavLink>
+                    <span className="text-gray-600">{icons.lock}</span>
+                    <span>Change password</span>
+                  </Link>
                 </li>
-              )}
-              <li>
-                <a
-                  href="/#"
-                  className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
-                >
-                  <span className="text-gray-600">{icons.settings}</span>
-                  <span>Settings</span>
-                </a>
-              </li>
-              <li>
-                <Link
-                  to={routes.resetPassword()}
-                  className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
-                >
-                  <span className="text-gray-600">{icons.lock}</span>
-                  <span>Change password</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
-                  to={routes.logout()}
-                >
-                  <span className="text-gray-600">
-                    {/*<svg
+                <li>
+                  <Link
+                    className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
+                    to={routes.logout()}
+                  >
+                    <span className="text-gray-600">
+                      {/*<svg
                       className="h-6"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -224,106 +234,107 @@ const NavSidebar = ({ children }) => {
                         d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                       />
                     </svg>*/}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="24px"
-                      viewBox="0 0 24 24"
-                      width="24px"
-                      fill="#000000"
-                    >
-                      <path d="M0 0h24v24H0z" fill="none" />
-                      <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
-                    </svg>
-                  </span>
-                  <span>Logout</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
-        )}
-        {!isAuthenticated && (
-          <div className="w-full h-full bg-white rounded p-3 shadow-lg">
-            <ul className="space-y-2 text-sm">
-              <li>
-                <NavLink
-                  to={routes.about()}
-                  activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
-                  className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
-                >
-                  <span className="text-gray-600">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="24px"
-                      viewBox="0 0 24 24"
-                      width="24px"
-                      fill="#000000"
-                    >
-                      <path d="M0 0h24v24H0z" fill="none" />
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
-                    </svg>
-                  </span>
-                  <span>About</span>
-                </NavLink>
-              </li>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 0 24 24"
+                        width="24px"
+                        fill="#000000"
+                      >
+                        <path d="M0 0h24v24H0z" fill="none" />
+                        <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+                      </svg>
+                    </span>
+                    <span>Logout</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          )}
+          {!isAuthenticated && (
+            <div className="w-full h-full bg-white rounded p-3 shadow-lg">
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <NavLink
+                    to={routes.about()}
+                    activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
+                    className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
+                  >
+                    <span className="text-gray-600">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 0 24 24"
+                        width="24px"
+                        fill="#000000"
+                      >
+                        <path d="M0 0h24v24H0z" fill="none" />
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+                      </svg>
+                    </span>
+                    <span>About</span>
+                  </NavLink>
+                </li>
 
-              <li>
-                <Link
-                  to={routes.signup()}
-                  className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
-                >
-                  <span className="text-gray-600">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      enableBackground="new 0 0 24 24"
-                      height="24px"
-                      viewBox="0 0 24 24"
-                      width="24px"
-                      fill="#000000"
-                    >
-                      <g>
-                        <rect fill="none" height="24" width="24" />
-                      </g>
-                      <g>
-                        <path d="M13,8c0-2.21-1.79-4-4-4S5,5.79,5,8s1.79,4,4,4S13,10.21,13,8z M15,10v2h3v3h2v-3h3v-2h-3V7h-2v3H15z M1,18v2h16v-2 c0-2.66-5.33-4-8-4S1,15.34,1,18z" />
-                      </g>
-                    </svg>
-                  </span>
-                  <span>Sign up</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
-                  to={routes.login()}
-                >
-                  <span className="text-gray-600">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      enableBackground="new 0 0 24 24"
-                      height="24px"
-                      viewBox="0 0 24 24"
-                      width="24px"
-                      fill="#000000"
-                    >
-                      <g>
-                        <rect fill="none" height="24" width="24" />
-                      </g>
-                      <g>
-                        <path d="M11,7L9.6,8.4l2.6,2.6H2v2h10.2l-2.6,2.6L11,17l5-5L11,7z M20,19h-8v2h8c1.1,0,2-0.9,2-2V5c0-1.1-0.9-2-2-2h-8v2h8V19z" />
-                      </g>
-                    </svg>
-                  </span>
-                  <span>Login</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
-        )}
+                <li>
+                  <Link
+                    to={routes.signup()}
+                    className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
+                  >
+                    <span className="text-gray-600">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        enableBackground="new 0 0 24 24"
+                        height="24px"
+                        viewBox="0 0 24 24"
+                        width="24px"
+                        fill="#000000"
+                      >
+                        <g>
+                          <rect fill="none" height="24" width="24" />
+                        </g>
+                        <g>
+                          <path d="M13,8c0-2.21-1.79-4-4-4S5,5.79,5,8s1.79,4,4,4S13,10.21,13,8z M15,10v2h3v3h2v-3h3v-2h-3V7h-2v3H15z M1,18v2h16v-2 c0-2.66-5.33-4-8-4S1,15.34,1,18z" />
+                        </g>
+                      </svg>
+                    </span>
+                    <span>Sign up</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
+                    to={routes.login()}
+                  >
+                    <span className="text-gray-600">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        enableBackground="new 0 0 24 24"
+                        height="24px"
+                        viewBox="0 0 24 24"
+                        width="24px"
+                        fill="#000000"
+                      >
+                        <g>
+                          <rect fill="none" height="24" width="24" />
+                        </g>
+                        <g>
+                          <path d="M11,7L9.6,8.4l2.6,2.6H2v2h10.2l-2.6,2.6L11,17l5-5L11,7z M20,19h-8v2h8c1.1,0,2-0.9,2-2V5c0-1.1-0.9-2-2-2h-8v2h8V19z" />
+                        </g>
+                      </svg>
+                    </span>
+                    <span>Login</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+        <div className="xl:w-9/12 w-full">
+          <div className="p-4 text-gray-500">{children}</div>
+        </div>
       </div>
-      <div className="xl:w-9/12 w-full">
-        <div className="p-4 text-gray-500">{children}</div>
-      </div>
-    </div>
+    </>
   )
 }
 

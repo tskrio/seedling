@@ -1,6 +1,7 @@
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 import { db } from './db'
 import CryptoJS from 'crypto-js'
+import { preference } from 'src/services/preferences/preferences'
 
 // The session object sent in as the first argument to getCurrentUser() will
 // have a single key `id` containing the unique ID of the logged in user
@@ -34,16 +35,16 @@ export const getCurrentUser = async (session) => {
     let foundPreferences = await db.preference.findMany({
       where: { userId: session.id },
     })
-    console.log('Preferences Found', foundPreferences)
+    delete foundUser.hashedPassword
+    delete foundUser.salt
+    let preferences = {}
+    foundPreferences.forEach((preference) => {
+      preferences[preference.entity] = preference.value
+    })
     let returnUser = {
       roles,
       ...foundUser,
-      preferences: foundPreferences.map((preference) => {
-        return {
-          entity: preference.entity,
-          value: preference.value,
-        }
-      }),
+      preferences,
       md5Email,
     }
     console.log('returnUser', returnUser)
