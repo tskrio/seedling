@@ -19,7 +19,8 @@ const LoginComponent = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(routes.about())
+      console.log('authd?')
+      //navigate(routes.users())
     }
   }, [isAuthenticated])
 

@@ -65,7 +65,7 @@ export const Success = ({ groupRoles }) => {
   }
   let recordRoutes = {
     editRecord: (prop) => {
-      return routes.editGroupRole(prop)
+      return routes.groupRole(prop)
     },
     createRecord: () => {
       return routes.newGroupRole()

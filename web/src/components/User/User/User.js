@@ -10,7 +10,7 @@ const DELETE_USER_MUTATION = gql`
   }
 `
 
-const User = ({ user }) => {
+const User2 = ({ user }) => {
   const { hasRole } = useAuth()
   const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
     onCompleted: () => {
@@ -25,26 +25,6 @@ const User = ({ user }) => {
     }
   }
 
-  var preferenceFields = []
-  if (user?.preferences) {
-    for (let key in user?.preferences) {
-      preferenceFields.push(
-        <label
-          key={key}
-          className="flex border-b border-gray-200 h-12 py-3 items-center"
-        >
-          <span className="text-right px-2">{key}</span>
-          <input
-            name={'preference.' + key}
-            className="focus:outline-none px-3 w-full"
-            placeholder="Card number MM/YY CVC"
-            value={user?.preferences[key]}
-            required=""
-          />
-        </label>
-      )
-    }
-  }
   return (
     <>
       <div className="rounded-md">
@@ -118,25 +98,6 @@ const User = ({ user }) => {
           </section>
         </form>
       </div>
-      <div className="rounded-md">
-        <section>
-          <h2 className="uppercase tracking-wide text-lg font-semibold text-gray-700 my-2">
-            Preferences
-          </h2>
-          <fieldset className="mb-3 bg-white shadow-lg rounded text-gray-600">
-            <label className="flex border-b border-gray-200 h-12 py-3 items-center">
-              <span className="text-right px-2 w-1/6">Card</span>
-              <input
-                name="card"
-                className="focus:outline-none px-3 w-5/6"
-                placeholder="Card number MM/YY CVC"
-                required=""
-              />
-            </label>
-            {preferenceFields}
-          </fieldset>
-        </section>
-      </div>
       <div className="flex">
         <button
           className="submit-button px-4 py-3 rounded-full bg-blue-400 hover:bg-blue-700 text-white focus:ring focus:outline-none w-2/3 text-xl font-semibold transition-colors"
@@ -158,4 +119,4 @@ const User = ({ user }) => {
   )
 }
 
-export default User
+export default User2

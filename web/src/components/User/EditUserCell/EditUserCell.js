@@ -13,7 +13,6 @@ export const QUERY = gql`
       updatedAt
       email
       name
-      preferences
     }
   }
 `
@@ -25,7 +24,6 @@ export const UPDATE_USER_MUTATION = gql`
       updatedAt
       email
       name
-      preferences
     }
   }
 `
