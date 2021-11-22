@@ -9,17 +9,19 @@ import Routes from 'src/Routes'
 import 'src/scaffold.css'
 import 'src/reset.css'
 import 'src/index.css'
-
-const App = () => (
-  <FatalErrorBoundary page={FatalErrorPage}>
-    <RedwoodProvider titleTemplate="%AppTitle · %PageTitle">
-      <AuthProvider type="dbAuth">
-        <RedwoodApolloProvider>
-          <Routes />
-        </RedwoodApolloProvider>
-      </AuthProvider>
-    </RedwoodProvider>
-  </FatalErrorBoundary>
-)
+window['__APOLLO_DEVTOOLS_GLOBAL_HOOK__'] = true // remove apollo dev tools message
+const App = () => {
+  return (
+    <FatalErrorBoundary page={FatalErrorPage}>
+      <RedwoodProvider titleTemplate="%AppTitle · %PageTitle">
+        <AuthProvider type="dbAuth">
+          <RedwoodApolloProvider>
+            <Routes />
+          </RedwoodApolloProvider>
+        </AuthProvider>
+      </RedwoodProvider>
+    </FatalErrorBoundary>
+  )
+}
 
 export default App
