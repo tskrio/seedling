@@ -162,6 +162,18 @@ const FormComponent = (props) => {
             </SelectField>
           )
         }
+        if (field.type === 'password') {
+          field.html = (
+            <PasswordField
+              name={field.name}
+              className={formTextFieldClass}
+              errorClassName={formTextFieldClass}
+              placeholder={field.placeHolder}
+              autoComplete={'new-password'}
+              config={{ required: field.required }}
+            />
+          )
+        }
       }
       return (
         <div key={field.name}>
