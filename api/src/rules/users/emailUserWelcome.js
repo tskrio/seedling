@@ -8,7 +8,7 @@ module.exports = {
   operation: ['create'],
   file: __filename,
   table: 'user',
-  command: async function ({ record, status }) {
+  command: async function ({ record }) {
     try {
       if (
         process.env.MAILGUN_API_KEY &&
@@ -60,12 +60,18 @@ Jace</p>
         })
       } else {
         logger.error(
-          `__filename mail not sent apiProperties.email.action=${apiProperties.email.active}`
+          `
+          mail not sent
+          - apiProperties.email.action=${apiProperties.email.active}
+          - record.email.indexOf('@example.com') == -1 ${
+            record.email.indexOf('@example.com') == -1
+          }
+          `
         )
       }
     } catch (e) {
       logger.error(e)
     }
-    return await { record, status }
+    return await { record }
   },
 }

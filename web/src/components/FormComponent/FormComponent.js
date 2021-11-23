@@ -47,6 +47,15 @@ const FormComponent = (props) => {
   let formLabelClassError =
     'flex border-b border-gray-200 h-12 py-3 items-center'
   let formTextFieldClass = 'focus:outline-none px-3 w-5/6'
+  let saveFieldClass = (() => {
+    if (props.record) {
+      return 'submit-button px-4 py-3 rounded-full bg-blue-400 hover:bg-blue-700 text-white focus:ring focus:outline-none w-2/3 text-xl font-semibold transition-colors'
+    } else {
+      return 'submit-button px-4 py-3 rounded-full bg-blue-400 hover:bg-blue-700 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors'
+    }
+  })()
+  let deleteFieldClass =
+    'submit-button px-4 py-3 rounded-full bg-red-400 hover:bg-red-700 text-white focus:ring focus:outline-none w-1/3 text-xl font-semibold transition-colors'
   let labelAndFieldList = () => {
     return props.fields.map((field) => {
       if (field.readOnly) {
@@ -243,16 +252,13 @@ const FormComponent = (props) => {
             </fieldset>
           </section>
           <div className="flex">
-            <Submit
-              disabled={props.loading}
-              className="submit-button px-4 py-3 rounded-full bg-blue-400 hover:bg-blue-700 text-white focus:ring focus:outline-none w-2/3 text-xl font-semibold transition-colors"
-            >
+            <Submit disabled={props.loading} className={saveFieldClass}>
               Save
             </Submit>
-            {hasRole(props.roles.delete.concat(['admin'])) && (
+            {hasRole(props.roles.delete.concat(['admin'])) && props.record && (
               <button
                 type="button"
-                className="submit-button px-4 py-3 rounded-full bg-red-400 hover:bg-red-700 text-white focus:ring focus:outline-none w-1/3 text-xl font-semibold transition-colors"
+                className={deleteFieldClass}
                 onClick={() => onDeleteClick(props?.record.id)}
               >
                 Delete

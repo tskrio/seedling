@@ -1,7 +1,6 @@
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 import { db } from './db'
 import CryptoJS from 'crypto-js'
-import { preference } from 'src/services/preferences/preferences'
 
 // The session object sent in as the first argument to getCurrentUser() will
 // have a single key `id` containing the unique ID of the logged in user
@@ -47,10 +46,7 @@ export const getCurrentUser = async (session) => {
       preferences,
       md5Email,
     }
-    console.log('returnUser', returnUser)
     return returnUser
-
-    //return session/*returnUser*/
   } catch (error) {
     return error
   }
