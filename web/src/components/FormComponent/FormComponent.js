@@ -252,17 +252,25 @@ const FormComponent = (props) => {
             </fieldset>
           </section>
           <div className="flex">
-            <Submit disabled={props.loading} className={saveFieldClass}>
-              Save
-            </Submit>
-            {hasRole(props.roles.delete.concat(['admin'])) && props.record && (
-              <button
-                type="button"
-                className={deleteFieldClass}
-                onClick={() => onDeleteClick(props?.record.id)}
+            <span className="p-1 w-full">
+              <Submit
+                disabled={props.loading}
+                className="rw-button rw-button-blue w-full"
               >
-                Delete
-              </button>
+                Save
+              </Submit>
+            </span>
+
+            {hasRole(props.roles.delete.concat(['admin'])) && props.record && (
+              <span className="p-1 w-full">
+                <button
+                  type="button"
+                  className="rw-button rw-button-red w-full"
+                  onClick={() => onDeleteClick(props?.record.id)}
+                >
+                  Delete
+                </button>
+              </span>
             )}
           </div>
         </Form>

@@ -3,6 +3,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
 import GroupMembersByGroupCell from 'src/components/GroupMember/GroupMembersByGroupCell'
+import GroupRolesByGroupCell from 'src/components/GroupRole/GroupRolesByGroupCell'
 const DELETE_GROUP_MUTATION = gql`
   mutation DeleteGroupMutation($id: Int!) {
     deleteGroup(id: $id) {
@@ -112,6 +113,7 @@ export const Success = ({ group }) => {
         returnLink={routes.groups()}
       />
       <GroupMembersByGroupCell groupID={group} />
+      <GroupRolesByGroupCell groupID={group} />
     </>
   )
 }

@@ -8,13 +8,13 @@ export const schema = gql`
     "DateTime set when updated by database"
     updatedAt: DateTime!
     "The email is used for notifications and authentication"
-    email: String!
+    email: String! @masked
     "Identifer used for the user"
     name: String!
     "Password that is salted and hashed"
-    hashedPassword: String!
+    hashedPassword: String! @masked
     "Random string generated on password change used when hashing password"
-    salt: String!
+    salt: String! @masked
     "String to allow the changing of the password without the password"
     resetToken: String
     "DateTime the resetToken expires"

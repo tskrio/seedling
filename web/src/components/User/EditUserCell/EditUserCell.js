@@ -2,7 +2,6 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
-import UserForm from 'src/components/User/UserForm'
 import GroupMembersByUserCell from 'src/components/GroupMember/GroupMembersByUserCell'
 
 export const QUERY = gql`
