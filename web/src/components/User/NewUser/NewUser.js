@@ -36,11 +36,13 @@ const NewUser = () => {
       name: 'email',
       prettyName: 'Email',
       placeHolder: 'We do send a welcome email on create',
+      required: true,
     },
     {
       name: 'hashedPassword',
       prettyName: 'Password',
       placeHolder: 'At least 4 characters',
+      type: 'password',
     },
   ]
   const roles = {
