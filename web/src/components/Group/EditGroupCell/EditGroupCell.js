@@ -47,7 +47,11 @@ export const Success = ({ group }) => {
       navigate(routes.groups())
     },
   })
-
+  const onSubmit = (data) => {
+    console.log('on save data', data)
+    /**Client RUles go here */
+    onSave(data, group.id)
+  }
   const onSave = (input, id) => {
     updateGroup({ variables: { id, input } })
   }
@@ -59,28 +63,11 @@ export const Success = ({ group }) => {
   })
 
   const onDelete = (id) => {
-    if (confirm('Are you sure you want to delete user ' + id + '?')) {
+    if (confirm('Are you sure you want to delete group ' + id + '?')) {
       deleteGroup({ variables: { id } })
     }
   }
   const fields = [
-    {
-      name: 'id',
-      prettyName: 'ID',
-      readOnly: true,
-    },
-    {
-      name: 'createdAt',
-      prettyName: 'Created At',
-      readOnly: true,
-      type: 'dateTime',
-    },
-    {
-      name: 'updatedAt',
-      prettyName: 'Updated At',
-      readOnly: true,
-      type: 'dateTime',
-    },
     {
       name: 'name',
       prettyName: 'Name',
@@ -96,18 +83,14 @@ export const Success = ({ group }) => {
     update: ['groupUpdate'],
     delete: ['groupDelete'],
   }
-  const mutations = {
-    deleteRecord: DELETE_GROUP_MUTATION,
-  }
   return (
     <>
       <FormComponent
         record={group}
         fields={fields}
         roles={roles}
-        onSave={onSave}
+        onSubmit={onSubmit}
         onDelete={onDelete}
-        mutations={mutations}
         loading={loading}
         error={error}
         returnLink={routes.groups()}

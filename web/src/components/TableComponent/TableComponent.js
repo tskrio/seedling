@@ -14,14 +14,6 @@ const TableComponent = ({
   roles,
   queryVariables,
 }) => {
-  //  console.log('columns', columns)
-  //  console.log('data', data)
-  //  console.log('queries', queries)
-  //  console.log('routes', routes)
-  //  console.log('display', display)
-  //  console.log('roles', roles)
-  //  console.log('queryVariables', queryVariables)
-
   const { hasRole } = useAuth()
 
   data = data.map((row) => {

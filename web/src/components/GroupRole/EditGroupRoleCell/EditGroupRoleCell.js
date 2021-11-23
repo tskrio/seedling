@@ -44,7 +44,6 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ groupRole, groups }) => {
-  console.log('groupRole', groupRole)
   const [updateGroup, { loading, error }] = useMutation(
     UPDATE_GROUP_ROLE_MUTATION,
     {
@@ -54,7 +53,11 @@ export const Success = ({ groupRole, groups }) => {
       },
     }
   )
-
+  const onSubmit = (data) => {
+    console.log(`Saving ${groupRole.id}`, data)
+    /**Client RUles go here */
+    onSave(data, groupRole.id)
+  }
   const onSave = (input, id) => {
     if (input?.groupId) {
       input.groupId = parseInt(input.groupId, 10)
@@ -74,23 +77,6 @@ export const Success = ({ groupRole, groups }) => {
     }
   }
   const fields = [
-    {
-      name: 'id',
-      prettyName: 'ID',
-      readOnly: true,
-    },
-    {
-      name: 'createdAt',
-      prettyName: 'Created At',
-      readOnly: true,
-      type: 'dateTime',
-    },
-    {
-      name: 'updatedAt',
-      prettyName: 'Updated At',
-      readOnly: true,
-      type: 'dateTime',
-    },
     {
       name: 'groupId',
       prettyName: 'Group',
@@ -130,17 +116,13 @@ export const Success = ({ groupRole, groups }) => {
     update: ['groupUpdate'],
     delete: ['groupDelete'],
   }
-  const mutations = {
-    deleteRecord: DELETE_GROUP_ROLE_MUTATION,
-  }
   return (
     <FormComponent
       record={groupRole}
       fields={fields}
       roles={roles}
-      onSave={onSave}
+      onSubmit={onSubmit}
       onDelete={onDelete}
-      mutations={mutations}
       loading={loading}
       error={error}
       returnLink={routes.groupRoles()}

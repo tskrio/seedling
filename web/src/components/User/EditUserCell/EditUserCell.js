@@ -47,6 +47,11 @@ export const Success = ({ user }) => {
     },
   })
 
+  const onSubmit = (data) => {
+    console.log('on save data', data)
+    /**Client RUles go here */
+    onSave(data, user.id)
+  }
   const onSave = (input, id) => {
     console.log(`onSave of edit`, input, id)
     updateUser({ variables: { id, input } })
@@ -64,23 +69,6 @@ export const Success = ({ user }) => {
     }
   }
   const fields = [
-    {
-      name: 'id',
-      prettyName: 'ID',
-      readOnly: true,
-    },
-    {
-      name: 'createdAt',
-      prettyName: 'Created At',
-      readOnly: true,
-      type: 'dateTime',
-    },
-    {
-      name: 'updatedAt',
-      prettyName: 'Updated At',
-      readOnly: true,
-      type: 'dateTime',
-    },
     {
       name: 'name',
       prettyName: 'Name',
@@ -100,21 +88,17 @@ export const Success = ({ user }) => {
     update: ['userUpdate'],
     delete: ['userDelete'],
   }
-  const mutations = {
-    deleteRecord: DELETE_USER_MUTATION,
-  }
   return (
     <>
       <FormComponent
         record={user}
         fields={fields}
         roles={roles}
-        onSave={onSave}
+        onSubmit={onSubmit}
         onDelete={onDelete}
-        mutations={mutations}
         loading={loading}
         error={error}
-        returnLink={routes.groups()}
+        returnLink={routes.users()}
       />
       <GroupMembersByUserCell userID={user} />
     </>
