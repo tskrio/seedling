@@ -17,13 +17,6 @@ export const CREATE_GROUP_ROLE_MUTATION = gql`
     }
   }
 `
-const DELETE_GROUP_ROLE_MUTATION = gql`
-  mutation DeleteGroupRoleMutation($id: Int!) {
-    deleteGroupRole(id: $id) {
-      id
-    }
-  }
-`
 export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Empty</div>

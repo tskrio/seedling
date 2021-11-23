@@ -58,7 +58,7 @@ export const Success = ({ group }) => {
   const [deleteGroup] = useMutation(DELETE_GROUP_MUTATION, {
     onCompleted: () => {
       toast.success('Group deleted')
-      navigate(routes.users())
+      navigate(routes.groups())
     },
   })
 

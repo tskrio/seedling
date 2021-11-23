@@ -21,13 +21,6 @@ const CREATE_GROUP_MEMBER_MUTATION = gql`
     }
   }
 `
-const DELETE_GROUP_MEMBER_MUTATION = gql`
-  mutation DeleteGroupMemberMutation($id: Int!) {
-    deleteGroupMember(id: $id) {
-      id
-    }
-  }
-`
 
 export const Loading = () => <div>Loading...</div>
 

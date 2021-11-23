@@ -12,7 +12,16 @@ import {
 } from '@redwoodjs/forms'
 import { Link, useLocation } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
-const FormComponent = (props) => {
+const FormComponent = ({
+  record,
+  fields,
+  roles,
+  onSubmit,
+  onDelete,
+  loading,
+  error,
+  returnLink,
+}) => {
   const { hasRole } = useAuth()
   const { search } = useLocation()
   let params = new URLSearchParams(search)
@@ -22,7 +31,7 @@ const FormComponent = (props) => {
     'flex border-b border-gray-200 h-12 py-3 items-center'
   let formTextFieldClass = 'focus:outline-none px-3 w-5/6'
   let labelAndFieldList = () => {
-    return props.fields.map((field) => {
+    return fields.map((field) => {
       if (field.readOnly) {
         field.html = (() => {
           if (field.type === 'dateTime') {
@@ -30,7 +39,7 @@ const FormComponent = (props) => {
               <span className="text-left px-2 w-5/6">
                 {
                   new Date(
-                    props?.record?.[field.name]
+                    record?.[field.name]
                   ).toLocaleString(/**TODO: User preference! */)
                 }
               </span>
@@ -38,7 +47,7 @@ const FormComponent = (props) => {
           } else {
             return (
               <span className="text-left px-2 w-5/6">
-                {props?.record?.[field.name]}
+                {record?.[field.name]}
               </span>
             )
           }
@@ -47,7 +56,7 @@ const FormComponent = (props) => {
         field.html = (
           <TextField
             name={field.name}
-            defaultValue={props?.record?.[field.name] || params.get(field.name)}
+            defaultValue={record?.[field.name] || params.get(field.name)}
             className={formTextFieldClass}
             errorClassName={formTextFieldClass}
             placeholder={field.placeHolder}
@@ -57,8 +66,8 @@ const FormComponent = (props) => {
         )
         if (field.type === 'dateTime') {
           //2018-06-12T19:30"
-          var dateTemp = new Date(props?.record?.[field.name])
-          console.log(props?.record?.[field.name])
+          var dateTemp = new Date(record?.[field.name])
+          console.log(record?.[field.name])
           let year = dateTemp.getFullYear()
           let month = (dateTemp.getMonth() + 1).toString().padStart(2, 0)
           let date = dateTemp.getDate().toString().padStart(2, 0)
@@ -108,9 +117,7 @@ const FormComponent = (props) => {
           field.html = (
             <TextAreaField
               name={field.name}
-              defaultValue={
-                props?.record?.[field.name] || params.get(field.name)
-              }
+              defaultValue={record?.[field.name] || params.get(field.name)}
               className={formTextFieldClass}
               errorClassName={formTextFieldClass}
               placeholder={field.placeHolder}
@@ -130,9 +137,7 @@ const FormComponent = (props) => {
           field.html = (
             <SelectField
               name={field.name}
-              defaultValue={
-                props?.record?.[field.name] || params.get(field.name)
-              }
+              defaultValue={record?.[field.name] || params.get(field.name)}
             >
               {options}
             </SelectField>
@@ -171,21 +176,21 @@ const FormComponent = (props) => {
     <>
       <div className="rounded-md">
         <Link
-          to={props.returnLink}
+          to={returnLink}
           className="text-sm leading-5 font-medium text-gray-500 hover:text-gray-900 focus:outline-none focus:underline transition ease-in-out duration-150"
         >
           Back to list
         </Link>
-        <Form onSubmit={props.onSubmit} error={props.error}>
+        <Form onSubmit={onSubmit} error={error}>
           <FormError
-            error={props.error}
+            error={error}
             wrapperClassName="rw-form-error-wrapper"
             titleClassName="rw-form-error-title"
             listClassName="rw-form-error-list"
           />
           <section>
             <h2 className="uppercase tracking-wide text-lg font-semibold text-gray-700 my-2">
-              {props.record?.name || props.record?.id || ''}
+              {record?.name || record?.id || ''}
             </h2>
             <fieldset className="mb-3 bg-white shadow-lg rounded text-gray-600">
               {labelAndFieldList()}
@@ -194,19 +199,19 @@ const FormComponent = (props) => {
           <div className="flex">
             <span className="p-1 w-full">
               <Submit
-                disabled={props.loading}
+                disabled={loading}
                 className="rw-button rw-button-blue w-full"
               >
                 Save
               </Submit>
             </span>
 
-            {hasRole(props.roles.delete.concat(['admin'])) && props.record && (
+            {hasRole(roles.delete.concat(['admin'])) && record && (
               <span className="p-1 w-full">
                 <button
                   type="button"
                   className="rw-button rw-button-red w-full"
-                  onClick={() => props.onDelete(props?.record.id)}
+                  onClick={() => onDelete(record.id)}
                 >
                   Delete
                 </button>
