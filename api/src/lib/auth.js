@@ -47,10 +47,7 @@ export const getCurrentUser = async (session) => {
       preferences,
       md5Email,
     }
-    console.log('returnUser', returnUser)
     return returnUser
-
-    //return session/*returnUser*/
   } catch (error) {
     return error
   }

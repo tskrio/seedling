@@ -1,6 +1,7 @@
 import { Link, NavLink, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
-import { CookieBanner } from '@palmabit/react-cookie-law'
+import CookieModal from 'src/components/CookieModal'
+
 const NavSidebar = ({ children }) => {
   const { isAuthenticated, hasRole, currentUser } = useAuth()
   const icons = {
@@ -97,15 +98,6 @@ const NavSidebar = ({ children }) => {
   }
   return (
     <>
-      <CookieBanner
-        message="We use cookies for authentication purposes, to use this side either accept that or don't use it."
-        wholeDomain={true}
-        onAccept={() => {}}
-        onAcceptPreferences={() => {}}
-        onAcceptStatistics={() => {}}
-        onAcceptMarketing={() => {}}
-      />
-
       <div className="flex flex-wrap bg-gray-100 w-full h-screen">
         <div id="navSideBar" className="hidden xl:block xl:h-screen w-6/6">
           {isAuthenticated && (
@@ -330,6 +322,8 @@ const NavSidebar = ({ children }) => {
             </div>
           )}
         </div>
+        <CookieModal />
+
         <div className="xl:w-9/12 w-full">
           <div className="p-4 text-gray-500">{children}</div>
         </div>

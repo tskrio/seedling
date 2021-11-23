@@ -20,6 +20,8 @@ export const schema = gql`
   type Query {
     "To see preferences you only need to be logged in, sometimes we'll need to see other user's preferences"
     preferences: [Preference!]! @requireAuth
+    "To see preferences you only need to be logged in, sometimes we'll need to see other user's preferences"
+    preference(id: Int!): Preference! @requireAuth
   }
 
   input CreatePreferenceInput {
@@ -38,5 +40,15 @@ export const schema = gql`
     value: String
     "The user's ID, optional"
     userId: Int
+  }
+
+  type Mutation {
+    "To create Groups you must be authenticated and have groupMemberCreate role"
+    createPreference(input: CreatePreferenceInput!): Preference! @requireAuth
+    "To update Groups you must be authenticated and have groupMemberUpdate role"
+    updatePreference(id: Int!, input: UpdatePreferenceInput!): Preference!
+      @requireAuth
+    "To update Groups you must be authenticated and have groupMemberDelete role"
+    deletePreference(id: Int!): Preference! @requireAuth
   }
 `
