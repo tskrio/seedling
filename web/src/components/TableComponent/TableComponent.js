@@ -113,7 +113,7 @@ const TableComponent = ({
         </svg>
       </div>
       {/**Title Above */}
-      {/**Search Below */}
+      {/**Search Below TODO: Enable global fitlering */}
       {/*<div className="w-full flex justify-end px-2 mt-2">
           <div className="w-full sm:w-64 inline-block relative ">
             <input
@@ -230,7 +230,7 @@ const TableComponent = ({
         </div>
       )}
       {/**New Record Button Above */}
-      {/**Pagination Below */}
+      {/**Pagination Below TODO: Enable pagination*/}
       {/**
         <div
           id="pagination"
