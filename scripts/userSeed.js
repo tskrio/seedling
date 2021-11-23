@@ -13,7 +13,7 @@ export const users = [
   },
   {
     name: 'Mike Manager',
-    email: 'mike@example.com',
+    email: 'manager@example.com',
     hashedPassword:
       '5f5f56d40b9ae6bf2abfd7804e97e607f9d7432feebb6371849f2676a5058999',
     salt: '881aed4f5703af38eaaab6e788d8e860',
