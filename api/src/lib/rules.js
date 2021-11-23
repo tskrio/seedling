@@ -3,7 +3,6 @@ import allRules from 'src/rules/**/**.{js,ts}'
 let loadRules = async (allRules, table, when, operation) => {
   let arrRules = Object.keys(allRules).map((k) => allRules[k])
   arrRules.sort((a, b) => a.order - b.order)
-  console.log(`1. loaded ${arrRules.length} for ${table} ${when} ${operation}`)
   arrRules = arrRules.filter((rule) => {
     if (
       rule.active &&
@@ -16,8 +15,6 @@ let loadRules = async (allRules, table, when, operation) => {
       return false
     }
   })
-  console.log(`2. loaded ${arrRules.length} for ${table} ${when} ${operation}`)
-
   arrRules = arrRules.filter((rule) => {
     let requiredFields = [
       'order',
@@ -42,11 +39,11 @@ let loadRules = async (allRules, table, when, operation) => {
       return false
     }
   })
-  console.log(`3. loaded ${arrRules.length} for ${table} ${when} ${operation}`)
   let ruleNames = arrRules.map((rule) => {
     return `${rule.order} ${rule.file}`
   })
-  console.log(`rules loaded \n${ruleNames.join('\n')}`)
+  let message = [arrRules.length, table, when, operation]
+  console.log(`${message.join(' ')} rules loaded \n${ruleNames.join('\n')}`)
   return (await arrRules) || []
 }
 export const executeBeforeCreateRules = async (table, input) => {

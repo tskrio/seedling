@@ -1,6 +1,5 @@
 import { useParams, Link, routes } from '@redwoodjs/router'
 import TableComponent from 'src/components/TableComponent'
-import GroupRolesLayout from 'src/layouts/GroupRolesLayout'
 const DELETE_GROUP_ROLE_MUTATION = gql`
   mutation DeleteGroupRoleMutation($id: Int!) {
     deleteGroupRole(id: $id) {
@@ -82,7 +81,7 @@ export const Success = ({ groupRoles }) => {
   }
   let recordRoutes = {
     editRecord: (prop) => {
-      return routes.editGroupRole(prop)
+      return routes.groupRole(prop)
     },
     createRecord: () => {
       return routes.newGroupRole()
@@ -108,52 +107,4 @@ export const Success = ({ groupRoles }) => {
       queryVariables={queryVariables}
     />
   )
-  //  let meta = {
-  //    title: 'Group Roles',
-  //    routes: {
-  //      newItem: () => {
-  //        return routes.newGroupRole({ groupId: groupRoles[0].group.id })
-  //      },
-  //      view: (prop) => {
-  //        return routes.groupRole(prop)
-  //      },
-  //      edit: (prop) => {
-  //        return routes.editGroupRole(prop)
-  //      },
-  //    },
-  //    labels: {
-  //      single: 'Group Role',
-  //      multiple: 'Group Roles',
-  //    },
-  //    key: 'id',
-  //    display: 'name',
-  //    columns: [
-  //      { key: 'role', label: 'Role', type: 'string' },
-  //      { key: 'group.name', label: 'Group', type: 'reference' },
-  //      { key: 'createdAt', label: 'Created', type: 'date' },
-  //      { key: 'updatedAt', label: 'Updated', type: 'date' },
-  //    ],
-  //    createRoles: ['groupRoleCreate'],
-  //    readRoles: ['groupRoleRead'],
-  //    updateRoles: ['groupRoleUpdate'],
-  //    deleteRoles: ['groupRoleDelete'],
-  //  }
-  //  const DELETE_GROUP_ROLE_MUTATION = gql`
-  //    mutation DeleteGroupRoleMutation($id: Int!) {
-  //      deleteGroupRole(id: $id) {
-  //        id
-  //      }
-  //    }
-  //  `
-  //  return (
-  //    <>
-  //      <Table
-  //        data={groupRoles}
-  //        meta={meta}
-  //        queryVariables={{ id: groupRoles[0].group.id }} // I don't know how to get the groupID from the query... so if there's a result, refresh the page
-  //        query={QUERY}
-  //        deleteMutation={DELETE_GROUP_ROLE_MUTATION}
-  //      />
-  //    </>
-  //  )
 }

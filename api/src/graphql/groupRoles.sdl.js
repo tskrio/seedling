@@ -15,26 +15,6 @@ export const schema = gql`
     groupId: Int!
   }
 
-  enum Role {
-    admin
-    userCreate
-    userRead
-    userUpdate
-    userDelete
-    groupCreate
-    groupRead
-    groupUpdate
-    groupDelete
-    groupMemberCreate
-    groupMemberRead
-    groupMemberUpdate
-    groupMemberDelete
-    groupRoleCreate
-    groupRoleRead
-    groupRoleUpdate
-    groupRoleDelete
-  }
-
   type Query {
     "To see GroupRoles you must be authenticated with groupRoleRead role"
     groupRoles: [GroupRole!]! @requireAuth(roles: ["groupRoleRead", "admin"])

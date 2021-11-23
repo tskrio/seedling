@@ -2,8 +2,8 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
-import UserForm from 'src/components/User/UserForm'
 import GroupMembersByUserCell from 'src/components/GroupMember/GroupMembersByUserCell'
+import { useAuth } from '@redwoodjs/auth'
 
 export const QUERY = gql`
   query EditUserById($id: Int!) {
@@ -41,6 +41,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ user }) => {
+  const { currentUser } = useAuth()
   const [updateUser, { loading, error }] = useMutation(UPDATE_USER_MUTATION, {
     onCompleted: () => {
       toast.success('User updated')
@@ -48,6 +49,11 @@ export const Success = ({ user }) => {
     },
   })
 
+  const onSubmit = (data) => {
+    console.log('on save data', data)
+    /**Client RUles go here */
+    onSave(data, user.id)
+  }
   const onSave = (input, id) => {
     console.log(`onSave of edit`, input, id)
     updateUser({ variables: { id, input } })
@@ -66,23 +72,6 @@ export const Success = ({ user }) => {
   }
   const fields = [
     {
-      name: 'id',
-      prettyName: 'ID',
-      readOnly: true,
-    },
-    {
-      name: 'createdAt',
-      prettyName: 'Created At',
-      readOnly: true,
-      type: 'dateTime',
-    },
-    {
-      name: 'updatedAt',
-      prettyName: 'Updated At',
-      readOnly: true,
-      type: 'dateTime',
-    },
-    {
       name: 'name',
       prettyName: 'Name',
     },
@@ -90,19 +79,18 @@ export const Success = ({ user }) => {
       name: 'email',
       prettyName: 'Email',
     },
-    {
+  ]
+  if (currentUser.id === user.id) {
+    fields.push({
       name: 'hashedPassword',
       prettyName: 'Password',
       type: 'password',
       placeHolder: 'Only set this if you want to change it',
-    },
-  ]
+    })
+  }
   const roles = {
     update: ['userUpdate'],
     delete: ['userDelete'],
-  }
-  const mutations = {
-    deleteRecord: DELETE_USER_MUTATION,
   }
   return (
     <>
@@ -110,12 +98,11 @@ export const Success = ({ user }) => {
         record={user}
         fields={fields}
         roles={roles}
-        onSave={onSave}
+        onSubmit={onSubmit}
         onDelete={onDelete}
-        mutations={mutations}
         loading={loading}
         error={error}
-        returnLink={routes.groups()}
+        returnLink={routes.users()}
       />
       <GroupMembersByUserCell userID={user} />
     </>

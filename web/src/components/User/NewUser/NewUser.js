@@ -21,7 +21,11 @@ const NewUser = () => {
       toast.error(error.message)
     },
   })
-
+  const onSubmit = (data) => {
+    console.log(`Saving`, data)
+    /**Client RUles go here */
+    onSave(data)
+  }
   const onSave = (input) => {
     console.log('in newuser onsave', input)
     createUser({ variables: { input } })
@@ -53,7 +57,7 @@ const NewUser = () => {
     <FormComponent
       fields={fields}
       roles={roles}
-      onSave={onSave}
+      onSubmit={onSubmit}
       loading={loading}
       error={error}
       returnLink={routes.users()}

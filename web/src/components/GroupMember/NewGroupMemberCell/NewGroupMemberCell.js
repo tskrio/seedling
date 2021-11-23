@@ -21,13 +21,6 @@ const CREATE_GROUP_MEMBER_MUTATION = gql`
     }
   }
 `
-const DELETE_GROUP_MEMBER_MUTATION = gql`
-  mutation DeleteGroupMemberMutation($id: Int!) {
-    deleteGroupMember(id: $id) {
-      id
-    }
-  }
-`
 
 export const Loading = () => <div>Loading...</div>
 
@@ -48,6 +41,11 @@ export const Success = ({ groups, users }) => {
     }
   )
 
+  const onSubmit = (data) => {
+    console.log(`Saving`, data)
+    /**Client RUles go here */
+    onSave(data)
+  }
   const onSave = (input) => {
     const castInput = Object.assign(input, {
       userId: parseInt(input.userId),
@@ -87,16 +85,12 @@ export const Success = ({ groups, users }) => {
     update: ['groupMemberUpdate'],
     delete: ['groupMemberDelete'],
   }
-  const mutations = {
-    deleteRecord: DELETE_GROUP_MEMBER_MUTATION,
-  }
 
   return (
     <FormComponent
       fields={fields}
       roles={roles}
-      mutations={mutations}
-      onSave={onSave}
+      onSubmit={onSubmit}
       loading={loading}
       error={error}
       returnLink={routes.groupMembers()}

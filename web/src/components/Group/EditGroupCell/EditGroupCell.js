@@ -3,6 +3,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
 import GroupMembersByGroupCell from 'src/components/GroupMember/GroupMembersByGroupCell'
+import GroupRolesByGroupCell from 'src/components/GroupRole/GroupRolesByGroupCell'
 const DELETE_GROUP_MUTATION = gql`
   mutation DeleteGroupMutation($id: Int!) {
     deleteGroup(id: $id) {
@@ -46,40 +47,27 @@ export const Success = ({ group }) => {
       navigate(routes.groups())
     },
   })
-
+  const onSubmit = (data) => {
+    console.log('on save data', data)
+    /**Client RUles go here */
+    onSave(data, group.id)
+  }
   const onSave = (input, id) => {
     updateGroup({ variables: { id, input } })
   }
   const [deleteGroup] = useMutation(DELETE_GROUP_MUTATION, {
     onCompleted: () => {
       toast.success('Group deleted')
-      navigate(routes.users())
+      navigate(routes.groups())
     },
   })
 
   const onDelete = (id) => {
-    if (confirm('Are you sure you want to delete user ' + id + '?')) {
+    if (confirm('Are you sure you want to delete group ' + id + '?')) {
       deleteGroup({ variables: { id } })
     }
   }
   const fields = [
-    {
-      name: 'id',
-      prettyName: 'ID',
-      readOnly: true,
-    },
-    {
-      name: 'createdAt',
-      prettyName: 'Created At',
-      readOnly: true,
-      type: 'dateTime',
-    },
-    {
-      name: 'updatedAt',
-      prettyName: 'Updated At',
-      readOnly: true,
-      type: 'dateTime',
-    },
     {
       name: 'name',
       prettyName: 'Name',
@@ -95,23 +83,20 @@ export const Success = ({ group }) => {
     update: ['groupUpdate'],
     delete: ['groupDelete'],
   }
-  const mutations = {
-    deleteRecord: DELETE_GROUP_MUTATION,
-  }
   return (
     <>
       <FormComponent
         record={group}
         fields={fields}
         roles={roles}
-        onSave={onSave}
+        onSubmit={onSubmit}
         onDelete={onDelete}
-        mutations={mutations}
         loading={loading}
         error={error}
         returnLink={routes.groups()}
       />
       <GroupMembersByGroupCell groupID={group} />
+      <GroupRolesByGroupCell groupID={group} />
     </>
   )
 }

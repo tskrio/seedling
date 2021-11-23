@@ -3,7 +3,7 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 export const QUERY = gql`
-  query getGroups {
+  query getGroupRoles {
     groups {
       id
       name
@@ -13,13 +13,6 @@ export const QUERY = gql`
 export const CREATE_GROUP_ROLE_MUTATION = gql`
   mutation CreateGroupRoleMutation($input: CreateGroupRoleInput!) {
     createGroupRole(input: $input) {
-      id
-    }
-  }
-`
-const DELETE_GROUP_ROLE_MUTATION = gql`
-  mutation DeleteGroupRoleMutation($id: Int!) {
-    deleteGroupRole(id: $id) {
       id
     }
   }
@@ -42,6 +35,11 @@ export const Success = ({ groups }) => {
       },
     }
   )
+  const onSubmit = (data) => {
+    console.log(`Saving`, data)
+    /**Client RUles go here */
+    onSave(data)
+  }
   const onSave = (input) => {
     const castInput = Object.assign(input, { groupId: parseInt(input.groupId) })
     createGroupRole({ variables: { input: castInput } })
@@ -92,15 +90,11 @@ export const Success = ({ groups }) => {
     update: ['groupRoleUpdate'],
     delete: ['groupRoleDelete'],
   }
-  const mutations = {
-    deleteRecord: DELETE_GROUP_ROLE_MUTATION,
-  }
   return (
     <FormComponent
       fields={fields}
       roles={roles}
-      mutations={mutations}
-      onSave={onSave}
+      onSubmit={onSubmit}
       loading={loading}
       error={error}
       returnLink={routes.groupRoles()}
