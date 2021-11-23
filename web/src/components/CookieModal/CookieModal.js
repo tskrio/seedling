@@ -21,7 +21,7 @@ const CookieModal = () => {
                   Tskr uses cookies and data to:
                   <ul>
                     <li>* Allow users to authenticate</li>
-                    <li>* Track if you{"'"}ve accepted this cookie notce</li>
+                    <li>* Track if you{"'"}ve accepted this cookie notice</li>
                   </ul>
                 </div>
                 <hr />
@@ -29,7 +29,10 @@ const CookieModal = () => {
                   <button
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     onClick={() => {
-                      Cookies.set('acceptCookies', true)
+                      Cookies.set('acceptCookies', true, {
+                        secure: true,
+                        sameSite: 'strict',
+                      })
                       setCookies(true)
                     }}
                   >
