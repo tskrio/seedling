@@ -3,6 +3,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
 import GroupMembersByUserCell from 'src/components/GroupMember/GroupMembersByUserCell'
+import { useAuth } from '@redwoodjs/auth'
 
 export const QUERY = gql`
   query EditUserById($id: Int!) {
@@ -40,6 +41,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ user }) => {
+  const { currentUser } = useAuth()
   const [updateUser, { loading, error }] = useMutation(UPDATE_USER_MUTATION, {
     onCompleted: () => {
       toast.success('User updated')
@@ -77,13 +79,15 @@ export const Success = ({ user }) => {
       name: 'email',
       prettyName: 'Email',
     },
-    {
+  ]
+  if (currentUser.id === user.id) {
+    fields.push({
       name: 'hashedPassword',
       prettyName: 'Password',
       type: 'password',
       placeHolder: 'Only set this if you want to change it',
-    },
-  ]
+    })
+  }
   const roles = {
     update: ['userUpdate'],
     delete: ['userDelete'],
