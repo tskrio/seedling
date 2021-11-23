@@ -57,8 +57,18 @@ const TableComponent = ({
     }
   })
 
-  columns = React.useMemo(() => columns, [])
-  data = React.useMemo(() => data, [])
+  columns = React.useMemo(
+    () => columns,
+    [
+      /**TODO: Allow columns hiding */
+    ]
+  )
+  data = React.useMemo(
+    () => data,
+    [
+      /**TODO: Update data on edit or delete */
+    ]
+  )
   const [deleteRecord] = useMutation(queries.DELETEMUTATION, {
     onError: (error) => {
       console.log('onError', error, error.message)
@@ -88,51 +98,31 @@ const TableComponent = ({
     }
   }
 
-  const tableInstance = useTable({ columns, data }, useSortBy)
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    tableInstance
+    useTable({ columns, data }, useSortBy)
 
-  /**
-     * if (hasRole(roles.createRecord.concat(['admin']))) {
-    data.push({
-      actions: (
-        <div className="flex">
-          <span className="pt-1 pl-1 pr-1 w-full">
-            <Link
-              className="rw-button rw-button-green"
-              to={routes.createRecord({ id: queryVariables })}
-            >
-              New Record
-            </Link>
-          </span>
-        </div>
-      ),
-    })
-  }
-     */
   return (
-    <div className="pt-4">
-      <div className="bg-white pb-4 px-4 rounded-md w-full shadow-lg">
-        {/**Title Below */}
-        <div className="flex justify-between w-full pt-6 ">
-          <p className="ml-3"> {title}</p>
-          <svg
-            width="14"
-            height="4"
-            viewBox="0 0 14 4"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <g opacity="0.4">
-              <circle cx="2.19796" cy="1.80139" r="1.38611" fill="#222222" />
-              <circle cx="11.9013" cy="1.80115" r="1.38611" fill="#222222" />
-              <circle cx="7.04991" cy="1.80115" r="1.38611" fill="#222222" />
-            </g>
-          </svg>
-        </div>
-        {/**Title Above */}
-        {/**Search Below */}
-        <div className="w-full flex justify-end px-2 mt-2">
+    <div className="pt-4 bg-white pb-4 px-4 rounded-md w-full shadow-lg">
+      {/**Title Below */}
+      <div className="flex justify-between w-full pt-6 ">
+        <h2 className="ml-1 font-bold text-lg"> {title}</h2>
+        <svg
+          width="14"
+          height="4"
+          viewBox="0 0 14 4"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g opacity="0.4">
+            <circle cx="2.19796" cy="1.80139" r="1.38611" fill="#222222" />
+            <circle cx="11.9013" cy="1.80115" r="1.38611" fill="#222222" />
+            <circle cx="7.04991" cy="1.80115" r="1.38611" fill="#222222" />
+          </g>
+        </svg>
+      </div>
+      {/**Title Above */}
+      {/**Search Below */}
+      {/*<div className="w-full flex justify-end px-2 mt-2">
           <div className="w-full sm:w-64 inline-block relative ">
             <input
               type=""
@@ -151,87 +141,91 @@ const TableComponent = ({
               </svg>
             </div>
           </div>
-        </div>
-        {/**Search Above */}
-        <div className="overflow-x-auto mt-6">
-          {/*/ apply the table props*/}
-          <table
-            {...getTableProps()}
-            className="table-auto border-collapse w-full"
-          >
-            <thead>
-              {
-                // Loop over the header rows
-                headerGroups.map((headerGroup) => (
-                  // Apply the header row props
+        </div>*/}
+      {/**Search Above */}
+      {/**Table Below */}
+      <div className="overflow-x-auto mt-6">
+        {/*/ apply the table props*/}
+        <table
+          {...getTableProps()}
+          className="table-auto border-collapse w-full"
+        >
+          <thead>
+            {
+              // Loop over the header rows
+              headerGroups.map((headerGroup) => (
+                // Apply the header row props
+                <tr
+                  key={headerGroup.key}
+                  {...headerGroup.getHeaderGroupProps()}
+                  className="rounded-lg text-sm font-medium text-gray-700 text-left"
+                >
+                  {
+                    // Loop over the headers in each row
+                    headerGroup.headers.map((column) => (
+                      // Apply the header cell props
+                      <th
+                        key={column.key}
+                        {...column.getHeaderProps(
+                          column.getSortByToggleProps()
+                        )}
+                      >
+                        {
+                          // Render the header
+                          column.render('Header')
+                        }
+                        <span>
+                          {column.isSorted
+                            ? column.isSortedDesc
+                              ? ' Z➡️A'
+                              : ' A➡️Z'
+                            : ''}
+                        </span>
+                      </th>
+                    ))
+                  }
+                </tr>
+              ))
+            }
+          </thead>
+          {/* Apply the table body props */}
+          <tbody {...getTableBodyProps()}>
+            {
+              // Loop over the table rows
+              rows.map((row) => {
+                // Prepare the row for display
+                prepareRow(row)
+                return (
+                  // Apply the row props
                   <tr
-                    key={headerGroup.key}
-                    {...headerGroup.getHeaderGroupProps()}
-                    className="rounded-lg text-sm font-medium text-gray-700 text-left"
+                    key={row.key}
+                    {...row.getRowProps()}
+                    className="border px-4 py-2"
                   >
                     {
-                      // Loop over the headers in each row
-                      headerGroup.headers.map((column) => (
-                        // Apply the header cell props
-                        <th
-                          key={column.key}
-                          {...column.getHeaderProps(
-                            column.getSortByToggleProps()
-                          )}
-                        >
-                          {
-                            // Render the header
-                            column.render('Header')
-                          }
-                          <span>
-                            {column.isSorted
-                              ? column.isSortedDesc
-                                ? ' Z➡️A'
-                                : ' A➡️Z'
-                              : ''}
-                          </span>
-                        </th>
-                      ))
+                      // Loop over the rows cells
+                      row.cells.map((cell) => {
+                        // Apply the cell props
+                        return (
+                          <td key={cell.key} {...cell.getCellProps()}>
+                            {
+                              // Render the cell contents
+                              cell.render('Cell')
+                            }
+                          </td>
+                        )
+                      })
                     }
                   </tr>
-                ))
-              }
-            </thead>
-            {/* Apply the table body props */}
-            <tbody {...getTableBodyProps()}>
-              {
-                // Loop over the table rows
-                rows.map((row) => {
-                  // Prepare the row for display
-                  prepareRow(row)
-                  return (
-                    // Apply the row props
-                    <tr
-                      key={row.key}
-                      {...row.getRowProps()}
-                      className="border px-4 py-2"
-                    >
-                      {
-                        // Loop over the rows cells
-                        row.cells.map((cell) => {
-                          // Apply the cell props
-                          return (
-                            <td key={cell.key} {...cell.getCellProps()}>
-                              {
-                                // Render the cell contents
-                                cell.render('Cell')
-                              }
-                            </td>
-                          )
-                        })
-                      }
-                    </tr>
-                  )
-                })
-              }
-            </tbody>
-          </table>
-        </div>
+                )
+              })
+            }
+          </tbody>
+        </table>
+      </div>
+      {/**Table Above */}
+      {/**New Record Button Below */}
+      {hasRole(roles.createRecord.concat(['admin'])) && (
         <div className="flex flex-row-reverse">
           <span className="p-1 w-full">
             <Link
@@ -242,7 +236,10 @@ const TableComponent = ({
             </Link>
           </span>
         </div>
-        {/**Pagination Below */}
+      )}
+      {/**New Record Button Above */}
+      {/**Pagination Below */}
+      {/**
         <div
           id="pagination"
           className="w-full flex justify-center border-t border-gray-100 pt-4 items-center"
@@ -294,8 +291,8 @@ const TableComponent = ({
             />
           </svg>
         </div>
-        {/**Pagination Above */}
-      </div>
+        */}
+      {/**Pagination Above */}
     </div>
   )
 }
