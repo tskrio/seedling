@@ -47,7 +47,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ users }) => {
-  console.log('loaded users', new Date().toLocaleTimeString())
+  //  console.log('loaded users', new Date().toLocaleTimeString())
   let title = 'Users'
   let columns = [
     {
@@ -72,7 +72,7 @@ export const Success = ({ users }) => {
     },
   ]
   let data = users.map((user) => {
-    console.log(user)
+    //console.log(user)
     let memberships = user.GroupMember.map((membership) => {
       return (
         <div key={membership.id}>
