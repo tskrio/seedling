@@ -5,15 +5,7 @@ export const schema = gql`
 `
 
 const transform = ({ resolvedValue }) => {
-  let resolvedValueArr = resolvedValue.split('@')
-  let returnValue = resolvedValueArr.map((part, index) => {
-    if (index === 0) {
-      return part.replace(/[a-zA-Z0-9\+\.]/gi, '*')
-    } else {
-      return part
-    }
-  })
-  return returnValue.join('@')
+  return resolvedValue.replace(/[a-zA-Z0-9\+\.]/gi, '*')
 }
 
 const masked = createTransformerDirective(schema, transform)
