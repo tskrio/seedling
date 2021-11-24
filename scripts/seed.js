@@ -3,7 +3,7 @@ const dotenv = require('dotenv')
 dotenv.config()
 const { PrismaClient } = require('@prisma/client')
 const db = new PrismaClient()
-import { users } from './userSeed'
+import { users, bulkUsers } from './userSeed'
 import { groups } from './groupSeed'
 
 async function main() {
@@ -16,12 +16,13 @@ async function main() {
     })
   }
   let userEmails = users.map((user) => user.email)
-  await db.user.deleteMany({ where: { email: { in: userEmails } } })
+  await db.user.deleteMany(/*{ where: { email: { in: userEmails } } }*/)
   for (let user of users) {
     await db.user.create({
       data: user,
     })
   }
+  await db.user.createMany({ data: bulkUsers })
 }
 
 main()

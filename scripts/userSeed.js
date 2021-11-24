@@ -1,7 +1,14 @@
 import Chance from 'chance'
 const chance = new Chance()
 let total = 10000
-let _users = [
+let _users = []
+while (_users.length < total) {
+  _users.push({
+    name: chance.name(),
+    email: `${_users.length}@example.com`,
+  })
+}
+export const users = [
   {
     name: 'Adam Admin',
     email: 'admin@example.com',
@@ -39,15 +46,4 @@ let _users = [
     },
   },
 ]
-while (_users.length < total) {
-  _users.push({
-    name: chance.name(),
-    email: `${_users.length}@example.com`,
-    GroupMember: {
-      create: {
-        groupId: chance.integer({ min: 1, max: 3 }),
-      },
-    },
-  })
-}
-export const users = _users
+export const bulkUsers = _users

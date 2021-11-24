@@ -1,4 +1,15 @@
 export const schema = gql`
+  enum Sort {
+    asc
+    desc
+  }
+  input UserOrderByInput {
+    createdAt: Sort
+    updatedAt: Sort
+    email: Sort
+    name: Sort
+    id: Sort
+  }
   "A account that can be associated to a group and preferences"
   type User {
     "The unique key auto assigned on create"
@@ -31,6 +42,8 @@ export const schema = gql`
   type Query {
     "To see Users you must be authenticated and have userRead role"
     users: [User!]! @requireAuth(roles: ["userRead", "admin"])
+    "Paginated"
+    users(filter: String, skip: Int, orderBy: UserOrderByInput): [User!]!
     "To see Users you must be authenticated and have userRead role"
     user(id: Int!): User @requireAuth(roles: ["userRead", "admin"])
   }

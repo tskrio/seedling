@@ -1,9 +1,17 @@
 import { DbAuthHandler } from '@redwoodjs/api'
 import { db } from 'src/lib/db'
-
+import { executeAfterUpdateRules } from 'src/lib/rules'
 export const handler = async (event, context) => {
   const forgotPasswordOptions = {
     handler: (user) => {
+      console.log(
+        `${JSON.stringify(
+          user
+        )} forgot their password, and requested new one sent to ${
+          user.email
+        }...`
+      )
+      executeAfterUpdateRules('user', { record: user })
       return user
     },
     expires: 60 * 60 * 24,

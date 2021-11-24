@@ -4,6 +4,12 @@ import CookieModal from 'src/components/CookieModal'
 
 const NavSidebar = ({ children }) => {
   const { isAuthenticated, hasRole, currentUser } = useAuth()
+  let styles = {
+    notActive:
+      'flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline',
+    active:
+      'flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline',
+  }
   const icons = {
     list: (
       <svg
@@ -95,6 +101,64 @@ const NavSidebar = ({ children }) => {
         <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
       </svg>
     ),
+    logout: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24px"
+        viewBox="0 0 24 24"
+        width="24px"
+        fill="#000000"
+      >
+        <path d="M0 0h24v24H0z" fill="none" />
+        <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+      </svg>
+    ),
+    signup: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        enableBackground="new 0 0 24 24"
+        height="24px"
+        viewBox="0 0 24 24"
+        width="24px"
+        fill="#000000"
+      >
+        <g>
+          <rect fill="none" height="24" width="24" />
+        </g>
+        <g>
+          <path d="M13,8c0-2.21-1.79-4-4-4S5,5.79,5,8s1.79,4,4,4S13,10.21,13,8z M15,10v2h3v3h2v-3h3v-2h-3V7h-2v3H15z M1,18v2h16v-2 c0-2.66-5.33-4-8-4S1,15.34,1,18z" />
+        </g>
+      </svg>
+    ),
+    login: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        enableBackground="new 0 0 24 24"
+        height="24px"
+        viewBox="0 0 24 24"
+        width="24px"
+        fill="#000000"
+      >
+        <g>
+          <rect fill="none" height="24" width="24" />
+        </g>
+        <g>
+          <path d="M11,7L9.6,8.4l2.6,2.6H2v2h10.2l-2.6,2.6L11,17l5-5L11,7z M20,19h-8v2h8c1.1,0,2-0.9,2-2V5c0-1.1-0.9-2-2-2h-8v2h8V19z" />
+        </g>
+      </svg>
+    ),
+    info: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24px"
+        viewBox="0 0 24 24"
+        width="24px"
+        fill="#000000"
+      >
+        <path d="M0 0h24v24H0z" fill="none" />
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+      </svg>
+    ),
   }
   return (
     <>
@@ -118,8 +182,8 @@ const NavSidebar = ({ children }) => {
                 <li>
                   <NavLink
                     to={routes.about()}
-                    activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
-                    className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
+                    activeClassName={styles.active}
+                    className={styles.notActive}
                   >
                     <span className="text-gray-600">{icons.dashboard}</span>
                     <span>Dashboard</span>
@@ -129,8 +193,8 @@ const NavSidebar = ({ children }) => {
                 <li>
                   <NavLink
                     to={routes.user({ id: currentUser.id })}
-                    activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
-                    className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
+                    activeClassName={styles.active}
+                    className={styles.notActive}
                   >
                     <span className="text-gray-600">{icons.profile}</span>
                     <span>My profile</span>
@@ -141,8 +205,8 @@ const NavSidebar = ({ children }) => {
                   <li>
                     <NavLink
                       to={routes.users()}
-                      activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
-                      className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
+                      activeClassName={styles.active}
+                      className={styles.notActive}
                     >
                       <span className="text-gray-600">{icons.users}</span>
                       <span>Users</span>
@@ -154,8 +218,8 @@ const NavSidebar = ({ children }) => {
                   <li>
                     <NavLink
                       to={routes.groups()}
-                      activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
-                      className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
+                      activeClassName={styles.active}
+                      className={styles.notActive}
                     >
                       <span className=" text-gray-600">{icons.groups}</span>
                       <span>Groups</span>
@@ -167,8 +231,8 @@ const NavSidebar = ({ children }) => {
                   <li>
                     <NavLink
                       to={routes.groupMembers()}
-                      activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
-                      className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
+                      activeClassName={styles.active}
+                      className={styles.notActive}
                     >
                       <span className=" text-gray-600">{icons.list}</span>
                       <span>Group Members</span>
@@ -180,8 +244,8 @@ const NavSidebar = ({ children }) => {
                   <li>
                     <NavLink
                       to={routes.groupRoles()}
-                      activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
-                      className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
+                      activeClassName={styles.active}
+                      className={styles.notActive}
                     >
                       <span className=" text-gray-600">{icons.list}</span>
                       <span>Group Roles</span>
@@ -189,10 +253,7 @@ const NavSidebar = ({ children }) => {
                   </li>
                 )}
                 <li>
-                  <a
-                    href="/#"
-                    className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
-                  >
+                  <a href="/#" className={styles.notActive}>
                     <span className="text-gray-600">{icons.settings}</span>
                     <span>Settings</span>
                   </a>
@@ -200,43 +261,15 @@ const NavSidebar = ({ children }) => {
                 <li>
                   <Link
                     to={routes.resetPassword()}
-                    className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
+                    className={styles.notActive}
                   >
                     <span className="text-gray-600">{icons.lock}</span>
                     <span>Change password</span>
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
-                    to={routes.logout()}
-                  >
-                    <span className="text-gray-600">
-                      {/*<svg
-                      className="h-6"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                      />
-                    </svg>*/}
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        width="24px"
-                        fill="#000000"
-                      >
-                        <path d="M0 0h24v24H0z" fill="none" />
-                        <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
-                      </svg>
-                    </span>
+                  <Link className={styles.notActive} to={routes.logout()}>
+                    <span className="text-gray-600">{icons.logout}</span>
                     <span>Logout</span>
                   </Link>
                 </li>
@@ -249,72 +282,23 @@ const NavSidebar = ({ children }) => {
                 <li>
                   <NavLink
                     to={routes.about()}
-                    activeClassName="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 bg-gray-200 focus:shadow-outline"
-                    className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
+                    activeClassName={styles.active}
+                    className={styles.notActive}
                   >
-                    <span className="text-gray-600">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        width="24px"
-                        fill="#000000"
-                      >
-                        <path d="M0 0h24v24H0z" fill="none" />
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
-                      </svg>
-                    </span>
+                    <span className="text-gray-600">{icons.info}</span>
                     <span>About</span>
                   </NavLink>
                 </li>
 
                 <li>
-                  <Link
-                    to={routes.signup()}
-                    className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
-                  >
-                    <span className="text-gray-600">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        enableBackground="new 0 0 24 24"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        width="24px"
-                        fill="#000000"
-                      >
-                        <g>
-                          <rect fill="none" height="24" width="24" />
-                        </g>
-                        <g>
-                          <path d="M13,8c0-2.21-1.79-4-4-4S5,5.79,5,8s1.79,4,4,4S13,10.21,13,8z M15,10v2h3v3h2v-3h3v-2h-3V7h-2v3H15z M1,18v2h16v-2 c0-2.66-5.33-4-8-4S1,15.34,1,18z" />
-                        </g>
-                      </svg>
-                    </span>
+                  <Link to={routes.signup()} className={styles.notActive}>
+                    <span className="text-gray-600">{icons.signup}</span>
                     <span>Sign up</span>
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    className="flex items-center space-x-3 text-gray-700 p-2 rounded-md font-medium hover:bg-gray-200 focus:bg-gray-200 focus:shadow-outline"
-                    to={routes.login()}
-                  >
-                    <span className="text-gray-600">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        enableBackground="new 0 0 24 24"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        width="24px"
-                        fill="#000000"
-                      >
-                        <g>
-                          <rect fill="none" height="24" width="24" />
-                        </g>
-                        <g>
-                          <path d="M11,7L9.6,8.4l2.6,2.6H2v2h10.2l-2.6,2.6L11,17l5-5L11,7z M20,19h-8v2h8c1.1,0,2-0.9,2-2V5c0-1.1-0.9-2-2-2h-8v2h8V19z" />
-                        </g>
-                      </svg>
-                    </span>
+                  <Link className={styles.notActive} to={routes.login()}>
+                    <span className="text-gray-600">{icons.login}</span>
                     <span>Login</span>
                   </Link>
                 </li>
