@@ -7,12 +7,12 @@ const DELETE_USER_MUTATION = gql`
     }
   }
 `
-export const beforeQuery = (props) => {
-  console.log('in beforequery', props)
+export const beforeQuery = () => {
+  //console.log('in beforequery', props)
   const { search } = useLocation()
   let params = new URLSearchParams(search)
 
-  console.log(params.get('filter'))
+  //console.log(params.get('filter'))
   return {
     variables: {
       filter: params.get('filter'),
@@ -99,7 +99,7 @@ export const Success = ({ users }) => {
       )
     })
     let name = <Link to={routes.user({ id: user.id })}>{user.name}</Link>
-    console.log(memberships)
+    //console.log(memberships)
     return {
       ...user,
       name,

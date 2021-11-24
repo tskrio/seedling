@@ -2,7 +2,7 @@ import { useTable, useSortBy } from 'react-table'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
-import { Link, navigate } from '@redwoodjs/router'
+import { Link, navigate, useLocation } from '@redwoodjs/router'
 import { useState, useEffect } from 'react'
 
 const TableComponent = ({
@@ -15,19 +15,26 @@ const TableComponent = ({
   roles,
   queryVariables,
 }) => {
+  const { search } = useLocation()
   const { hasRole } = useAuth()
+  let params = new URLSearchParams(search)
   const [tableData, setTableData] = useState(data)
-  const [searchInput, setSearchInput] = useState('')
+  const [searchInput, setSearchInput] = useState(params.get('filter'))
   let handleSearchInput = (event) => {
-    console.log(event.target.value)
+    //console.log(event.target.value)
     setSearchInput(event.target.value)
   }
+  let handleSearchKeyDown = (event) => {
+    if (event.keyCode == 13) {
+      navigate(routes.readRecords({ filter: searchInput }))
+    }
+  }
   let updateData = () => {
-    console.log(data)
+    //console.log(data)
     setTableData(data)
   }
   useEffect(() => {
-    console.log('from useeffect', data.length)
+    //console.log('from useeffect', data.length)
     setTableData(data)
   }, [])
   data = data.map((row) => {
@@ -82,7 +89,7 @@ const TableComponent = ({
       toast.error(error.message || `Error - not deleted`)
     },
     onCompleted: (something) => {
-      console.log(`${JSON.stringify(something)}`)
+      //console.log(`${JSON.stringify(something)}`)
       toast.success(`deleted`)
       updateData()
     },
@@ -138,7 +145,9 @@ const TableComponent = ({
             name="globalSearch"
             className="leading-snug border border-gray-300 block w-full appearance-none bg-gray-100 text-sm text-gray-600 py-1 px-4 pl-8 rounded-lg"
             placeholder="Search"
+            defaultValue={searchInput}
             onChange={handleSearchInput}
+            onKeyDown={handleSearchKeyDown}
           />
           <button
             type="button"

@@ -50,8 +50,8 @@ export const users = async ({ orderBy, filter, skip }) => {
     let where = (() => {
       if (filter) {
         let OR = [
-          { email: { contains: filter } },
-          { name: { contains: filter } },
+          { email: { contains: filter, mode: 'insensitive' } },
+          { name: { contains: filter, mode: 'insensitive' } },
         ]
         let castFilter = parseInt(filter, 10)
         if (isNaN(castFilter) === false) {
