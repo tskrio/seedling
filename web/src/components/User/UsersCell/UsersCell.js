@@ -13,8 +13,18 @@ export const QUERY = gql`
       id
       createdAt
       updatedAt
-      email
+      #email
       name
+      GroupMember {
+        id
+        group {
+          id
+          name
+        }
+      }
+      Preference {
+        id
+      }
     }
   }
 `
@@ -37,23 +47,24 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ users }) => {
+  console.log('loaded users', new Date().toLocaleTimeString())
   let title = 'Users'
   let columns = [
-    {
-      Header: 'Created At',
-      accessor: 'createdAt', // accessor is the "key" in the data
-    },
-    {
-      Header: 'Updated At',
-      accessor: 'updatedAt',
-    },
     {
       Header: 'Name',
       accessor: 'name',
     },
+    //{
+    //  Header: 'Email',
+    //  accessor: 'email',
+    //},
     {
-      Header: 'Email',
-      accessor: 'email',
+      Header: 'Group Memberships',
+      accessor: 'groupMemberships',
+    },
+    {
+      Header: 'Preferences',
+      accessor: 'Preference.length',
     },
     {
       Header: 'Actions',
@@ -61,8 +72,26 @@ export const Success = ({ users }) => {
     },
   ]
   let data = users.map((user) => {
+    console.log(user)
+    let memberships = user.GroupMember.map((membership) => {
+      return (
+        <div key={membership.id}>
+          <Link
+            key={membership.id}
+            to={routes.group({ id: membership.group.id })}
+          >
+            {membership.group.name}
+          </Link>
+          <br />
+        </div>
+      )
+    })
+    let name = <Link to={routes.user({ id: user.id })}>{user.name}</Link>
+    console.log(memberships)
     return {
       ...user,
+      name,
+      groupMemberships: memberships,
       createdAt: new Date(
         user.createdAt
       ).toLocaleString(/**TODO: User preference! */),

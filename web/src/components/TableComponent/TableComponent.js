@@ -3,6 +3,7 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
 import { Link } from '@redwoodjs/router'
+import { useState, useEffect } from 'react'
 
 const TableComponent = ({
   title,
@@ -15,7 +16,15 @@ const TableComponent = ({
   queryVariables,
 }) => {
   const { hasRole } = useAuth()
-
+  const [tableData, setTableData] = useState(data)
+  let updateData = () => {
+    console.log(data)
+    setTableData(data)
+  }
+  useEffect(() => {
+    console.log('from useeffect', data.length)
+    setTableData(data)
+  }, [])
   data = data.map((row) => {
     return {
       ...row,
@@ -58,6 +67,7 @@ const TableComponent = ({
   data = React.useMemo(
     () => data,
     [
+      tableData,
       /**TODO: Update data on edit or delete */
     ]
   )
@@ -69,20 +79,21 @@ const TableComponent = ({
     onCompleted: (something) => {
       console.log(`${JSON.stringify(something)}`)
       toast.success(`deleted`)
+      updateData()
     },
     // This refetches the query on the list page. Read more about other ways to
     // update the cache over here:
     // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
-    refetchQueries: [
-      {
-        query: queries.QUERY,
-        variables: {
-          id: queryVariables,
-          /*not sure how to get the query variables */
-        },
-      },
-    ],
-    awaitRefetchQueries: true,
+    //refetchQueries: [
+    //  {
+    //    query: queries.QUERY,
+    //    variables: {
+    //      id: queryVariables,
+    //      /*not sure how to get the query variables */
+    //    },
+    //  },
+    //],
+    //awaitRefetchQueries: true,
   })
   const onDeleteClick = (id, display) => {
     if (confirm(`Are you sure you want to delete ${display}?`)) {

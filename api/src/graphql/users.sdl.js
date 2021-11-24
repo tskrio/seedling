@@ -23,6 +23,8 @@ export const schema = gql`
     md5Email: String!
     "The memberships this user is a part of"
     GroupMember: [GroupMember]!
+    "The preferences this user has"
+    Preference: [Preference]!
   }
 
   "A collection of queries from user"

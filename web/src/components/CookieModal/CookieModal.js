@@ -11,18 +11,22 @@ const CookieModal = () => {
           <div className="flex items-center justify-center fixed left-0 bottom-0 w-full h-full bg-gray-800">
             <div className="bg-white rounded-lg w-1/2">
               <div className="flex flex-col items-start p-4">
-                <div className="flex items-center w-full">
-                  <div className="text-gray-900 font-medium text-lg">
+                <div className="flex items-center w-full text-center">
+                  <div className="text-gray-900 font-medium text-lg w-full">
                     Before you contine to Tskr
                   </div>
                 </div>
                 <hr />
                 <div className="">
-                  Tskr uses cookies and data to:
-                  <ul>
-                    <li>* Allow users to authenticate</li>
-                    <li>* Track if you{"'"}ve accepted this cookie notice</li>
-                  </ul>
+                  <p>
+                    We use cookies and similiar technologies to allow you the
+                    ability to log in, as well as track if you have accepted
+                    this notice.
+                  </p>
+                  <p>
+                    By clicking {'"'}I accept{'"'}, or by using our site, you
+                    consent to the use of cookies unless you have disabled them.
+                  </p>
                 </div>
                 <hr />
                 <div className="ml-auto">

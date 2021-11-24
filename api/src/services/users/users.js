@@ -113,5 +113,7 @@ export const deleteUser = async ({ id }) => {
 export const User = {
   GroupMember: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).GroupMember(),
+  Preference: (_obj, { root }) =>
+    db.user.findUnique({ where: { id: root.id } }).Preference(),
   md5Email: (_args, { root }) => CryptoJS.MD5(root.email).toString(),
 }
