@@ -10,6 +10,9 @@ export const schema = gql`
     name: Sort
     id: Sort
   }
+  input UserSearchInput {
+    filter: String
+  }
   "A account that can be associated to a group and preferences"
   type User {
     "The unique key auto assigned on create"

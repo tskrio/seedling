@@ -1,4 +1,4 @@
-import { Link, routes } from '@redwoodjs/router'
+import { Link, routes, useLocation } from '@redwoodjs/router'
 import TableComponent from 'src/components/TableComponent'
 const DELETE_USER_MUTATION = gql`
   mutation DeleteUserMutation($id: Int!) {
@@ -7,9 +7,21 @@ const DELETE_USER_MUTATION = gql`
     }
   }
 `
+export const beforeQuery = (props) => {
+  console.log('in beforequery', props)
+  const { search } = useLocation()
+  let params = new URLSearchParams(search)
+
+  console.log(params.get('filter'))
+  return {
+    variables: {
+      filter: params.get('filter'),
+    },
+  }
+}
 export const QUERY = gql`
-  query FindUsers {
-    users {
+  query FindUsers($filter: String) {
+    users(filter: $filter) {
       id
       createdAt
       updatedAt
@@ -110,6 +122,9 @@ export const Success = ({ users }) => {
     },
     createRecord: () => {
       return routes.newUser()
+    },
+    readRecords: (props) => {
+      return routes.users(props)
     },
   }
   let display = 'id'
