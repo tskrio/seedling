@@ -1,4 +1,15 @@
 export const schema = gql`
+  input GroupMemberOrderByInput {
+    createdAt: Sort
+    updatedAt: Sort
+    email: Sort
+    name: Sort
+    group: Sort
+    id: Sort
+  }
+  input GroupMemberSearchInput {
+    filter: String
+  }
   "A membership from a group to a user"
   type GroupMember {
     "The unique key auto assigned on create"
@@ -19,8 +30,11 @@ export const schema = gql`
 
   type Query {
     "To see GroupMembers you must be authenticated and have groupMemberRead role"
-    groupMembers: [GroupMember!]!
-      @requireAuth(roles: ["groupMemberRead", "admin"])
+    groupMembers(
+      filter: String
+      skip: Int
+      orderBy: GroupMemberOrderByInput
+    ): [GroupMember!]! @requireAuth(roles: ["groupMemberRead", "admin"])
     "To see GroupMembers you must be authenticated and have groupMemberRead role"
     groupMember(id: Int!): GroupMember
       @requireAuth(roles: ["groupMemberRead", "admin"])

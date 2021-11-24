@@ -8,7 +8,6 @@ const DELETE_USER_MUTATION = gql`
   }
 `
 export const beforeQuery = () => {
-  //console.log('in beforequery', props)
   const { search } = useLocation()
   let params = new URLSearchParams(search)
 

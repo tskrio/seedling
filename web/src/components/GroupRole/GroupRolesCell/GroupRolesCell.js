@@ -1,7 +1,15 @@
-import { routes } from '@redwoodjs/router'
+import { Link, routes, useLocation } from '@redwoodjs/router'
 import TableComponent from 'src/components/TableComponent'
-export const beforeQuery = (props) => {
-  //console.log('variables', props)
+export const beforeQuery = () => {
+  const { search } = useLocation()
+  let params = new URLSearchParams(search)
+
+  //console.log(params.get('filter'))
+  return {
+    variables: {
+      filter: params.get('filter'),
+    },
+  }
 }
 const DELETE_GROUP_ROLE_MUTATION = gql`
   mutation DeleteGroupRoleMutation($id: Int!) {
@@ -11,8 +19,8 @@ const DELETE_GROUP_ROLE_MUTATION = gql`
   }
 `
 export const QUERY = gql`
-  query FindGroupRoles {
-    groupRoles {
+  query FindGroupRoles($filter: String) {
+    groupRoles(filter: $filter) {
       id
       createdAt
       updatedAt
@@ -80,6 +88,9 @@ export const Success = ({ groupRoles }) => {
     },
     createRecord: () => {
       return routes.newGroupRole()
+    },
+    readRecords: (props) => {
+      return routes.groupRoles(props)
     },
   }
   let display = 'id'

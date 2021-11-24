@@ -46,7 +46,6 @@ export const users = async ({ orderBy, filter, skip }) => {
         return limit
       }
     })()
-    console.log('take', take)
     let where = (() => {
       if (filter) {
         let OR = [

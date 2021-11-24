@@ -47,6 +47,7 @@ export const schema = gql`
     users: [User!]! @requireAuth(roles: ["userRead", "admin"])
     "Paginated"
     users(filter: String, skip: Int, orderBy: UserOrderByInput): [User!]!
+      @requireAuth(roles: ["userRead", "admin"])
     "To see Users you must be authenticated and have userRead role"
     user(id: Int!): User @requireAuth(roles: ["userRead", "admin"])
   }
