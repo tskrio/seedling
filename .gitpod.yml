@@ -1,4 +1,3 @@
-FROM gitpod/workspace-postgres
 # Commands to start on workspace startup
 tasks:
   - name: Dev Server
