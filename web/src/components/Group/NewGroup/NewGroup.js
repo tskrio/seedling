@@ -1,11 +1,9 @@
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
-import GroupForm from 'src/components/Group/GroupForm'
-import 'src/scaffold.css'
-import 'src/reset.css'
-import 'src/index.css'
-
+import FormComponent from 'src/components/FormComponent'
+import Chance from 'chance'
+const chance = new Chance()
 const CREATE_GROUP_MUTATION = gql`
   mutation CreateGroupMutation($input: CreateGroupInput!) {
     createGroup(input: $input) {
@@ -20,21 +18,45 @@ const NewGroup = () => {
       toast.success('Group created')
       navigate(routes.groups())
     },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
-
+  const onSubmit = (data) => {
+    console.log(`Saving`, data)
+    /**Client RUles go here */
+    onSave(data)
+  }
   const onSave = (input) => {
     createGroup({ variables: { input } })
   }
-
+  const fields = [
+    {
+      name: 'name',
+      prettyName: 'Name',
+      placeHolder: 'Give us a groupname!',
+      defaultValue: `${chance.state({ full: true })} ${chance.profession()}s`,
+    },
+    {
+      name: 'description',
+      prettyName: 'Description',
+      placeHolder: 'How would you describe this?',
+      required: true,
+    },
+  ]
+  const roles = {
+    update: ['groupUpdate'],
+    delete: ['groupDelete'],
+  }
   return (
-    <div className="rw-segment">
-      <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">New Group</h2>
-      </header>
-      <div className="rw-segment-main">
-        <GroupForm onSave={onSave} loading={loading} error={error} />
-      </div>
-    </div>
+    <FormComponent
+      fields={fields}
+      roles={roles}
+      onSubmit={onSubmit}
+      loading={loading}
+      error={error}
+      returnLink={routes.users()}
+    />
   )
 }
 

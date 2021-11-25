@@ -12,12 +12,15 @@ datasource db {
   // MySQL
   // provider = "mysql"
   // SQLite // probably only for testing
-  provider = "sqlite"
+  // provider = "sqlite"
+  // url      = "file:./dev.db"
   // MongoDB
   // provider = "mongodb"
   // Microsoft SQL Server
-  //url      = env("DATABASE_URL")
-  url      = "file:./dev.db"
+
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+
 }
 
 model User {

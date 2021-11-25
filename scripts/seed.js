@@ -15,7 +15,7 @@ async function main() {
       create: group,
     })
   }
-  let userEmails = users.map((user) => user.email)
+  users.map((user) => user.email)
   await db.user.deleteMany(/*{ where: { email: { in: userEmails } } }*/)
   for (let user of users) {
     await db.user.create({
@@ -23,6 +23,11 @@ async function main() {
     })
   }
   //await db.user.createMany({ data: bulkUsers })
+  for (let user of bulkUsers) {
+    await db.user.create({
+      data: user,
+    })
+  }
 }
 
 main()

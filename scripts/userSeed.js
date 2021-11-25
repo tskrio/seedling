@@ -1,11 +1,19 @@
 import Chance from 'chance'
 const chance = new Chance()
-let total = 10000
+let total = 100
 let _users = []
 while (_users.length < total) {
   _users.push({
     name: chance.name(),
     email: `${_users.length}@example.com`,
+    hashedPassword:
+      '5f5f56d40b9ae6bf2abfd7804e97e607f9d7432feebb6371849f2676a5058999',
+    salt: '881aed4f5703af38eaaab6e788d8e860',
+    Preference: {
+      create: {
+        entity: 'default-password-is-admin',
+      },
+    },
   })
 }
 export const users = [

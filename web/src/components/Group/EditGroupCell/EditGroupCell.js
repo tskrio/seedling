@@ -76,7 +76,7 @@ export const Success = ({ group }) => {
       name: 'description',
       prettyName: 'Description',
       //type: 'dateTime',
-      type: 'textArea',
+      //type: 'textArea',
     },
   ]
   const roles = {
