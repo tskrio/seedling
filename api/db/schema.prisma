@@ -4,7 +4,18 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  // we default this to sqlite so you can try this before you
+  // plugin in a database.. your choices for databse providers
+  // are the following
+  // PostgreSQL
+  // provider = "postgresql"
+  // MySQL
+  // provider = "mysql"
+  // SQLite // probably only for testing
+  provider = "sqlite"
+  // MongoDB
+  // provider = "mongodb"
+  // Microsoft SQL Server
   url      = env("DATABASE_URL")
 }
 

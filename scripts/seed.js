@@ -22,7 +22,7 @@ async function main() {
       data: user,
     })
   }
-  await db.user.createMany({ data: bulkUsers })
+  //await db.user.createMany({ data: bulkUsers })
 }
 
 main()

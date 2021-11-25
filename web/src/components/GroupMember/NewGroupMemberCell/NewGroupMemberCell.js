@@ -5,12 +5,16 @@ import { navigate, routes } from '@redwoodjs/router'
 export const QUERY = gql`
   query getGroupsAndUsers {
     groups {
-      id
-      name
+      results {
+        id
+        name
+      }
     }
     users {
-      id
-      name
+      results {
+        id
+        name
+      }
     }
   }
 `
@@ -65,7 +69,7 @@ export const Success = ({ groups, users }) => {
           name: 'Pick one',
           id: '',
         },
-      ].concat(groups),
+      ].concat(groups.results),
     },
     {
       name: 'userId',
@@ -78,7 +82,7 @@ export const Success = ({ groups, users }) => {
           name: 'Pick one',
           id: '',
         },
-      ].concat(users),
+      ].concat(users.results),
     },
   ]
   const roles = {
