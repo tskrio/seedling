@@ -15,9 +15,21 @@ export const schema = gql`
     groupId: Int!
   }
 
+  type GroupRoles {
+    results: [GroupRole!]!
+    count: Int!
+    take: Int!
+    skip: Int!
+  }
+
   type Query {
     "To see GroupRoles you must be authenticated with groupRoleRead role"
-    groupRoles: [GroupRole!]! @requireAuth(roles: ["groupRoleRead", "admin"])
+    groupRoles(
+      filter: String
+      skip: Int
+      take: Int
+      orderBy: OrderByInput
+    ): GroupRoles! @requireAuth(roles: ["groupRoleRead", "admin"])
     "To see GroupRoles you must be authenticated with groupRoleRead role"
     groupRole(id: Int!): GroupRole
       @requireAuth(roles: ["groupRoleRead", "admin"])

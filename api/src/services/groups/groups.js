@@ -33,22 +33,44 @@ export const createGroup = async ({ input }) => {
   }
 }
 
-export const groups = async () => {
+export const groups = async ({ orderBy, filter, skip }) => {
   try {
+    let preferences = context.currentUser.preferences
+    let take = (() => {
+      let limit = parseInt(preferences['user.pageSize'], 10) || 10
+      if (limit > 100) {
+        return 100 //return 100 or limit whatever is smaller
+      } else {
+        return limit
+      }
+    })()
+    let where = (() => {
+      if (filter) {
+        let OR = [
+          { description: { contains: filter, mode: 'insensitive' } },
+          { name: { contains: filter, mode: 'insensitive' } },
+        ]
+        let castFilter = parseInt(filter, 10)
+        if (isNaN(castFilter) === false) {
+          OR.push({ id: { equals: castFilter } })
+        }
+        return { OR }
+      } else {
+        return {}
+      }
+    })()
+    if (!skip) skip = 0
     let result = await executeBeforeReadAllRules(table, {
       status: { code: 'success', message: '' },
     })
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
-    let readRecords = await db[table].findMany({
-      include: {
-        GroupRole: true,
-        GroupMember: true,
-      },
-    })
+    let readRecords = await db[table].findMany({ take, where, orderBy, skip })
+    let count = await db[table].count({ where })
+    let results = { results: readRecords, count, take, skip }
     readRecords = executeAfterReadAllRules(table, readRecords)
-    return readRecords
+    return results
   } catch (error) {
     throw new UserInputError(error.message)
   }

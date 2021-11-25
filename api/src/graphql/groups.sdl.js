@@ -17,9 +17,21 @@ export const schema = gql`
     GroupMember: [GroupMember]!
   }
 
+  type Groups {
+    results: [Group!]!
+    count: Int!
+    take: Int!
+    skip: Int!
+  }
+
   type Query {
     "To see Groups you must be authenticated and have groupRead role"
-    groups: [Group!]! @requireAuth(roles: ["groupRead", "admin"])
+    groups(
+      filter: String
+      skip: Int
+      take: Int
+      orderBy: OrderByInput
+    ): Groups! @requireAuth(roles: ["groupRead", "admin"])
     "To see Groups you must be authenticated and have groupRead role"
     group(id: Int!): Group @requireAuth(roles: ["groupRead", "admin"])
   }

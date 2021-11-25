@@ -1,5 +1,17 @@
-import { Link, routes } from '@redwoodjs/router'
+import { Link, routes, useLocation } from '@redwoodjs/router'
 import TableComponent from 'src/components/TableComponent'
+export const beforeQuery = () => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { search } = useLocation()
+  let params = new URLSearchParams(search)
+  return {
+    variables: {
+      filter: params.get('filter'),
+      skip: parseInt(params.get('offset'), 10) || 0,
+    },
+    fetchPolicy: 'no-cache',
+  }
+}
 
 const DELETE_GROUP_MEMBER_MUTATION = gql`
   mutation DeleteGroupMemberMutation($id: Int!) {
@@ -9,18 +21,21 @@ const DELETE_GROUP_MEMBER_MUTATION = gql`
   }
 `
 export const QUERY = gql`
-  query FindGroupMembers {
-    groupMembers {
-      id
-      createdAt
-      updatedAt
-      userId
-      user {
-        name
-      }
-      groupId
-      group {
-        name
+  query FindGroupMembers($filter: String, $skip: Int) {
+    groupMembers(filter: $filter, skip: $skip) {
+      count
+      take
+      skip
+      results {
+        id
+        userId
+        user {
+          name
+        }
+        groupId
+        group {
+          name
+        }
       }
     }
   }
@@ -46,14 +61,14 @@ export const Failure = ({ error }) => (
 export const Success = ({ groupMembers }) => {
   let title = 'Group Members'
   let columns = [
-    {
-      Header: 'Created At',
-      accessor: 'createdAt', // accessor is the "key" in the data
-    },
-    {
-      Header: 'Updated At',
-      accessor: 'updatedAt',
-    },
+    //{
+    //  Header: 'Created At',
+    //  accessor: 'createdAt', // accessor is the "key" in the data
+    //},
+    //{
+    //  Header: 'Updated At',
+    //  accessor: 'updatedAt',
+    //},
     {
       Header: 'User',
       accessor: 'user.name',
@@ -67,15 +82,15 @@ export const Success = ({ groupMembers }) => {
       accessor: 'actions',
     },
   ]
-  let data = groupMembers.map((groupMember) => {
+  let data = groupMembers.results.map((groupMember) => {
     return {
       ...groupMember,
-      createdAt: new Date(
-        groupMember.createdAt
-      ).toLocaleString(/**TODO: User preference! */),
-      updatedAt: new Date(
-        groupMember.createdAt
-      ).toLocaleString(/**TODO: User preference! */),
+      //createdAt: new Date(
+      //  groupMember.createdAt
+      //).toLocaleString(/**TODO: User preference! */),
+      //updatedAt: new Date(
+      //  groupMember.createdAt
+      //).toLocaleString(/**TODO: User preference! */),
     }
   })
   let queries = {
@@ -88,6 +103,9 @@ export const Success = ({ groupMembers }) => {
     },
     createRecord: () => {
       return routes.newGroupMember()
+    },
+    readRecords: (prop) => {
+      return routes.groupMembers(prop)
     },
   }
   let display = 'id'
@@ -108,6 +126,9 @@ export const Success = ({ groupMembers }) => {
       display={display}
       roles={roles}
       queryVariables={queryVariables}
+      count={groupMembers.count}
+      skip={groupMembers.skip}
+      take={groupMembers.take}
     />
   )
 }

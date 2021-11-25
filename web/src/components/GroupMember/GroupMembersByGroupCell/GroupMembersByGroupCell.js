@@ -1,12 +1,17 @@
-import { useParams, Link, routes } from '@redwoodjs/router'
+import { useParams, Link, routes, useLocation } from '@redwoodjs/router'
 import TableComponent from 'src/components/TableComponent'
 export const beforeQuery = (props) => {
-  //console.log('variables', props)
-  props.id = props.groupID.id
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { search } = useLocation()
+  let params = new URLSearchParams(search)
+
   return {
-    variables: props,
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'cache-first',
+    variables: {
+      filter: params.get('filter'),
+      skip: parseInt(params.get('offset'), 10) || 0,
+      id: props.groupID.id,
+    },
+    fetchPolicy: 'no-cache',
   }
 }
 
@@ -18,23 +23,26 @@ const DELETE_GROUP_MEMBER_MUTATION = gql`
   }
 `
 export const QUERY = gql`
-  query getGroupMembersFromGroup($id: Int!) {
-    groupMembers: groupMembersByGroup(id: $id) {
-      id
-      createdAt
-      updatedAt
-      userId
-      groupId
-      user {
-        name
+  query getGroupMembersFromGroup($id: Int!, $filter: String, $skip: Int) {
+    groupMembers: groupMembersByGroup(id: $id, filter: $filter, skip: $skip) {
+      count
+      take
+      skip
+      results {
         id
-      }
-      group {
-        name
-        id
-        createdAt
-        updatedAt
-        description
+        userId
+        groupId
+        user {
+          name
+          id
+        }
+        group {
+          name
+          id
+          createdAt
+          updatedAt
+          description
+        }
       }
     }
   }
@@ -57,38 +65,35 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 export const Success = ({ groupMembers }) => {
+  console.log('groupMembers', groupMembers)
   let title = 'Group Members By Group'
   let columns = [
     {
-      Header: 'Created At',
-      accessor: 'createdAt', // accessor is the "key" in the data
-    },
-    {
-      Header: 'Updated At',
-      accessor: 'updatedAt',
-    },
-    {
       Header: 'User',
-      accessor: 'user.name',
+      accessor: 'userLink',
     },
     {
       Header: 'Group',
-      accessor: 'group.name',
+      accessor: 'groupLink',
     },
     {
       Header: 'Actions',
       accessor: 'actions',
     },
   ]
-  let data = groupMembers.map((groupMember) => {
+  let data = groupMembers.results.map((groupMember) => {
     return {
       ...groupMember,
-      createdAt: new Date(
-        groupMember.createdAt
-      ).toLocaleString(/**TODO: User preference! */),
-      updatedAt: new Date(
-        groupMember.createdAt
-      ).toLocaleString(/**TODO: User preference! */),
+      userLink: (
+        <Link to={routes.user({ id: groupMember.user.id })}>
+          {groupMember.user.name}
+        </Link>
+      ),
+      groupLink: (
+        <Link to={routes.group({ id: groupMember.group.id })}>
+          {groupMember.group.name}
+        </Link>
+      ),
     }
   })
 
@@ -101,7 +106,12 @@ export const Success = ({ groupMembers }) => {
       return routes.groupMember(prop)
     },
     createRecord: () => {
-      return routes.newGroupMember({ groupId: groupMembers[0].group.id })
+      return routes.newGroupMember({
+        groupId: groupMembers.results[0].group.id,
+      })
+    },
+    readRecords: (props) => {
+      return routes.groupMembers(props)
     },
   }
   let display = 'id'
@@ -122,6 +132,9 @@ export const Success = ({ groupMembers }) => {
       display={display}
       roles={roles}
       queryVariables={queryVariables}
+      count={groupMembers.count}
+      skip={groupMembers.skip}
+      take={groupMembers.take}
     />
   )
 }
