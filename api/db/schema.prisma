@@ -16,7 +16,8 @@ datasource db {
   // MongoDB
   // provider = "mongodb"
   // Microsoft SQL Server
-  url      = env("DATABASE_URL")
+  //url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
 
 model User {
