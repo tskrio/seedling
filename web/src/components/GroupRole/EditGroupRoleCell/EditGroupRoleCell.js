@@ -13,8 +13,10 @@ export const QUERY = gql`
       groupId
     }
     groups {
-      id
-      name
+      results {
+        id
+        name
+      }
     }
   }
 `
@@ -83,7 +85,7 @@ export const Success = ({ groupRole, groups }) => {
       type: 'reference',
       display: 'name',
       value: 'id',
-      data: groups,
+      data: groups.results,
     },
     {
       name: 'role',

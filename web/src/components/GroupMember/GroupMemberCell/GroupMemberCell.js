@@ -3,16 +3,20 @@ import GroupMember from 'src/components/GroupMember/GroupMember'
 export const QUERY = gql`
   query FindGroupMemberById($id: Int!) {
     groupMember: groupMember(id: $id) {
-      id
-      createdAt
-      updatedAt
-      userId
-      groupId
-      user {
-        name
-      }
-      group {
-        name
+      results {
+        id
+        createdAt
+        updatedAt
+        userId
+        groupId
+        user {
+          name
+          id
+        }
+        group {
+          name
+          id
+        }
       }
     }
   }
@@ -27,5 +31,6 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ groupMember }) => {
+  console.log(groupMember)
   return <GroupMember groupMember={groupMember} />
 }

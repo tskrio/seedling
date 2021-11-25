@@ -16,13 +16,31 @@ export const QUERY = gql`
       }
     }
     groups {
-      id
-      name
+      count
+      take
+      skip
+      results {
+        id
+        name
+        description
+      }
     }
     users {
-      id
-      name
+      count
+      take
+      skip
+      results {
+        id
+        name
+      }
     }
+    #  id
+    #  name
+    #}
+    #users {
+    #  id
+    #  name
+    #}
   }
 `
 const DELETE_GROUP_MEMBER_MUTATION = gql`
@@ -54,6 +72,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ groupMember, groups, users }) => {
+  console.log(groupMember)
   const [updateGroup, { loading, error }] = useMutation(
     UPDATE_GROUP_MEMBER_MUTATION,
     {
@@ -99,7 +118,7 @@ export const Success = ({ groupMember, groups, users }) => {
       type: 'reference',
       display: 'name',
       value: 'id',
-      data: groups,
+      data: groups.results,
     },
 
     {
@@ -108,7 +127,7 @@ export const Success = ({ groupMember, groups, users }) => {
       type: 'reference',
       display: 'name',
       value: 'id',
-      data: users,
+      data: users.results, //TODO: figure out how to load a type ahead, there's 7k users in this list...
     },
   ]
   const roles = {
