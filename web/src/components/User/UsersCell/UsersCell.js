@@ -8,33 +8,39 @@ const DELETE_USER_MUTATION = gql`
   }
 `
 export const beforeQuery = () => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { search } = useLocation()
   let params = new URLSearchParams(search)
-
-  //console.log(params.get('filter'))
   return {
     variables: {
       filter: params.get('filter'),
+      skip: parseInt(params.get('offset'), 10) || 0,
     },
+    fetchPolicy: 'no-cache',
   }
 }
 export const QUERY = gql`
-  query FindUsers($filter: String) {
-    users(filter: $filter) {
-      id
-      createdAt
-      updatedAt
-      #email
-      name
-      GroupMember {
+  query FindUsers($filter: String, $skip: Int) {
+    users(filter: $filter, skip: $skip) {
+      count
+      take
+      skip
+      results {
         id
-        group {
+        createdAt
+        updatedAt
+        #email
+        name
+        GroupMember {
           id
-          name
+          group {
+            id
+            name
+          }
         }
-      }
-      Preference {
-        id
+        Preference {
+          id
+        }
       }
     }
   }
@@ -58,17 +64,13 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ users }) => {
-  //  console.log('loaded users', new Date().toLocaleTimeString())
+  console.log('results', users.results)
   let title = 'Users'
   let columns = [
     {
       Header: 'Name',
       accessor: 'name',
     },
-    //{
-    //  Header: 'Email',
-    //  accessor: 'email',
-    //},
     {
       Header: 'Group Memberships',
       accessor: 'groupMemberships',
@@ -82,7 +84,7 @@ export const Success = ({ users }) => {
       accessor: 'actions',
     },
   ]
-  let data = users.map((user) => {
+  let data = users.results.map((user) => {
     //console.log(user)
     let memberships = user.GroupMember.map((membership) => {
       return (
@@ -144,6 +146,9 @@ export const Success = ({ users }) => {
       display={display}
       roles={roles}
       queryVariables={queryVariables}
+      count={users.count}
+      skip={users.skip}
+      take={users.take}
     />
   )
 }

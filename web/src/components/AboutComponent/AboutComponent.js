@@ -1,11 +1,16 @@
 //import './AboutComponent.css'
 //import styles from './AboutComponent.module.css'
+import YouTubeEmbed from 'src/components/YouTubeEmbed'
+
 const AboutComponent = () => {
   let altText =
     'Find me in ./web/src/components/AboutComponent/AboutComponent.js'
   return (
     <>
-      <h1 alt={altText}>What is Tskr</h1>
+      {/*
+      <YouTubeEmbed embedId="lSSYciuiKSA" />
+      */}
+      {/*<h1 alt={altText}>What is Tskr</h1>
       <p>
         Tskr is a minimal RedwoodJS template to get started with Rules,
         Authentication, Roles and Role based Access Control.
@@ -108,7 +113,7 @@ const AboutComponent = () => {
       <h2>I&apos;m in, where do I start?</h2>
       <a href="https://github.com/tskrio/tskr#contributing">
         Contributing docs
-      </a>
+      </a>*/}
     </>
   )
 }

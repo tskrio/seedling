@@ -1,15 +1,4 @@
 export const schema = gql`
-  input GroupMemberOrderByInput {
-    createdAt: Sort
-    updatedAt: Sort
-    email: Sort
-    name: Sort
-    group: Sort
-    id: Sort
-  }
-  input GroupMemberSearchInput {
-    filter: String
-  }
   "A membership from a group to a user"
   type GroupMember {
     "The unique key auto assigned on create"
@@ -28,13 +17,21 @@ export const schema = gql`
     groupId: Int!
   }
 
+  type GroupMembers {
+    results: [GroupMember!]!
+    count: Int!
+    take: Int!
+    skip: Int!
+  }
+
   type Query {
     "To see GroupMembers you must be authenticated and have groupMemberRead role"
     groupMembers(
       filter: String
       skip: Int
-      orderBy: GroupMemberOrderByInput
-    ): [GroupMember!]! @requireAuth(roles: ["groupMemberRead", "admin"])
+      take: Int
+      orderBy: OrderByInput
+    ): GroupMembers! @requireAuth(roles: ["groupMemberRead", "admin"])
     "To see GroupMembers you must be authenticated and have groupMemberRead role"
     groupMember(id: Int!): GroupMember
       @requireAuth(roles: ["groupMemberRead", "admin"])
@@ -43,8 +40,13 @@ export const schema = gql`
     There's probably a better way to do this but for the time being I've made
     this query to look up memberships by groupId
     """
-    groupMembersByGroup(id: Int!): [GroupMember!]!
-      @requireAuth(roles: ["groupMemberRead", "admin"])
+    groupMembersByGroup(
+      id: Int!
+      filter: String
+      skip: Int
+      take: Int
+      orderBy: OrderByInput
+    ): GroupMembers! @requireAuth(roles: ["groupMemberRead", "admin"])
     """
     To see GroupMembers you must be authenticated and have groupMemberRead role
     There's probably a better way to do this but for the time being I've made

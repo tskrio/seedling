@@ -60,20 +60,12 @@ export const Success = ({ groupMembers }) => {
   let title = 'Group Members By Group'
   let columns = [
     {
-      Header: 'Created At',
-      accessor: 'createdAt', // accessor is the "key" in the data
-    },
-    {
-      Header: 'Updated At',
-      accessor: 'updatedAt',
-    },
-    {
       Header: 'User',
-      accessor: 'user.name',
+      accessor: 'userLink',
     },
     {
       Header: 'Group',
-      accessor: 'group.name',
+      accessor: 'groupLink',
     },
     {
       Header: 'Actions',
@@ -84,12 +76,16 @@ export const Success = ({ groupMembers }) => {
   let data = groupMembers.map((groupMember) => {
     return {
       ...groupMember,
-      createdAt: new Date(
-        groupMember.createdAt
-      ).toLocaleString(/**TODO: User preference! */),
-      updatedAt: new Date(
-        groupMember.createdAt
-      ).toLocaleString(/**TODO: User preference! */),
+      userLink: (
+        <Link to={routes.user({ id: groupMember.user.id })}>
+          {groupMember.user.name}
+        </Link>
+      ),
+      groupLink: (
+        <Link to={routes.group({ id: groupMember.group.id })}>
+          {groupMember.group.name}
+        </Link>
+      ),
     }
   })
   let queries = {

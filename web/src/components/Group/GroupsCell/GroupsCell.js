@@ -1,14 +1,15 @@
 import { Link, routes, useLocation } from '@redwoodjs/router'
 import TableComponent from 'src/components/TableComponent'
 export const beforeQuery = () => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { search } = useLocation()
   let params = new URLSearchParams(search)
-
-  //console.log(params.get('filter'))
   return {
     variables: {
       filter: params.get('filter'),
+      skip: parseInt(params.get('offset'), 10) || 0,
     },
+    fetchPolicy: 'no-cache',
   }
 }
 const DELETE_GROUP_MUTATION = gql`
@@ -19,13 +20,16 @@ const DELETE_GROUP_MUTATION = gql`
   }
 `
 export const QUERY = gql`
-  query FindGroups($filter: String) {
-    groups(filter: $filter) {
-      id
-      createdAt
-      updatedAt
-      name
-      description
+  query FindGroups($filter: String, $skip: Int) {
+    groups(filter: $filter, skip: $skip) {
+      count
+      take
+      skip
+      results {
+        id
+        name
+        description
+      }
     }
   }
 `
@@ -51,14 +55,6 @@ export const Success = ({ groups }) => {
   let title = 'Groups'
   let columns = [
     {
-      Header: 'Created At',
-      accessor: 'createdAt', // accessor is the "key" in the data
-    },
-    {
-      Header: 'Updated At',
-      accessor: 'updatedAt',
-    },
-    {
       Header: 'Name',
       accessor: 'name',
     },
@@ -71,15 +67,15 @@ export const Success = ({ groups }) => {
       accessor: 'actions',
     },
   ]
-  let data = groups.map((group) => {
+  let data = groups.results.map((group) => {
     return {
       ...group,
-      createdAt: new Date(
-        group.createdAt
-      ).toLocaleString(/**TODO: User preference! */),
-      updatedAt: new Date(
-        group.createdAt
-      ).toLocaleString(/**TODO: User preference! */),
+      //createdAt: new Date(
+      //  group.createdAt
+      //).toLocaleString(/**TODO: User preference! */),
+      //updatedAt: new Date(
+      //  group.createdAt
+      //).toLocaleString(/**TODO: User preference! */),
     }
   })
   let queries = {
@@ -115,6 +111,9 @@ export const Success = ({ groups }) => {
       display={display}
       roles={roles}
       queryVariables={queryVariables}
+      count={groups.count}
+      skip={groups.skip}
+      take={groups.take}
     />
   )
 }

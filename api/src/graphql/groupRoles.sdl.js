@@ -1,14 +1,4 @@
 export const schema = gql`
-  input GroupRoleOrderByInput {
-    createdAt: Sort
-    updatedAt: Sort
-    role: Sort
-    group: Sort
-    id: Sort
-  }
-  input GroupSearchInput {
-    filter: String
-  }
   "A group role is a role that is given to the group's members"
   type GroupRole {
     "The unique key auto assigned on create"
@@ -25,13 +15,21 @@ export const schema = gql`
     groupId: Int!
   }
 
+  type GroupRoles {
+    results: [GroupRole!]!
+    count: Int!
+    take: Int!
+    skip: Int!
+  }
+
   type Query {
     "To see GroupRoles you must be authenticated with groupRoleRead role"
     groupRoles(
       filter: String
       skip: Int
-      orderBy: GroupRoleOrderByInput
-    ): [GroupRole!]! @requireAuth(roles: ["groupRoleRead", "admin"])
+      take: Int
+      orderBy: OrderByInput
+    ): GroupRoles! @requireAuth(roles: ["groupRoleRead", "admin"])
     "To see GroupRoles you must be authenticated with groupRoleRead role"
     groupRole(id: Int!): GroupRole
       @requireAuth(roles: ["groupRoleRead", "admin"])

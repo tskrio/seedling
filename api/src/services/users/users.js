@@ -35,7 +35,7 @@ export const createUser = async ({ input }) => {
   }
 }
 
-export const users = async ({ orderBy, filter, skip }) => {
+export const users = async ({ filter, skip, orderBy }) => {
   try {
     let preferences = context.currentUser.preferences
     let take = (() => {
@@ -61,6 +61,7 @@ export const users = async ({ orderBy, filter, skip }) => {
         return {}
       }
     })()
+    if (!skip) skip = 0
     let result = await executeBeforeReadAllRules(table, {
       status: { code: 'success', message: '' },
     })
@@ -68,10 +69,10 @@ export const users = async ({ orderBy, filter, skip }) => {
       throw new UserInputError(result.status.message)
     }
     let readRecords = await db[table].findMany({ take, where, orderBy, skip })
-    readRecords = executeAfterReadAllRules(table, readRecords)
     let count = await db[table].count({ where })
-    console.log(`There ${count} records on ${table} ${JSON.stringify(where)}`)
-    return readRecords
+    let results = { results: readRecords, count, take, skip }
+    readRecords = executeAfterReadAllRules(table, readRecords)
+    return results
   } catch (error) {
     throw new UserInputError(error.message)
   }

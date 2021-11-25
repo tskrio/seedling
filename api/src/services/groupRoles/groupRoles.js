@@ -51,11 +51,17 @@ export const groupRoles = async ({ orderBy, filter, skip }) => {
           { group: { name: { contains: filter, mode: 'insensitive' } } },
           { role: { contains: filter, mode: 'insensitive' } },
         ]
+        let castFilter = parseInt(filter, 10)
+        if (isNaN(castFilter) === false) {
+          OR.push({ group: { id: { equals: castFilter } } })
+          OR.push({ id: { equals: castFilter } })
+        }
         return { OR }
       } else {
         return {}
       }
     })()
+    if (!skip) skip = 0
     let result = await executeBeforeReadAllRules(table, {
       status: { code: 'success', message: '' },
     })
@@ -63,10 +69,10 @@ export const groupRoles = async ({ orderBy, filter, skip }) => {
       throw new UserInputError(result.status.message)
     }
     let readRecords = await db[table].findMany({ take, where, orderBy, skip })
-    readRecords = executeAfterReadAllRules(table, readRecords)
     let count = await db[table].count({ where })
-    console.log(`There ${count} records on ${table} ${JSON.stringify(where)}`)
-    return readRecords
+    let results = { results: readRecords, count, take, skip }
+    readRecords = executeAfterReadAllRules(table, readRecords)
+    return results
   } catch (error) {
     throw new UserInputError(error.message)
   }
