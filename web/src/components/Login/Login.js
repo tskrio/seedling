@@ -25,7 +25,7 @@ const Login = () => {
   }, [])
 
   const onSubmit = async (data) => {
-    toast.loading()
+    // toast.loading()
     const response = await logIn({ ...data })
     if (response.error) {
       toast.error(response.error)
