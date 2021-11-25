@@ -1,4 +1,4 @@
-import { useParams, Link, routes } from '@redwoodjs/router'
+import { useParams, Link, routes, useLocation } from '@redwoodjs/router'
 import TableComponent from 'src/components/TableComponent'
 const DELETE_GROUP_ROLE_MUTATION = gql`
   mutation DeleteGroupRoleMutation($id: Int!) {
@@ -8,26 +8,34 @@ const DELETE_GROUP_ROLE_MUTATION = gql`
   }
 `
 export const beforeQuery = (props) => {
-  //console.log('variables', props)
-  props.id = props.groupID.id
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { search } = useLocation()
+  let params = new URLSearchParams(search)
+
   return {
-    variables: props,
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'cache-first',
+    variables: {
+      filter: params.get('filter'),
+      skip: parseInt(params.get('offset'), 10) || 0,
+      id: props.groupID.id,
+    },
+    fetchPolicy: 'no-cache',
   }
 }
 
 export const QUERY = gql`
-  query FindGroupRolesByGroupQuery($id: Int!) {
-    groupRoles: groupRolesByGroup(id: $id) {
-      id
-      createdAt
-      updatedAt
-      role
-      groupId
-      group {
+  query FindGroupRolesByGroupQuery($id: Int!, $filter: String, $skip: Int) {
+    groupRoles: groupRolesByGroup(id: $id, filter: $filter, skip: $skip) {
+      count
+      take
+      skip
+      results {
         id
-        name
+        role
+        groupId
+        group {
+          id
+          name
+        }
       }
     }
   }
@@ -54,16 +62,8 @@ export const Success = ({ groupRoles }) => {
   let title = 'Group Roles by Group'
   let columns = [
     {
-      Header: 'Created At',
-      accessor: 'createdAt', // accessor is the "key" in the data
-    },
-    {
-      Header: 'Updated At',
-      accessor: 'updatedAt',
-    },
-    {
       Header: 'Group',
-      accessor: 'group.name',
+      accessor: 'groupLink',
     },
     {
       Header: 'Role',
@@ -74,7 +74,16 @@ export const Success = ({ groupRoles }) => {
       accessor: 'actions',
     },
   ]
-  let data = groupRoles
+  let data = groupRoles.results.map((groupRole) => {
+    return {
+      ...groupRole,
+      groupLink: (
+        <Link to={routes.group({ id: groupRole.group.id })}>
+          {groupRole.group.name}
+        </Link>
+      ),
+    }
+  })
   let queries = {
     QUERY: QUERY,
     DELETEMUTATION: DELETE_GROUP_ROLE_MUTATION,
@@ -85,6 +94,9 @@ export const Success = ({ groupRoles }) => {
     },
     createRecord: () => {
       return routes.newGroupRole()
+    },
+    readRecords: (props) => {
+      return routes.groupRoles(props)
     },
   }
   let display = 'id'
