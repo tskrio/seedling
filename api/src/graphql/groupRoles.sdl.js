@@ -38,8 +38,13 @@ export const schema = gql`
     There's probably a better way to do this but for the time being I've made
     this query to look up roles by groupId.  Used during authentication
     """
-    groupRolesByGroup(id: Int!): [GroupRole!]!
-      @requireAuth(roles: ["groupRoleRead", "admin"])
+    groupRolesByGroup(
+      id: Int!
+      filter: String
+      skip: Int
+      take: Int
+      orderBy: OrderByInput
+    ): GroupRoles! @requireAuth(roles: ["groupRoleRead", "admin"])
   }
 
   "When creating a group both the Role and the Group ID is needed."

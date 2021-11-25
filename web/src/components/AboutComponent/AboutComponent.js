@@ -1,10 +1,10 @@
 //import './AboutComponent.css'
 //import styles from './AboutComponent.module.css'
-import YouTubeEmbed from 'src/components/YouTubeEmbed'
+//import YouTubeEmbed from 'src/components/YouTubeEmbed'
 
 const AboutComponent = () => {
-  let altText =
-    'Find me in ./web/src/components/AboutComponent/AboutComponent.js'
+  //let altText =
+  //  'Find me in ./web/src/components/AboutComponent/AboutComponent.js'
   return (
     <>
       {/*

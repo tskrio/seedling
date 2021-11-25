@@ -51,7 +51,8 @@ export const Success = ({ groupRoles }) => {
   let columns = [
     {
       Header: 'Group',
-      accessor: 'group.name',
+      //accessor: 'group.name',
+      accessor: 'groupLink',
     },
     {
       Header: 'Role',
@@ -66,6 +67,11 @@ export const Success = ({ groupRoles }) => {
   let data = groupRoles.results.map((groupRole) => {
     return {
       ...groupRole,
+      groupLink: (
+        <Link to={routes.group({ id: groupRole.group.id })}>
+          {groupRole.group.name}
+        </Link>
+      ),
       //createdAt: new Date(
       //  groupRole.createdAt
       //).toLocaleString(/**TODO: User preference! */),

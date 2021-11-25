@@ -65,7 +65,6 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 export const Success = ({ groupMembers }) => {
-  console.log('groupMembers', groupMembers)
   let title = 'Group Members By Group'
   let columns = [
     {

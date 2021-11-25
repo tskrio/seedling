@@ -7,13 +7,8 @@ export const QUERY = gql`
   query EditGroupMemberById($id: Int!) {
     groupMember: groupMember(id: $id) {
       id
-      createdAt
-      updatedAt
       userId
       groupId
-      group {
-        name
-      }
     }
     groups {
       count
@@ -34,13 +29,6 @@ export const QUERY = gql`
         name
       }
     }
-    #  id
-    #  name
-    #}
-    #users {
-    #  id
-    #  name
-    #}
   }
 `
 const DELETE_GROUP_MEMBER_MUTATION = gql`
@@ -57,8 +45,6 @@ export const UPDATE_GROUP_MEMBER_MUTATION = gql`
   ) {
     updateGroupMember(id: $id, input: $input) {
       id
-      createdAt
-      updatedAt
       userId
       groupId
     }

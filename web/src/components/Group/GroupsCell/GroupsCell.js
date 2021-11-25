@@ -56,7 +56,7 @@ export const Success = ({ groups }) => {
   let columns = [
     {
       Header: 'Name',
-      accessor: 'name',
+      accessor: 'nameLink',
     },
     {
       Header: 'Description',
@@ -70,6 +70,7 @@ export const Success = ({ groups }) => {
   let data = groups.results.map((group) => {
     return {
       ...group,
+      nameLink: <Link to={routes.group({ id: group.id })}>{group.name}</Link>,
       //createdAt: new Date(
       //  group.createdAt
       //).toLocaleString(/**TODO: User preference! */),

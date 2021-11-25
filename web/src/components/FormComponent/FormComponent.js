@@ -29,7 +29,7 @@ const FormComponent = ({
   let formLabelClass = 'flex border-b border-gray-200 h-12 py-3 items-center'
   let formLabelClassError =
     'flex border-b border-gray-200 h-12 py-3 items-center'
-  let formTextFieldClass = 'focus:outline-none px-3 w-5/6'
+  let formTextFieldClass = 'focus:outline-none px-3 w-5/6 border-b'
   let labelAndFieldList = () => {
     return fields.map((field) => {
       if (field.readOnly) {
@@ -56,7 +56,11 @@ const FormComponent = ({
         field.html = (
           <TextField
             name={field.name}
-            defaultValue={record?.[field.name] || params.get(field.name)}
+            defaultValue={
+              record?.[field.name] ||
+              field.defaultValue ||
+              params.get(field.name)
+            }
             className={formTextFieldClass}
             errorClassName={formTextFieldClass}
             placeholder={field.placeHolder}

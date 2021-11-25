@@ -8,6 +8,7 @@ tasks:
       nvm alias default 14
       eval $(gp env -e RWJS_DEV_API_URL="http://localhost")
       yarn install
+      yarn rw exec seed
     command: |
       nvm install 14
       nvm use 14
