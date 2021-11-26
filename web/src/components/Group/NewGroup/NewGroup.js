@@ -23,8 +23,7 @@ const NewGroup = () => {
     },
   })
   const onSubmit = (data) => {
-    console.log(`Saving`, data)
-    /**Client RUles go here */
+    /**TODO: Client Rules go here */
     onSave(data)
   }
   const onSave = (input) => {

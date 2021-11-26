@@ -1,10 +1,10 @@
 import TableComponent from 'src/components/TableComponent'
-import { useParams, Link, routes } from '@redwoodjs/router'
+import { useParams, Link, routes, useLocation } from '@redwoodjs/router'
 export const beforeQuery = (props) => {
-  //console.log('variables', props)
-  props.id = props.userID.id
   return {
-    variables: props,
+    variables: {
+      id: props.userID.id,
+    },
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first',
   }
@@ -20,21 +20,19 @@ const DELETE_GROUP_MEMBER_MUTATION = gql`
 export const QUERY = gql`
   query getGroupMembersFromUser($id: Int!) {
     groupMembers: groupMembersByUser(id: $id) {
-      id
-      createdAt
-      updatedAt
-      userId
-      groupId
-      user {
-        name
+      count
+      take
+      skip
+      results {
         id
-      }
-      group {
-        name
-        id
-        createdAt
-        updatedAt
-        description
+        user {
+          name
+          id
+        }
+        group {
+          name
+          id
+        }
       }
     }
   }
@@ -57,7 +55,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ groupMembers }) => {
-  let title = 'Group Members By Group'
+  let title = 'Group memberships'
   let columns = [
     {
       Header: 'User',
@@ -73,7 +71,7 @@ export const Success = ({ groupMembers }) => {
     },
   ]
 
-  let data = groupMembers.map((groupMember) => {
+  let data = groupMembers.results.map((groupMember) => {
     return {
       ...groupMember,
       userLink: (
@@ -97,7 +95,7 @@ export const Success = ({ groupMembers }) => {
       return routes.groupMember(prop)
     },
     createRecord: () => {
-      return routes.newGroupMember({ userId: groupMembers[0].user.id })
+      return routes.newGroupMember({ userId: groupMembers.results[0].user.id })
     },
   }
   let display = 'id'
@@ -118,6 +116,8 @@ export const Success = ({ groupMembers }) => {
       display={display}
       roles={roles}
       queryVariables={queryVariables}
+      enableSearch={false}
+      count={groupMembers.count}
     />
   )
 }

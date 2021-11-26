@@ -14,9 +14,7 @@ let _preferences = [
   },
 ]
 let preferenceSeed = users.map((user) => {
-  //console.log(user.name)
   return preferences.map((preference) => {
-    //console.log(`  ${preference.name}`)
     return {
       id: preferenceId++,
       userId: user.id,

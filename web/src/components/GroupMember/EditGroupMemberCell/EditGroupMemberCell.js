@@ -10,25 +10,6 @@ export const QUERY = gql`
       userId
       groupId
     }
-    groups {
-      count
-      take
-      skip
-      results {
-        id
-        name
-        description
-      }
-    }
-    users {
-      count
-      take
-      skip
-      results {
-        id
-        name
-      }
-    }
   }
 `
 const DELETE_GROUP_MEMBER_MUTATION = gql`
@@ -57,8 +38,7 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ groupMember, groups, users }) => {
-  console.log(groupMember)
+export const Success = ({ groupMember }) => {
   const [updateGroup, { loading, error }] = useMutation(
     UPDATE_GROUP_MEMBER_MUTATION,
     {
@@ -70,8 +50,7 @@ export const Success = ({ groupMember, groups, users }) => {
   )
 
   const onSubmit = (data) => {
-    console.log(`Saving ${groupMember.id}`, data)
-    /**Client RUles go here */
+    /**TODO: Client Rules go here */
     onSave(data, groupMember.id)
   }
   const onSave = (input, id) => {
@@ -99,21 +78,45 @@ export const Success = ({ groupMember, groups, users }) => {
   }
   const fields = [
     {
-      name: 'groupId',
       prettyName: 'Group',
+      name: 'groupId',
       type: 'reference',
       display: 'name',
       value: 'id',
-      data: groups.results,
+      QUERY: gql`
+        query FindReferenceFieldQuery($filter: String, $skip: Int) {
+          search: groups(filter: $filter, skip: $skip) {
+            count
+            take
+            skip
+            results {
+              id
+              name
+            }
+          }
+        }
+      `,
     },
 
     {
+      prettyName: 'Users',
       name: 'userId',
-      prettyName: 'User',
       type: 'reference',
       display: 'name',
       value: 'id',
-      data: users.results, //TODO: figure out how to load a type ahead, there's 7k users in this list...
+      QUERY: gql`
+        query FindReferenceFieldQuery($filter: String, $skip: Int) {
+          search: users(filter: $filter, skip: $skip) {
+            count
+            take
+            skip
+            results {
+              id
+              name
+            }
+          }
+        }
+      `,
     },
   ]
   const roles = {

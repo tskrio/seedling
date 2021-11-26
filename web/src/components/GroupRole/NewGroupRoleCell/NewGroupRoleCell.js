@@ -38,8 +38,7 @@ export const Success = ({ groups }) => {
     }
   )
   const onSubmit = (data) => {
-    console.log(`Saving`, data)
-    /**Client RUles go here */
+    /**TODO: Client Rules go here */
     onSave(data)
   }
   const onSave = (input) => {
@@ -49,22 +48,29 @@ export const Success = ({ groups }) => {
 
   const fields = [
     {
-      name: 'groupId',
       prettyName: 'Group',
+      name: 'groupId',
       type: 'reference',
       display: 'name',
       value: 'id',
-      data: [
-        {
-          name: 'Pick one',
-          id: '',
-        },
-      ].concat(groups.results),
+      QUERY: gql`
+        query FindReferenceFieldQuery($filter: String, $skip: Int) {
+          search: groups(filter: $filter, skip: $skip) {
+            count
+            take
+            skip
+            results {
+              id
+              name
+            }
+          }
+        }
+      `,
     },
     {
       name: 'role',
       prettyName: 'Role',
-      type: 'reference',
+      type: 'select',
       display: 'name',
       value: 'name',
       data: [

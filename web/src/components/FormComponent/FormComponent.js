@@ -12,6 +12,7 @@ import {
 } from '@redwoodjs/forms'
 import { Link, useLocation } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
+import ReferenceField from 'src/components/ReferenceField'
 const FormComponent = ({
   record,
   fields,
@@ -71,7 +72,6 @@ const FormComponent = ({
         if (field.type === 'dateTime') {
           //2018-06-12T19:30"
           var dateTemp = new Date(record?.[field.name])
-          console.log(record?.[field.name])
           let year = dateTemp.getFullYear()
           let month = (dateTemp.getMonth() + 1).toString().padStart(2, 0)
           let date = dateTemp.getDate().toString().padStart(2, 0)
@@ -79,11 +79,6 @@ const FormComponent = ({
           let minute = dateTemp.getMinutes().toString().padStart(2, 0)
           let dateOnly = `${year}-${month}-${date}`
           let timeOnly = `${hour}:${minute}`
-          //try {
-          //  console.log(timeOnly.split('.'))
-          //} catch (e) {
-          //  console.log(e)
-          //}
           field.html = (
             <>
               <TextField
@@ -130,7 +125,7 @@ const FormComponent = ({
             />
           )
         }
-        if (field.type === 'reference') {
+        if (field.type === 'select') {
           let options = field.data.map((option) => {
             return (
               <option key={option[field.value]} value={option[field.value]}>
@@ -158,6 +153,11 @@ const FormComponent = ({
               config={{ required: field.required }}
             />
           )
+        }
+        if (field.type === 'reference') {
+          let _field = { ...field }
+          delete _field.html
+          field.html = <ReferenceField field={_field} />
         }
       }
       return (

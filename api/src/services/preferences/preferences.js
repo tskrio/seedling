@@ -29,7 +29,6 @@ export const createPreference = async ({ input }) => {
       record,
       status: { code: 'success', message: '' },
     })
-    console.log('returning record', record)
     return afterResult.record
   } catch (error) {
     throw new UserInputError(error.message)

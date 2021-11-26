@@ -30,8 +30,6 @@ export const QUERY = gql`
       skip
       results {
         id
-        userId
-        groupId
         user {
           name
           id
@@ -39,9 +37,6 @@ export const QUERY = gql`
         group {
           name
           id
-          createdAt
-          updatedAt
-          description
         }
       }
     }
@@ -134,6 +129,7 @@ export const Success = ({ groupMembers }) => {
       count={groupMembers.count}
       skip={groupMembers.skip}
       take={groupMembers.take}
+      enableSearch={false}
     />
   )
 }

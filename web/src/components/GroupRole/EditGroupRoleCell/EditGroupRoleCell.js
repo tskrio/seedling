@@ -56,8 +56,7 @@ export const Success = ({ groupRole, groups }) => {
     }
   )
   const onSubmit = (data) => {
-    console.log(`Saving ${groupRole.id}`, data)
-    /**Client RUles go here */
+    /**TODO: Client Rules go here */
     onSave(data, groupRole.id)
   }
   const onSave = (input, id) => {
@@ -80,17 +79,29 @@ export const Success = ({ groupRole, groups }) => {
   }
   const fields = [
     {
-      name: 'groupId',
       prettyName: 'Group',
+      name: 'groupId',
       type: 'reference',
       display: 'name',
       value: 'id',
-      data: groups.results,
+      QUERY: gql`
+        query FindReferenceFieldQuery($filter: String, $skip: Int) {
+          search: groups(filter: $filter, skip: $skip) {
+            count
+            take
+            skip
+            results {
+              id
+              name
+            }
+          }
+        }
+      `,
     },
     {
       name: 'role',
       prettyName: 'Role',
-      type: 'reference',
+      type: 'select',
       display: 'name',
       value: 'name',
       data: [
