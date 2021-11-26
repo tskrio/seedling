@@ -36,7 +36,6 @@ export const createGroupMember = async ({ input }) => {
 }
 
 export const groupMembers = async ({ orderBy, filter, skip, q }) => {
-  console.log('q', q)
   try {
     let preferences = context.currentUser.preferences
     let take = (() => {

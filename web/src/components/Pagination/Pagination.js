@@ -2,12 +2,13 @@ import { NavLink, Link } from '@redwoodjs/router'
 import { icons } from 'src/lib/icons'
 import { styles } from 'src/lib/styles'
 const Pagination = ({ count, readRecord, pageSize, filter, currentPage }) => {
+  //console.log('pagination', count)
   pageSize = pageSize || 5
   const items = []
   items.push(
     <p key={'first'}>
       <Link
-        to={readRecord({ filter: filter, offset: 0 * pageSize })}
+        to={readRecord({ offset: 0 * pageSize })}
         className={styles.notActive}
       >
         {icons.leftArrow}
@@ -21,7 +22,7 @@ const Pagination = ({ count, readRecord, pageSize, filter, currentPage }) => {
         className="leading-relaxed cursor-pointer mx-2 text-blue-600 hover:text-blue-600 text-sm"
       >
         <NavLink
-          to={readRecord({ filter: filter, offset: i * pageSize })}
+          to={readRecord({ offset: i * pageSize })}
           activeClassName={styles.active}
           className={styles.notActive}
         >
@@ -34,7 +35,6 @@ const Pagination = ({ count, readRecord, pageSize, filter, currentPage }) => {
     <p key={'last'}>
       <Link
         to={readRecord({
-          filter: filter,
           offset: currentPage * pageSize,
         })}
         className={styles.notActive}
@@ -44,14 +44,17 @@ const Pagination = ({ count, readRecord, pageSize, filter, currentPage }) => {
     </p>
   )
   let paginate = (array, pageSize, pageNumber) => {
-    return array.slice(pageNumber * pageSize, pageNumber * pageSize + pageSize)
+    pageNumber = pageNumber || 0
+    let param1 = pageNumber * pageSize
+    let param2 = pageNumber * pageSize + pageSize
+
+    return array.slice(param1, param2)
   }
-  console.log('currentPage', currentPage)
-  console.log('pageSize', pageSize)
   let reduced = paginate(items, pageSize, currentPage)
   //  console.log('items.length', items.length)
   //  items.splice(currentPage - 1, currentPage + 1)
   //  console.log('items.length', items.length)
+  //console.log(reduced)
   return <>{reduced}</>
 }
 

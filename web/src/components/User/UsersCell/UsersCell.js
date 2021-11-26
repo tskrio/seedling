@@ -11,7 +11,6 @@ export const beforeQuery = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { search } = useLocation()
   let params = new URLSearchParams(search)
-  console.log('beforeQuery', params.get('q'))
   return {
     variables: {
       q: params.get('q'),
@@ -67,7 +66,6 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ users }) => {
-  console.log('users', users)
   let title = 'Users'
   let columns = [
     {

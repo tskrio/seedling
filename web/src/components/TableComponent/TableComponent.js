@@ -4,8 +4,8 @@ import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
 import { Link, navigate, useLocation } from '@redwoodjs/router'
 import { useState, useEffect } from 'react'
-import Breadcrumbs from '../Breadcrumbs/Breadcrumbs'
-//import Pagination from 'src/components/Pagination'
+//import Breadcrumbs from '../Breadcrumbs/Breadcrumbs'
+import Pagination from 'src/components/Pagination'
 const TableComponent = ({
   title,
   columns,
@@ -21,7 +21,6 @@ const TableComponent = ({
   enableSearch,
   q,
 }) => {
-  console.log(q)
   const { search } = useLocation()
   const { hasRole } = useAuth()
   let params = new URLSearchParams(search)
@@ -75,12 +74,12 @@ const TableComponent = ({
     }
   })
 
-  columns = React.useMemo(
-    () => columns,
-    [
-      /**TODO: FEAT Allow columns hiding */
-    ]
-  )
+  //columns = React.useMemo(
+  //  () => columns,
+  //  [
+  //    /**TODO: FEAT Allow columns hiding */
+  //  ]
+  //)
   //data = tableData
   data = React.useMemo(
     () => data,
@@ -296,6 +295,11 @@ const TableComponent = ({
       {/**New Record Button Above */}
       {/*TODO: FEAT Enable pagination*/}
       {/**Pagination Below */}
+      <Pagination
+        count={count}
+        readRecord={routes.readRecords}
+        filter={'filter'}
+      />
       {/*
       <div
         id="pagination"
