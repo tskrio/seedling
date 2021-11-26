@@ -19,7 +19,7 @@ const DELETE_GROUP_MEMBER_MUTATION = gql`
 `
 export const QUERY = gql`
   query getGroupMembersFromUser($id: Int!) {
-    groupMembers: groupMembersByUser(id: $id) {
+    response: groupMembersByUser(id: $id) {
       count
       take
       skip
@@ -54,7 +54,10 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ groupMembers }) => {
+export const Success = ({ response }) => {
+  let single = 'groupMember'
+  let plural = 'groupMembers'
+  let Single = 'GroupMember'
   const { pathname } = useLocation()
   let userId = pathname.split('/')[2]
   let title = 'Group memberships'
@@ -73,17 +76,15 @@ export const Success = ({ groupMembers }) => {
     },
   ]
 
-  let data = groupMembers.results.map((groupMember) => {
+  let data = response.results.map((record) => {
     return {
-      ...groupMember,
+      ...record,
       userLink: (
-        <Link to={routes.user({ id: groupMember.user.id })}>
-          {groupMember.user.name}
-        </Link>
+        <Link to={routes.user({ id: record.user.id })}>{record.user.name}</Link>
       ),
       groupLink: (
-        <Link to={routes.group({ id: groupMember.group.id })}>
-          {groupMember.group.name}
+        <Link to={routes.group({ id: record.group.id })}>
+          {record.group.name}
         </Link>
       ),
     }
@@ -94,19 +95,22 @@ export const Success = ({ groupMembers }) => {
   }
   let recordRoutes = {
     editRecord: (prop) => {
-      return routes.groupMember(prop)
+      return routes[single](prop)
     },
     createRecord: () => {
       // TODO: FEAT figure out way to add ... select for this user even if they dont appear in reference field
-      return routes.newGroupMember({ userId })
+      return routes[`new${Single}`]({ userId })
+    },
+    readRecords: () => {
+      return routes[plural]({ userId })
     },
   }
   let display = 'id'
   let roles = {
-    createRecord: ['groupMemberCreate'],
-    updateRecord: ['groupMemberUpdate'],
-    readRecord: ['groupMemberRead'],
-    deleteRecord: ['groupMemberDelete'],
+    createRecord: [`${single}Create`],
+    updateRecord: [`${single}Update`],
+    readRecord: [`${single}Read`],
+    deleteRecord: [`${single}Delete`],
   }
   let queryVariables = {}
   return (
@@ -120,7 +124,7 @@ export const Success = ({ groupMembers }) => {
       roles={roles}
       queryVariables={queryVariables}
       enableSearch={false}
-      count={groupMembers.count}
+      count={response.count}
     />
   )
 }
