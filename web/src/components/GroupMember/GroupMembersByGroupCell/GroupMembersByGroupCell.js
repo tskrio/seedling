@@ -103,12 +103,15 @@ export const Success = ({ groupMembers }) => {
     },
     createRecord: () => {
       return routes.newGroupMember({
-        // TODO: figure out way to add ... select for this user even if they dont appear in reference field
+        // TODO: FEAT figure out way to add ... select for this user even if they dont appear in reference field
         groupId: groupId,
       })
     },
     readRecords: (props) => {
       return routes.groupMembers(props)
+    },
+    readFilteredRecords: () => {
+      return routes.groupMembers({ filter: groupId })
     },
   }
   let display = 'id'

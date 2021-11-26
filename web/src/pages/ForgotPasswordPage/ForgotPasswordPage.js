@@ -38,7 +38,6 @@ const ForgotPasswordPage = () => {
   return (
     <>
       <MetaTags title="Forgot Password" />
-
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">

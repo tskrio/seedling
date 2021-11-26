@@ -2,11 +2,9 @@ import { useTable, useSortBy } from 'react-table'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
-import { NavLink, Link, navigate, useLocation } from '@redwoodjs/router'
+import { Link, navigate, useLocation } from '@redwoodjs/router'
 import { useState, useEffect } from 'react'
-import { styles } from 'src/lib/styles'
-import { icons } from 'src/lib/icons'
-import Pagination from 'src/components/Pagination'
+//import Pagination from 'src/components/Pagination'
 const TableComponent = ({
   title,
   columns,
@@ -17,8 +15,8 @@ const TableComponent = ({
   roles,
   queryVariables,
   count,
-  take,
-  skip,
+  //take,
+  //skip,
   enableSearch,
 }) => {
   const { search } = useLocation()
@@ -26,7 +24,7 @@ const TableComponent = ({
   let params = new URLSearchParams(search)
   const [tableData, setTableData] = useState(data)
   const [searchInput, setSearchInput] = useState(params.get('filter'))
-  const [offset, setOffset] = useState(params.get('offset'))
+  //const [offset, setOffset] = useState(params.get('offset'))
   let handleSearchInput = (event) => {
     setSearchInput(event.target.value)
   }
@@ -77,7 +75,7 @@ const TableComponent = ({
   columns = React.useMemo(
     () => columns,
     [
-      /**TODO: Allow columns hiding */
+      /**TODO: FEAT Allow columns hiding */
     ]
   )
   //data = tableData
@@ -85,15 +83,16 @@ const TableComponent = ({
     () => data,
     [
       tableData,
-      /**TODO: Update data on edit or delete */
+      /**TODO: BUG Update data on edit or delete */
     ]
   )
   const [deleteRecord] = useMutation(queries.DELETEMUTATION, {
     onError: (error) => {
       toast.error(error.message || `Error - not deleted`)
     },
-    onCompleted: (something) => {
+    onCompleted: () => {
       toast.success(`deleted`)
+      //TODO: BUG List doesn't remove record when deleted
       updateData()
     },
     // This refetches the query on the list page. Read more about other ways to
@@ -119,13 +118,14 @@ const TableComponent = ({
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data }, useSortBy)
   return (
-    <div className="pt-4 bg-white pb-4 px-4 rounded-md w-full shadow-lg">
+    <div className="mt-4 pt-4 bg-white pb-4 px-4 rounded-md w-full shadow-lg">
       {/**Title Below */}
-      <div className="flex justify-between w-full pt-6 ">
+      <div className="flex justify-between w-full pb-6 ">
         <h2 className="ml-1 font-bold text-lg">
-          {' '}
           {title} ({count})
         </h2>
+        {/**Table Menu Below */}
+        {/*
         <svg
           width="14"
           height="4"
@@ -139,8 +139,19 @@ const TableComponent = ({
             <circle cx="7.04991" cy="1.80115" r="1.38611" fill="#222222" />
           </g>
         </svg>
+        */}
+        {/**Table Menu Above */}
       </div>
-      All
+      {/* TODO: FEAT Add filter here | This doesn't work right yet, will probably need a better search parse */}
+      {/* All > Table > Filter */}
+      <Link to={routes.readRecords()}>All</Link>
+      {routes.readFilteredRecords && (
+        <>
+          {' '}
+          {'>'} <Link to={routes.readFilteredRecords()}>All</Link>
+        </>
+      )}
+      {/* TODO: FEAT Add filter here */}
       {/**Title Above */}
       {/**Search Below TODO: Enable global fitlering */}
       {enableSearch !== false && (
@@ -279,7 +290,8 @@ const TableComponent = ({
         </div>
       )}
       {/**New Record Button Above */}
-      {/**Pagination Below TODO: Enable pagination*/}
+      {/*TODO: FEAT Enable pagination*/}
+      {/**Pagination Below */}
       {/*
       <div
         id="pagination"

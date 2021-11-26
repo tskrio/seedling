@@ -41,7 +41,12 @@ const ReferenceField = ({ field }) => {
       console.log(error)
     }
   })
-  let html = <SelectField name={field.name}>{options}</SelectField>
+  let html = (
+    <SelectField name={field.name}>
+      <option>Pick one</option>
+      {options}
+    </SelectField>
+  )
   return (
     <div>
       {input}

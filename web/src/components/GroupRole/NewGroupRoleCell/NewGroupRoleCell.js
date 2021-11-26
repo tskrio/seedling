@@ -27,7 +27,8 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ groups }) => {
+export const Success = () => {
+  //TODO: DEBT This can be not a cell anymore as I'm not using the query
   const [createGroupRole, { loading, error }] = useMutation(
     CREATE_GROUP_ROLE_MUTATION,
     {
@@ -38,7 +39,7 @@ export const Success = ({ groups }) => {
     }
   )
   const onSubmit = (data) => {
-    /**TODO: Client Rules go here */
+    /**TODO: FEAT Client Rules go here */
     onSave(data)
   }
   const onSave = (input) => {

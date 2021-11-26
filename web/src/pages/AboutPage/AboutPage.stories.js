@@ -6,9 +6,9 @@ import 'src/reset.css'
 import 'src/index.css'
 export const generated = () => {
   return (
-    <StandardLayout>
+    <Standard>
       <AboutPage />
-    </StandardLayout>
+    </Standard>
   )
 }
 
@@ -21,15 +21,3 @@ export const loggedin = () => {
 }
 
 export default { title: 'Pages/AboutPage' }
-
-//export const empty = () => {
-//  return Empty ? <Empty /> : null
-//}
-//
-//export const failure = () => {
-//  return Failure ? <Failure error={new Error('Oh no')} /> : null
-//}
-//
-//export const success = () => {
-//  return Success ? <Success {...standard()} /> : null
-//}

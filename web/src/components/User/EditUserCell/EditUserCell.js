@@ -50,7 +50,7 @@ export const Success = ({ user }) => {
   })
 
   const onSubmit = (data) => {
-    /**TODO: Client Rules go here */
+    /**TODO: FEAT Client Rules go here */
     onSave(data, user.id)
   }
   const onSave = (input, id) => {

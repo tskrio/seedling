@@ -41,7 +41,7 @@ const FormComponent = ({
                 {
                   new Date(
                     record?.[field.name]
-                  ).toLocaleString(/**TODO: User preference! */)
+                  ).toLocaleString(/**TODO: FEAT User preference! */)
                 }
               </span>
             )

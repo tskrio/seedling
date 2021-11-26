@@ -12,12 +12,6 @@ export const QUERY = gql`
       role
       groupId
     }
-    groups {
-      results {
-        id
-        name
-      }
-    }
   }
 `
 const DELETE_GROUP_ROLE_MUTATION = gql`
@@ -45,7 +39,7 @@ export const Failure = ({ error }) => (
   <div className="rw-cell-error">{error.message}</div>
 )
 
-export const Success = ({ groupRole, groups }) => {
+export const Success = ({ groupRole }) => {
   const [updateGroup, { loading, error }] = useMutation(
     UPDATE_GROUP_ROLE_MUTATION,
     {
@@ -56,7 +50,7 @@ export const Success = ({ groupRole, groups }) => {
     }
   )
   const onSubmit = (data) => {
-    /**TODO: Client Rules go here */
+    /**TODO: FEAT Client Rules go here */
     onSave(data, groupRole.id)
   }
   const onSave = (input, id) => {
