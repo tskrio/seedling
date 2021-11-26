@@ -34,7 +34,7 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ groups, users }) => {
+export const Success = () => {
   const [createGroupMember, { loading, error }] = useMutation(
     CREATE_GROUP_MEMBER_MUTATION,
     {

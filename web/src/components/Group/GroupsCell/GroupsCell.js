@@ -71,12 +71,6 @@ export const Success = ({ groups }) => {
     return {
       ...group,
       nameLink: <Link to={routes.group({ id: group.id })}>{group.name}</Link>,
-      //createdAt: new Date(
-      //  group.createdAt
-      //).toLocaleString(/**TODO: User preference! */),
-      //updatedAt: new Date(
-      //  group.createdAt
-      //).toLocaleString(/**TODO: User preference! */),
     }
   })
   let queries = {

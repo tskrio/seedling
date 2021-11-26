@@ -55,6 +55,8 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ groupMembers }) => {
+  const { pathname } = useLocation()
+  let userId = pathname.split('/')[2]
   let title = 'Group memberships'
   let columns = [
     {
@@ -95,7 +97,8 @@ export const Success = ({ groupMembers }) => {
       return routes.groupMember(prop)
     },
     createRecord: () => {
-      return routes.newGroupMember({ userId: groupMembers.results[0].user.id })
+      // TODO: figure out way to add ... select for this user even if they dont appear in reference field
+      return routes.newGroupMember({ userId })
     },
   }
   let display = 'id'

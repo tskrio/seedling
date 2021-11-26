@@ -102,12 +102,6 @@ export const Success = ({ users }) => {
       ...user,
       name,
       groupMemberships: memberships,
-      createdAt: new Date(
-        user.createdAt
-      ).toLocaleString(/**TODO: User preference! */),
-      updatedAt: new Date(
-        user.createdAt
-      ).toLocaleString(/**TODO: User preference! */),
     }
   })
   let queries = {

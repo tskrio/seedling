@@ -72,12 +72,6 @@ export const Success = ({ groupRoles }) => {
           {groupRole.group.name}
         </Link>
       ),
-      //createdAt: new Date(
-      //  groupRole.createdAt
-      //).toLocaleString(/**TODO: User preference! */),
-      //updatedAt: new Date(
-      //  groupRole.createdAt
-      //).toLocaleString(/**TODO: User preference! */),
     }
   })
   let queries = {
