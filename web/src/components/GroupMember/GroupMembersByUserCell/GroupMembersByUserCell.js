@@ -100,6 +100,9 @@ export const Success = ({ groupMembers }) => {
       // TODO: FEAT figure out way to add ... select for this user even if they dont appear in reference field
       return routes.newGroupMember({ userId })
     },
+    readRecords: () => {
+      return routes.groupMembers({ userId })
+    },
   }
   let display = 'id'
   let roles = {
