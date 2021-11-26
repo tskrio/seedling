@@ -50,12 +50,10 @@ export const Success = ({ user }) => {
   })
 
   const onSubmit = (data) => {
-    console.log('on save data', data)
-    /**Client RUles go here */
+    /**TODO: FEAT Client Rules go here */
     onSave(data, user.id)
   }
   const onSave = (input, id) => {
-    console.log(`onSave of edit`, input, id)
     updateUser({ variables: { id, input } })
   }
   const [deleteUser] = useMutation(DELETE_USER_MUTATION, {

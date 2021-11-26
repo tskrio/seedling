@@ -139,13 +139,6 @@ export const deleteGroupMember = async ({ id }) => {
 }
 
 export const groupMembersByGroup = async ({ id, filter, skip, orderBy }) => {
-  //let records = await db[table].findMany({
-  //  where: { group: id },
-  //})
-  //let readRecords = records.map((current) => {
-  //  return current
-  //})
-  //return readRecords
   try {
     let preferences = context.currentUser.preferences
     let take = (() => {
@@ -157,20 +150,29 @@ export const groupMembersByGroup = async ({ id, filter, skip, orderBy }) => {
       }
     })()
     let where = (() => {
+      let forcedFilter = { groupId: { equals: id } }
+      let caseInsenstive = { contains: filter, mode: 'insensitive' }
       if (filter) {
-        let OR = [
-          { user: { email: { contains: filter, mode: 'insensitive' } } },
-          { user: { name: { contains: filter, mode: 'insensitive' } } },
-          { group: { name: { contains: filter, mode: 'insensitive' } } },
-        ]
-        let castFilter = parseInt(filter, 10)
-        if (isNaN(castFilter) === false) {
-          OR.push({ user: { id: { equals: castFilter } } })
-        }
-        return { AND: [{ groupId: { equals: id } }, { OR }] }
+        //let OR = [
+        //  {
+        //    AND: [{ user: { email: caseInsenstive } }, forcedFilter],
+        //  },
+        //  {
+        //    AND: [{ user: { name: caseInsenstive } }, forcedFilter],
+        //  },
+        //  {
+        //    AND: [{ group: { name: caseInsenstive } }, forcedFilter],
+        //  },
+        //]
+        //let castFilter = parseInt(filter, 10)
+        //if (isNaN(castFilter) === false) {
+        //  OR.push({ user: { id: { equals: castFilter } } })
+        //}
+        return forcedFilter
+        //return { AND: [ }, { OR }] }
         //return { AND { [ { groupId: {equals: id },  { OR }} ] }
       } else {
-        return {}
+        return forcedFilter
       }
     })()
     if (!skip) skip = 0
@@ -190,14 +192,42 @@ export const groupMembersByGroup = async ({ id, filter, skip, orderBy }) => {
   }
 }
 
-export const groupMembersByUser = async (id) => {
-  let records = await db[table].findMany({
-    where: { user: id },
-  })
-  let readRecords = records.map((current) => {
-    return current
-  })
-  return readRecords
+export const groupMembersByUser = async ({ id, filter, skip, orderBy }) => {
+  //let records = await db[table].findMany({
+  //  where: { user: id },
+  //})
+  //let readRecords = records.map((current) => {
+  //  return current
+  //})
+  //return readRecords
+  try {
+    let preferences = context.currentUser.preferences
+    let take = (() => {
+      let limit = parseInt(preferences['user.pageSize'], 10) || 10
+      if (limit > 100) {
+        return 100 //return 100 or limit whatever is smaller
+      } else {
+        return limit
+      }
+    })()
+    let where = (() => {
+      return { userId: { equals: id } }
+    })()
+    if (!skip) skip = 0
+    let result = await executeBeforeReadAllRules(table, {
+      status: { code: 'success', message: '' },
+    })
+    if (result.status.code !== 'success') {
+      throw new UserInputError(result.status.message)
+    }
+    let readRecords = await db[table].findMany({ take, where, orderBy, skip })
+    let count = await db[table].count({ where })
+    let results = { results: readRecords, count, take, skip }
+    readRecords = executeAfterReadAllRules(table, readRecords)
+    return results
+  } catch (error) {
+    throw new UserInputError(error.message)
+  }
 }
 
 export const GroupMember = {

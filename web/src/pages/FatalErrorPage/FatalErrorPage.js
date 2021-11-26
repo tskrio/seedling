@@ -7,6 +7,7 @@
 // still render a generic error page, but your users will prefer something a bit more
 // thoughtful. =)
 
+// TODO: FEAT Log error and update UI
 export default () => (
   <main>
     <style

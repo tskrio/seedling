@@ -30,8 +30,6 @@ export const QUERY = gql`
       skip
       results {
         id
-        userId
-        groupId
         user {
           name
           id
@@ -39,9 +37,6 @@ export const QUERY = gql`
         group {
           name
           id
-          createdAt
-          updatedAt
-          description
         }
       }
     }
@@ -65,6 +60,8 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 export const Success = ({ groupMembers }) => {
+  const { pathname } = useLocation()
+  let groupId = pathname.split('/')[2]
   let title = 'Group Members By Group'
   let columns = [
     {
@@ -106,11 +103,15 @@ export const Success = ({ groupMembers }) => {
     },
     createRecord: () => {
       return routes.newGroupMember({
-        groupId: groupMembers.results[0].group.id,
+        // TODO: FEAT figure out way to add ... select for this user even if they dont appear in reference field
+        groupId: groupId,
       })
     },
     readRecords: (props) => {
       return routes.groupMembers(props)
+    },
+    readFilteredRecords: () => {
+      return routes.groupMembers({ filter: groupId })
     },
   }
   let display = 'id'
@@ -134,6 +135,7 @@ export const Success = ({ groupMembers }) => {
       count={groupMembers.count}
       skip={groupMembers.skip}
       take={groupMembers.take}
+      enableSearch={false}
     />
   )
 }

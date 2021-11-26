@@ -12,12 +12,6 @@ export const QUERY = gql`
       role
       groupId
     }
-    groups {
-      results {
-        id
-        name
-      }
-    }
   }
 `
 const DELETE_GROUP_ROLE_MUTATION = gql`
@@ -45,7 +39,7 @@ export const Failure = ({ error }) => (
   <div className="rw-cell-error">{error.message}</div>
 )
 
-export const Success = ({ groupRole, groups }) => {
+export const Success = ({ groupRole }) => {
   const [updateGroup, { loading, error }] = useMutation(
     UPDATE_GROUP_ROLE_MUTATION,
     {
@@ -56,8 +50,7 @@ export const Success = ({ groupRole, groups }) => {
     }
   )
   const onSubmit = (data) => {
-    console.log(`Saving ${groupRole.id}`, data)
-    /**Client RUles go here */
+    /**TODO: FEAT Client Rules go here */
     onSave(data, groupRole.id)
   }
   const onSave = (input, id) => {
@@ -80,17 +73,29 @@ export const Success = ({ groupRole, groups }) => {
   }
   const fields = [
     {
-      name: 'groupId',
       prettyName: 'Group',
+      name: 'groupId',
       type: 'reference',
       display: 'name',
       value: 'id',
-      data: groups.results,
+      QUERY: gql`
+        query FindReferenceFieldQuery($filter: String, $skip: Int) {
+          search: groups(filter: $filter, skip: $skip) {
+            count
+            take
+            skip
+            results {
+              id
+              name
+            }
+          }
+        }
+      `,
     },
     {
       name: 'role',
       prettyName: 'Role',
-      type: 'reference',
+      type: 'select',
       display: 'name',
       value: 'name',
       data: [

@@ -1,5 +1,6 @@
 export const webProperties = (() => {
   return {
+    //TODO: DEBT Remove avatar bits (md5hash)
     avatars: {
       active: true,
       /**

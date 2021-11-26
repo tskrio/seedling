@@ -22,12 +22,10 @@ const NewUser = () => {
     },
   })
   const onSubmit = (data) => {
-    console.log(`Saving`, data)
-    /**Client RUles go here */
+    /**TODO: FEAT Client Rules go here */
     onSave(data)
   }
   const onSave = (input) => {
-    console.log('in newuser onsave', input)
     createUser({ variables: { input } })
   }
   const fields = [

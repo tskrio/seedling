@@ -64,7 +64,6 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ users }) => {
-  console.log('results', users.results)
   let title = 'Users'
   let columns = [
     {
@@ -85,7 +84,6 @@ export const Success = ({ users }) => {
     },
   ]
   let data = users.results.map((user) => {
-    //console.log(user)
     let memberships = user.GroupMember.map((membership) => {
       return (
         <div key={membership.id}>
@@ -100,17 +98,10 @@ export const Success = ({ users }) => {
       )
     })
     let name = <Link to={routes.user({ id: user.id })}>{user.name}</Link>
-    //console.log(memberships)
     return {
       ...user,
       name,
       groupMemberships: memberships,
-      createdAt: new Date(
-        user.createdAt
-      ).toLocaleString(/**TODO: User preference! */),
-      updatedAt: new Date(
-        user.createdAt
-      ).toLocaleString(/**TODO: User preference! */),
     }
   })
   let queries = {

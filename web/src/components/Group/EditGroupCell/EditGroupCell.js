@@ -48,8 +48,7 @@ export const Success = ({ group }) => {
     },
   })
   const onSubmit = (data) => {
-    console.log('on save data', data)
-    /**Client RUles go here */
+    /**TODO: FEAT Client Rules go here */
     onSave(data, group.id)
   }
   const onSave = (input, id) => {

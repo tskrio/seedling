@@ -117,6 +117,8 @@ export const Success = ({ groupRoles }) => {
       display={display}
       roles={roles}
       queryVariables={queryVariables}
+      enableSearch={false}
+      count={groupRoles.count}
     />
   )
 }

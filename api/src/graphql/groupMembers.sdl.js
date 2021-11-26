@@ -52,7 +52,7 @@ export const schema = gql`
     There's probably a better way to do this but for the time being I've made
     this query to look up memberships by userId
     """
-    groupMembersByUser(id: Int!): [GroupMember!]!
+    groupMembersByUser(id: Int!): GroupMembers!
       @requireAuth(roles: ["groupMemberRead", "admin"])
   }
 

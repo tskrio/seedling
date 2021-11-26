@@ -34,7 +34,7 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ groups, users }) => {
+export const Success = () => {
   const [createGroupMember, { loading, error }] = useMutation(
     CREATE_GROUP_MEMBER_MUTATION,
     {
@@ -46,8 +46,7 @@ export const Success = ({ groups, users }) => {
   )
 
   const onSubmit = (data) => {
-    console.log(`Saving`, data)
-    /**Client RUles go here */
+    /**TODO: FEAT Client Rules go here */
     onSave(data)
   }
   const onSave = (input) => {
@@ -58,32 +57,72 @@ export const Success = ({ groups, users }) => {
     createGroupMember({ variables: { input: castInput } })
   }
   const fields = [
+    //{
+    //  name: 'groupId',
+    //  prettyName: 'Group',
+    //  type: 'select',
+    //  display: 'name',
+    //  value: 'id',
+    //  data: [
+    //    {
+    //      name: 'Pick one',
+    //      id: '',
+    //    },
+    //  ].concat(groups.results),
+    //},
     {
-      name: 'groupId',
       prettyName: 'Group',
+      name: 'groupId',
       type: 'reference',
       display: 'name',
       value: 'id',
-      data: [
-        {
-          name: 'Pick one',
-          id: '',
-        },
-      ].concat(groups.results),
+      QUERY: gql`
+        query FindReferenceFieldQuery($filter: String, $skip: Int) {
+          search: groups(filter: $filter, skip: $skip) {
+            count
+            take
+            skip
+            results {
+              id
+              name
+            }
+          }
+        }
+      `,
     },
     {
-      name: 'userId',
       prettyName: 'User',
+      name: 'userId',
       type: 'reference',
       display: 'name',
       value: 'id',
-      data: [
-        {
-          name: 'Pick one',
-          id: '',
-        },
-      ].concat(users.results),
+      QUERY: gql`
+        query FindReferenceFieldQuery($filter: String, $skip: Int) {
+          search: users(filter: $filter, skip: $skip) {
+            count
+            take
+            skip
+            results {
+              id
+              name
+            }
+          }
+        }
+      `,
     },
+    //{
+    //  name: 'userId',
+    //  prettyName: 'User',
+    //  type: 'select',
+    //  display: 'name',
+    //  value: 'id',
+    //  data: [
+    //    {
+    //      name: 'Pick one',
+    //      id: '',
+    //    },
+    //  ].concat(users.results),
+    //},
   ]
   const roles = {
     update: ['groupMemberUpdate'],
