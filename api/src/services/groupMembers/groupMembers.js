@@ -35,7 +35,8 @@ export const createGroupMember = async ({ input }) => {
   }
 }
 
-export const groupMembers = async ({ orderBy, filter, skip }) => {
+export const groupMembers = async ({ orderBy, filter, skip, q }) => {
+  console.log('q', q)
   try {
     let preferences = context.currentUser.preferences
     let take = (() => {
@@ -47,18 +48,26 @@ export const groupMembers = async ({ orderBy, filter, skip }) => {
       }
     })()
     let where = (() => {
-      if (filter) {
-        let OR = [
-          { user: { email: { contains: filter, mode: 'insensitive' } } },
-          { user: { name: { contains: filter, mode: 'insensitive' } } },
-          { group: { name: { contains: filter, mode: 'insensitive' } } },
-        ]
-        let castFilter = parseInt(filter, 10)
-        if (isNaN(castFilter) === false) {
-          OR.push({ user: { id: { equals: castFilter } } })
+      try {
+        let returnObject = {}
+        if (filter) {
+          let OR = [
+            { user: { email: { contains: filter, mode: 'insensitive' } } },
+            { user: { name: { contains: filter, mode: 'insensitive' } } },
+            { group: { name: { contains: filter, mode: 'insensitive' } } },
+          ]
+          let castFilter = parseInt(filter, 10)
+          if (isNaN(castFilter) === false) {
+            OR.push({ id: { equals: castFilter } })
+          }
+          returnObject.parsed = { OR }
         }
-        return { OR }
-      } else {
+        if (q) {
+          returnObject.parsed = JSON.parse(q)
+        }
+        return returnObject
+      } catch (error) {
+        console.log(error)
         return {}
       }
     })()
@@ -69,9 +78,20 @@ export const groupMembers = async ({ orderBy, filter, skip }) => {
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
-    let readRecords = await db[table].findMany({ take, where, orderBy, skip })
-    let count = await db[table].count({ where })
-    let results = { results: readRecords, count, take, skip }
+    let readRecords = await db[table].findMany({
+      take,
+      where: where.parsed,
+      orderBy,
+      skip,
+    })
+    let count = await db[table].count({ where: where.parsed })
+    let results = {
+      results: readRecords,
+      count,
+      take,
+      skip,
+      q: JSON.stringify(where.parsed),
+    }
     readRecords = executeAfterReadAllRules(table, readRecords)
     return results
   } catch (error) {

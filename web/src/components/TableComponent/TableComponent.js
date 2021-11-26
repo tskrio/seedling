@@ -4,6 +4,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
 import { Link, navigate, useLocation } from '@redwoodjs/router'
 import { useState, useEffect } from 'react'
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs'
 //import Pagination from 'src/components/Pagination'
 const TableComponent = ({
   title,
@@ -18,7 +19,9 @@ const TableComponent = ({
   //take,
   //skip,
   enableSearch,
+  q,
 }) => {
+  console.log(q)
   const { search } = useLocation()
   const { hasRole } = useAuth()
   let params = new URLSearchParams(search)
@@ -148,9 +151,10 @@ const TableComponent = ({
       {routes.readFilteredRecords && (
         <>
           {' '}
-          {'>'} <Link to={routes.readFilteredRecords()}>All</Link>
+          {'>'} <Link to={routes.readFilteredRecords()}>Limited</Link>
         </>
       )}
+      {/*<Breadcrumbs crumbs={q} readRecords={routes.readRecords} />*/}
       {/* TODO: FEAT Add filter here */}
       {/**Title Above */}
       {/**Search Below TODO: Enable global fitlering */}

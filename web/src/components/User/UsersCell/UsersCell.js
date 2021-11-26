@@ -11,8 +11,10 @@ export const beforeQuery = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { search } = useLocation()
   let params = new URLSearchParams(search)
+  console.log('beforeQuery', params.get('q'))
   return {
     variables: {
+      q: params.get('q'),
       filter: params.get('filter'),
       skip: parseInt(params.get('offset'), 10) || 0,
     },
@@ -20,11 +22,12 @@ export const beforeQuery = () => {
   }
 }
 export const QUERY = gql`
-  query FindUsers($filter: String, $skip: Int) {
-    users(filter: $filter, skip: $skip) {
+  query FindUsers($filter: String, $skip: Int, $q: String) {
+    users(filter: $filter, skip: $skip, q: $q) {
       count
       take
       skip
+      q
       results {
         id
         createdAt
@@ -64,6 +67,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ users }) => {
+  console.log('users', users)
   let title = 'Users'
   let columns = [
     {
@@ -93,11 +97,32 @@ export const Success = ({ users }) => {
           >
             {membership.group.name}
           </Link>
+          {' --- '}
+          <Link
+            to={routes.groupMembers({
+              q: JSON.stringify({
+                AND: [{ groupId: membership.group.id }],
+              }),
+            })}
+          >
+            show matching
+          </Link>
           <br />
         </div>
       )
     })
-    let name = <Link to={routes.user({ id: user.id })}>{user.name}</Link>
+    //q: JSON.stringify({ AND: [JSON.parse(st)] }),
+    let name = (
+      <>
+        <Link to={routes.user({ id: user.id })}>{user.name}</Link>
+        {' --- '}
+        <Link
+          to={routes.users({ q: JSON.stringify({ AND: [{ id: user.id }] }) })}
+        >
+          show matching
+        </Link>
+      </>
+    )
     return {
       ...user,
       name,
@@ -140,6 +165,7 @@ export const Success = ({ users }) => {
       count={users.count}
       skip={users.skip}
       take={users.take}
+      q={users.q}
     />
   )
 }
