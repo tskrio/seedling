@@ -90,12 +90,14 @@ export const Success = ({ users }) => {
       return (
         <div key={membership.id}>
           <Link
+            alt={`Link to ${membership.group.name}`}
+            title={`Link to ${membership.group.name}`}
             key={membership.id}
             to={routes.group({ id: membership.group.id })}
           >
             {membership.group.name}
           </Link>
-          {' --- '}
+          {/*{' --- '}
           <Link
             to={routes.groupMembers({
               q: JSON.stringify({
@@ -105,26 +107,28 @@ export const Success = ({ users }) => {
           >
             show matching
           </Link>
-          <br />
+          <br />*/}
         </div>
       )
     })
     //q: JSON.stringify({ AND: [JSON.parse(st)] }),
     let name = (
       <>
-        <Link to={routes.user({ id: user.id })}>{user.name}</Link>
-        {' --- '}
+        <Link title={user.name} to={routes.user({ id: user.id })}>
+          {user.name}
+        </Link>
+        {/*{' --- '}
         <Link
           to={routes.users({ q: JSON.stringify({ AND: [{ id: user.id }] }) })}
         >
           show matching
-        </Link>
+        </Link>*/}
       </>
     )
     return {
       ...user,
       name,
-      groupMemberships: memberships,
+      groupMemberships: memberships || <div> 0 </div>,
     }
   })
   let queries = {
