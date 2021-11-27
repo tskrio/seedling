@@ -17,6 +17,14 @@ export const schema = gql`
     user: User!
   }
 
+  type Preferences {
+    results: [Preference!]!
+    count: Int!
+    take: Int!
+    skip: Int!
+    q: String
+  }
+
   type Query {
     "To see preferences you only need to be logged in, sometimes we'll need to see other user's preferences"
     preferences(
@@ -24,7 +32,9 @@ export const schema = gql`
       skip: Int
       take: Int
       orderBy: OrderByInput
-    ): [Preference!]! @requireAuth
+      q: String
+    ): Preferences! @requireAuth(roles: ["userRead", "admin"])
+
     "To see preferences you only need to be logged in, sometimes we'll need to see other user's preferences"
     preference(id: Int!): Preference! @requireAuth
   }

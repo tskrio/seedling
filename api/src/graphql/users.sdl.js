@@ -20,8 +20,6 @@ export const schema = gql`
     "DateTime the resetToken expires"
     resetTokenExpiresAt: DateTime
     "Calculated field, not actually stored on the database"
-    md5Email: String!
-    "The memberships this user is a part of"
     GroupMember: [GroupMember]!
     "The preferences this user has"
     Preference: [Preference]!

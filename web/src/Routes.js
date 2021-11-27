@@ -12,6 +12,7 @@ import GroupRolesLayout from 'src/layouts/GroupRolesLayout'
 import UsersLayout from 'src/layouts/UsersLayout'
 import GroupMembersLayout from 'src/layouts/GroupMembersLayout'
 import GroupsLayout from 'src/layouts/GroupsLayout'
+import PreferencesLayout from 'src/layouts/PreferencesLayout'
 import Standard from './layouts/Standard/Standard'
 
 const Routes = () => {
@@ -33,6 +34,15 @@ const Routes = () => {
             <Private unauthenticated="home" role={['admin', 'groupUpdate', 'groupRead']}>
               <Route path="/groups/{id:Int}" page={GroupEditGroupPage} name="group" />
               <Route path="/groups" page={GroupGroupsPage} name="groups" />
+            </Private>
+          </Set>
+          <Set wrap={PreferencesLayout}>
+            <Private unauthenticated="home">
+              <Route path="/preferences/new" page={PreferenceNewPreferencePage} name="newPreference" />
+            </Private>
+            <Private unauthenticated="home">
+              <Route path="/preferences/{id:Int}" page={PreferenceEditPreferencePage} name="preference" />
+              <Route path="/preferences" page={PreferencePreferencesPage} name="preferences" />
             </Private>
           </Set>
           <Set wrap={UsersLayout}>
