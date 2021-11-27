@@ -1,4 +1,5 @@
 import { Link, routes, useLocation } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
 import TableComponent from 'src/components/TableComponent'
 const DELETE_USER_MUTATION = gql`
   mutation DeleteUserMutation($id: Int!) {
@@ -155,19 +156,28 @@ export const Success = ({ users }) => {
   }
   let queryVariables = {}
   return (
-    <TableComponent
-      title={title}
-      columns={columns}
-      data={data}
-      queries={queries}
-      routes={recordRoutes}
-      display={display}
-      roles={roles}
-      queryVariables={queryVariables}
-      count={users.count}
-      skip={users.skip}
-      take={users.take}
-      q={users.q}
-    />
+    <>
+      <MetaTags
+        title="Users"
+        description="All users"
+        /* you should un-comment description and add a unique description, 155 characters or less
+      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+      />
+
+      <TableComponent
+        title={title}
+        columns={columns}
+        data={data}
+        queries={queries}
+        routes={recordRoutes}
+        display={display}
+        roles={roles}
+        queryVariables={queryVariables}
+        count={users.count}
+        skip={users.skip}
+        take={users.take}
+        q={users.q}
+      />
+    </>
   )
 }

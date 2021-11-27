@@ -1,4 +1,4 @@
-import { useMutation } from '@redwoodjs/web'
+import { useMutation, MetaTags } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
@@ -48,14 +48,22 @@ const NewGroup = () => {
     delete: ['groupDelete'],
   }
   return (
-    <FormComponent
-      fields={fields}
-      roles={roles}
-      onSubmit={onSubmit}
-      loading={loading}
-      error={error}
-      returnLink={routes.users()}
-    />
+    <>
+      <MetaTags
+        title="New Group"
+        description="New Group form"
+        /* you should un-comment description and add a unique description, 155 characters or less
+      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+      />
+      <FormComponent
+        fields={fields}
+        roles={roles}
+        onSubmit={onSubmit}
+        loading={loading}
+        error={error}
+        returnLink={routes.users()}
+      />
+    </>
   )
 }
 

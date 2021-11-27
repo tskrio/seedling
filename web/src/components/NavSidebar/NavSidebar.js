@@ -4,6 +4,9 @@ import { styles } from 'src/lib/styles'
 import { icons } from 'src/lib/icons'
 const NavSidebar = ({ children }) => {
   const { isAuthenticated, hasRole, currentUser } = useAuth()
+  let toggleMenu = () => {
+    document.querySelector('#navSideBar').classList.toggle(['hidden'])
+  }
   return (
     <>
       <div className="flex flex-wrap bg-gray-100 w-full h-screen">
@@ -28,6 +31,7 @@ const NavSidebar = ({ children }) => {
                     to={routes.about()}
                     activeClassName={styles.active}
                     className={styles.notActive}
+                    onClick={toggleMenu}
                   >
                     <span className="text-gray-600">{icons.dashboard}</span>
                     <span>Dashboard</span>
@@ -39,6 +43,7 @@ const NavSidebar = ({ children }) => {
                     to={routes.user({ id: currentUser.id })}
                     activeClassName={styles.active}
                     className={styles.notActive}
+                    onClick={toggleMenu}
                   >
                     <span className="text-gray-600">{icons.profile}</span>
                     <span>My profile</span>
@@ -51,6 +56,7 @@ const NavSidebar = ({ children }) => {
                       to={routes.users()}
                       activeClassName={styles.active}
                       className={styles.notActive}
+                      onClick={toggleMenu}
                     >
                       <span className="text-gray-600">{icons.users}</span>
                       <span>Users</span>
@@ -64,6 +70,7 @@ const NavSidebar = ({ children }) => {
                       to={routes.groups()}
                       activeClassName={styles.active}
                       className={styles.notActive}
+                      onClick={toggleMenu}
                     >
                       <span className=" text-gray-600">{icons.groups}</span>
                       <span>Groups</span>
@@ -77,6 +84,7 @@ const NavSidebar = ({ children }) => {
                       to={routes.groupMembers()}
                       activeClassName={styles.active}
                       className={styles.notActive}
+                      onClick={toggleMenu}
                     >
                       <span className=" text-gray-600">{icons.list}</span>
                       <span>Group Members</span>
@@ -90,6 +98,7 @@ const NavSidebar = ({ children }) => {
                       to={routes.groupRoles()}
                       activeClassName={styles.active}
                       className={styles.notActive}
+                      onClick={toggleMenu}
                     >
                       <span className=" text-gray-600">{icons.list}</span>
                       <span>Group Roles</span>
@@ -97,22 +106,26 @@ const NavSidebar = ({ children }) => {
                   </li>
                 )}
                 <li>
-                  <a href="/#" className={styles.notActive}>
+                  {/*<a href="/#" className={styles.notActive}>
                     <span className="text-gray-600">{icons.settings}</span>
                     <span>Settings</span>
-                  </a>
+                  </a>*/}
                 </li>
                 <li>
-                  <Link
+                  {/*<Link
                     to={routes.resetPassword()}
                     className={styles.notActive}
                   >
                     <span className="text-gray-600">{icons.lock}</span>
                     <span>Change password</span>
-                  </Link>
+                  </Link>*/}
                 </li>
                 <li>
-                  <Link className={styles.notActive} to={routes.logout()}>
+                  <Link
+                    className={styles.notActive}
+                    to={routes.logout()}
+                    onClick={toggleMenu}
+                  >
                     <span className="text-gray-600">{icons.logout}</span>
                     <span>Logout</span>
                   </Link>
@@ -128,6 +141,7 @@ const NavSidebar = ({ children }) => {
                     to={routes.about()}
                     activeClassName={styles.active}
                     className={styles.notActive}
+                    onClick={toggleMenu}
                   >
                     <span className="text-gray-600">{icons.info}</span>
                     <span>About</span>
@@ -135,13 +149,21 @@ const NavSidebar = ({ children }) => {
                 </li>
 
                 <li>
-                  <Link to={routes.signup()} className={styles.notActive}>
+                  <Link
+                    to={routes.signup()}
+                    className={styles.notActive}
+                    onClick={toggleMenu}
+                  >
                     <span className="text-gray-600">{icons.signup}</span>
                     <span>Sign up</span>
                   </Link>
                 </li>
                 <li>
-                  <Link className={styles.notActive} to={routes.login()}>
+                  <Link
+                    className={styles.notActive}
+                    to={routes.login()}
+                    onClick={toggleMenu}
+                  >
                     <span className="text-gray-600">{icons.login}</span>
                     <span>Login</span>
                   </Link>
