@@ -6,6 +6,7 @@ export const beforeQuery = () => {
   let params = new URLSearchParams(search)
   return {
     variables: {
+      q: params.get('q'),
       filter: params.get('filter'),
       skip: parseInt(params.get('offset'), 10) || 0,
     },
@@ -21,11 +22,12 @@ const DELETE_GROUP_MEMBER_MUTATION = gql`
   }
 `
 export const QUERY = gql`
-  query FindGroupMembers($filter: String, $skip: Int) {
-    groupMembers(filter: $filter, skip: $skip) {
+  query FindGroupMembers($filter: String, $skip: Int, $q: String) {
+    groupMembers(filter: $filter, skip: $skip, q: $q) {
       count
       take
       skip
+      q
       results {
         id
         user {
@@ -126,6 +128,7 @@ export const Success = ({ groupMembers }) => {
       count={groupMembers.count}
       skip={groupMembers.skip}
       take={groupMembers.take}
+      q={groupMembers.q}
     />
   )
 }

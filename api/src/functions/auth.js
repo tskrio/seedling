@@ -1,9 +1,9 @@
 import { DbAuthHandler } from '@redwoodjs/api'
 import { db } from 'src/lib/db'
-import { executeAfterUpdateRules } from 'src/lib/rules'
+import { executeAfterCreateRules, executeAfterUpdateRules } from 'src/lib/rules'
 export const handler = async (event, context) => {
   const forgotPasswordOptions = {
-    handler: (user) => {
+    handler: async (user) => {
       console.log(
         `${JSON.stringify(
           user
@@ -11,7 +11,7 @@ export const handler = async (event, context) => {
           user.email
         }...`
       )
-      executeAfterUpdateRules('user', { record: user })
+      await executeAfterUpdateRules('user', { record: user })
       return user
     },
     expires: 60 * 60 * 24,
@@ -76,8 +76,8 @@ export const handler = async (event, context) => {
     //
     // If this returns anything else, it will be returned by the
     // `signUp()` function in the form of: `{ message: 'String here' }`.
-    handler: ({ username, hashedPassword, salt, userAttributes }) => {
-      return db.user.create({
+    handler: async ({ username, hashedPassword, salt, userAttributes }) => {
+      let user = await db.user.create({
         data: {
           email: username,
           hashedPassword: hashedPassword,
@@ -85,6 +85,8 @@ export const handler = async (event, context) => {
           name: userAttributes.name,
         },
       })
+      await executeAfterCreateRules('user', { record: user })
+      return user
     },
 
     errors: {

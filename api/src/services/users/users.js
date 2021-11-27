@@ -35,7 +35,7 @@ export const createUser = async ({ input }) => {
   }
 }
 
-export const users = async ({ filter, skip, orderBy }) => {
+export const users = async ({ filter, skip, orderBy, q }) => {
   try {
     let preferences = context.currentUser.preferences
     let take = (() => {
@@ -47,17 +47,25 @@ export const users = async ({ filter, skip, orderBy }) => {
       }
     })()
     let where = (() => {
-      if (filter) {
-        let OR = [
-          { email: { contains: filter, mode: 'insensitive' } },
-          { name: { contains: filter, mode: 'insensitive' } },
-        ]
-        let castFilter = parseInt(filter, 10)
-        if (isNaN(castFilter) === false) {
-          OR.push({ id: { equals: castFilter } })
+      try {
+        let returnObject = {}
+        if (filter) {
+          let OR = [
+            { email: { contains: filter, mode: 'insensitive' } },
+            { name: { contains: filter, mode: 'insensitive' } },
+          ]
+          let castFilter = parseInt(filter, 10)
+          if (isNaN(castFilter) === false) {
+            OR.push({ id: { equals: castFilter } })
+          }
+          returnObject.parsed = { OR }
         }
-        return { OR }
-      } else {
+        if (q) {
+          returnObject.parsed = JSON.parse(q)
+        }
+        return returnObject
+      } catch (error) {
+        console.log(error)
         return {}
       }
     })()
@@ -68,9 +76,20 @@ export const users = async ({ filter, skip, orderBy }) => {
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
-    let readRecords = await db[table].findMany({ take, where, orderBy, skip })
-    let count = await db[table].count({ where })
-    let results = { results: readRecords, count, take, skip }
+    let readRecords = await db[table].findMany({
+      take,
+      where: where.parsed,
+      orderBy,
+      skip,
+    })
+    let count = await db[table].count({ where: where.parsed })
+    let results = {
+      results: readRecords,
+      count,
+      take,
+      skip,
+      q: JSON.stringify(where.parsed),
+    }
     readRecords = executeAfterReadAllRules(table, readRecords)
     return results
   } catch (error) {

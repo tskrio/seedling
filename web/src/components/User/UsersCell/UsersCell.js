@@ -13,6 +13,7 @@ export const beforeQuery = () => {
   let params = new URLSearchParams(search)
   return {
     variables: {
+      q: params.get('q'),
       filter: params.get('filter'),
       skip: parseInt(params.get('offset'), 10) || 0,
     },
@@ -20,11 +21,12 @@ export const beforeQuery = () => {
   }
 }
 export const QUERY = gql`
-  query FindUsers($filter: String, $skip: Int) {
-    users(filter: $filter, skip: $skip) {
+  query FindUsers($filter: String, $skip: Int, $q: String) {
+    users(filter: $filter, skip: $skip, q: $q) {
       count
       take
       skip
+      q
       results {
         id
         createdAt
@@ -88,20 +90,45 @@ export const Success = ({ users }) => {
       return (
         <div key={membership.id}>
           <Link
+            alt={`Link to ${membership.group.name}`}
+            title={`Link to ${membership.group.name}`}
             key={membership.id}
             to={routes.group({ id: membership.group.id })}
           >
             {membership.group.name}
           </Link>
-          <br />
+          {/*{' --- '}
+          <Link
+            to={routes.groupMembers({
+              q: JSON.stringify({
+                AND: [{ groupId: membership.group.id }],
+              }),
+            })}
+          >
+            show matching
+          </Link>
+          <br />*/}
         </div>
       )
     })
-    let name = <Link to={routes.user({ id: user.id })}>{user.name}</Link>
+    //q: JSON.stringify({ AND: [JSON.parse(st)] }),
+    let name = (
+      <>
+        <Link title={user.name} to={routes.user({ id: user.id })}>
+          {user.name}
+        </Link>
+        {/*{' --- '}
+        <Link
+          to={routes.users({ q: JSON.stringify({ AND: [{ id: user.id }] }) })}
+        >
+          show matching
+        </Link>*/}
+      </>
+    )
     return {
       ...user,
       name,
-      groupMemberships: memberships,
+      groupMemberships: memberships || <div> 0 </div>,
     }
   })
   let queries = {
@@ -140,6 +167,7 @@ export const Success = ({ users }) => {
       count={users.count}
       skip={users.skip}
       take={users.take}
+      q={users.q}
     />
   )
 }

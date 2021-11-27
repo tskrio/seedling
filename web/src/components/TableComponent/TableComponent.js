@@ -4,6 +4,8 @@ import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
 import { Link, navigate, useLocation } from '@redwoodjs/router'
 import { useState, useEffect } from 'react'
+///import './table.css'
+//import Breadcrumbs from '../Breadcrumbs/Breadcrumbs'
 //import Pagination from 'src/components/Pagination'
 const TableComponent = ({
   title,
@@ -18,6 +20,7 @@ const TableComponent = ({
   //take,
   //skip,
   enableSearch,
+  //q,
 }) => {
   const { search } = useLocation()
   const { hasRole } = useAuth()
@@ -38,7 +41,7 @@ const TableComponent = ({
   }
   useEffect(() => {
     setTableData(data)
-  }, [])
+  }, [data])
   data = data.map((row) => {
     return {
       ...row,
@@ -72,12 +75,12 @@ const TableComponent = ({
     }
   })
 
-  columns = React.useMemo(
-    () => columns,
-    [
-      /**TODO: FEAT Allow columns hiding */
-    ]
-  )
+  //columns = React.useMemo(
+  //  () => columns,
+  //  [
+  //    /**TODO: FEAT Allow columns hiding */
+  //  ]
+  //)
   //data = tableData
   data = React.useMemo(
     () => data,
@@ -148,9 +151,10 @@ const TableComponent = ({
       {routes.readFilteredRecords && (
         <>
           {' '}
-          {'>'} <Link to={routes.readFilteredRecords()}>All</Link>
+          {'>'} <Link to={routes.readFilteredRecords()}>Limited</Link>
         </>
       )}
+      {/*<Breadcrumbs crumbs={q} readRecords={routes.readRecords} />*/}
       {/* TODO: FEAT Add filter here */}
       {/**Title Above */}
       {/**Search Below TODO: Enable global fitlering */}
@@ -198,10 +202,7 @@ const TableComponent = ({
       {/**Table Below */}
       <div className="overflow-x-auto mt-6">
         {/*/ apply the table props*/}
-        <table
-          {...getTableProps()}
-          className="table-auto border-collapse w-full"
-        >
+        <table {...getTableProps()} className="border-collapse w-full">
           <thead>
             {
               // Loop over the header rows
@@ -210,7 +211,6 @@ const TableComponent = ({
                 <tr
                   key={headerGroup.key}
                   {...headerGroup.getHeaderGroupProps()}
-                  className="rounded-lg text-sm font-medium text-gray-700 text-left"
                 >
                   {
                     // Loop over the headers in each row
@@ -218,6 +218,7 @@ const TableComponent = ({
                       // Apply the header cell props
                       <th
                         key={column.key}
+                        className="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell"
                         {...column.getHeaderProps(
                           column.getSortByToggleProps()
                         )}
@@ -252,14 +253,18 @@ const TableComponent = ({
                   <tr
                     key={row.key}
                     {...row.getRowProps()}
-                    className="border px-4 py-2"
+                    className="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0"
                   >
                     {
                       // Loop over the rows cells
                       row.cells.map((cell) => {
                         // Apply the cell props
                         return (
-                          <td key={cell.key} {...cell.getCellProps()}>
+                          <td
+                            key={cell.key}
+                            {...cell.getCellProps()}
+                            className="w-full lg:w-auto p-3 text-gray-800  border border-b block lg:table-cell relative lg:static"
+                          >
                             {
                               // Render the cell contents
                               cell.render('Cell')
@@ -292,6 +297,11 @@ const TableComponent = ({
       {/**New Record Button Above */}
       {/*TODO: FEAT Enable pagination*/}
       {/**Pagination Below */}
+      {/*<Pagination
+        count={count}
+        readRecord={routes.readRecords}
+        filter={'filter'}
+      />*/}
       {/*
       <div
         id="pagination"

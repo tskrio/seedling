@@ -22,6 +22,7 @@ export const schema = gql`
     count: Int!
     take: Int!
     skip: Int!
+    q: String
   }
 
   type Query {
@@ -31,6 +32,7 @@ export const schema = gql`
       skip: Int
       take: Int
       orderBy: OrderByInput
+      q: String
     ): GroupMembers! @requireAuth(roles: ["groupMemberRead", "admin"])
     "To see GroupMembers you must be authenticated and have groupMemberRead role"
     groupMember(id: Int!): GroupMember

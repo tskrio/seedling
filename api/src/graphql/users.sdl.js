@@ -32,13 +32,19 @@ export const schema = gql`
     count: Int!
     take: Int!
     skip: Int!
+    q: String
   }
 
   "A collection of queries from user"
   type Query {
     "To see Users you must be authenticated and have userRead role"
-    users(filter: String, skip: Int, take: Int, orderBy: OrderByInput): Users!
-      @requireAuth(roles: ["userRead", "admin"])
+    users(
+      filter: String
+      skip: Int
+      take: Int
+      orderBy: OrderByInput
+      q: String
+    ): Users! @requireAuth(roles: ["userRead", "admin"])
     "To see Users you must be authenticated and have userRead role"
     user(id: Int!): User @requireAuth(roles: ["userRead", "admin"])
   }
