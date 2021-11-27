@@ -1,4 +1,5 @@
 import { Link, routes, useLocation } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
 import TableComponent from 'src/components/TableComponent'
 export const beforeQuery = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -97,18 +98,26 @@ export const Success = ({ groups }) => {
   }
   let queryVariables = {}
   return (
-    <TableComponent
-      title={title}
-      columns={columns}
-      data={data}
-      queries={queries}
-      routes={recordRoutes}
-      display={display}
-      roles={roles}
-      queryVariables={queryVariables}
-      count={groups.count}
-      skip={groups.skip}
-      take={groups.take}
-    />
+    <>
+      <MetaTags
+        title="Groups"
+        description="All groups"
+        /* you should un-comment description and add a unique description, 155 characters or less
+      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+      />
+      <TableComponent
+        title={title}
+        columns={columns}
+        data={data}
+        queries={queries}
+        routes={recordRoutes}
+        display={display}
+        roles={roles}
+        queryVariables={queryVariables}
+        count={groups.count}
+        skip={groups.skip}
+        take={groups.take}
+      />
+    </>
   )
 }

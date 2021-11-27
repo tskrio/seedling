@@ -1,8 +1,7 @@
 import FormComponent from 'src/components/FormComponent'
-import { useMutation } from '@redwoodjs/web'
+import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
-
 const CREATE_USER_MUTATION = gql`
   mutation CreateUserMutation($input: CreateUserInput!) {
     createUser(input: $input) {
@@ -52,14 +51,22 @@ const NewUser = () => {
     delete: ['userDelete'],
   }
   return (
-    <FormComponent
-      fields={fields}
-      roles={roles}
-      onSubmit={onSubmit}
-      loading={loading}
-      error={error}
-      returnLink={routes.users()}
-    />
+    <>
+      <MetaTags
+        title="New User"
+        description="New User form"
+        /* you should un-comment description and add a unique description, 155 characters or less
+      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+      />
+      <FormComponent
+        fields={fields}
+        roles={roles}
+        onSubmit={onSubmit}
+        loading={loading}
+        error={error}
+        returnLink={routes.users()}
+      />
+    </>
   )
 }
 
