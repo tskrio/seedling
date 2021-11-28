@@ -33,6 +33,7 @@ const FormComponent = ({
   let formTextFieldClass = 'focus:outline-none px-3 w-5/6 border-b'
   let labelAndFieldList = () => {
     return fields.map((field) => {
+      console.log(field)
       if (field.readOnly) {
         field.html = (() => {
           if (field.type === 'dateTime') {

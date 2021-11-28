@@ -1,7 +1,7 @@
 import FormComponent from 'src/components/FormComponent'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+import { navigate, routes, useParams, useLocation } from '@redwoodjs/router'
 export const QUERY = gql`
   query getGroupsAndUsers {
     groups {
@@ -35,6 +35,8 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = () => {
+  const { search } = useLocation()
+  let params = new URLSearchParams(search)
   const [createGroupMember, { loading, error }] = useMutation(
     CREATE_GROUP_MEMBER_MUTATION,
     {
@@ -57,19 +59,6 @@ export const Success = () => {
     createGroupMember({ variables: { input: castInput } })
   }
   const fields = [
-    //{
-    //  name: 'groupId',
-    //  prettyName: 'Group',
-    //  type: 'select',
-    //  display: 'name',
-    //  value: 'id',
-    //  data: [
-    //    {
-    //      name: 'Pick one',
-    //      id: '',
-    //    },
-    //  ].concat(groups.results),
-    //},
     {
       prettyName: 'Group',
       name: 'groupId',
@@ -77,7 +66,10 @@ export const Success = () => {
       display: 'name',
       value: 'id',
       QUERY: gql`
-        query FindReferenceFieldQuery($filter: String, $skip: Int) {
+        query FindReferenceFieldQueryNewGroupMemberGroup(
+          $filter: String
+          $skip: Int
+        ) {
           search: groups(filter: $filter, skip: $skip) {
             count
             take
@@ -96,8 +88,13 @@ export const Success = () => {
       type: 'reference',
       display: 'name',
       value: 'id',
+      defaultValue: params.get('userId'),
+      defaultDisplay: params.get('userName'),
       QUERY: gql`
-        query FindReferenceFieldQuery($filter: String, $skip: Int) {
+        query FindReferenceFieldQueryNewGroupMemberMember(
+          $filter: String
+          $skip: Int
+        ) {
           search: users(filter: $filter, skip: $skip) {
             count
             take
@@ -110,19 +107,6 @@ export const Success = () => {
         }
       `,
     },
-    //{
-    //  name: 'userId',
-    //  prettyName: 'User',
-    //  type: 'select',
-    //  display: 'name',
-    //  value: 'id',
-    //  data: [
-    //    {
-    //      name: 'Pick one',
-    //      id: '',
-    //    },
-    //  ].concat(users.results),
-    //},
   ]
   const roles = {
     update: ['groupMemberUpdate'],

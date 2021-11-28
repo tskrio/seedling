@@ -23,6 +23,14 @@ datasource db {
 
 }
 
+model Property {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  entity    String
+  value     String?
+}
+
 model User {
   id                  Int           @id @default(autoincrement())
   createdAt           DateTime      @default(now())

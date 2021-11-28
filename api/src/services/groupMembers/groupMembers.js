@@ -170,7 +170,7 @@ export const groupMembersByGroup = async ({ id, filter, skip, orderBy }) => {
     })()
     let where = (() => {
       let forcedFilter = { groupId: { equals: id } }
-      let caseInsenstive = { contains: filter, mode: 'insensitive' }
+      //let caseInsenstive = { contains: filter, mode: 'insensitive' }
       if (filter) {
         //let OR = [
         //  {
