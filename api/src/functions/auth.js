@@ -49,7 +49,7 @@ export const handler = async (event, context) => {
     expires: 60 * 60 * 24 * 365 * 10,
   }
   const resetPasswordOptions = {
-    handler: (user) => {
+    handler: (/*user*/) => {
       return true
     },
     allowReusedPassword: true,

@@ -11,7 +11,8 @@ import {
   FieldError,
 } from '@redwoodjs/forms'
 
-const ResetPasswordPage = ({ resetToken }) => {
+const ResetPasswordPage = ({ resetToken, wait }) => {
+  console.log('wait', wait)
   const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
     useAuth()
   const [enabled, setEnabled] = useState(true)
@@ -68,47 +69,54 @@ const ResetPasswordPage = ({ resetToken }) => {
                 Reset Password
               </h2>
             </header>
+            {wait && <>Waiting for code?</>}
+            {!wait && (
+              <>
+                <div className="rw-segment-main">
+                  <div className="rw-form-wrapper">
+                    <Form onSubmit={onSubmit} className="rw-form-wrapper">
+                      <div className="text-left">
+                        <Label
+                          name="password"
+                          className="rw-label"
+                          errorClassName="rw-label rw-label-error"
+                        >
+                          New Password
+                        </Label>
+                        <PasswordField
+                          name="password"
+                          autoComplete="new-password"
+                          className="rw-input"
+                          errorClassName="rw-input rw-input-error"
+                          disabled={!enabled}
+                          ref={passwordRef}
+                          validation={{
+                            required: {
+                              value: true,
+                              message: 'Password is required',
+                            },
+                          }}
+                        />
 
-            <div className="rw-segment-main">
-              <div className="rw-form-wrapper">
-                <Form onSubmit={onSubmit} className="rw-form-wrapper">
-                  <div className="text-left">
-                    <Label
-                      name="password"
-                      className="rw-label"
-                      errorClassName="rw-label rw-label-error"
-                    >
-                      New Password
-                    </Label>
-                    <PasswordField
-                      name="password"
-                      autoComplete="new-password"
-                      className="rw-input"
-                      errorClassName="rw-input rw-input-error"
-                      disabled={!enabled}
-                      ref={passwordRef}
-                      validation={{
-                        required: {
-                          value: true,
-                          message: 'Password is required',
-                        },
-                      }}
-                    />
+                        <FieldError
+                          name="password"
+                          className="rw-field-error"
+                        />
+                      </div>
 
-                    <FieldError name="password" className="rw-field-error" />
+                      <div className="rw-button-group">
+                        <Submit
+                          className="rw-button rw-button-blue"
+                          disabled={!enabled}
+                        >
+                          Submit
+                        </Submit>
+                      </div>
+                    </Form>
                   </div>
-
-                  <div className="rw-button-group">
-                    <Submit
-                      className="rw-button rw-button-blue"
-                      disabled={!enabled}
-                    >
-                      Submit
-                    </Submit>
-                  </div>
-                </Form>
-              </div>
-            </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </main>

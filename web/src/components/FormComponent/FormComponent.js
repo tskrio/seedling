@@ -23,7 +23,7 @@ const FormComponent = ({
   error,
   returnLink,
 }) => {
-  const { hasRole } = useAuth()
+  const { hasRole, currentUser } = useAuth()
   const { search } = useLocation()
   let params = new URLSearchParams(search)
 
@@ -33,6 +33,7 @@ const FormComponent = ({
   let formTextFieldClass = 'focus:outline-none px-3 w-5/6 border-b'
   let labelAndFieldList = () => {
     return fields.map((field) => {
+      //console.log(field)
       if (field.readOnly) {
         field.html = (() => {
           if (field.type === 'dateTime') {
@@ -168,7 +169,7 @@ const FormComponent = ({
             errorClassName={formLabelClassError}
           >
             <span className="whitespace-nowrap text-right px-2 w-1/6">
-              {field.prettyName}
+              {currentUser.messages[field.prettyName] || field.prettyName}
             </span>
             {field.html}
           </Label>

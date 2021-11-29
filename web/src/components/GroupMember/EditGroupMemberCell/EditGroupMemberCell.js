@@ -8,7 +8,13 @@ export const QUERY = gql`
     groupMember: groupMember(id: $id) {
       id
       userId
+      user {
+        name
+      }
       groupId
+      group {
+        name
+      }
     }
   }
 `
@@ -83,8 +89,13 @@ export const Success = ({ groupMember }) => {
       type: 'reference',
       display: 'name',
       value: 'id',
+      defaultValue: groupMember.groupId,
+      defaultDisplay: groupMember.group.name,
       QUERY: gql`
-        query FindReferenceFieldQuery($filter: String, $skip: Int) {
+        query FindReferenceFieldQueryEditGroupMembersGroups(
+          $filter: String
+          $skip: Int
+        ) {
           search: groups(filter: $filter, skip: $skip) {
             count
             take
@@ -104,8 +115,13 @@ export const Success = ({ groupMember }) => {
       type: 'reference',
       display: 'name',
       value: 'id',
+      defaultValue: groupMember.userId,
+      defaultDisplay: groupMember.user.name,
       QUERY: gql`
-        query FindReferenceFieldQuery($filter: String, $skip: Int) {
+        query FindReferenceFieldQueryEditGroupMembersMembers(
+          $filter: String
+          $skip: Int
+        ) {
           search: users(filter: $filter, skip: $skip) {
             count
             take

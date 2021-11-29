@@ -12,7 +12,6 @@ import {
   executeBeforeDeleteRules,
   executeAfterDeleteRules,
 } from 'src/lib/rules'
-import CryptoJS from 'crypto-js'
 let table = 'user'
 export const createUser = async ({ input }) => {
   try {
@@ -161,5 +160,4 @@ export const User = {
     db.user.findUnique({ where: { id: root.id } }).GroupMember(),
   Preference: (_obj, { root }) =>
     db.user.findUnique({ where: { id: root.id } }).Preference(),
-  md5Email: (_args, { root }) => CryptoJS.MD5(root.email).toString(),
 }

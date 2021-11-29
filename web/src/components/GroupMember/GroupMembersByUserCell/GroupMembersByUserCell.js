@@ -55,6 +55,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ response }) => {
+  console.log('response', response)
   let single = 'groupMember'
   let plural = 'groupMembers'
   let Single = 'GroupMember'

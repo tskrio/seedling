@@ -20,5 +20,9 @@
   },
   "prisma": {
     "seed": "yarn rw exec seed"
+  },
+  "scripts": {
+    "postgres:up": "docker-compose up -d",
+    "postgres:down": "docker-compose down"
   }
 }

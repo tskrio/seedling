@@ -1,6 +1,6 @@
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
+import { preference } from 'src/services/preferences/preferences'
 import { db } from './db'
-import CryptoJS from 'crypto-js'
 
 // The session object sent in as the first argument to getCurrentUser() will
 // have a single key `id` containing the unique ID of the logged in user
@@ -28,8 +28,6 @@ export const getCurrentUser = async (session) => {
     })
     // assign the roles to the user
     let roles = foundGroupRoles.map((groupRole) => groupRole.role)
-    // get the hashed email for gravatar
-    let md5Email = CryptoJS.MD5(foundUser.email).toString()
     // get user's preferences and store them as part of the user
     let foundPreferences = await db.preference.findMany({
       where: { userId: session.id },
@@ -40,14 +38,28 @@ export const getCurrentUser = async (session) => {
     foundPreferences.forEach((preference) => {
       preferences[preference.entity] = preference.value
     })
+    if (!preferences.language) {
+      preferences.language = 'en'
+    }
+    let foundMessages = await db.message.findMany({
+      where: { language: preferences.language },
+    })
+    console.log('preferences.language', preference.language)
+    console.log(foundMessages[0])
+    let messages = {}
+    foundMessages.forEach((message) => {
+      messages[message.entity] = message.value
+    })
     let returnUser = {
       roles,
       ...foundUser,
       preferences,
-      md5Email,
+      messages,
     }
+    console.log(returnUser)
     return returnUser
   } catch (error) {
+    console.log('error', error)
     return error
   }
 }

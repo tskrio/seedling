@@ -11,6 +11,9 @@ export const QUERY = gql`
       updatedAt
       role
       groupId
+      group {
+        name
+      }
     }
   }
 `
@@ -78,8 +81,10 @@ export const Success = ({ groupRole }) => {
       type: 'reference',
       display: 'name',
       value: 'id',
+      defaultValue: groupRole.groupId,
+      defaultDisplay: groupRole.group.name,
       QUERY: gql`
-        query FindReferenceFieldQuery($filter: String, $skip: Int) {
+        query FindReferenceFieldQueryGroupRoles($filter: String, $skip: Int) {
           search: groups(filter: $filter, skip: $skip) {
             count
             take
