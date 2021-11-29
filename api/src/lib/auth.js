@@ -1,4 +1,5 @@
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
+import { preference } from 'src/services/preferences/preferences'
 import { db } from './db'
 
 // The session object sent in as the first argument to getCurrentUser() will
@@ -37,13 +38,28 @@ export const getCurrentUser = async (session) => {
     foundPreferences.forEach((preference) => {
       preferences[preference.entity] = preference.value
     })
+    if (!preferences.language) {
+      preferences.language = 'en'
+    }
+    let foundMessages = await db.message.findMany({
+      where: { language: preferences.language },
+    })
+    console.log('preferences.language', preference.language)
+    console.log(foundMessages[0])
+    let messages = {}
+    foundMessages.forEach((message) => {
+      messages[message.entity] = message.value
+    })
     let returnUser = {
       roles,
       ...foundUser,
       preferences,
+      messages,
     }
+    console.log(returnUser)
     return returnUser
   } catch (error) {
+    console.log('error', error)
     return error
   }
 }

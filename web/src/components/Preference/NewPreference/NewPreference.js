@@ -52,7 +52,10 @@ const NewPreference = () => {
       display: 'name',
       value: 'id',
       QUERY: gql`
-        query FindReferenceFieldQuery($filter: String, $skip: Int) {
+        query FindReferenceFieldQueryNewPreferenceUsers(
+          $filter: String
+          $skip: Int
+        ) {
           search: users(filter: $filter, skip: $skip) {
             count
             take

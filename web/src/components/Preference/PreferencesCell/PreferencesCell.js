@@ -14,7 +14,7 @@ export const beforeQuery = () => {
   }
 }
 const DELETE_PREFERENCE_MUTATION = gql`
-  mutation DeletePreferenceMutation($id: Int!) {
+  mutation DeletePreferenceMutationPC($id: Int!) {
     deletePreference(id: $id) {
       id
     }

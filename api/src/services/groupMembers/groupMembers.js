@@ -211,7 +211,7 @@ export const groupMembersByGroup = async ({ id, filter, skip, orderBy }) => {
   }
 }
 
-export const groupMembersByUser = async ({ id, filter, skip, orderBy }) => {
+export const groupMembersByUser = async ({ id, /*filter,*/ skip, orderBy }) => {
   //let records = await db[table].findMany({
   //  where: { user: id },
   //})

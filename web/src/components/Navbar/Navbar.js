@@ -1,7 +1,7 @@
 import { useAuth } from '@redwoodjs/auth'
 import { icons } from 'src/lib/icons'
 const Navbar = () => {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, currentUser } = useAuth()
   return (
     <div className="flex flex-wrap">
       <section className="relative mx-auto">
@@ -65,7 +65,13 @@ const Navbar = () => {
                   className="hover:text-gray-200"
                   href="https://github.com/tskrio/tskr/issues/new"
                 >
-                  Leave Feedback
+                  {currentUser && (
+                    <>
+                      {currentUser.messages['Leave Feedback'] ||
+                        'Leave Feedback'}
+                    </>
+                  )}
+                  {!currentUser && <>Leave Feedback</>}
                 </a>
               </li>
               {!isAuthenticated && (
@@ -97,7 +103,7 @@ const Navbar = () => {
                   className="font-semibold flex items-center hover:text-gray-200"
                   href="/logout"
                 >
-                  Log out
+                  {currentUser.messages['Logout'] || 'Logout'}
                 </a>
               )}
             </div>

@@ -11,7 +11,8 @@ while (_users.length < total) {
     salt: '881aed4f5703af38eaaab6e788d8e860',
     Preference: {
       create: {
-        entity: 'default-password-is-admin',
+        entity: 'language',
+        value: chance.pickone(['en', 'fr', 'es', 'de']),
       },
     },
   })

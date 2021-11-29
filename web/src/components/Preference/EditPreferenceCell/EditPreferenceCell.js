@@ -3,7 +3,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
 const DELETE_GROUP_MUTATION = gql`
-  mutation DeletePreferenceMutation($id: Int!) {
+  mutation DeletePreferenceMutationEP($id: Int!) {
     deleteGroup(id: $id) {
       id
     }
@@ -29,6 +29,10 @@ export const UPDATE_PREFERENCE_MUTATION = gql`
       entity
       value
       userId
+      user {
+        name
+        id
+      }
     }
   }
 `
@@ -86,8 +90,13 @@ export const Success = ({ preference }) => {
       type: 'reference',
       display: 'name',
       value: 'id',
+      defaultValue: preference.user.id,
+      defaultDisplay: preference.user.name,
       QUERY: gql`
-        query FindReferenceFieldQuery($filter: String, $skip: Int) {
+        query FindReferenceFieldQueryEditPreferencesUsers(
+          $filter: String
+          $skip: Int
+        ) {
           search: users(filter: $filter, skip: $skip) {
             count
             take

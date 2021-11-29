@@ -36,15 +36,14 @@ export const createPreference = async ({ input }) => {
 
 export const preferences = async ({ filter, skip, orderBy, q }) => {
   try {
-    //let preferences = context.currentUser.preferences
+    let _preferences = context.currentUser.preferences
     let take = (() => {
-      return 10
-      //let limit = parseInt(preferences['user.pageSize'], 10) || 10
-      //if (limit > 100) {
-      //  return 100 //return 100 or limit whatever is smaller
-      //} else {
-      //  return limit
-      //}
+      let limit = parseInt(_preferences['user.pageSize'], 10) || 10
+      if (limit > 100) {
+        return 100 //return 100 or limit whatever is smaller
+      } else {
+        return limit
+      }
     })()
     let where = (() => {
       try {
@@ -90,7 +89,6 @@ export const preferences = async ({ filter, skip, orderBy, q }) => {
       skip,
       q: JSON.stringify(where.parsed),
     }
-    console.log(results)
     readRecords = executeAfterReadAllRules(table, readRecords)
     return results
   } catch (error) {

@@ -34,7 +34,9 @@ const NavSidebar = ({ children }) => {
                     onClick={toggleMenu}
                   >
                     <span className="text-gray-600">{icons.dashboard}</span>
-                    <span>Dashboard</span>
+                    <span>
+                      {currentUser.messages['Dashboard'] || 'Dashboard'}
+                    </span>
                   </NavLink>
                 </li>
                 {/**Profile */}
@@ -46,7 +48,9 @@ const NavSidebar = ({ children }) => {
                     onClick={toggleMenu}
                   >
                     <span className="text-gray-600">{icons.profile}</span>
-                    <span>My profile</span>
+                    <span>
+                      {currentUser.messages['My profile'] || 'My profile'}
+                    </span>
                   </NavLink>
                 </li>
                 {/**Users */}
@@ -59,7 +63,7 @@ const NavSidebar = ({ children }) => {
                       onClick={toggleMenu}
                     >
                       <span className="text-gray-600">{icons.users}</span>
-                      <span>Users</span>
+                      <span>{currentUser.messages['Users'] || 'Users'}</span>
                     </NavLink>
                   </li>
                 )}
@@ -73,7 +77,7 @@ const NavSidebar = ({ children }) => {
                       onClick={toggleMenu}
                     >
                       <span className=" text-gray-600">{icons.groups}</span>
-                      <span>Groups</span>
+                      <span>{currentUser.messages['Groups'] || 'Groups'}</span>
                     </NavLink>
                   </li>
                 )}
@@ -87,7 +91,10 @@ const NavSidebar = ({ children }) => {
                       onClick={toggleMenu}
                     >
                       <span className=" text-gray-600">{icons.list}</span>
-                      <span>Group Members</span>
+                      <span>
+                        {currentUser.messages['Group Members'] ||
+                          'Group Members'}
+                      </span>
                     </NavLink>
                   </li>
                 )}
@@ -101,10 +108,48 @@ const NavSidebar = ({ children }) => {
                       onClick={toggleMenu}
                     >
                       <span className=" text-gray-600">{icons.list}</span>
-                      <span>Group Roles</span>
+                      <span>
+                        {currentUser.messages['Group Roles'] || 'Group Roles'}
+                      </span>
                     </NavLink>
                   </li>
                 )}
+
+                {/**All Preferences */}
+                {hasRole(['admin']) && (
+                  <li>
+                    <NavLink
+                      to={routes.preferences()}
+                      activeClassName={styles.active}
+                      className={styles.notActive}
+                      onClick={toggleMenu}
+                    >
+                      <span className=" text-gray-600">{icons.list}</span>
+                      <span>
+                        {currentUser.messages['Preferences'] || 'Preferences'}
+                      </span>
+                    </NavLink>
+                  </li>
+                )}
+                {/**Properties */}
+                {/*}
+                {hasRole(['admin']) && (
+                  <li>
+                    <NavLink
+                      to={routes.preferences()}
+                      activeClassName={styles.active}
+                      className={styles.notActive}
+                      onClick={toggleMenu}
+                    >
+                      <span className=" text-gray-600">{icons.list}</span>
+                      <span>
+                        {currentUser.messages['Preferences'] || 'Preferences'}
+                      </span>
+                    </NavLink>
+                  </li>
+                )}
+
+                */}
                 <li>
                   {/*<a href="/#" className={styles.notActive}>
                     <span className="text-gray-600">{icons.settings}</span>
@@ -127,7 +172,7 @@ const NavSidebar = ({ children }) => {
                     onClick={toggleMenu}
                   >
                     <span className="text-gray-600">{icons.logout}</span>
-                    <span>Logout</span>
+                    <span>{currentUser.messages['Logout'] || 'Logout'}</span>
                   </Link>
                 </li>
               </ul>

@@ -3,6 +3,7 @@ import { SelectField } from '@redwoodjs/forms'
 import { useState } from 'react'
 
 const ReferenceField = ({ field }) => {
+  //console.log(field)
   let defaultOption = (
     <>
       {field.defaultValue && field.defaultDisplay && (
@@ -19,7 +20,7 @@ const ReferenceField = ({ field }) => {
   let handleSearchResult = () => {
     refetch()
   }
-  console.log(field.defaultValue, field.defaultDisplay)
+  //console.log(field.defaultValue, field.defaultDisplay)
   let input = (
     <>
       <input

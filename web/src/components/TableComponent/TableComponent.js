@@ -6,7 +6,7 @@ import { Link, navigate, useLocation } from '@redwoodjs/router'
 import { useState, useEffect } from 'react'
 ///import './table.css'
 //import Breadcrumbs from '../Breadcrumbs/Breadcrumbs'
-//import Pagination from 'src/components/Pagination'
+import Pagination from 'src/components/Pagination'
 const TableComponent = ({
   title,
   columns,
@@ -23,9 +23,10 @@ const TableComponent = ({
   //q,
 }) => {
   const { search } = useLocation()
-  const { hasRole } = useAuth()
+  const { hasRole, currentUser } = useAuth()
   let params = new URLSearchParams(search)
   const [tableData, setTableData] = useState(data)
+  const [columnData, setColumnData] = useState(data)
   const [searchInput, setSearchInput] = useState(params.get('filter'))
   //const [offset, setOffset] = useState(params.get('offset'))
   let handleSearchInput = (event) => {
@@ -41,6 +42,13 @@ const TableComponent = ({
   }
   useEffect(() => {
     setTableData(data)
+    let translatedColumns = columns.map((column) => {
+      return {
+        ...column,
+        Header: currentUser.messages[column.Header] || column.Header,
+      }
+    })
+    setColumnData(translatedColumns)
   }, [data])
   data = data.map((row) => {
     return {
@@ -54,7 +62,7 @@ const TableComponent = ({
                 to={routes.editRecord({ id: row.id })}
                 title={`Edit ${row[display]}`}
               >
-                Edit
+                {currentUser.messages['Edit'] || 'Edit'}
               </Link>
             </span>
           )}
@@ -66,7 +74,7 @@ const TableComponent = ({
                 className="rw-button rw-button-red w-full"
                 onClick={() => onDeleteClick(row.id, `${row[display]}`)}
               >
-                Delete
+                {currentUser.messages['Delete'] || 'Delete'}
               </button>
             </span>
           )}
@@ -82,6 +90,7 @@ const TableComponent = ({
   //  ]
   //)
   //data = tableData
+  //columns = columns.map((column) => {})
   data = React.useMemo(
     () => data,
     [
@@ -119,7 +128,7 @@ const TableComponent = ({
   }
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data }, useSortBy)
+    useTable({ columns: columnData, data }, useSortBy)
   return (
     <div className="mt-4 pt-4 bg-white pb-4 px-4 rounded-md w-full shadow-lg">
       {/**Title Below */}
@@ -147,11 +156,16 @@ const TableComponent = ({
       </div>
       {/* TODO: FEAT Add filter here | This doesn't work right yet, will probably need a better search parse */}
       {/* All > Table > Filter */}
-      <Link to={routes.readRecords()}>All</Link>
+      <Link to={routes.readRecords()}>
+        {currentUser.messages['All'] || 'All'}
+      </Link>
       {routes.readFilteredRecords && (
         <>
           {' '}
-          {'>'} <Link to={routes.readFilteredRecords()}>Limited</Link>
+          {'>'}{' '}
+          <Link to={routes.readFilteredRecords()}>
+            {currentUser.messages['Limited'] || 'Limited'}
+          </Link>
         </>
       )}
       {/*<Breadcrumbs crumbs={q} readRecords={routes.readRecords} />*/}
@@ -167,7 +181,7 @@ const TableComponent = ({
               id="globalSearch"
               name="globalSearch"
               className="leading-snug border border-gray-300 block w-full appearance-none bg-gray-100 text-sm text-gray-600 py-1 px-4 pl-8 rounded-lg"
-              placeholder="Search"
+              placeholder={currentUser.messages['Search'] || 'Search'}
               defaultValue={searchInput}
               onChange={handleSearchInput}
               onKeyDown={handleSearchKeyDown}
@@ -184,7 +198,7 @@ const TableComponent = ({
                 )
               }
             >
-              Go
+              {currentUser.messages['Go'] || 'Go'}
             </button>
             <div className="pointer-events-none absolute pl-3 inset-y-0 left-0 flex items-center px-2 text-gray-300">
               <svg
@@ -289,7 +303,7 @@ const TableComponent = ({
               className="rw-button rw-button-green w-full"
               to={routes.createRecord({ id: queryVariables })}
             >
-              New Record
+              {currentUser.messages['New Record'] || 'New Record'}
             </Link>
           </span>
         </div>
@@ -297,11 +311,14 @@ const TableComponent = ({
       {/**New Record Button Above */}
       {/*TODO: FEAT Enable pagination*/}
       {/**Pagination Below */}
-      {/*<Pagination
+      <Pagination
         count={count}
         readRecord={routes.readRecords}
-        filter={'filter'}
-      />*/}
+        pageSize={
+          currentUser.preferences[`${title.toLowerCase()}.pageSize`] || 5
+        }
+        offset={params.get('offset') || 0}
+      />
       {/*
       <div
         id="pagination"
