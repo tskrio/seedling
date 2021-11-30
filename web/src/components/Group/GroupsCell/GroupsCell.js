@@ -53,6 +53,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ groups }) => {
+  let table = 'group'
   let title = 'Groups'
   let columns = [
     {
@@ -117,6 +118,7 @@ export const Success = ({ groups }) => {
         count={groups.count}
         skip={groups.skip}
         take={groups.take}
+        table={table}
       />
     </>
   )

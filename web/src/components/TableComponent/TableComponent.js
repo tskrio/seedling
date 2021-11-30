@@ -21,6 +21,7 @@ const TableComponent = ({
   //skip,
   enableSearch,
   //q,
+  table,
 }) => {
   const { search } = useLocation()
   const { hasRole, currentUser } = useAuth()
@@ -315,7 +316,9 @@ const TableComponent = ({
         count={count}
         readRecord={routes.readRecords}
         pageSize={
-          currentUser.preferences[`${title.toLowerCase()}.pageSize`] || 5
+          currentUser.preferences[`${table}.pageSize`] ||
+          currentUser.preferences[`pageSize`] ||
+          10
         }
         offset={params.get('offset') || 0}
       />

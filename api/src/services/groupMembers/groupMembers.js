@@ -39,7 +39,10 @@ export const groupMembers = async ({ orderBy, filter, skip, q }) => {
   try {
     let preferences = context.currentUser.preferences
     let take = (() => {
-      let limit = parseInt(preferences['user.pageSize'], 10) || 10
+      let limit =
+        parseInt(preferences['groupMember.pageSize'], 10) ||
+        parseInt(preferences['pageSize'], 10) ||
+        10
       if (limit > 100) {
         return 100 //return 100 or limit whatever is smaller
       } else {

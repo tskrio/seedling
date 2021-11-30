@@ -38,7 +38,10 @@ export const groupRoles = async ({ orderBy, filter, skip }) => {
   try {
     let preferences = context.currentUser.preferences
     let take = (() => {
-      let limit = parseInt(preferences['user.pageSize'], 10) || 10
+      let limit =
+        parseInt(preferences['groupRole.pageSize'], 10) ||
+        parseInt(preferences['pageSize'], 10) ||
+        10
       if (limit > 100) {
         return 100 //return 100 or limit whatever is smaller
       } else {

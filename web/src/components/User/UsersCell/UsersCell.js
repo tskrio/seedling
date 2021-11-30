@@ -68,6 +68,7 @@ export const Failure = ({ error }) => (
 
 export const Success = ({ users }) => {
   let title = 'Users'
+  let table = 'user'
   let columns = [
     {
       Header: 'Name',
@@ -177,6 +178,7 @@ export const Success = ({ users }) => {
         skip={users.skip}
         take={users.take}
         q={users.q}
+        table={table}
       />
     </>
   )

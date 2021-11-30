@@ -62,6 +62,7 @@ export const Failure = ({ error }) => (
 export const Success = ({ groupMembers }) => {
   const { pathname } = useLocation()
   let groupId = pathname.split('/')[2]
+  let table = 'groupMember'
   let title = 'Group Members By Group'
   let columns = [
     {
@@ -136,6 +137,7 @@ export const Success = ({ groupMembers }) => {
       skip={groupMembers.skip}
       take={groupMembers.take}
       enableSearch={false}
+      table={table}
     />
   )
 }
