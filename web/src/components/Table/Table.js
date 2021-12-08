@@ -21,7 +21,7 @@ const Table = () => {
   `
   const { loading, error, data, refetch } = useQuery(QUERY, {
     variables: {
-      filter: filterString || '',
+      filter: filterString || 'mi',
       skip,
     },
     onCompleted: () => {
@@ -29,12 +29,17 @@ const Table = () => {
       setLoadedData(data)
     },
   })
-  let handleSearchResult = () => {
+  let handleSkipUpdate = () => {
     console.log('handleSearchResult')
     setSkip(skip + 1)
     refetch()
     //setLoadedData(data)
     //refetch()
+  }
+  let handleSearchInput = (event) => {
+    console.log(event.target.value)
+    setFitlerString(event.target.value)
+    refetch()
   }
   //if (loading) return <p>Loading Lazy Data</p>
   //if (error) return <p>`Error! ${error}`</p>
@@ -42,7 +47,11 @@ const Table = () => {
   let output
   try {
     output = loadedData.search.results.map((result) => {
-      return <p key={result.id}>{result.name}</p>
+      return (
+        <p key={result.id}>
+          {result.name} ({result.id})
+        </p>
+      )
     })
   } catch (error) {
     console.log(error.message)
@@ -50,12 +59,10 @@ const Table = () => {
 
   return (
     <Fragment>
-      <button
-        className="rw-button rw-button-blue "
-        onClick={handleSearchResult}
-      >
+      <button className="rw-button rw-button-blue " onClick={handleSkipUpdate}>
         Set Skip to {parseInt(skip, 10) + 1}
       </button>
+      <input onChange={handleSearchInput} />
       {output}
     </Fragment>
   )

@@ -1,7 +1,5 @@
-import { useAuth } from '@redwoodjs/auth'
 import { icons } from 'src/lib/icons'
-const Navbar = () => {
-  const { isAuthenticated, currentUser } = useAuth()
+const Navbar = ({ isAuthenticated, currentUser }) => {
   return (
     <div className="flex flex-wrap">
       <section className="relative mx-auto">

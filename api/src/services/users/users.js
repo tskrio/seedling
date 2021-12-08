@@ -51,6 +51,8 @@ export const users = async ({ filter, skip, orderBy, q }) => {
     let where = (() => {
       try {
         let returnObject = {}
+        // { OR: [ {field: value}, {field: {equals: value}} ]}
+        // RedwoodRecord
         if (filter) {
           let OR = [
             { email: { contains: filter, mode: 'insensitive' } },

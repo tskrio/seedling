@@ -13,10 +13,10 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/auth": "^0.38.0",
-    "@redwoodjs/forms": "^0.38.0",
-    "@redwoodjs/router": "^0.38.0",
-    "@redwoodjs/web": "^0.38.0",
+    "@redwoodjs/auth": "^0.39.3",
+    "@redwoodjs/forms": "^0.39.3",
+    "@redwoodjs/router": "^0.39.3",
+    "@redwoodjs/web": "^0.39.3",
     "chance": "^1.1.8",
     "js-cookie": "^3.0.1",
     "prop-types": "15.7.2",
@@ -29,6 +29,6 @@
     "autoprefixer": "^10.4.0",
     "postcss": "^8.3.11",
     "postcss-loader": "^6.2.0",
-    "tailwindcss": "^2.2.19"
+    "tailwindcss": "^3.0.0-alpha.2"
   }
 }

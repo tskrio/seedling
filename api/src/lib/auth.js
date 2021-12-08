@@ -15,7 +15,7 @@ import { db } from './db'
 export const getCurrentUser = async (session) => {
   try {
     // look up the user by the session id
-    let foundUser = await db.user.findUnique({ where: { id: session.id } })
+    let foundUser = await db.user.findUnique({ where: { id: session.id }})
     // look up the group memberships of the user
     let foundGroups = await db.groupMember.findMany({
       where: { userId: session.id },

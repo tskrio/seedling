@@ -25,8 +25,9 @@ const Routes = () => {
       <Set wrap={Standard}>
         <Route path="/logout" page={LogoutPage} name="logout" />
         <Route path="/" page={HomePage} name="home" />
-        <Route path="/about" page={AboutPage} name="about" />
         <Private unauthenticated="home">
+          <Route path="/about" page={AboutPage} name="about" />
+
           <Set wrap={GroupsLayout}>
             <Private unauthenticated="home" role={['admin', 'groupCreate']}>
               <Route path="/groups/new" page={GroupNewGroupPage} name="newGroup" />

@@ -4,11 +4,19 @@ import AboutPage from 'src/pages/AboutPage'
 import CookieModal from 'src/components/CookieModal'
 import { useAuth } from '@redwoodjs/auth'
 const Standard = ({ children }) => {
-  const { isAuthenticated, currentUser } = useAuth()
+  const { isAuthenticated, currentUser, hasRole } = useAuth()
   return (
     <>
-      <Navbar />
-      {isAuthenticated && currentUser && <NavSidebar>{children}</NavSidebar>}
+      <Navbar isAuthenticated={isAuthenticated} currentUser={currentUser} />
+      {isAuthenticated && currentUser && (
+        <NavSidebar
+          isAuthenticated={isAuthenticated}
+          currentUser={currentUser}
+          hasRole={hasRole}
+        >
+          {children}
+        </NavSidebar>
+      )}
       {!isAuthenticated && <AboutPage />}
       <CookieModal />
       {/*{!isAuthenticated && <>{children}</>}*/}

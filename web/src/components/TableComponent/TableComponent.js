@@ -4,6 +4,8 @@ import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
 import { Link, navigate, useLocation } from '@redwoodjs/router'
 import { useState, useEffect } from 'react'
+import { useQuery, ApolloClient } from '@apollo/client'
+
 ///import './table.css'
 //import Breadcrumbs from '../Breadcrumbs/Breadcrumbs'
 import Pagination from 'src/components/Pagination'
@@ -30,6 +32,7 @@ const TableComponent = ({
   const [columnData, setColumnData] = useState(data)
   const [searchInput, setSearchInput] = useState(params.get('filter'))
   //const [offset, setOffset] = useState(params.get('offset'))
+
   let handleSearchInput = (event) => {
     setSearchInput(event.target.value)
   }

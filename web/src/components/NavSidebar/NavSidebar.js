@@ -1,9 +1,8 @@
 import { Link, NavLink, routes } from '@redwoodjs/router'
-import { useAuth } from '@redwoodjs/auth'
 import { styles } from 'src/lib/styles'
 import { icons } from 'src/lib/icons'
-const NavSidebar = ({ children }) => {
-  const { isAuthenticated, hasRole, currentUser } = useAuth()
+const NavSidebar = ({ children, isAuthenticated, currentUser, hasRole }) => {
+  //const { isAuthenticated, hasRole, currentUser } = useAuth()
   let toggleMenu = () => {
     document.querySelector('#navSideBar').classList.toggle(['hidden'])
   }
