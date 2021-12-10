@@ -20,8 +20,15 @@ const UsersPage = () => {
       accessor: 'email',
     },
     {
+      Header: 'GroupMember',
+      accessor: 'GroupMember',
+      sortable: false,
+      scripted: true,
+    },
+    {
       Header: 'Actions',
       accessor: 'actions',
+      sortable: false,
     },
   ])
   return (

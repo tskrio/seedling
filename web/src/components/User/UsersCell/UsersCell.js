@@ -1,11 +1,15 @@
 import { Link, routes, useLocation } from '@redwoodjs/router'
-import { Fragment, useState, useMemo, useEffect } from 'react'
+import { Fragment, useState, useEffect } from 'react'
+import { toast } from '@redwoodjs/web/toast'
+import { useMutation } from '@redwoodjs/web'
+import { useAuth } from '@redwoodjs/auth'
 //import { MetaTags } from '@redwoodjs/web'
 //import TableComponent from 'src/components/TableComponent'
 const DELETE_USER_MUTATION = gql`
   mutation DeleteUserMutation($id: Int!) {
     deleteUser(id: $id) {
       id
+      name
     }
   }
 `
@@ -13,7 +17,7 @@ export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { search } = useLocation()
   let params = new URLSearchParams(search)
-  console.log(props)
+  //console.log(props)
   return {
     variables: {
       q: params.get('q'),
@@ -93,6 +97,8 @@ export const Success = ({
   //   let _columns = columns.concat([{ accessor: 'actions', Header: 'Actions' }])
   //   setColumns(_columns)
   // }, [''])
+
+  const { hasRole, currentUser } = useAuth()
   const { search } = useLocation()
   let params = new URLSearchParams(search)
 
@@ -110,19 +116,49 @@ export const Success = ({
     setTake(parseInt(event.target.value, 10))
   }
   let handleRemoveItem = (event) => {
+    let id = parseInt(event.target.value, 10)
+    console.log(data.results)
+    let foundUser = data.results.filter((user) => {
+      return user.id === id
+    })
+
+    if (confirm(`Are you sure you want to delete ${foundUser[0].name}?`)) {
+      deleteRecord({ variables: { id } })
+    }
     setData({
       ...users,
       results: data.results.filter((user) => {
-        return !(user.id === parseInt(event.target.value, 10))
+        return !(user.id === id)
       }),
     })
   }
-  //  const memoizedColumns = React.useMemo(() => [], columns, [columns])
+
+  const [deleteRecord] = useMutation(DELETE_USER_MUTATION, {
+    onError: (error) => {
+      toast.error(error.message || `Error - not deleted`)
+    },
+    onCompleted: (del) => {
+      toast.success(`Deleted ${del.deleteUser.name}`)
+    },
+    // This refetches the query on the list page. Read more about other ways to
+    // update the cache over here:
+    // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
+    //refetchQueries: [
+    //  {
+    //    query: queries.QUERY,
+    //    variables: {
+    //      id: queryVariables,
+    //      /*not sure how to get the query variables */
+    //    },
+    //  },
+    //],
+    //awaitRefetchQueries: true,
+  })
   let tableColumns = columns.map((column) => {
     return (
       <td key={column.accessor}>
         {column.Header}
-        {column.accessor != 'actions' && (
+        {column.sortable != false && (
           <Fragment>
             <button
               onClick={() => {
@@ -168,23 +204,35 @@ export const Success = ({
   })
   let tableRows = (rows) => {
     let _rows = rows.map((row) => {
-      row.actions = (
-        <button value={row.id} onClick={handleRemoveItem}>
-          Remove
-        </button>
-      )
-      let _elements = columns.map((column) => {
-        return (
-          <td
-            className={row.id + '_' + column.accessor}
-            key={row.id + '_' + column.accessor}
-          >
-            {row[column.accessor]}
-          </td>
+      if (hasRole(['userDelete', 'userEdit', 'admin'])) {
+        row.actions = (
+          <button value={row.id} onClick={handleRemoveItem}>
+            Remove
+          </button>
         )
+      }
+      let _elements = columns.map((column) => {
+        if (column.scripted) {
+          let _value = row[column.accessor]
+          let nestedElements = _value.map((relatedRecord) => {
+            return relatedRecord?.group?.name
+          })
+          return <td key={`${row.id}_${column.accessor}`}>{nestedElements}</td>
+        } else {
+          return (
+            <td
+              className={`${row.id}_${column.accessor}`}
+              key={`${row.id}_${column.accessor}`}
+            >
+              <Link title={row.name} to={routes.user({ id: row.id })}>
+                {row[column.accessor]}
+              </Link>
+            </td>
+          )
+        }
       })
       return (
-        <tr className={row.id + '_row'} key={row.id}>
+        <tr className={`${row.id}_row`} key={row.id}>
           {_elements}
         </tr>
       )
@@ -213,8 +261,15 @@ export const Success = ({
           setColumns([
             { accessor: 'id', Header: 'ID' },
             { accessor: 'name', Header: 'Name' },
-            { accessor: 'eamil', Header: 'Email' },
-            { accessor: 'actions', Header: 'Actions' },
+            { accessor: 'email', Header: 'Email' },
+
+            {
+              Header: 'GroupMember',
+              accessor: 'GroupMember',
+              sortable: false,
+              scripted: true,
+            },
+            { accessor: 'actions', Header: 'Actions', sortable: false },
           ])
         }}
       >
