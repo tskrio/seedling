@@ -20,16 +20,16 @@ const AboutPage = () => {
   return (
     <>
       {/*<AboutComponent />*/}
-      HERE{"'"}s MY QUERY FROM PAGE {"'"}
-      {queryFromPage}
-      {"'"}
-      <br />
-      <Testcomponent
+      {/*HERE{"'"}s MY QUERY FROM PAGE {"'"}*/}
+      {/*{queryFromPage}*/}
+      {/*{"'"}*/}
+      {/*<br />*/}
+      {/*<Testcomponent
         filter={queryFromPage}
         setQueryFromPage={setQueryFromPage}
         queryFromPage={queryFromPage}
         query={QUERY}
-      />
+      />*/}
     </>
   )
 }

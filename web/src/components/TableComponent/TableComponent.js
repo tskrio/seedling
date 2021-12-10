@@ -24,13 +24,15 @@ const TableComponent = ({
   enableSearch,
   //q,
   table,
+  setSearchInput,
+  searchInput
 }) => {
   const { search } = useLocation()
   const { hasRole, currentUser } = useAuth()
   let params = new URLSearchParams(search)
   const [tableData, setTableData] = useState(data)
   const [columnData, setColumnData] = useState(data)
-  const [searchInput, setSearchInput] = useState(params.get('filter'))
+
   //const [offset, setOffset] = useState(params.get('offset'))
 
   let handleSearchInput = (event) => {
@@ -106,7 +108,13 @@ const TableComponent = ({
     onError: (error) => {
       toast.error(error.message || `Error - not deleted`)
     },
-    onCompleted: () => {
+    onCompleted: (del) => {
+      console.log('completed delete', del.deleteUser, data)
+      let newData = data.filter((record)=>{
+        return del.deleteUser.id != record.id
+      })
+      setTableData(newData)
+      console.log('new data', newData)
       toast.success(`deleted`)
       //TODO: BUG List doesn't remove record when deleted
       updateData()

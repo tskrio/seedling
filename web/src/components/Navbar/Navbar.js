@@ -100,6 +100,7 @@ const Navbar = ({ isAuthenticated, currentUser }) => {
                 <a
                   className="font-semibold flex items-center hover:text-gray-200"
                   href="/logout"
+                  alt={JSON.stringify(currentUser)}
                 >
                   {currentUser.messages['Logout'] || 'Logout'}
                 </a>
