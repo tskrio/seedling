@@ -10,14 +10,17 @@ const UsersPage = () => {
     {
       Header: 'ID',
       accessor: 'id',
+      link: true,
     },
     {
       Header: 'Name',
       accessor: 'name',
+      link: true,
     },
     {
       Header: 'Email',
       accessor: 'email',
+      link: true,
     },
     {
       Header: 'GroupMember',

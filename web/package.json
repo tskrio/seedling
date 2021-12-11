@@ -13,6 +13,7 @@
     ]
   },
   "dependencies": {
+    "@chakra-ui/icons": "^1.1.1",
     "@redwoodjs/auth": "^0.39.3",
     "@redwoodjs/forms": "^0.39.3",
     "@redwoodjs/router": "^0.39.3",
@@ -26,7 +27,11 @@
     "react-table": "^7.7.0"
   },
   "devDependencies": {
+    "@chakra-ui/react": "^1.7.3",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
     "autoprefixer": "^10.4.0",
+    "framer-motion": "^4",
     "postcss": "^8.3.11",
     "postcss-loader": "^6.2.0",
     "tailwindcss": "^3.0.0-alpha.2"

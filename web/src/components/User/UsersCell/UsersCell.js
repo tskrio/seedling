@@ -1,8 +1,31 @@
 import { Link, routes, useLocation } from '@redwoodjs/router'
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState, useEffect, useRef } from 'react'
 import { toast } from '@redwoodjs/web/toast'
 import { useMutation } from '@redwoodjs/web'
 import { useAuth } from '@redwoodjs/auth'
+import {
+  Input,
+  Select,
+  //Box,
+  Button,
+  Table,
+  Thead,
+  Tbody,
+  //Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+} from '@chakra-ui/react'
+import {
+  TriangleUpIcon,
+  TriangleDownIcon,
+  CloseIcon,
+  SearchIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from '@chakra-ui/icons'
+import { IconButton } from '@chakra-ui/react'
 //import { MetaTags } from '@redwoodjs/web'
 //import TableComponent from 'src/components/TableComponent'
 const DELETE_USER_MUTATION = gql`
@@ -66,14 +89,7 @@ export const QUERY = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => {
-  return (
-    <div className="rw-text-center">
-      {'No users yet. '}
-      <Link to={routes.newUser()} className="rw-link">
-        {'Create one?'}
-      </Link>
-    </div>
-  )
+  return <Fragment>{'No users yet. '}</Fragment>
 }
 
 export const Failure = ({ error }) => (
@@ -93,14 +109,14 @@ export const Success = ({
   take,
   setTake,
 }) => {
-  // useEffect(() => {
-  //   let _columns = columns.concat([{ accessor: 'actions', Header: 'Actions' }])
-  //   setColumns(_columns)
-  // }, [''])
-
-  const { hasRole, currentUser } = useAuth()
-  const { search } = useLocation()
-  let params = new URLSearchParams(search)
+  const { hasRole /*currentUser*/ } = useAuth()
+  //  const { search } = useLocation()
+  //  let params = new URLSearchParams(search)
+  let initialColumns = useRef(columns)
+  useEffect(() => {
+    console.log('useEffect ran columns', columns)
+    console.log('useEffect ran initialColumns', initialColumns.current)
+  }, [])
 
   let [query, setQuery] = useState(queryFromPage)
   let [data, setData] = useState(users)
@@ -116,6 +132,7 @@ export const Success = ({
     setTake(parseInt(event.target.value, 10))
   }
   let handleRemoveItem = (event) => {
+    console.log(event)
     let id = parseInt(event.target.value, 10)
     console.log(data.results)
     let foundUser = data.results.filter((user) => {
@@ -131,6 +148,7 @@ export const Success = ({
         return !(user.id === id)
       }),
     })
+    return false
   }
 
   const [deleteRecord] = useMutation(DELETE_USER_MUTATION, {
@@ -140,27 +158,47 @@ export const Success = ({
     onCompleted: (del) => {
       toast.success(`Deleted ${del.deleteUser.name}`)
     },
-    // This refetches the query on the list page. Read more about other ways to
-    // update the cache over here:
-    // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
-    //refetchQueries: [
-    //  {
-    //    query: queries.QUERY,
-    //    variables: {
-    //      id: queryVariables,
-    //      /*not sure how to get the query variables */
-    //    },
-    //  },
-    //],
-    //awaitRefetchQueries: true,
   })
   let tableColumns = columns.map((column) => {
     return (
-      <td key={column.accessor}>
+      <Th key={column.accessor}>
         {column.Header}
         {column.sortable != false && (
           <Fragment>
-            <button
+            <IconButton
+              onClick={() => {
+                setOrderBy({
+                  [column.accessor]: 'asc',
+                })
+              }}
+              aria-label="Sort A-Z"
+              size="xs"
+              colorScheme={
+                (JSON.stringify(orderBy) ==
+                  JSON.stringify({ [column.accessor]: 'asc' }) &&
+                  'teal') ||
+                'blue'
+              }
+              icon={<TriangleUpIcon />}
+            />
+            <IconButton
+              onClick={() => {
+                setOrderBy({
+                  [column.accessor]: 'desc',
+                })
+              }}
+              aria-label="Sort Z-A"
+              size="xs"
+              colorScheme={
+                (JSON.stringify(orderBy) ==
+                  JSON.stringify({ [column.accessor]: 'desc' }) &&
+                  'teal') ||
+                'blue'
+              }
+              icon={<TriangleDownIcon />}
+            />
+
+            <IconButton
               onClick={() => {
                 setColumns(
                   columns.filter((_column) => {
@@ -168,67 +206,51 @@ export const Success = ({
                   })
                 )
               }}
-            >
-              Remove
-            </button>
-            <button
-              onClick={() => {
-                setOrderBy({
-                  [column.accessor]: 'asc',
-                })
-              }}
-            >
-              Sort A-Z
-              {JSON.stringify(orderBy) ==
-                JSON.stringify({ [column.accessor]: 'asc' }) && (
-                <Fragment>*</Fragment>
-              )}
-            </button>
-            <button
-              onClick={() => {
-                setOrderBy({
-                  [column.accessor]: 'desc',
-                })
-              }}
-            >
-              Sort Z-A
-              {JSON.stringify(orderBy) ==
-                JSON.stringify({ [column.accessor]: 'desc' }) && (
-                <Fragment>*</Fragment>
-              )}
-            </button>
+              aria-label="Remove Column"
+              size="xs"
+              colorScheme="red"
+              icon={<CloseIcon />}
+            />
           </Fragment>
         )}
-      </td>
+      </Th>
     )
   })
   let tableRows = (rows) => {
     let _rows = rows.map((row) => {
       if (hasRole(['userDelete', 'userEdit', 'admin'])) {
         row.actions = (
-          <button value={row.id} onClick={handleRemoveItem}>
+          <Button
+            value={row.id}
+            onClick={handleRemoveItem}
+            leftIcon={<CloseIcon />}
+            colorScheme="red"
+            variant="solid"
+            type="button"
+          >
             Remove
-          </button>
+          </Button>
         )
       }
       let _elements = columns.map((column) => {
+        let key = `${row.id}_${column.accessor}`
+
         if (column.scripted) {
           let _value = row[column.accessor]
           let nestedElements = _value.map((relatedRecord) => {
             return relatedRecord?.group?.name
           })
-          return <td key={`${row.id}_${column.accessor}`}>{nestedElements}</td>
-        } else {
+          return <Td key={key}>{nestedElements}</Td>
+        } else if (column.link) {
           return (
-            <td
-              className={`${row.id}_${column.accessor}`}
-              key={`${row.id}_${column.accessor}`}
-            >
+            <Td key={key}>
               <Link title={row.name} to={routes.user({ id: row.id })}>
                 {row[column.accessor]}
               </Link>
-            </td>
+            </Td>
           )
+        } else {
+          return <Td key={key}>{row[column.accessor]}</Td>
         }
       })
       return (
@@ -237,25 +259,34 @@ export const Success = ({
         </tr>
       )
     })
-    return <tbody>{_rows}</tbody>
+    return <Tbody>{_rows}</Tbody>
   }
   return (
     <Fragment>
-      <input onChange={handleSearchInput} />
-      <button onClick={handleSearchButton}>Go</button>
-      <select onChange={handleTakeInput}>
+      <Input
+        placeholder="Search id, name and email"
+        onChange={handleSearchInput}
+      />
+      <IconButton
+        aria-label="Search database"
+        onClick={handleSearchButton}
+        icon={<SearchIcon />}
+      />
+      <Select onChange={handleTakeInput}>
         <option value={take}>{take}</option>
         {take != 10 && <option value="10">10</option>}
         {take != 20 && <option value="20">20</option>}
         {take != 50 && <option value="50">50</option>}
         {take != 100 && <option value="100">100</option>}
-      </select>
-      <table>
-        <thead>
-          <tr>{tableColumns}</tr>
-        </thead>
+      </Select>
+      <Table variant="striped" colorScheme="teal" size="lg">
+        <TableCaption>List of Users</TableCaption>
+
+        <Thead>
+          <Tr>{tableColumns}</Tr>
+        </Thead>
         {tableRows(data.results)}
-      </table>
+      </Table>
       <button
         onClick={() => {
           setColumns([
@@ -275,20 +306,21 @@ export const Success = ({
       >
         Reset Columns
       </button>
-      <button
+      <IconButton
         onClick={() => {
           setSkip(skip - 10)
         }}
-      >
-        Prev Page
-      </button>
-      <button
+        aria-label="Previous Page"
+        icon={<ChevronLeftIcon />}
+      />
+
+      <IconButton
         onClick={() => {
           setSkip(skip + 10)
         }}
-      >
-        Next Page
-      </button>
+        aria-label="Next Page"
+        icon={<ChevronRightIcon />}
+      />
     </Fragment>
   )
 }

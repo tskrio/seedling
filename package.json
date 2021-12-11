@@ -22,7 +22,7 @@
     "seed": "yarn rw exec seed"
   },
   "scripts": {
-    "postgres:up": "docker-compose up -d",
+    "postgres:up": "docker-compose up -d && sudo chown -R $(whoami):$(whoami) .",
     "postgres:down": "docker-compose down"
   }
 }
