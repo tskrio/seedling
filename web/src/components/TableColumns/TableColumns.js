@@ -1,5 +1,5 @@
 import { Fragment } from 'react'
-import { Tr, Th, IconButton } from '@chakra-ui/react'
+import { Tr, Th, Thead, IconButton } from '@chakra-ui/react'
 import { TriangleUpIcon, TriangleDownIcon, CloseIcon } from '@chakra-ui/icons'
 const TableColumns = ({ columns, orderBy, setOrderBy, setColumns }) => {
   let headers = columns.map((column) => {
@@ -61,7 +61,11 @@ const TableColumns = ({ columns, orderBy, setOrderBy, setColumns }) => {
       </Th>
     )
   })
-  return <Tr>{headers}</Tr>
+  return (
+    <Thead>
+      <Tr>{headers}</Tr>
+    </Thead>
+  )
 }
 
 export default TableColumns

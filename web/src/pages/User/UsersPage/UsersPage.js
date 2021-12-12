@@ -1,6 +1,6 @@
 import UsersCell from 'src/components/User/UsersCell'
 import { useState } from 'react'
-
+import { Link, routes, useLocation } from '@redwoodjs/router'
 const UsersPage = () => {
   let [fuzzyQuery, setFuzzyQuery] = useState('')
   let [query, setQuery] = useState('')
@@ -11,24 +11,36 @@ const UsersPage = () => {
     {
       Header: 'ID',
       accessor: 'id',
-      link: true,
+      //link: true,
+      link: (givenId) => {
+        return routes.user({ id: givenId })
+      },
     },
     {
       Header: 'Name',
       accessor: 'name',
-      link: true,
+      link: (givenId) => {
+        return routes.user({ id: givenId })
+      },
       canRemove: false,
     },
     {
       Header: 'Email',
       accessor: 'email',
-      link: true,
+      link: (givenId) => {
+        return routes.user({ id: givenId })
+      },
     },
     {
       Header: 'GroupMember',
       accessor: 'GroupMember',
       canSort: false,
       scripted: true,
+      model: 'group',
+      field: 'name',
+      link: (givenId) => {
+        return routes.groupMembers({ q: `{AND:{userID: ${givenId}}}` })
+      },
     },
     {
       Header: 'Actions',
@@ -37,6 +49,7 @@ const UsersPage = () => {
       canRemove: false,
     },
   ])
+  let deleteRoles = ['userDelete']
   return (
     <UsersCell
       fuzzyQuery={fuzzyQuery}
@@ -51,6 +64,7 @@ const UsersPage = () => {
       setSkip={setSkip}
       take={take}
       setTake={setTake}
+      deleteRoles={deleteRoles}
     />
   )
 }

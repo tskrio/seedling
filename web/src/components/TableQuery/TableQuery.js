@@ -1,3 +1,4 @@
+import { navigate, useLocation, Link } from '@redwoodjs/router'
 import { Fragment, useRef } from 'react'
 import {
   SimpleGrid,
@@ -17,7 +18,17 @@ import { SearchIcon } from '@chakra-ui/icons'
  * TODO: Make this wokr
  */
 
-const TableQuery = ({ setQuery, fuzzyQuery, setFuzzyQuery, rawQuery }) => {
+const TableQuery = ({
+  setQuery,
+  fuzzyQuery,
+  setFuzzyQuery,
+  rawQuery,
+  inputPlaceholder,
+  link,
+}) => {
+  const { search } = useLocation()
+
+  let params = new URLSearchParams(search)
   let searchInput = useRef('')
   let handleSearchButton = () => {
     console.log(`searching for ${searchInput.current.value}`)
@@ -38,7 +49,7 @@ const TableQuery = ({ setQuery, fuzzyQuery, setFuzzyQuery, rawQuery }) => {
             <Input
               color="black"
               bgColor="white"
-              placeholder="Search id, name and email"
+              placeholder={inputPlaceholder || 'Search'}
               ref={searchInput}
               padding="10px"
               defaultValue={fuzzyQuery}
@@ -51,11 +62,16 @@ const TableQuery = ({ setQuery, fuzzyQuery, setFuzzyQuery, rawQuery }) => {
             />
           </Flex>
           <Flex padding="10px">
-            <Text color="white">{rawQuery || 'All Users'}</Text>
+            <Link to={link(rawQuery || '')}>
+              <Text color="white">{rawQuery || 'All Users'}</Text>
+            </Link>
             <Button
               onClick={() => {
+                console.log(params.get('q'))
+                params.delete('q')
                 setQuery('')
                 setFuzzyQuery('')
+                navigate(link(''))
               }}
               colorScheme="red"
               variant="solid"
