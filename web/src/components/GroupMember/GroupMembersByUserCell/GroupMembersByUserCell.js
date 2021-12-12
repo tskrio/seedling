@@ -55,7 +55,6 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ response }) => {
-  console.log('response', response)
   let single = 'groupMember'
   let plural = 'groupMembers'
   let Single = 'GroupMember'
@@ -126,6 +125,7 @@ export const Success = ({ response }) => {
       queryVariables={queryVariables}
       enableSearch={false}
       count={response.count}
+      table={single}
     />
   )
 }

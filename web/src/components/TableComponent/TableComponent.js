@@ -4,6 +4,8 @@ import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
 import { Link, navigate, useLocation } from '@redwoodjs/router'
 import { useState, useEffect } from 'react'
+import { useQuery, ApolloClient } from '@apollo/client'
+
 ///import './table.css'
 //import Breadcrumbs from '../Breadcrumbs/Breadcrumbs'
 import Pagination from 'src/components/Pagination'
@@ -21,14 +23,18 @@ const TableComponent = ({
   //skip,
   enableSearch,
   //q,
+  table,
+  setSearchInput,
+  searchInput
 }) => {
   const { search } = useLocation()
   const { hasRole, currentUser } = useAuth()
   let params = new URLSearchParams(search)
   const [tableData, setTableData] = useState(data)
   const [columnData, setColumnData] = useState(data)
-  const [searchInput, setSearchInput] = useState(params.get('filter'))
+
   //const [offset, setOffset] = useState(params.get('offset'))
+
   let handleSearchInput = (event) => {
     setSearchInput(event.target.value)
   }
@@ -102,7 +108,13 @@ const TableComponent = ({
     onError: (error) => {
       toast.error(error.message || `Error - not deleted`)
     },
-    onCompleted: () => {
+    onCompleted: (del) => {
+      console.log('completed delete', del.deleteUser, data)
+      let newData = data.filter((record)=>{
+        return del.deleteUser.id != record.id
+      })
+      setTableData(newData)
+      console.log('new data', newData)
       toast.success(`deleted`)
       //TODO: BUG List doesn't remove record when deleted
       updateData()
@@ -315,7 +327,9 @@ const TableComponent = ({
         count={count}
         readRecord={routes.readRecords}
         pageSize={
-          currentUser.preferences[`${title.toLowerCase()}.pageSize`] || 5
+          currentUser.preferences[`${table}.pageSize`] ||
+          currentUser.preferences[`pageSize`] ||
+          10
         }
         offset={params.get('offset') || 0}
       />

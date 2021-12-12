@@ -13,21 +13,27 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/auth": "^0.38.0",
-    "@redwoodjs/forms": "^0.38.0",
-    "@redwoodjs/router": "^0.38.0",
-    "@redwoodjs/web": "^0.38.0",
+    "@chakra-ui/icons": "^1.1.1",
+    "@redwoodjs/auth": "^0.39.3",
+    "@redwoodjs/forms": "^0.39.3",
+    "@redwoodjs/router": "^0.39.3",
+    "@redwoodjs/web": "^0.39.3",
     "chance": "^1.1.8",
     "js-cookie": "^3.0.1",
     "prop-types": "15.7.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-icons": "^4.3.1",
     "react-table": "^7.7.0"
   },
   "devDependencies": {
+    "@chakra-ui/react": "^1.7.3",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
     "autoprefixer": "^10.4.0",
+    "framer-motion": "^4",
     "postcss": "^8.3.11",
     "postcss-loader": "^6.2.0",
-    "tailwindcss": "^2.2.19"
+    "tailwindcss": "^3.0.0-alpha.2"
   }
 }

@@ -1,6 +1,8 @@
 // Define your own mock data here:
-export const standard = () => ({
-  groupRolesByGroup: {
-    id: 42,
-  },
-})
+export const standard = () => {
+  return {
+    groupRolesByGroup: {
+      id: 42,
+    },
+  };
+};

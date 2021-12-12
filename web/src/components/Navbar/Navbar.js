@@ -1,7 +1,5 @@
-import { useAuth } from '@redwoodjs/auth'
 import { icons } from 'src/lib/icons'
-const Navbar = () => {
-  const { isAuthenticated, currentUser } = useAuth()
+const Navbar = ({ isAuthenticated, currentUser }) => {
   return (
     <div className="flex flex-wrap">
       <section className="relative mx-auto">
@@ -102,6 +100,7 @@ const Navbar = () => {
                 <a
                   className="font-semibold flex items-center hover:text-gray-200"
                   href="/logout"
+                  alt={JSON.stringify(currentUser)}
                 >
                   {currentUser.messages['Logout'] || 'Logout'}
                 </a>

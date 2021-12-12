@@ -34,11 +34,20 @@ export const createUser = async ({ input }) => {
   }
 }
 
-export const users = async ({ filter, skip, orderBy, q }) => {
+export const users = async ({ filter, skip, orderBy, q, take }) => {
   try {
-    let preferences = context.currentUser.preferences
-    let take = (() => {
-      let limit = parseInt(preferences['user.pageSize'], 10) || 10
+    // let preferences = context.currentUser.preferences
+    let preferences = db.preference.findMany({
+      where: { userID: context.currentUser.id },
+    })
+    console.log('preferences', preferences)
+    if (skip < 0) skip = 0
+    let _take = (() => {
+      let limit =
+        take ||
+        parseInt(preferences['user.pageSize'], 10) ||
+        parseInt(preferences['pageSize'], 10) ||
+        10
       if (limit > 100) {
         return 100 //return 100 or limit whatever is smaller
       } else {
@@ -48,6 +57,8 @@ export const users = async ({ filter, skip, orderBy, q }) => {
     let where = (() => {
       try {
         let returnObject = {}
+        // { OR: [ {field: value}, {field: {equals: value}} ]}
+        // RedwoodRecord
         if (filter) {
           let OR = [
             { email: { contains: filter, mode: 'insensitive' } },
@@ -62,6 +73,7 @@ export const users = async ({ filter, skip, orderBy, q }) => {
         if (q) {
           returnObject.parsed = JSON.parse(q)
         }
+        console.log('whereObject', returnObject)
         return returnObject
       } catch (error) {
         console.log(error)
@@ -76,7 +88,7 @@ export const users = async ({ filter, skip, orderBy, q }) => {
       throw new UserInputError(result.status.message)
     }
     let readRecords = await db[table].findMany({
-      take,
+      take: _take,
       where: where.parsed,
       orderBy,
       skip,
@@ -85,7 +97,7 @@ export const users = async ({ filter, skip, orderBy, q }) => {
     let results = {
       results: readRecords,
       count,
-      take,
+      take: _take,
       skip,
       q: JSON.stringify(where.parsed),
     }

@@ -60,6 +60,7 @@ export const Failure = ({ error }) => (
 
 export const Success = ({ groupRoles }) => {
   let title = 'Group Roles by Group'
+  let table = 'groupRole'
   let columns = [
     {
       Header: 'Group',
@@ -119,6 +120,7 @@ export const Success = ({ groupRoles }) => {
       queryVariables={queryVariables}
       enableSearch={false}
       count={groupRoles.count}
+      table={table}
     />
   )
 }

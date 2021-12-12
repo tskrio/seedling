@@ -58,6 +58,7 @@ export const Failure = ({ error }) => (
 
 export const Success = ({ preferences }) => {
   let title = 'Preferences'
+  let table = 'preference'
   let columns = [
     {
       Header: 'Entity',
@@ -129,6 +130,7 @@ export const Success = ({ preferences }) => {
         count={preferences.count}
         skip={preferences.skip}
         take={preferences.take}
+        table={table}
       />
     </>
   )

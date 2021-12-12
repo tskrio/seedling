@@ -38,11 +38,12 @@ export const preferences = async ({ filter, skip, orderBy, q }) => {
   try {
     let _preferences = context.currentUser.preferences
     let take = (() => {
-      let limit = parseInt(_preferences['user.pageSize'], 10) || 10
-      if (limit > 100) {
-        return 100 //return 100 or limit whatever is smaller
+      if (_preferences['preference.pageSize']) {
+        return parseInt(_preferences['preference.pageSize'], 10)
+      } else if (_preferences['pageSize']) {
+        return parseInt(_preferences['pageSize'], 10)
       } else {
-        return limit
+        return 10
       }
     })()
     let where = (() => {

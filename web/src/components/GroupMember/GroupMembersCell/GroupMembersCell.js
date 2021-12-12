@@ -62,6 +62,7 @@ export const Failure = ({ error }) => (
 
 export const Success = ({ groupMembers }) => {
   let title = 'Group Members'
+  let table = 'groupMember'
   let columns = [
     {
       Header: 'User',
@@ -129,6 +130,7 @@ export const Success = ({ groupMembers }) => {
       skip={groupMembers.skip}
       take={groupMembers.take}
       q={groupMembers.q}
+      table={table}
     />
   )
 }

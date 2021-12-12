@@ -8,21 +8,22 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "^0.38.0"
+    "@redwoodjs/core": "^0.39.3"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
     "root": true
   },
   "engines": {
-    "node": ">=14.x <=16.x",
+    "node": ">=14.17 <=16.x",
     "yarn": ">=1.15"
   },
   "prisma": {
     "seed": "yarn rw exec seed"
   },
   "scripts": {
-    "postgres:up": "docker-compose up -d",
+    "start": "docker-compose down && docker-compose up -d && sudo chown -R $(whoami):$(whoami) . && rw dev",
+    "postgres:up": "docker-compose up -d && sudo chown -R $(whoami):$(whoami) .",
     "postgres:down": "docker-compose down"
   }
 }
