@@ -63,10 +63,11 @@ const TableRows = ({
 
       if (column.scripted) {
         let _value = row[column.accessor]
-        let nestedElements = _value.map((relatedRecord) => {
-          console.log(relatedRecord)
-          return relatedRecord?.[column.model]?.[column.field]
-        })
+        //let nestedElements = _value.map((relatedRecord) => {
+        //  console.log(relatedRecord)
+        //  return relatedRecord?.[column.model]?.[column.field]
+        //})
+        let nestedElements = row[column.accessor].length
         if (column.link) {
           nestedElements = (
             <Link to={column.link(row.id)}>{nestedElements}</Link>

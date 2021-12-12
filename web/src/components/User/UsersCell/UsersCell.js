@@ -1,23 +1,20 @@
-import { Link, routes, useLocation } from '@redwoodjs/router'
+import { routes, useLocation } from '@redwoodjs/router'
 import { Fragment, useState } from 'react'
-import { toast } from '@redwoodjs/web/toast'
-import { useMutation } from '@redwoodjs/web'
-import { useAuth } from '@redwoodjs/auth'
 import {
-  Select,
+  SimpleGrid,
+  Flex,
   Button,
   Table,
-  Tbody,
-  Td,
   TableCaption,
   Heading,
 } from '@chakra-ui/react'
-import { CloseIcon } from '@chakra-ui/icons'
 import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
 import TablePagination from 'src/components/TablePagination'
 import { MetaTags } from '@redwoodjs/web'
 import TableRows from 'src/components/TableRows/TableRows'
+import TableTake from 'src/components/TableTake'
+import { initialColumns } from 'src/pages/User/UsersPage'
 const DELETE_USER_MUTATION = gql`
   mutation DeleteUserMutation($id: Int!) {
     deletedRow: deleteUser(id: $id) {
@@ -30,7 +27,6 @@ export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { search, pathname } = useLocation()
   let params = new URLSearchParams(search)
-
   if (pathname !== '/users') return
   return {
     variables: {
@@ -79,10 +75,6 @@ export const QUERY = gql`
 
 export const Loading = () => <div>Loading...</div>
 
-export const Empty = () => {
-  return <Fragment>{'No users yet. '}</Fragment>
-}
-
 export const Failure = ({ error }) => (
   <div className="rw-cell-error">{error.message}</div>
 )
@@ -104,10 +96,6 @@ export const Success = ({
   deleteRoles,
 }) => {
   let [data, setData] = useState(users)
-  let handleTakeInput = (event) => {
-    console.log(event.target.value)
-    setTake(parseInt(event.target.value, 10))
-  }
   return (
     <Fragment>
       <MetaTags />
@@ -122,14 +110,8 @@ export const Success = ({
         link={(query) => {
           return routes.users({ q: query })
         }}
+        setSkip={setSkip}
       />
-      <Select onChange={handleTakeInput}>
-        <option value={take}>{take}</option>
-        {take != 10 && <option value="10">10</option>}
-        {take != 20 && <option value="20">20</option>}
-        {take != 50 && <option value="50">50</option>}
-        {take != 100 && <option value="100">100</option>}
-      </Select>
       <Table variant="striped" colorScheme="teal" size="xs">
         <TableCaption>List of Users</TableCaption>
 
@@ -138,6 +120,8 @@ export const Success = ({
           orderBy={orderBy}
           setOrderBy={setOrderBy}
           setColumns={setColumns}
+          initialColumns={initialColumns}
+          setTake={setTake}
         />
         {/*{tableRows(data.results)}*/}
         <TableRows
@@ -149,27 +133,12 @@ export const Success = ({
           displayColumn="name"
         />
       </Table>
-      <button
-        onClick={() => {
-          setColumns([
-            { accessor: 'id', Header: 'ID' },
-            { accessor: 'name', Header: 'Name' },
-            { accessor: 'email', Header: 'Email' },
-
-            {
-              Header: 'GroupMember',
-              accessor: 'GroupMember',
-              canSort: false,
-              scripted: true,
-            },
-            { accessor: 'actions', Header: 'Actions', canSort: false },
-          ])
-        }}
-      >
-        Reset Columns
-      </button>
-
-      <TablePagination skip={skip} setSkip={setSkip} />
+      <SimpleGrid columns={2} spacingX="40px" spacingY="20px">
+        <Flex padding="10px"></Flex>
+        <Flex padding="10px">
+          <TablePagination skip={skip} setSkip={setSkip} />
+        </Flex>
+      </SimpleGrid>
     </Fragment>
   )
 }
