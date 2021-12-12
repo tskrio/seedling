@@ -1,10 +1,9 @@
 import { Link, routes, useLocation } from '@redwoodjs/router'
-import { Fragment, useState, useEffect, useRef } from 'react'
+import { Fragment, useState /* useEffect, useRef */ } from 'react'
 import { toast } from '@redwoodjs/web/toast'
 import { useMutation } from '@redwoodjs/web'
 import { useAuth } from '@redwoodjs/auth'
 import {
-  Input,
   Select,
   //Box,
   Button,
@@ -12,20 +11,14 @@ import {
   Thead,
   Tbody,
   //Tfoot,
-  Tr,
-  Th,
   Td,
   TableCaption,
+  IconButton,
+  Heading,
 } from '@chakra-ui/react'
-import {
-  TriangleUpIcon,
-  TriangleDownIcon,
-  CloseIcon,
-  SearchIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from '@chakra-ui/icons'
-import { IconButton } from '@chakra-ui/react'
+import { CloseIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
+import TableColumns from 'src/components/TableColumns'
+import TableQuery from 'src/components/TableQuery'
 //import { MetaTags } from '@redwoodjs/web'
 //import TableComponent from 'src/components/TableComponent'
 const DELETE_USER_MUTATION = gql`
@@ -44,7 +37,7 @@ export const beforeQuery = (props) => {
   return {
     variables: {
       q: params.get('q'),
-      filter: props.queryFromPage || params.get('filter'),
+      filter: props.fuzzyQuery || params.get('filter'),
       skip: props.skip || 0,
       take: props.take || 10,
       orderBy: props.orderBy || params.get('orderBy'),
@@ -98,8 +91,10 @@ export const Failure = ({ error }) => (
 
 export const Success = ({
   users,
-  queryFromPage,
-  setQueryFromPage,
+  fuzzyQuery,
+  setFuzzyQuery,
+  query,
+  setQuery,
   columns,
   setColumns,
   orderBy,
@@ -110,23 +105,7 @@ export const Success = ({
   setTake,
 }) => {
   const { hasRole /*currentUser*/ } = useAuth()
-  //  const { search } = useLocation()
-  //  let params = new URLSearchParams(search)
-  let initialColumns = useRef(columns)
-  useEffect(() => {
-    console.log('useEffect ran columns', columns)
-    console.log('useEffect ran initialColumns', initialColumns.current)
-  }, [])
-
-  let [query, setQuery] = useState(queryFromPage)
   let [data, setData] = useState(users)
-  let handleSearchInput = (event) => {
-    setQuery(event.target.value)
-  }
-  let handleSearchButton = () => {
-    console.log(`searching for ${query}`)
-    setQueryFromPage(query)
-  }
   let handleTakeInput = (event) => {
     console.log(event.target.value)
     setTake(parseInt(event.target.value, 10))
@@ -159,63 +138,6 @@ export const Success = ({
       toast.success(`Deleted ${del.deleteUser.name}`)
     },
   })
-  let tableColumns = columns.map((column) => {
-    return (
-      <Th key={column.accessor}>
-        {column.Header}
-        {column.sortable != false && (
-          <Fragment>
-            <IconButton
-              onClick={() => {
-                setOrderBy({
-                  [column.accessor]: 'asc',
-                })
-              }}
-              aria-label="Sort A-Z"
-              size="xs"
-              colorScheme={
-                (JSON.stringify(orderBy) ==
-                  JSON.stringify({ [column.accessor]: 'asc' }) &&
-                  'teal') ||
-                'blue'
-              }
-              icon={<TriangleUpIcon />}
-            />
-            <IconButton
-              onClick={() => {
-                setOrderBy({
-                  [column.accessor]: 'desc',
-                })
-              }}
-              aria-label="Sort Z-A"
-              size="xs"
-              colorScheme={
-                (JSON.stringify(orderBy) ==
-                  JSON.stringify({ [column.accessor]: 'desc' }) &&
-                  'teal') ||
-                'blue'
-              }
-              icon={<TriangleDownIcon />}
-            />
-
-            <IconButton
-              onClick={() => {
-                setColumns(
-                  columns.filter((_column) => {
-                    return _column.accessor != column.accessor
-                  })
-                )
-              }}
-              aria-label="Remove Column"
-              size="xs"
-              colorScheme="red"
-              icon={<CloseIcon />}
-            />
-          </Fragment>
-        )}
-      </Th>
-    )
-  })
   let tableRows = (rows) => {
     let _rows = rows.map((row) => {
       if (hasRole(['userDelete', 'userEdit', 'admin'])) {
@@ -227,6 +149,7 @@ export const Success = ({
             colorScheme="red"
             variant="solid"
             type="button"
+            size="xs"
           >
             Remove
           </Button>
@@ -263,14 +186,13 @@ export const Success = ({
   }
   return (
     <Fragment>
-      <Input
-        placeholder="Search id, name and email"
-        onChange={handleSearchInput}
-      />
-      <IconButton
-        aria-label="Search database"
-        onClick={handleSearchButton}
-        icon={<SearchIcon />}
+      <Heading>Users ({users.count})</Heading>
+      <TableQuery
+        query={query}
+        setQuery={setQuery}
+        fuzzyQuery={fuzzyQuery}
+        setFuzzyQuery={setFuzzyQuery}
+        rawQuery={users.q}
       />
       <Select onChange={handleTakeInput}>
         <option value={take}>{take}</option>
@@ -279,11 +201,17 @@ export const Success = ({
         {take != 50 && <option value="50">50</option>}
         {take != 100 && <option value="100">100</option>}
       </Select>
-      <Table variant="striped" colorScheme="teal" size="lg">
+      <Table variant="striped" colorScheme="teal" size="xs">
         <TableCaption>List of Users</TableCaption>
 
         <Thead>
-          <Tr>{tableColumns}</Tr>
+          {/*<Tr>{tableColumns}</Tr>*/}
+          <TableColumns
+            columns={columns}
+            orderBy={orderBy}
+            setOrderBy={setOrderBy}
+            setColumns={setColumns}
+          />
         </Thead>
         {tableRows(data.results)}
       </Table>
@@ -297,10 +225,10 @@ export const Success = ({
             {
               Header: 'GroupMember',
               accessor: 'GroupMember',
-              sortable: false,
+              canSort: false,
               scripted: true,
             },
-            { accessor: 'actions', Header: 'Actions', sortable: false },
+            { accessor: 'actions', Header: 'Actions', canSort: false },
           ])
         }}
       >

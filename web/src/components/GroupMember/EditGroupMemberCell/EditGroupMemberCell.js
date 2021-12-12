@@ -121,11 +121,21 @@ export const Success = ({ groupMember }) => {
         query FindReferenceFieldQueryEditGroupMembersMembers(
           $filter: String
           $skip: Int
+          $take: Int
+          $q: String
+          $orderBy: OrderByInput
         ) {
-          search: users(filter: $filter, skip: $skip) {
+          search: users(
+            filter: $filter
+            skip: $skip
+            take: $take
+            q: $q
+            orderBy: $orderBy
+          ) {
             count
             take
             skip
+            q
             results {
               id
               name

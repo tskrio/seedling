@@ -3,7 +3,7 @@ import { SelectField } from '@redwoodjs/forms'
 import { useState } from 'react'
 
 const ReferenceField = ({ field }) => {
-  //console.log(field)
+  console.log(field)
   let defaultOption = (
     <>
       {field.defaultValue && field.defaultDisplay && (
@@ -15,10 +15,15 @@ const ReferenceField = ({ field }) => {
   const { loading, error, data, refetch } = useQuery(field.QUERY, {
     variables: {
       filter: filterString || '',
+      //q: params.get('q'),
+      //filter: props.fuzzyQuery || params.get('filter'),
+      skip: /*props.skip ||*/ 0,
+      take: /*props.take ||*/ 10,
+      //orderBy: props.orderBy || params.get('orderBy'),
     },
   })
   let handleSearchResult = () => {
-    refetch()
+    //refetch()
   }
   //console.log(field.defaultValue, field.defaultDisplay)
   let input = (
@@ -35,9 +40,18 @@ const ReferenceField = ({ field }) => {
       <br />
     </>
   )
-  if (loading) return <p>Loading Lazy Data</p>
-  if (error) return <p>`Error! ${error}`</p>
-  if (data) handleSearchResult(data)
+  if (loading) {
+    console.log('loading')
+    return <p>Loading Lazy Data</p>
+  }
+  if (error) {
+    console.log('error', error)
+    return <p>`Error! ${error}`</p>
+  }
+  if (data) {
+    handleSearchResult(data)
+    console.log(data)
+  }
   let options = data.search.results.map((option) => {
     try {
       if (option[field.value] !== field.defaultValue) {
@@ -64,7 +78,7 @@ const ReferenceField = ({ field }) => {
       {html}
     </div>
   )
-  //<input onChange=
+  //  return <p>{input}</p>
 }
 
 export default ReferenceField

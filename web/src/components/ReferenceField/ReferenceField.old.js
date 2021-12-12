@@ -1,7 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { SelectField } from '@redwoodjs/forms'
 import { useState } from 'react'
-import Downshift from 'downshift'
 const ReferenceField = ({ field }) => {
   //console.log(field)
   let defaultOption = (

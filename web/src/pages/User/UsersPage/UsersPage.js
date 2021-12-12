@@ -2,7 +2,8 @@ import UsersCell from 'src/components/User/UsersCell'
 import { useState } from 'react'
 
 const UsersPage = () => {
-  let [queryFromPage, setQueryFromPage] = useState('')
+  let [fuzzyQuery, setFuzzyQuery] = useState('')
+  let [query, setQuery] = useState('')
   let [orderBy, setOrderBy] = useState({ id: 'asc' })
   let [skip, setSkip] = useState(0)
   let [take, setTake] = useState(10)
@@ -16,6 +17,7 @@ const UsersPage = () => {
       Header: 'Name',
       accessor: 'name',
       link: true,
+      canRemove: false,
     },
     {
       Header: 'Email',
@@ -25,19 +27,22 @@ const UsersPage = () => {
     {
       Header: 'GroupMember',
       accessor: 'GroupMember',
-      sortable: false,
+      canSort: false,
       scripted: true,
     },
     {
       Header: 'Actions',
       accessor: 'actions',
-      sortable: false,
+      canSort: false,
+      canRemove: false,
     },
   ])
   return (
     <UsersCell
-      queryFromPage={queryFromPage}
-      setQueryFromPage={setQueryFromPage}
+      fuzzyQuery={fuzzyQuery}
+      setFuzzyQuery={setFuzzyQuery}
+      query={query}
+      setQuery={setQuery}
       columns={columns}
       setColumns={setColumns}
       orderBy={orderBy}
