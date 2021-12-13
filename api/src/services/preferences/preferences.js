@@ -34,17 +34,20 @@ export const createPreference = async ({ input }) => {
   }
 }
 
-export const preferences = async ({ filter, skip, orderBy, q }) => {
+export const preferences = async ({ filter, skip, orderBy, q, take }) => {
   try {
-    let _preferences = context.currentUser.preferences
-    let take = (() => {
-      if (_preferences['preference.pageSize']) {
-        return parseInt(_preferences['preference.pageSize'], 10)
-      } else if (_preferences['pageSize']) {
-        return parseInt(_preferences['pageSize'], 10)
-      } else {
-        return 10
-      }
+    let _preferences = db.preference.findMany({
+      where: { userID: context.currentUser.id },
+    })
+    if (skip < 0) skip = 0
+    let _take = (() => {
+      let limit =
+        take ||
+        parseInt(_preferences['preference.pageSize'], 10) ||
+        parseInt(_preferences['pageSize'], 10) ||
+        10
+      if (limit > 100) return 100 //return 100 or limit whatever is smaller
+      return limit
     })()
     let where = (() => {
       try {
@@ -63,6 +66,7 @@ export const preferences = async ({ filter, skip, orderBy, q }) => {
         if (q) {
           returnObject.parsed = JSON.parse(q)
         }
+        console.log('whereObject', returnObject)
         return returnObject
       } catch (error) {
         console.log(error)
@@ -77,7 +81,7 @@ export const preferences = async ({ filter, skip, orderBy, q }) => {
       throw new UserInputError(result.status.message)
     }
     let readRecords = await db[table].findMany({
-      take,
+      take: _take,
       where: where.parsed,
       orderBy,
       skip,
@@ -86,7 +90,7 @@ export const preferences = async ({ filter, skip, orderBy, q }) => {
     let results = {
       results: readRecords,
       count,
-      take,
+      take: _take,
       skip,
       q: JSON.stringify(where.parsed),
     }

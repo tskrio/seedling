@@ -1,3 +1,4 @@
+import { navigate, useLocation, Link } from '@redwoodjs/router'
 import { Fragment, useRef } from 'react'
 import {
   SimpleGrid,
@@ -9,36 +10,40 @@ import {
   Flex,
 } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons'
-/**
- * Loads query from state....
- * Allows you to pick from the fields (not necessarily hte columns presented)
- * Operators based on field types
- * values based on.... lookups.
- * TODO: Make this wokr
- */
 
-const TableQuery = ({ setQuery, fuzzyQuery, setFuzzyQuery, rawQuery }) => {
+const TableQuery = ({
+  setQuery,
+  fuzzyQuery,
+  setFuzzyQuery,
+  rawQuery,
+  inputPlaceholder,
+  link,
+  setSkip,
+}) => {
+  const { search } = useLocation()
+
+  let params = new URLSearchParams(search)
   let searchInput = useRef('')
   let handleSearchButton = () => {
     console.log(`searching for ${searchInput.current.value}`)
     setFuzzyQuery(searchInput.current.value)
+    setSkip(0)
   }
   let handleSearchKeyDown = (event) => {
     //
     if (event.charCode === 13) {
       setFuzzyQuery(searchInput.current.value)
+      setSkip(0)
     }
   }
 
   return (
     <Fragment>
-      <SimpleGrid columns={2} spacingX="40px" spacingY="20px">
-        <Box padding="5px" bg="teal" height="160px">
+      <SimpleGrid columns={1} spacingX="40px" spacingY="20px">
+        <Box padding="5px" height="160px">
           <Flex padding="10px">
             <Input
-              color="black"
-              bgColor="white"
-              placeholder="Search id, name and email"
+              placeholder={inputPlaceholder || 'Search'}
               ref={searchInput}
               padding="10px"
               defaultValue={fuzzyQuery}
@@ -51,11 +56,16 @@ const TableQuery = ({ setQuery, fuzzyQuery, setFuzzyQuery, rawQuery }) => {
             />
           </Flex>
           <Flex padding="10px">
-            <Text color="white">{rawQuery || 'All Users'}</Text>
+            <Link to={link(rawQuery || '')}>
+              <Text>{rawQuery || 'All Users'}</Text>
+            </Link>
             <Button
               onClick={() => {
+                console.log(params.get('q'))
+                params.delete('q')
                 setQuery('')
                 setFuzzyQuery('')
+                navigate(link(''))
               }}
               colorScheme="red"
               variant="solid"
@@ -67,7 +77,6 @@ const TableQuery = ({ setQuery, fuzzyQuery, setFuzzyQuery, rawQuery }) => {
           </Flex>
           <Text color="white">{fuzzyQuery.toString()}</Text>
         </Box>
-        <Box padding="5px" height="80px"></Box>
       </SimpleGrid>
     </Fragment>
   )
