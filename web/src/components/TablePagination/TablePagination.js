@@ -2,12 +2,12 @@ import { Fragment } from 'react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import { IconButton } from '@chakra-ui/react'
 
-const TablePagination = ({ skip, setSkip }) => {
+const TablePagination = ({ skip, setSkip, take }) => {
   return (
     <Fragment>
       <IconButton
         onClick={() => {
-          setSkip(skip - 10)
+          setSkip(skip - take)
         }}
         aria-label="Previous Page"
         icon={<ChevronLeftIcon />}
@@ -15,7 +15,7 @@ const TablePagination = ({ skip, setSkip }) => {
 
       <IconButton
         onClick={() => {
-          setSkip(skip + 10)
+          setSkip(skip + take)
         }}
         aria-label="Next Page"
         icon={<ChevronRightIcon />}

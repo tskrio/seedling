@@ -3,7 +3,6 @@ import { Fragment, useState } from 'react'
 import {
   SimpleGrid,
   Flex,
-  Button,
   Table,
   TableCaption,
   Heading,
@@ -11,9 +10,8 @@ import {
 import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
 import TablePagination from 'src/components/TablePagination'
-import { MetaTags } from '@redwoodjs/web'
+
 import TableRows from 'src/components/TableRows/TableRows'
-import TableTake from 'src/components/TableTake'
 import { initialColumns } from 'src/pages/User/UsersPage'
 const DELETE_USER_MUTATION = gql`
   mutation DeleteUserMutation($id: Int!) {
@@ -98,7 +96,6 @@ export const Success = ({
   let [data, setData] = useState(users)
   return (
     <Fragment>
-      <MetaTags />
       <Heading>Users ({data.count})</Heading>
       <TableQuery
         query={query}
@@ -136,7 +133,7 @@ export const Success = ({
       <SimpleGrid columns={2} spacingX="40px" spacingY="20px">
         <Flex padding="10px"></Flex>
         <Flex padding="10px">
-          <TablePagination skip={skip} setSkip={setSkip} />
+          <TablePagination skip={skip} setSkip={setSkip} take={take} />
         </Flex>
       </SimpleGrid>
     </Fragment>

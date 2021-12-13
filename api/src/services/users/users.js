@@ -37,22 +37,19 @@ export const createUser = async ({ input }) => {
 export const users = async ({ filter, skip, orderBy, q, take }) => {
   try {
     // let preferences = context.currentUser.preferences
-    let preferences = db.preference.findMany({
+    let _preferences = db.preference.findMany({
       where: { userID: context.currentUser.id },
     })
-    console.log('preferences', preferences)
+    console.log('preferences', _preferences)
     if (skip < 0) skip = 0
     let _take = (() => {
       let limit =
         take ||
-        parseInt(preferences['user.pageSize'], 10) ||
-        parseInt(preferences['pageSize'], 10) ||
+        parseInt(_preferences['user.pageSize'], 10) ||
+        parseInt(_preferences['pageSize'], 10) ||
         10
-      if (limit > 100) {
-        return 100 //return 100 or limit whatever is smaller
-      } else {
-        return limit
-      }
+      if (limit > 100) return 100 //return 100 or limit whatever is smaller
+      return limit
     })()
     let where = (() => {
       try {

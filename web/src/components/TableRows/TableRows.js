@@ -1,5 +1,4 @@
 import { Link } from '@redwoodjs/router'
-import { Fragment } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 import { Button, Tbody, Td } from '@chakra-ui/react'
 import { CloseIcon } from '@chakra-ui/icons'
@@ -43,25 +42,30 @@ const TableRows = ({
   })
 
   let rowsOutput = data.results.map((row) => {
+    //console.log(row)
     if (hasRole(deleteRoles.concat(['admin']))) {
-      row.actions = (
-        <Button
-          value={row.id}
-          onClick={handleDeleteItem}
-          leftIcon={<CloseIcon />}
-          colorScheme="red"
-          variant="solid"
-          type="button"
-          size="xs"
-        >
-          Remove
-        </Button>
-      )
+      try {
+        row.actions = (
+          <Button
+            value={row.id}
+            onClick={handleDeleteItem}
+            leftIcon={<CloseIcon />}
+            colorScheme="red"
+            variant="solid"
+            type="button"
+            size="xs"
+          >
+            Remove
+          </Button>
+        )
+      } catch (e) {
+        console.log('error', e)
+      }
     }
     let _elements = columns.map((column) => {
       let key = `${row.id}_${column.accessor}`
 
-      if (column.scripted) {
+      if (column.aggregate) {
         let _value = row[column.accessor]
         //let nestedElements = _value.map((relatedRecord) => {
         //  console.log(relatedRecord)
@@ -74,6 +78,8 @@ const TableRows = ({
           )
         }
         return <Td key={key}>{nestedElements}</Td>
+      } else if (column.reference) {
+        return <Td key={key}>{row[column.accessor][column.field]}</Td>
       } else if (column.link) {
         return (
           <Td key={key}>

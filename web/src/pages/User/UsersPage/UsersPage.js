@@ -1,6 +1,8 @@
 import UsersCell from 'src/components/User/UsersCell'
 import { useState } from 'react'
 import { routes } from '@redwoodjs/router'
+import { Fragment } from 'react'
+import { MetaTags } from '@redwoodjs/web'
 export const initialColumns = [
   {
     Header: 'ID',
@@ -29,7 +31,7 @@ export const initialColumns = [
     Header: 'Groups',
     accessor: 'GroupMember',
     canSort: false,
-    scripted: true,
+    aggregate: true,
     model: 'group',
     field: 'name',
     link: (givenId) => {
@@ -40,11 +42,13 @@ export const initialColumns = [
     Header: 'Preferences',
     accessor: 'Preference',
     canSort: false,
-    scripted: true,
+    aggregate: true,
     model: 'preference',
     field: 'entity',
     link: (givenId) => {
-      return routes.preferences({ q: `{AND:{userID: ${givenId}}}` })
+      //q={%22AND%22:{%22userID%22:%20620}}
+      //q={"AND":[{"userId":{"equals":620}}]}
+      return routes.preferences({ q: `{"AND":{"userId": ${givenId}}}` })
     },
   },
   {
@@ -66,21 +70,29 @@ const UsersPage = () => {
   let [columns, setColumns] = useState(initialColumns)
   let deleteRoles = ['userDelete']
   return (
-    <UsersCell
-      fuzzyQuery={fuzzyQuery}
-      setFuzzyQuery={setFuzzyQuery}
-      query={query}
-      setQuery={setQuery}
-      columns={columns}
-      setColumns={setColumns}
-      orderBy={orderBy}
-      setOrderBy={setOrderBy}
-      skip={skip}
-      setSkip={setSkip}
-      take={take}
-      setTake={setTake}
-      deleteRoles={deleteRoles}
-    />
+    <Fragment>
+      <MetaTags
+        title={'Users'}
+        description={`Users`}
+        /* you should un-comment description and add a unique description, 155 characters or less
+  You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+      />
+      <UsersCell
+        fuzzyQuery={fuzzyQuery}
+        setFuzzyQuery={setFuzzyQuery}
+        query={query}
+        setQuery={setQuery}
+        columns={columns}
+        setColumns={setColumns}
+        orderBy={orderBy}
+        setOrderBy={setOrderBy}
+        skip={skip}
+        setSkip={setSkip}
+        take={take}
+        setTake={setTake}
+        deleteRoles={deleteRoles}
+      />
+    </Fragment>
   )
 }
 
