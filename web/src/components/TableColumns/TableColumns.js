@@ -19,11 +19,11 @@ import {
 } from '@chakra-ui/icons'
 const TableColumns = ({
   columns,
-  orderBy,
+  //orderBy,
   setOrderBy,
   setColumns,
   initialColumns,
-  take,
+  //take,
   setTake,
 }) => {
   let headers = columns.map((column) => {

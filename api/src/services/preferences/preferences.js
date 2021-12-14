@@ -56,6 +56,7 @@ export const preferences = async ({ filter, skip, orderBy, q, take }) => {
           let OR = [
             { entity: { contains: filter, mode: 'insensitive' } },
             { value: { contains: filter, mode: 'insensitive' } },
+            { user: { name: { contains: filter, mode: 'insensitive' } } },
           ]
           let castFilter = parseInt(filter, 10)
           if (isNaN(castFilter) === false) {

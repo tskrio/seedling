@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { routes } from '@redwoodjs/router'
 import { Fragment } from 'react'
 import { MetaTags } from '@redwoodjs/web'
-
+import { showMatching, filterOut } from '/src/lib/atomicFunctions'
 export const initialColumns = [
   {
     Header: 'Id',
@@ -11,14 +11,24 @@ export const initialColumns = [
     link: (givenId) => {
       return routes.preference({ id: givenId })
     },
+    dataType: 'integer',
+
+    showMatching,
+    filterOut,
   },
   {
     Header: 'Entity',
     accessor: 'entity',
+
+    showMatching,
+    filterOut,
   },
   {
     Header: 'Value',
     accessor: 'value',
+
+    showMatching,
+    filterOut,
   },
   {
     Header: 'User',
@@ -28,8 +38,12 @@ export const initialColumns = [
     model: 'user',
     field: 'name',
     link: (givenId) => {
-      return routes.users({ q: `{AND:{userID: ${givenId}}}` })
+      //TODO: Get this working
+      return routes.users({ q: `{userID:${givenId}}` })
     },
+
+    showMatching,
+    filterOut,
   },
   {
     Header: 'Actions',
@@ -48,7 +62,11 @@ const PreferencesPage = () => {
   let [skip, setSkip] = useState(0)
   let [take, setTake] = useState(10)
   let [columns, setColumns] = useState(initialColumns)
-  let deleteRoles = ['userDelete']
+  let roles = {
+    createRecord: 'preferenceCreate',
+    updateRecord: 'preferenceUpdate',
+    deleteRecord: 'preferenceDelete',
+  }
   return (
     <Fragment>
       <MetaTags
@@ -70,7 +88,7 @@ const PreferencesPage = () => {
         setSkip={setSkip}
         take={take}
         setTake={setTake}
-        deleteRoles={deleteRoles}
+        roles={roles}
       />
     </Fragment>
   )

@@ -3,14 +3,18 @@ import { useState } from 'react'
 import { routes } from '@redwoodjs/router'
 import { Fragment } from 'react'
 import { MetaTags } from '@redwoodjs/web'
+import { showMatching, filterOut } from '/src/lib/atomicFunctions'
 export const initialColumns = [
   {
     Header: 'ID',
     accessor: 'id',
+    dataType: 'integer',
     //link: true,
     link: (givenId) => {
       return routes.user({ id: givenId })
     },
+    showMatching,
+    filterOut,
   },
   {
     Header: 'Name',
@@ -19,6 +23,8 @@ export const initialColumns = [
       return routes.user({ id: givenId })
     },
     canRemove: false,
+    showMatching,
+    filterOut,
   },
   {
     Header: 'Email',
@@ -26,6 +32,14 @@ export const initialColumns = [
     link: (givenId) => {
       return routes.user({ id: givenId })
     },
+    showMatching,
+    filterOut,
+  },
+  {
+    Header: 'Created',
+    accessor: 'createdAt',
+    showMatching,
+    filterOut,
   },
   {
     Header: 'Groups',
@@ -33,9 +47,8 @@ export const initialColumns = [
     canSort: false,
     aggregate: true,
     model: 'group',
-    field: 'name',
     link: (givenId) => {
-      return routes.groupMembers({ q: `{AND:{userID: ${givenId}}}` })
+      return routes.groupMembers({ q: `{"userID":${givenId}}` })
     },
   },
   {
@@ -48,7 +61,7 @@ export const initialColumns = [
     link: (givenId) => {
       //q={%22AND%22:{%22userID%22:%20620}}
       //q={"AND":[{"userId":{"equals":620}}]}
-      return routes.preferences({ q: `{"AND":{"userId": ${givenId}}}` })
+      return routes.preferences({ q: `{"userId":${givenId}}` })
     },
   },
   {
@@ -68,7 +81,11 @@ const UsersPage = () => {
   let [skip, setSkip] = useState(0)
   let [take, setTake] = useState(10)
   let [columns, setColumns] = useState(initialColumns)
-  let deleteRoles = ['userDelete']
+  let roles = {
+    createRecord: 'userCreate',
+    updateRecord: 'userUpdate',
+    deleteRecord: 'userDelete',
+  }
   return (
     <Fragment>
       <MetaTags
@@ -90,7 +107,7 @@ const UsersPage = () => {
         setSkip={setSkip}
         take={take}
         setTake={setTake}
-        deleteRoles={deleteRoles}
+        roles={roles}
       />
     </Fragment>
   )
