@@ -50,6 +50,7 @@ export const Success = ({ user }) => {
   })
 
   const onSubmit = (data) => {
+    console.log('saving', data)
     /**TODO: FEAT Client Rules go here */
     onSave(data, user.id)
   }
