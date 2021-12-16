@@ -109,7 +109,7 @@ export const Success = ({
         }}
         setSkip={setSkip}
       />
-      <Table variant="striped" colorScheme="teal" size="xs">
+      <Table variant="striped" colorScheme="green" size="xs">
         <TableCaption>List of Users</TableCaption>
 
         <TableColumns
