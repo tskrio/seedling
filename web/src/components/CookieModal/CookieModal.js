@@ -7,8 +7,10 @@ const CookieModal = () => {
   const buttonRef = useRef(null)
 
   useEffect(() => {
-    buttonRef.current.focus()
-  }, [])
+    if (buttonRef.current) {
+      buttonRef.current.focus()
+    }
+  }, [''])
   return (
     <>
       {!acceptedCookies && (

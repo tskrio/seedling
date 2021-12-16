@@ -39,9 +39,14 @@ const FormComponent = ({
             pr="4.5rem"
             type={show ? 'text' : 'password'}
             placeholder={field.placeholder || 'Enter password'}
+            {...register(field.name, {
+              //required: field.required
+              //required: 'This is required',
+              //minLength: { value: 4, message: 'Minimum length should be 4' },
+            })}
           />
           <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm" ref={ref} onClick={handleClick}>
+            <Button h="1.75rem" size="sm" onClick={handleClick}>
               {show ? 'Hide' : 'Show'}
             </Button>
           </InputRightElement>
