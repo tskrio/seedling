@@ -33,12 +33,12 @@ export const initialColumns = [
       return routes.user({ id: givenId })
     },
   },
-  {
-    Header: 'Created',
-    accessor: 'createdAt',
-    showMatching,
-    filterOut,
-  },
+  //{
+  //  Header: 'Created',
+  //  accessor: 'createdAt',
+  //  showMatching,
+  //  filterOut,
+  //},
   {
     Header: 'Groups',
     accessor: 'GroupMember',

@@ -67,7 +67,7 @@ const TableRows = ({
             colorScheme="red"
             variant="solid"
             type="button"
-            size="xs"
+            size="sm"
           >
             Remove
           </Button>
@@ -91,6 +91,7 @@ const TableRows = ({
                 aria-label="Options"
                 icon={<HamburgerIcon />}
                 variant="outline"
+                size="sm"
               />
               <MenuList>
                 {column.showMatching && (
@@ -131,7 +132,7 @@ const TableRows = ({
             <Flex>
               <Box p="2">{row[column.accessor][column.field]} </Box>
               <Spacer />
-              <Box>
+              <Box p="2">
                 {showMatchingOrFilterOut && showMatchingOrFilterOutMenu}
               </Box>
             </Flex>
@@ -147,7 +148,8 @@ const TableRows = ({
                 </Link>
               </Box>
               <Spacer />
-              <Box>
+
+              <Box p="2">
                 {showMatchingOrFilterOut && showMatchingOrFilterOutMenu}
               </Box>
             </Flex>
@@ -159,7 +161,7 @@ const TableRows = ({
             <Flex>
               <Box p="2">{row[column.accessor]}</Box>
               <Spacer />
-              <Box>
+              <Box p="2">
                 {showMatchingOrFilterOut && showMatchingOrFilterOutMenu}
               </Box>
             </Flex>
