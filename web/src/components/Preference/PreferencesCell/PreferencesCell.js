@@ -90,7 +90,7 @@ export const Success = ({
   setSkip,
   take,
   setTake,
-  deleteRoles,
+  roles,
 }) => {
   let [data, setData] = useState(preferences)
   return (
@@ -122,9 +122,10 @@ export const Success = ({
         {/*{tableRows(data.results)}*/}
         <TableRows
           columns={columns}
-          deleteRoles={deleteRoles}
+          roles={roles}
           setData={setData}
           data={data}
+          model="preferences"
           deleteMutation={DELETE_PREFERENCE_MUTATION}
           displayColumn="entity"
         />

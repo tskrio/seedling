@@ -19,11 +19,11 @@ import {
 } from '@chakra-ui/icons'
 const TableColumns = ({
   columns,
-  orderBy,
+  //orderBy,
   setOrderBy,
   setColumns,
   initialColumns,
-  take,
+  //take,
   setTake,
 }) => {
   let headers = columns.map((column) => {
@@ -33,19 +33,19 @@ const TableColumns = ({
       column.canReset === true ||
       column.canExport === true
     return (
-      <Th key={column.accessor}>
+      <Th p={3} bg={'grey.100'} key={column.accessor}>
         {!canDoSomething && <Text>{column.Header}</Text>}
         {canDoSomething && (
-          <Menu>
+          <Menu p={3} m={4}>
             <MenuButton
               px={4}
               py={2}
               transition="all 0.2s"
               borderRadius="md"
-              borderWidth="1px"
               _hover={{ bg: 'gray.400' }}
-              _expanded={{ bg: 'blue.400' }}
+              _expanded={{ bg: 'gray.50' }}
               _focus={{ boxShadow: 'outline' }}
+              fontSize={24}
             >
               {column.Header} <ChevronDownIcon />
             </MenuButton>
@@ -133,7 +133,9 @@ const TableColumns = ({
   })
   return (
     <Thead>
-      <Tr>{headers}</Tr>
+      <Tr px={4} py={2} m={4}>
+        {headers}
+      </Tr>
     </Thead>
   )
 }

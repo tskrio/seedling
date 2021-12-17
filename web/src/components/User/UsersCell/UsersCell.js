@@ -91,7 +91,7 @@ export const Success = ({
   setSkip,
   take,
   setTake,
-  deleteRoles,
+  roles,
 }) => {
   let [data, setData] = useState(users)
   return (
@@ -109,7 +109,7 @@ export const Success = ({
         }}
         setSkip={setSkip}
       />
-      <Table variant="striped" colorScheme="teal" size="xs">
+      <Table variant="striped" colorScheme={'green'} size="xs">
         <TableCaption>List of Users</TableCaption>
 
         <TableColumns
@@ -123,9 +123,10 @@ export const Success = ({
         {/*{tableRows(data.results)}*/}
         <TableRows
           columns={columns}
-          deleteRoles={deleteRoles}
+          roles={roles}
           setData={setData}
           data={data}
+          model="users"
           deleteMutation={DELETE_USER_MUTATION}
           displayColumn="name"
         />

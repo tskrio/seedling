@@ -25,15 +25,21 @@ const TableQuery = ({
   let params = new URLSearchParams(search)
   let searchInput = useRef('')
   let handleSearchButton = () => {
-    console.log(`searching for ${searchInput.current.value}`)
+    params.delete('q')
+    setQuery('')
     setFuzzyQuery(searchInput.current.value)
     setSkip(0)
+
+    navigate(link(''))
   }
   let handleSearchKeyDown = (event) => {
     //
     if (event.charCode === 13) {
+      params.delete('q')
       setFuzzyQuery(searchInput.current.value)
       setSkip(0)
+
+      navigate(link(''))
     }
   }
 
@@ -41,6 +47,27 @@ const TableQuery = ({
     <Fragment>
       <SimpleGrid columns={1} spacingX="40px" spacingY="20px">
         <Box padding="5px" height="160px">
+          <Flex padding="10px">
+            <Link to={link(rawQuery || '')}>
+              <Text>{rawQuery || 'All Users'}</Text>
+            </Link>
+            {rawQuery && (
+              <Button
+                onClick={() => {
+                  params.delete('q')
+                  setQuery('')
+                  setFuzzyQuery('')
+                  navigate(link(''))
+                }}
+                colorScheme="red"
+                variant="solid"
+                type="button"
+                size="xs"
+              >
+                Clear Query
+              </Button>
+            )}
+          </Flex>
           <Flex padding="10px">
             <Input
               placeholder={inputPlaceholder || 'Search'}
@@ -54,26 +81,6 @@ const TableQuery = ({
               onClick={handleSearchButton}
               icon={<SearchIcon />}
             />
-          </Flex>
-          <Flex padding="10px">
-            <Link to={link(rawQuery || '')}>
-              <Text>{rawQuery || 'All Users'}</Text>
-            </Link>
-            <Button
-              onClick={() => {
-                console.log(params.get('q'))
-                params.delete('q')
-                setQuery('')
-                setFuzzyQuery('')
-                navigate(link(''))
-              }}
-              colorScheme="red"
-              variant="solid"
-              type="button"
-              size="xs"
-            >
-              Clear Query
-            </Button>
           </Flex>
           <Text color="white">{fuzzyQuery.toString()}</Text>
         </Box>

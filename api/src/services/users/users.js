@@ -66,9 +66,18 @@ export const users = async ({ filter, skip, orderBy, q, take }) => {
             OR.push({ id: { equals: castFilter } })
           }
           returnObject.parsed = { OR }
+          // TODO: add more row level security here...
+          // e.g. if x role, append userId: me
         }
         if (q) {
-          returnObject.parsed = JSON.parse(q)
+          returnObject.parsed = {
+            AND: [
+              JSON.parse(q),
+              {
+                /**rls */
+              },
+            ],
+          }
         }
         console.log('whereObject', returnObject)
         return returnObject
@@ -90,6 +99,8 @@ export const users = async ({ filter, skip, orderBy, q, take }) => {
       orderBy,
       skip,
     })
+    // here add something to say, canUpdate, canDelete
+    // TODO: Implement Row level security
     let count = await db[table].count({ where: where.parsed })
     let results = {
       results: readRecords,
@@ -117,6 +128,8 @@ export const user = async ({ id }) => {
     let readRecord = await db[table].findUnique({
       where: { id },
     })
+    // here add something to say, canUpdate, canDelete
+    // TODO: Implement Row level security
     readRecord = executeAfterReadRules(table, readRecord)
     return readRecord
   } catch (error) {

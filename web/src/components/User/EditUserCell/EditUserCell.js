@@ -50,6 +50,7 @@ export const Success = ({ user }) => {
   })
 
   const onSubmit = (data) => {
+    console.log('saving', data)
     /**TODO: FEAT Client Rules go here */
     onSave(data, user.id)
   }
@@ -72,10 +73,12 @@ export const Success = ({ user }) => {
     {
       name: 'name',
       prettyName: 'Name',
+      required: 'Name is required',
     },
     {
       name: 'email',
       prettyName: 'Email',
+      required: 'Email is required',
     },
   ]
   if (currentUser.id === user.id) {
@@ -84,6 +87,7 @@ export const Success = ({ user }) => {
       prettyName: 'Password',
       type: 'password',
       placeHolder: 'Only set this if you want to change it',
+      minLength: { value: 4, message: 'Minimum length should be 4' },
     })
   }
   const roles = {

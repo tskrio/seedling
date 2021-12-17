@@ -19,6 +19,8 @@ export const schema = gql`
     resetToken: String
     "DateTime the resetToken expires"
     resetTokenExpiresAt: DateTime
+    #TODO: canUpdate: Boolean!
+    #TOOD: canDelete: Boolean!
     "Calculated field, not actually stored on the database"
     GroupMember: [GroupMember]!
     "The preferences this user has"

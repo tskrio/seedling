@@ -1,17 +1,32 @@
-import { Link } from '@redwoodjs/router'
+import { Link, navigate } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
-import { Button, Tbody, Td } from '@chakra-ui/react'
-import { CloseIcon } from '@chakra-ui/icons'
+import {
+  Button,
+  Box,
+  Flex,
+  Spacer,
+  Tbody,
+  Td,
+  //  Tr,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  //  Text,
+} from '@chakra-ui/react'
+import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 const TableRows = ({
   columns,
-  deleteRoles,
+  roles,
   setData,
   data,
   deleteMutation,
   displayColumn,
+  model,
 }) => {
   const { hasRole /*currentUser*/ } = useAuth()
   let handleDeleteItem = (event) => {
@@ -42,8 +57,7 @@ const TableRows = ({
   })
 
   let rowsOutput = data.results.map((row) => {
-    //console.log(row)
-    if (hasRole(deleteRoles.concat(['admin']))) {
+    if (hasRole([roles.deleteRecord].concat(['admin']))) {
       try {
         row.actions = (
           <Button
@@ -64,13 +78,46 @@ const TableRows = ({
     }
     let _elements = columns.map((column) => {
       let key = `${row.id}_${column.accessor}`
+      let showMatchingOrFilterOut = column.showMatching || column.filterOut
+      let showMatchingOrFilterOutMenu = (() => {
+        if (column.showMatching || column.filterOut) {
+          //console.log(row, column)
+          let value = row[column.accessor]
+          if (column.field) value = row[column.accessor][column.field]
+          return (
+            <Menu>
+              <MenuButton
+                as={IconButton}
+                aria-label="Options"
+                icon={<HamburgerIcon />}
+                variant="outline"
+              />
+              <MenuList>
+                {column.showMatching && (
+                  <MenuItem
+                    onClick={() => {
+                      navigate(column.showMatching(model, column, value))
+                    }}
+                  >
+                    Show Matching {column.Header}
+                  </MenuItem>
+                )}
 
+                {column.filterOut && (
+                  <MenuItem
+                    onClick={() => {
+                      navigate(column.filterOut(model, column, value))
+                    }}
+                  >
+                    Filter Out {column.Header}
+                  </MenuItem>
+                )}
+              </MenuList>
+            </Menu>
+          )
+        }
+      })()
       if (column.aggregate) {
-        let _value = row[column.accessor]
-        //let nestedElements = _value.map((relatedRecord) => {
-        //  console.log(relatedRecord)
-        //  return relatedRecord?.[column.model]?.[column.field]
-        //})
         let nestedElements = row[column.accessor].length
         if (column.link) {
           nestedElements = (
@@ -79,17 +126,45 @@ const TableRows = ({
         }
         return <Td key={key}>{nestedElements}</Td>
       } else if (column.reference) {
-        return <Td key={key}>{row[column.accessor][column.field]}</Td>
+        return (
+          <Td key={key}>
+            <Flex>
+              <Box p="2">{row[column.accessor][column.field]} </Box>
+              <Spacer />
+              <Box>
+                {showMatchingOrFilterOut && showMatchingOrFilterOutMenu}
+              </Box>
+            </Flex>
+          </Td>
+        )
       } else if (column.link) {
         return (
           <Td key={key}>
-            <Link title={row[column.accessor]} to={column.link(row.id)}>
-              {row[column.accessor]}
-            </Link>
+            <Flex>
+              <Box p="2">
+                <Link title={row[column.accessor]} to={column.link(row.id)}>
+                  {row[column.accessor]}
+                </Link>
+              </Box>
+              <Spacer />
+              <Box>
+                {showMatchingOrFilterOut && showMatchingOrFilterOutMenu}
+              </Box>
+            </Flex>
           </Td>
         )
       } else {
-        return <Td key={key}>{row[column.accessor]}</Td>
+        return (
+          <Td key={key}>
+            <Flex>
+              <Box p="2">{row[column.accessor]}</Box>
+              <Spacer />
+              <Box>
+                {showMatchingOrFilterOut && showMatchingOrFilterOutMenu}
+              </Box>
+            </Flex>
+          </Td>
+        )
       }
     })
     return (
