@@ -2,14 +2,18 @@ import { Link, navigate } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 import {
   Button,
+  Box,
+  Flex,
+  Spacer,
   Tbody,
   Td,
+  //  Tr,
   IconButton,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
-  Text,
+  //  Text,
 } from '@chakra-ui/react'
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
 import { useMutation } from '@redwoodjs/web'
@@ -95,7 +99,7 @@ const TableRows = ({
                       navigate(column.showMatching(model, column, value))
                     }}
                   >
-                    Show Matching
+                    Show Matching {column.Header}
                   </MenuItem>
                 )}
 
@@ -105,7 +109,7 @@ const TableRows = ({
                       navigate(column.filterOut(model, column, value))
                     }}
                   >
-                    Filter Out
+                    Filter Out {column.Header}
                   </MenuItem>
                 )}
               </MenuList>
@@ -124,25 +128,41 @@ const TableRows = ({
       } else if (column.reference) {
         return (
           <Td key={key}>
-            <Text>{row[column.accessor][column.field]}</Text>
-            {showMatchingOrFilterOut && showMatchingOrFilterOutMenu}
+            <Flex>
+              <Box p="2">{row[column.accessor][column.field]} </Box>
+              <Spacer />
+              <Box>
+                {showMatchingOrFilterOut && showMatchingOrFilterOutMenu}
+              </Box>
+            </Flex>
           </Td>
         )
       } else if (column.link) {
         return (
           <Td key={key}>
-            <Link title={row[column.accessor]} to={column.link(row.id)}>
-              {row[column.accessor]}
-            </Link>
-
-            {showMatchingOrFilterOut && showMatchingOrFilterOutMenu}
+            <Flex>
+              <Box p="2">
+                <Link title={row[column.accessor]} to={column.link(row.id)}>
+                  {row[column.accessor]}
+                </Link>
+              </Box>
+              <Spacer />
+              <Box>
+                {showMatchingOrFilterOut && showMatchingOrFilterOutMenu}
+              </Box>
+            </Flex>
           </Td>
         )
       } else {
         return (
           <Td key={key}>
-            <Text>{row[column.accessor]}</Text>
-            {showMatchingOrFilterOut && showMatchingOrFilterOutMenu}
+            <Flex>
+              <Box p="2">{row[column.accessor]}</Box>
+              <Spacer />
+              <Box>
+                {showMatchingOrFilterOut && showMatchingOrFilterOutMenu}
+              </Box>
+            </Flex>
           </Td>
         )
       }

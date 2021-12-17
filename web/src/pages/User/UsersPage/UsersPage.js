@@ -32,8 +32,6 @@ export const initialColumns = [
     link: (givenId) => {
       return routes.user({ id: givenId })
     },
-    showMatching,
-    filterOut,
   },
   {
     Header: 'Created',
