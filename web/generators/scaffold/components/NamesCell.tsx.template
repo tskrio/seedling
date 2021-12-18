@@ -1,38 +1,127 @@
+import { routes, useLocation } from '@redwoodjs/router'
+import { Fragment, useState } from 'react'
+import {
+  SimpleGrid,
+  Flex,
+  Table,
+  TableCaption,
+  Heading,
+} from '@chakra-ui/react'
+import TableColumns from 'src/components/TableColumns'
+import TableQuery from 'src/components/TableQuery'
+import TablePagination from 'src/components/TablePagination'
+import TableRows from 'src/components/TableRows/TableRows'
+import { initialColumns } from 'src/pages/${singularPascalName}/${pluralPascalName}Page'
+
 import type { Find${pluralPascalName} } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
-import { Link, routes } from '@redwoodjs/router'
+import { DELETE_${singularConstantName}_MUTATION } from 'src/components/${singularPascalName}/Edit${singularPascalName}Cell'
+
+export const beforeQuery = (props) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { search, pathname } = useLocation()
+  let params = new URLSearchParams(search)
+  if (pathname !== '/${pluralCamelName}') return
+  return {
+    variables: {
+      q: params.get('q'),
+      filter: params.get('filter') || props.fuzzyQuery,
+      skip: params.get('skip') || props.skip || 0,
+      take: params.get('take') || props.take || 10,
+      orderBy: params.get('orderBy') || props.orderBy,
+    },
+    fetchPolicy: 'no-cache',
+  }
+}
+
 
 import ${pluralPascalName} from '${importComponentNames}'
 
 export const QUERY = gql`
-  query Find${pluralPascalName} {
-    ${pluralCamelName} {<% columns.forEach(column => { %>
+  query Find${pluralPascalName}(
+    $filter: String
+    $skip: Int
+    $take: Int
+    $q: String
+    $orderBy: OrderByInput
+  ) {
+    ${pluralCamelName}(filter: $filter, skip: $skip, take: $take, q: $q, orderBy: $orderBy) {
+    count
+      take
+      skip
+      q
+      results {
+    <% columns.forEach(column => { %>
       <%= column.name %><% }) %>
+      }
     }
   }
 `
 
 export const Loading = () => <div>Loading...</div>
 
-export const Empty = () => {
-  return (
-    <div className="rw-text-center">
-      {'No ${pluralCamelName} yet. '}
-      <Link
-        to={routes.${newRouteName}()}
-        className="rw-link"
-      >
-        {'Create one?'}
-      </Link>
-    </div>
-  )
-}
-
 export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error.message}</div>
 )
 
-export const Success = ({ ${pluralCamelName} }: CellSuccessProps<Find${pluralPascalName}>) => {
-  return <${pluralPascalName} ${pluralCamelName}={${pluralCamelName}} />
+export const Success = ({
+  ${pluralCamelName},
+  fuzzyQuery,
+  setFuzzyQuery,
+  query,
+  setQuery,
+  columns,
+  setColumns,
+  orderBy,
+  setOrderBy,
+  skip,
+  setSkip,
+  take,
+  setTake,
+  roles,
+  }: CellSuccessProps<Find${pluralPascalName}>) => {
+    let [data, setData] = useState(${pluralCamelName})
+  return <Fragment>
+  <Heading>${pluralPascalName} ({data.count})</Heading>
+      <TableQuery
+        query={query}
+        setQuery={setQuery}
+        fuzzyQuery={fuzzyQuery}
+        setFuzzyQuery={setFuzzyQuery}
+        rawQuery={${pluralCamelName}.q}
+        inputPlaceholder="Search"
+        link={(query) => {
+          return routes.${pluralRouteName}({ q: query })
+        }}
+        setSkip={setSkip}
+      />
+      <Table variant="striped" colorScheme={'green'} size="xs">
+        <TableCaption>List of ${pluralPascalName}</TableCaption>
+
+        <TableColumns
+          columns={columns}
+          orderBy={orderBy}
+          setOrderBy={setOrderBy}
+          setColumns={setColumns}
+          initialColumns={initialColumns}
+          setTake={setTake}
+        />
+        <TableRows
+          columns={columns}
+          roles={roles}
+          setData={setData}
+          data={data}
+          model="${pluralCamelName}"
+          deleteMutation={DELETE_${singularConstantName}_MUTATION}
+          displayColumn="id"
+        />
+      </Table>
+      <SimpleGrid columns={2} spacingX="40px" spacingY="20px">
+        <Flex padding="10px"></Flex>
+        <Flex padding="10px">
+          <TablePagination skip={skip} setSkip={setSkip} take={take} />
+        </Flex>
+      </SimpleGrid>
+  </Fragment>
 }

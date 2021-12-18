@@ -1,9 +1,12 @@
 import type { Edit${singularPascalName}ById } from 'types/graphql'
 
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
-import { useMutation } from '@redwoodjs/web'
+import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
+import FormComponent from 'src/components/FormComponent'
+import { useAuth } from '@redwoodjs/auth'
+import { Fragment, useState } from 'react'
 
 import ${singularPascalName}Form from '${importComponentNameForm}'
 
@@ -18,6 +21,13 @@ const UPDATE_${singularConstantName}_MUTATION = gql`
   mutation Update${singularPascalName}Mutation($id: ${idType}!, $input: Update${singularPascalName}Input!) {
     update${singularPascalName}(id: $id, input: $input) {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>
+    }
+  }
+`
+export const DELETE_${singularConstantName}_MUTATION = gql`
+  mutation Delete${singularPascalName}Mutation($id: Int!) {
+    delete${singularPascalName}(id: $id) {
+      id
     }
   }
 `
@@ -39,19 +49,57 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
     },
   })
 
+  const onSubmit = (data) => {
+    console.log('saving', data)
+    /**TODO: FEAT Client Rules go here */
+    onSave(data, ${singularCamelName}.id)
+  }
   const onSave = (input, id) => {<% if (intForeignKeys.length) { %>
     const castInput = Object.assign(input, { <% intForeignKeys.forEach(key => { %>${key}: parseInt(input.${key}), <% }) %>})<% } %>
     update${singularPascalName}({ variables: { id, <% if (intForeignKeys.length) { %>input: castInput<% } else { %>input<% } %> } })
   }
 
+  const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
+    onCompleted: () => {
+      toast.success('${singularPascalName} deleted')
+      navigate(routes.${pluralRouteName}())
+    },
+  })
+
+  const onDelete = (id) => {
+    if (confirm('Are you sure you want to delete ${singularPascalName} ' + id + '?')) {
+      delete${singularPascalName}({ variables: { id } })
+    }
+  }
+  const fields = [
+    {
+      name: 'field',
+      prettyName: 'Field',
+      required: 'message to show when empty',
+    }
+  ]
+
+  const roles = {
+    update: ['${singularCamelName}Update'],
+    delete: ['${singularCamelName}Delete'],
+  }
   return (
-    <div className="rw-segment">
-      <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">Edit ${singularPascalName} {${singularCamelName}.id}</h2>
-      </header>
-      <div className="rw-segment-main">
-        <${singularPascalName}Form ${singularCamelName}={${singularCamelName}} onSave={onSave} error={error} loading={loading} />
-      </div>
-    </div>
+    <Fragment>
+      <MetaTags
+        title={${singularCamelName}.id}
+        description="Replace me with 155 charactes about this page"
+        />
+      <FormComponent
+        record={${singularCamelName}}
+        fields={fields}
+        roles={roles}
+        onSubmit={onSubmit}
+        onDelete={onDelete}
+        loading={loading}
+        error={error}
+        returnLink={routes.${pluralRouteName}()}
+      />
+    </Fragment>
+
   )
 }

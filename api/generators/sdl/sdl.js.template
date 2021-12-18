@@ -1,0 +1,28 @@
+export const schema = gql`
+  type ${singularPascalName} {
+    ${query}
+  }
+<% if (enums.length > 0) {%>
+<% enums.forEach((enumDef, idx)=> {%>  enum ${enums[idx].name} {<% enums[idx].values.forEach((enumDefValue, idk)=> { %>
+    ${enums[idx].values[idk].name}<% }) %>
+  }
+<%}) %><% } %>
+  type Query {
+    ${pluralCamelName}: [${singularPascalName}!]! @requireAuth<% if (crud) { %>
+    ${singularCamelName}(id: ${idType}!): ${singularPascalName} @requireAuth<% } %>
+  }
+
+  input Create${singularPascalName}Input {
+    ${createInput}
+  }
+
+  input Update${singularPascalName}Input {
+    ${updateInput}
+  }<% if (crud) { %>
+
+  type Mutation {
+    create${singularPascalName}(input: Create${singularPascalName}Input!): ${singularPascalName}! @requireAuth
+    update${singularPascalName}(id: ${idType}!, input: Update${singularPascalName}Input!): ${singularPascalName}! @requireAuth
+    delete${singularPascalName}(id: ${idType}!): ${singularPascalName}! @requireAuth
+  }<% } %>
+`

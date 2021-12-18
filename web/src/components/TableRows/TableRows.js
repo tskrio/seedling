@@ -28,10 +28,11 @@ const TableRows = ({
   displayColumn,
   model,
 }) => {
+  console.log('data from tabelrow.js', data)
   const { hasRole /*currentUser*/ } = useAuth()
   let handleDeleteItem = (event) => {
     let id = parseInt(event.target.value, 10)
-    let foundRow = data.results.filter((user) => {
+    let foundRow = data.results?.filter((user) => {
       return user.id === id
     })
     let question = `Are you sure you want to delete ${foundRow[0][displayColumn]}?`
@@ -39,7 +40,7 @@ const TableRows = ({
       deleteRecord({ variables: { id } })
       setData({
         ...data,
-        results: data.results.filter((row) => {
+        results: data.results?.filter((row) => {
           return !(row.id === id)
         }),
         count: data.count - 1,
@@ -56,7 +57,7 @@ const TableRows = ({
     },
   })
 
-  let rowsOutput = data.results.map((row) => {
+  let rowsOutput = data.results?.map((row) => {
     if (hasRole([roles.deleteRecord].concat(['admin']))) {
       try {
         row.actions = (

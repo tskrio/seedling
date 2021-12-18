@@ -1,23 +1,22 @@
-import ${pluralPascalName}Cell from '${importComponentNamesCell}'
+import PropertiesCell from 'src/components/Property/PropertiesCell'
 import { useState } from 'react'
 import { routes } from '@redwoodjs/router'
 import { Fragment } from 'react'
 import { MetaTags } from '@redwoodjs/web'
 import { showMatching, filterOut } from '/src/lib/atomicFunctions'
-import ${pluralPascalName} from '${importComponentNames}'
-import type { Find${pluralPascalName} } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+
 export const initialColumns = [
   {
     Header: 'Id',
     accessor: 'id',
     link: (givenId) => {
-      return routes.${singularRouteName}({ id: givenId })
+      return routes.property({ id: givenId })
     },
     dataType: 'integer',
     showMatching,
     filterOut,
   },
+
   /** Insert your columns here **/
   {
     Header: 'Actions',
@@ -30,7 +29,7 @@ export const initialColumns = [
   },
 ]
 
-const ${pluralPascalName}Page = () => {
+const PropertiesPage = () => {
   let [fuzzyQuery, setFuzzyQuery] = useState('')
   let [query, setQuery] = useState('')
   let [orderBy, setOrderBy] = useState({ id: 'asc' })
@@ -38,19 +37,21 @@ const ${pluralPascalName}Page = () => {
   let [take, setTake] = useState(10)
   let [columns, setColumns] = useState(initialColumns)
   let roles = {
-    createRecord: '${singularCamelName}Create',
-    updateRecord: '${singularCamelName}Update',
-    deleteRecord: '${singularCamelName}Delete',
+    createRecord: 'propertyCreate',
+    updateRecord: 'propertyUpdate',
+    deleteRecord: 'propertyDelete',
   }
+
   return (
-  <Fragment>
+    <Fragment>
       <MetaTags
-        title={'${singularPascalName}'}
-        description={'${singularPascalName}'}
+        title={'Property'}
+        description={'Property'}
         /* you should un-comment description and add a unique description, 155 characters or less
-  You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
       />
-      <${pluralPascalName}Cell
+
+      <PropertiesCell
         fuzzyQuery={fuzzyQuery}
         setFuzzyQuery={setFuzzyQuery}
         query={query}
@@ -69,4 +70,4 @@ const ${pluralPascalName}Page = () => {
   )
 }
 
-export default ${pluralPascalName}Page
+export default PropertiesPage

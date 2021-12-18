@@ -10,17 +10,16 @@ import {
 import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
 import TablePagination from 'src/components/TablePagination'
-
 import TableRows from 'src/components/TableRows/TableRows'
-import { initialColumns } from 'src/pages/User/UsersPage'
+import { initialColumns } from 'src/pages/Property/PropertiesPage'
 
-import { DELETE_USER_MUTATION } from 'src/components/User/EditUserCell'
+import { DELETE_PROPERTY_MUTATION } from 'src/components/Property/EditPropertyCell'
 
 export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { search, pathname } = useLocation()
   let params = new URLSearchParams(search)
-  if (pathname !== '/users') return
+  if (pathname !== '/properties') return
   return {
     variables: {
       q: params.get('q'),
@@ -29,18 +28,26 @@ export const beforeQuery = (props) => {
       take: params.get('take') || props.take || 10,
       orderBy: params.get('orderBy') || props.orderBy,
     },
+
     fetchPolicy: 'no-cache',
   }
 }
+
 export const QUERY = gql`
-  query FindUsers(
+  query FindProperties(
     $filter: String
     $skip: Int
     $take: Int
     $q: String
     $orderBy: OrderByInput
   ) {
-    users(filter: $filter, skip: $skip, take: $take, q: $q, orderBy: $orderBy) {
+    properties(
+      filter: $filter
+      skip: $skip
+      take: $take
+      q: $q
+      orderBy: $orderBy
+    ) {
       count
       take
       skip
@@ -49,18 +56,8 @@ export const QUERY = gql`
         id
         createdAt
         updatedAt
-        email
-        name
-        GroupMember {
-          id
-          group {
-            id
-            name
-          }
-        }
-        Preference {
-          id
-        }
+        entity
+        value
       }
     }
   }
@@ -73,7 +70,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({
-  users,
+  properties,
   fuzzyQuery,
   setFuzzyQuery,
   query,
@@ -88,24 +85,25 @@ export const Success = ({
   setTake,
   roles,
 }) => {
-  let [data, setData] = useState(users)
+  let [data, setData] = useState(properties)
   return (
     <Fragment>
-      <Heading>Users ({data.count})</Heading>
+      <Heading>Properties ({data.count})</Heading>
       <TableQuery
         query={query}
         setQuery={setQuery}
         fuzzyQuery={fuzzyQuery}
         setFuzzyQuery={setFuzzyQuery}
-        rawQuery={users.q}
-        inputPlaceholder="Search id, name and email"
+        rawQuery={properties.q}
+        inputPlaceholder="Search"
         link={(query) => {
-          return routes.users({ q: query })
+          return routes.properties({ q: query })
         }}
         setSkip={setSkip}
       />
+
       <Table variant="striped" colorScheme={'green'} size="xs">
-        <TableCaption>List of Users</TableCaption>
+        <TableCaption>List of Properties</TableCaption>
 
         <TableColumns
           columns={columns}
@@ -115,15 +113,15 @@ export const Success = ({
           initialColumns={initialColumns}
           setTake={setTake}
         />
-        {/*{tableRows(data.results)}*/}
+
         <TableRows
           columns={columns}
           roles={roles}
           setData={setData}
           data={data}
-          model="users"
-          deleteMutation={DELETE_USER_MUTATION}
-          displayColumn="name"
+          model="properties"
+          deleteMutation={DELETE_PROPERTY_MUTATION}
+          displayColumn="id"
         />
       </Table>
       <SimpleGrid columns={2} spacingX="40px" spacingY="20px">

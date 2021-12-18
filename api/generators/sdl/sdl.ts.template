@@ -7,8 +7,25 @@ export const schema = gql`
     ${enums[idx].values[idk].name}<% }) %>
   }
 <%}) %><% } %>
+
+  type ${pluralPascalName} {
+    results: [${singularPascalName}!]!
+    count: Int!
+    take: Int!
+    skip: Int!
+    q: String
+  }
+
   type Query {
-    ${pluralCamelName}: [${singularPascalName}!]! @requireAuth(roles: ["${singularCamelName}Read", "admin"])<% if (crud) { %>
+    <% if (crud) { %>
+    ${pluralCamelName}(
+      filter: String
+      skip: Int
+      take: Int
+      orderBy: OrderByInput
+      q: String
+    ): ${pluralPascalName}! @requireAuth(roles: ["${singularCamelName}Read", "admin"])
+
     ${singularCamelName}(id: ${idType}!): ${singularPascalName} @requireAuth(roles: ["${singularCamelName}Read", "admin"])<% } %>
   }
 
