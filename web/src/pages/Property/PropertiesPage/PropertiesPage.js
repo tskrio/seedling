@@ -6,13 +6,29 @@ import { MetaTags } from '@redwoodjs/web'
 import { showMatching, filterOut } from '/src/lib/atomicFunctions'
 
 export const initialColumns = [
+  // {
+  //   Header: 'Id',
+  //   accessor: 'id',
+  //   link: (givenId) => {
+  //     return routes.property({ id: givenId })
+  //   },
+  //   dataType: 'integer',
+  //   showMatching,
+  //   filterOut,
+  // },
   {
-    Header: 'Id',
-    accessor: 'id',
+    Header: 'Entity',
+    accessor: 'entity',
     link: (givenId) => {
       return routes.property({ id: givenId })
     },
-    dataType: 'integer',
+    showMatching,
+    filterOut,
+  },
+  {
+    Header: 'Value',
+    accessor: 'value',
+
     showMatching,
     filterOut,
   },

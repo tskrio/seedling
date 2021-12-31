@@ -78,8 +78,13 @@ export const Success = ({ property }) => {
   }
   const fields = [
     {
-      name: 'field',
-      prettyName: 'Field',
+      name: 'entity',
+      prettyName: 'Entity',
+      required: 'message to show when empty',
+    },
+    {
+      name: 'value',
+      prettyName: 'Value',
       required: 'message to show when empty',
     },
   ]
@@ -92,7 +97,7 @@ export const Success = ({ property }) => {
   return (
     <Fragment>
       <MetaTags
-        title={property.id}
+        title={`property.id`}
         description="Replace me with 155 charactes about this page"
       />
 

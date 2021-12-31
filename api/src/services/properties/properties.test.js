@@ -21,10 +21,10 @@ describe('properties', () => {
 
   scenario('creates a property', async () => {
     const result = await createProperty({
-      input: { updatedAt: '2021-12-18T06:29:39Z', entity: 'String' },
+      input: { updatedAt: '2021-12-31T04:11:06Z', entity: 'String' },
     })
 
-    expect(result.updatedAt).toEqual('2021-12-18T06:29:39Z')
+    expect(result.updatedAt).toEqual('2021-12-31T04:11:06Z')
     expect(result.entity).toEqual('String')
   })
 
@@ -32,10 +32,10 @@ describe('properties', () => {
     const original = await property({ id: scenario.property.one.id })
     const result = await updateProperty({
       id: original.id,
-      input: { updatedAt: '2021-12-19T06:29:39Z' },
+      input: { updatedAt: '2022-01-01T04:11:06Z' },
     })
 
-    expect(result.updatedAt).toEqual('2021-12-19T06:29:39Z')
+    expect(result.updatedAt).toEqual('2022-01-01T04:11:06Z')
   })
 
   scenario('deletes a property', async (scenario) => {

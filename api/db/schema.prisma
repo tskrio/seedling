@@ -45,7 +45,7 @@ model User {
   id                  Int           @id @default(autoincrement())
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
-  // Users's emailyarn r
+  // Users's email
   email               String        @unique
   name                String        @default("")
   hashedPassword      String        @default("")

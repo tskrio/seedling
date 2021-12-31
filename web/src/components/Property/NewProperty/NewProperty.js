@@ -36,18 +36,6 @@ const NewProperty = () => {
   }
   const fields = [
     {
-      name: 'id',
-      prettyName: 'Id',
-    },
-    {
-      name: 'createdAt',
-      prettyName: 'Created at',
-    },
-    {
-      name: 'updatedAt',
-      prettyName: 'Updated at',
-    },
-    {
       name: 'entity',
       prettyName: 'Entity',
     },
