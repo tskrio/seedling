@@ -12,6 +12,7 @@ import {
   executeBeforeDeleteRules,
   executeAfterDeleteRules,
 } from 'src/lib/rules'
+
 let table = 'groupMember'
 
 export const createGroupMember = async ({ input }) => {
@@ -20,29 +21,29 @@ export const createGroupMember = async ({ input }) => {
       input,
       status: { code: 'success', message: '' },
     })
+
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
     let record = await db[table].create({
       data: result.input,
     })
+
     let afterResult = await executeAfterCreateRules(table, {
       record,
     })
+
     return afterResult.record
   } catch (error) {
     throw new UserInputError(error.message)
   }
 }
 
-export const groupMembers = async ({ orderBy, filter, skip, q }) => {
+export const groupMembers = async ({ filter, skip, orderBy, q }) => {
   try {
     let preferences = context.currentUser.preferences
     let take = (() => {
-      let limit =
-        parseInt(preferences['groupMember.pageSize'], 10) ||
-        parseInt(preferences['pageSize'], 10) ||
-        10
+      let limit = parseInt(preferences['user.pageSize'], 10) || 10
       if (limit > 100) {
         return 100 //return 100 or limit whatever is smaller
       } else {
@@ -77,6 +78,7 @@ export const groupMembers = async ({ orderBy, filter, skip, q }) => {
     let result = await executeBeforeReadAllRules(table, {
       status: { code: 'success', message: '' },
     })
+
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
@@ -86,6 +88,7 @@ export const groupMembers = async ({ orderBy, filter, skip, q }) => {
       orderBy,
       skip,
     })
+
     let count = await db[table].count({ where: where.parsed })
     let results = {
       results: readRecords,
@@ -94,6 +97,7 @@ export const groupMembers = async ({ orderBy, filter, skip, q }) => {
       skip,
       q: JSON.stringify(where.parsed),
     }
+
     readRecords = executeAfterReadAllRules(table, readRecords)
     return results
   } catch (error) {
@@ -107,12 +111,14 @@ export const groupMember = async ({ id }) => {
       id,
       status: { code: 'success', message: '' },
     })
+
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
     let readRecord = await db[table].findUnique({
       where: { id },
     })
+
     readRecord = executeAfterReadRules(table, readRecord)
     return readRecord
   } catch (error) {
@@ -127,6 +133,7 @@ export const updateGroupMember = async ({ id, input }) => {
       input,
       status: { code: 'success', message: '' },
     })
+
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
@@ -134,6 +141,7 @@ export const updateGroupMember = async ({ id, input }) => {
       data: result.input,
       where: { id },
     })
+
     updatedRecord = executeAfterUpdateRules(table, updatedRecord)
     return updatedRecord
   } catch (error) {
@@ -147,12 +155,14 @@ export const deleteGroupMember = async ({ id }) => {
       id,
       status: { code: 'success', message: '' },
     })
+
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
     let deletedRecord = await db[table].delete({
       where: { id },
     })
+
     deletedRecord = executeAfterDeleteRules(table, deletedRecord)
     return deletedRecord
   } catch (error) {
@@ -160,101 +170,9 @@ export const deleteGroupMember = async ({ id }) => {
   }
 }
 
-export const groupMembersByGroup = async ({ id, filter, skip, orderBy }) => {
-  try {
-    let preferences = context.currentUser.preferences
-    let take = (() => {
-      let limit = parseInt(preferences['user.pageSize'], 10) || 10
-      if (limit > 100) {
-        return 100 //return 100 or limit whatever is smaller
-      } else {
-        return limit
-      }
-    })()
-    let where = (() => {
-      let forcedFilter = { groupId: { equals: id } }
-      //let caseInsenstive = { contains: filter, mode: 'insensitive' }
-      if (filter) {
-        //let OR = [
-        //  {
-        //    AND: [{ user: { email: caseInsenstive } }, forcedFilter],
-        //  },
-        //  {
-        //    AND: [{ user: { name: caseInsenstive } }, forcedFilter],
-        //  },
-        //  {
-        //    AND: [{ group: { name: caseInsenstive } }, forcedFilter],
-        //  },
-        //]
-        //let castFilter = parseInt(filter, 10)
-        //if (isNaN(castFilter) === false) {
-        //  OR.push({ user: { id: { equals: castFilter } } })
-        //}
-        return forcedFilter
-        //return { AND: [ }, { OR }] }
-        //return { AND { [ { groupId: {equals: id },  { OR }} ] }
-      } else {
-        return forcedFilter
-      }
-    })()
-    if (!skip) skip = 0
-    let result = await executeBeforeReadAllRules(table, {
-      status: { code: 'success', message: '' },
-    })
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
-    }
-    let readRecords = await db[table].findMany({ take, where, orderBy, skip })
-    let count = await db[table].count({ where })
-    let results = { results: readRecords, count, take, skip }
-    readRecords = executeAfterReadAllRules(table, readRecords)
-    return results
-  } catch (error) {
-    throw new UserInputError(error.message)
-  }
-}
-
-export const groupMembersByUser = async ({ id, /*filter,*/ skip, orderBy }) => {
-  //let records = await db[table].findMany({
-  //  where: { user: id },
-  //})
-  //let readRecords = records.map((current) => {
-  //  return current
-  //})
-  //return readRecords
-  try {
-    let preferences = context.currentUser.preferences
-    let take = (() => {
-      let limit = parseInt(preferences['user.pageSize'], 10) || 10
-      if (limit > 100) {
-        return 100 //return 100 or limit whatever is smaller
-      } else {
-        return limit
-      }
-    })()
-    let where = (() => {
-      return { userId: { equals: id } }
-    })()
-    if (!skip) skip = 0
-    let result = await executeBeforeReadAllRules(table, {
-      status: { code: 'success', message: '' },
-    })
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
-    }
-    let readRecords = await db[table].findMany({ take, where, orderBy, skip })
-    let count = await db[table].count({ where })
-    let results = { results: readRecords, count, take, skip }
-    readRecords = executeAfterReadAllRules(table, readRecords)
-    return results
-  } catch (error) {
-    throw new UserInputError(error.message)
-  }
-}
-
 export const GroupMember = {
-  user: (_obj, { root }) =>
-    db[table].findUnique({ where: { id: root.id } }).user(),
   group: (_obj, { root }) =>
     db[table].findUnique({ where: { id: root.id } }).group(),
+  user: (_obj, { root }) =>
+    db[table].findUnique({ where: { id: root.id } }).user(),
 }

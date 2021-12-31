@@ -5,17 +5,16 @@ import { Fragment } from 'react'
 import { MetaTags } from '@redwoodjs/web'
 import { showMatching, filterOut } from '/src/lib/atomicFunctions'
 export const initialColumns = [
-  {
-    Header: 'Id',
-    accessor: 'id',
-    link: (givenId) => {
-      return routes.preference({ id: givenId })
-    },
-    dataType: 'integer',
-
-    showMatching,
-    filterOut,
-  },
+  // {
+  //   Header: 'Id',
+  //   accessor: 'id',
+  //   link: (givenId) => {
+  //     return routes.preference({ id: givenId })
+  //   },
+  //   dataType: 'integer',
+  //   showMatching,
+  //   filterOut,
+  // },
   {
     Header: 'Entity',
     accessor: 'entity',

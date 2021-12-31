@@ -1,42 +1,68 @@
-import { Link, routes, useLocation } from '@redwoodjs/router'
-import TableComponent from 'src/components/TableComponent'
-export const beforeQuery = () => {
+import { routes, useLocation } from '@redwoodjs/router'
+import { Fragment, useState } from 'react'
+import {
+  SimpleGrid,
+  Flex,
+  Table,
+  TableCaption,
+  Heading,
+} from '@chakra-ui/react'
+import TableColumns from 'src/components/TableColumns'
+import TableQuery from 'src/components/TableQuery'
+import TablePagination from 'src/components/TablePagination'
+import TableRows from 'src/components/TableRows/TableRows'
+import { initialColumns } from 'src/pages/GroupMember/GroupMembersPage'
+
+import { DELETE_GROUP_MEMBER_MUTATION } from 'src/components/GroupMember/EditGroupMemberCell'
+
+export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { search } = useLocation()
+  const { search, pathname } = useLocation()
   let params = new URLSearchParams(search)
+  if (pathname !== '/group-members') return
   return {
     variables: {
       q: params.get('q'),
-      filter: params.get('filter'),
-      skip: parseInt(params.get('offset'), 10) || 0,
+      filter: params.get('filter') || props.fuzzyQuery,
+      skip: params.get('skip') || props.skip || 0,
+      take: params.get('take') || props.take || 10,
+      orderBy: params.get('orderBy') || props.orderBy,
     },
+
     fetchPolicy: 'no-cache',
   }
 }
 
-const DELETE_GROUP_MEMBER_MUTATION = gql`
-  mutation DeleteGroupMemberMutation($id: Int!) {
-    deleteGroupMember(id: $id) {
-      id
-    }
-  }
-`
 export const QUERY = gql`
-  query FindGroupMembers($filter: String, $skip: Int, $q: String) {
-    groupMembers(filter: $filter, skip: $skip, q: $q) {
+  query FindGroupMembers(
+    $filter: String
+    $skip: Int
+    $take: Int
+    $q: String
+    $orderBy: OrderByInput
+  ) {
+    groupMembers(
+      filter: $filter
+      skip: $skip
+      take: $take
+      q: $q
+      orderBy: $orderBy
+    ) {
       count
       take
       skip
       q
       results {
         id
+        createdAt
+        updatedAt
+        userId
         user {
           name
-          id
         }
+        groupId
         group {
           name
-          id
         }
       }
     }
@@ -45,92 +71,71 @@ export const QUERY = gql`
 
 export const Loading = () => <div>Loading...</div>
 
-export const Empty = () => {
-  return (
-    <div className="rw-text-center">
-      {`No Group Members yet.`}
-      <Link to={routes.newGroupMember()} className="rw-link">
-        {'Create one?'}
-      </Link>
-    </div>
-  )
-}
-
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className="rw-cell-error">{error.message}</div>
 )
 
-export const Success = ({ groupMembers }) => {
-  let title = 'Group Members'
-  let table = 'groupMember'
-  let columns = [
-    {
-      Header: 'User',
-      //accessor: 'user.name',
-      accessor: 'userLink',
-    },
-    {
-      Header: 'Group',
-      accessor: 'groupLink',
-    },
-    {
-      Header: 'Actions',
-      accessor: 'actions',
-    },
-  ]
-  let data = groupMembers.results.map((groupMember) => {
-    return {
-      ...groupMember,
-      userLink: (
-        <Link to={routes.user({ id: groupMember.user.id })}>
-          {groupMember.user.name}
-        </Link>
-      ),
-      groupLink: (
-        <Link to={routes.group({ id: groupMember.group.id })}>
-          {groupMember.group.name}
-        </Link>
-      ),
-    }
-  })
-  let queries = {
-    QUERY: QUERY,
-    DELETEMUTATION: DELETE_GROUP_MEMBER_MUTATION,
-  }
-  let recordRoutes = {
-    editRecord: (prop) => {
-      return routes.groupMember(prop)
-    },
-    createRecord: () => {
-      return routes.newGroupMember()
-    },
-    readRecords: (prop) => {
-      return routes.groupMembers(prop)
-    },
-  }
-  let display = 'id'
-  let roles = {
-    createRecord: ['groupMemberCreate'],
-    updateRecord: ['groupMemberUpdate'],
-    readRecord: ['groupMemberRead'],
-    deleteRecord: ['groupMemberDelete'],
-  }
-  let queryVariables = {}
+export const Success = ({
+  groupMembers,
+  fuzzyQuery,
+  setFuzzyQuery,
+  query,
+  setQuery,
+  columns,
+  setColumns,
+  orderBy,
+  setOrderBy,
+  skip,
+  setSkip,
+  take,
+  setTake,
+  roles,
+}) => {
+  let [data, setData] = useState(groupMembers)
   return (
-    <TableComponent
-      title={title}
-      columns={columns}
-      data={data}
-      queries={queries}
-      routes={recordRoutes}
-      display={display}
-      roles={roles}
-      queryVariables={queryVariables}
-      count={groupMembers.count}
-      skip={groupMembers.skip}
-      take={groupMembers.take}
-      q={groupMembers.q}
-      table={table}
-    />
+    <Fragment>
+      <Heading>GroupMembers ({data.count})</Heading>
+      <TableQuery
+        query={query}
+        setQuery={setQuery}
+        fuzzyQuery={fuzzyQuery}
+        setFuzzyQuery={setFuzzyQuery}
+        rawQuery={groupMembers.q}
+        inputPlaceholder="Search"
+        link={(query) => {
+          return routes.groupMembers({ q: query })
+        }}
+        setSkip={setSkip}
+      />
+
+      <Table variant="striped" colorScheme={'green'} size="xs">
+        <TableCaption>List of GroupMembers</TableCaption>
+
+        <TableColumns
+          columns={columns}
+          orderBy={orderBy}
+          setOrderBy={setOrderBy}
+          setColumns={setColumns}
+          initialColumns={initialColumns}
+          setTake={setTake}
+        />
+
+        <TableRows
+          columns={columns}
+          roles={roles}
+          setData={setData}
+          data={data}
+          model="groupMembers"
+          deleteMutation={DELETE_GROUP_MEMBER_MUTATION}
+          displayColumn="id"
+        />
+      </Table>
+      <SimpleGrid columns={2} spacingX="40px" spacingY="20px">
+        <Flex padding="10px"></Flex>
+        <Flex padding="10px">
+          <TablePagination skip={skip} setSkip={setSkip} take={take} />
+        </Flex>
+      </SimpleGrid>
+    </Fragment>
   )
 }

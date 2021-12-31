@@ -1,117 +1,138 @@
-import { Link, routes, useLocation } from '@redwoodjs/router'
-import TableComponent from 'src/components/TableComponent'
-export const beforeQuery = () => {
+import { routes, useLocation } from '@redwoodjs/router'
+import { Fragment, useState } from 'react'
+import {
+  SimpleGrid,
+  Flex,
+  Table,
+  TableCaption,
+  Heading,
+} from '@chakra-ui/react'
+import TableColumns from 'src/components/TableColumns'
+import TableQuery from 'src/components/TableQuery'
+import TablePagination from 'src/components/TablePagination'
+import TableRows from 'src/components/TableRows/TableRows'
+import { initialColumns } from 'src/pages/GroupRole/GroupRolesPage'
+
+import { DELETE_GROUP_ROLE_MUTATION } from 'src/components/GroupRole/EditGroupRoleCell'
+
+export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { search } = useLocation()
+  const { search, pathname } = useLocation()
   let params = new URLSearchParams(search)
+  if (pathname !== '/group-roles') return
   return {
     variables: {
-      filter: params.get('filter'),
-      skip: parseInt(params.get('offset'), 10) || 0,
+      q: params.get('q'),
+      filter: params.get('filter') || props.fuzzyQuery,
+      skip: params.get('skip') || props.skip || 0,
+      take: params.get('take') || props.take || 10,
+      orderBy: params.get('orderBy') || props.orderBy,
     },
+
     fetchPolicy: 'no-cache',
   }
 }
-const DELETE_GROUP_ROLE_MUTATION = gql`
-  mutation DeleteGroupRoleMutation($id: Int!) {
-    deleteGroupRole(id: $id) {
-      id
-    }
-  }
-`
+
 export const QUERY = gql`
-  query FindGroupRoles($filter: String, $skip: Int) {
-    groupRoles(filter: $filter, skip: $skip) {
+  query FindGroupRoles(
+    $filter: String
+    $skip: Int
+    $take: Int
+    $q: String
+    $orderBy: OrderByInput
+  ) {
+    groupRoles(
+      filter: $filter
+      skip: $skip
+      take: $take
+      q: $q
+      orderBy: $orderBy
+    ) {
       count
       take
       skip
+      q
       results {
         id
+        createdAt
+        updatedAt
+        role
         groupId
         group {
           name
-          id
-          description
         }
-        role
       }
     }
   }
 `
+
 export const Loading = () => <div>Loading...</div>
 
-export const Empty = () => <div>Empty</div>
-
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className="rw-cell-error">{error.message}</div>
 )
 
-export const Success = ({ groupRoles }) => {
-  let title = 'Group Roles'
-  let table = 'groupRole'
-  let columns = [
-    {
-      Header: 'Group',
-      //accessor: 'group.name',
-      accessor: 'groupLink',
-    },
-    {
-      Header: 'Role',
-      accessor: 'role',
-    },
-    {
-      Header: 'Actions',
-      accessor: 'actions',
-    },
-  ]
-
-  let data = groupRoles.results.map((groupRole) => {
-    return {
-      ...groupRole,
-      groupLink: (
-        <Link to={routes.group({ id: groupRole.group.id })}>
-          {groupRole.group.name}
-        </Link>
-      ),
-    }
-  })
-  let queries = {
-    QUERY: QUERY,
-    DELETEMUTATION: DELETE_GROUP_ROLE_MUTATION,
-  }
-  let recordRoutes = {
-    editRecord: (prop) => {
-      return routes.groupRole(prop)
-    },
-    createRecord: () => {
-      return routes.newGroupRole()
-    },
-    readRecords: (props) => {
-      return routes.groupRoles(props)
-    },
-  }
-  let display = 'id'
-  let roles = {
-    createRecord: ['groupRoleCreate'],
-    updateRecord: ['groupRoleUpdate'],
-    readRecord: ['groupRoleRead'],
-    deleteRecord: ['groupRoleDelete'],
-  }
-  let queryVariables = {}
+export const Success = ({
+  groupRoles,
+  fuzzyQuery,
+  setFuzzyQuery,
+  query,
+  setQuery,
+  columns,
+  setColumns,
+  orderBy,
+  setOrderBy,
+  skip,
+  setSkip,
+  take,
+  setTake,
+  roles,
+}) => {
+  let [data, setData] = useState(groupRoles)
   return (
-    <TableComponent
-      title={title}
-      columns={columns}
-      data={data}
-      queries={queries}
-      routes={recordRoutes}
-      display={display}
-      roles={roles}
-      queryVariables={queryVariables}
-      count={groupRoles.count}
-      skip={groupRoles.skip}
-      take={groupRoles.take}
-      table={table}
-    />
+    <Fragment>
+      <Heading>GroupRoles ({data.count})</Heading>
+      <TableQuery
+        query={query}
+        setQuery={setQuery}
+        fuzzyQuery={fuzzyQuery}
+        setFuzzyQuery={setFuzzyQuery}
+        rawQuery={groupRoles.q}
+        inputPlaceholder="Search"
+        link={(query) => {
+          return routes.groupRoles({ q: query })
+        }}
+        setSkip={setSkip}
+      />
+
+      <Table variant="striped" colorScheme={'green'} size="xs">
+        <TableCaption>List of GroupRoles</TableCaption>
+
+        <TableColumns
+          columns={columns}
+          orderBy={orderBy}
+          setOrderBy={setOrderBy}
+          setColumns={setColumns}
+          initialColumns={initialColumns}
+          setTake={setTake}
+        />
+
+        <TableRows
+          columns={columns}
+          roles={roles}
+          setData={setData}
+          data={data}
+          model="groupRoles"
+          deleteMutation={DELETE_GROUP_ROLE_MUTATION}
+          displayColumn="id"
+        />
+      </Table>
+      <SimpleGrid columns={2} spacingX="40px" spacingY="20px">
+        <Flex padding="10px"></Flex>
+        <Flex padding="10px">
+          <TablePagination skip={skip} setSkip={setSkip} take={take} />
+        </Flex>
+      </SimpleGrid>
+    </Fragment>
   )
 }

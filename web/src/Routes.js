@@ -19,6 +19,10 @@ import Standard from './layouts/Standard/Standard'
 const Routes = () => {
   return (
     <Router>
+      <Set wrap={GroupMembersLayout}>
+        <Route path="/group-members/{id:Int}/edit" page={GroupMemberEditGroupMemberPage} name="editGroupMember" />
+        <Route path="/group-members/{id:Int}" page={GroupMemberGroupMemberPage} name="groupMember" />
+      </Set>
       <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
       <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
       <Route path="/login" page={LoginPage} name="login" />

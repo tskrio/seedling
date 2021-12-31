@@ -86,7 +86,7 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
   return (
     <Fragment>
       <MetaTags
-        title={${singularCamelName}.id}
+        title={`${singularCamelName}.id`}
         description="Replace me with 155 charactes about this page"
         />
       <FormComponent

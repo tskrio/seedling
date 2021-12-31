@@ -22,13 +22,13 @@ describe('groupRoles', () => {
   scenario('creates a groupRole', async (scenario) => {
     const result = await createGroupRole({
       input: {
-        updatedAt: '2021-09-08T20:45:01Z',
+        updatedAt: '2021-12-18T15:43:13Z',
         role: 'String',
         groupId: scenario.groupRole.two.groupId,
       },
     })
 
-    expect(result.updatedAt).toEqual('2021-09-08T20:45:01Z')
+    expect(result.updatedAt).toEqual('2021-12-18T15:43:13Z')
     expect(result.role).toEqual('String')
     expect(result.groupId).toEqual(scenario.groupRole.two.groupId)
   })
@@ -37,10 +37,10 @@ describe('groupRoles', () => {
     const original = await groupRole({ id: scenario.groupRole.one.id })
     const result = await updateGroupRole({
       id: original.id,
-      input: { updatedAt: '2021-09-09T20:45:01Z' },
+      input: { updatedAt: '2021-12-19T15:43:13Z' },
     })
 
-    expect(result.updatedAt).toEqual('2021-09-09T20:45:01Z')
+    expect(result.updatedAt).toEqual('2021-12-19T15:43:13Z')
   })
 
   scenario('deletes a groupRole', async (scenario) => {

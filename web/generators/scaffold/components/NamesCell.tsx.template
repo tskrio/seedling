@@ -22,7 +22,7 @@ export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { search, pathname } = useLocation()
   let params = new URLSearchParams(search)
-  if (pathname !== '/${pluralCamelName}') return
+  if (pathname !== '/replace-me-with-uri-path-eg-group-members}') return
   return {
     variables: {
       q: params.get('q'),

@@ -2,7 +2,6 @@ import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
-import GroupMembersByUserCell from 'src/components/GroupMember/GroupMembersByUserCell'
 import { useAuth } from '@redwoodjs/auth'
 
 export const QUERY = gql`
@@ -112,7 +111,6 @@ export const Success = ({ user }) => {
         error={error}
         returnLink={routes.users()}
       />
-      <GroupMembersByUserCell userID={user} />
     </>
   )
 }

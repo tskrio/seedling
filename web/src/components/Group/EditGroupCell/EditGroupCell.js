@@ -2,15 +2,9 @@ import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
-import GroupMembersByGroupCell from 'src/components/GroupMember/GroupMembersByGroupCell'
-import GroupRolesByGroupCell from 'src/components/GroupRole/GroupRolesByGroupCell'
-const DELETE_GROUP_MUTATION = gql`
-  mutation DeleteGroupMutation($id: Int!) {
-    deleteGroup(id: $id) {
-      id
-    }
-  }
-`
+
+import { Fragment } from 'react'
+
 export const QUERY = gql`
   query EditGroupById($id: Int!) {
     group: group(id: $id) {
@@ -22,7 +16,7 @@ export const QUERY = gql`
     }
   }
 `
-export const UPDATE_GROUP_MUTATION = gql`
+const UPDATE_GROUP_MUTATION = gql`
   mutation UpdateGroupMutation($id: Int!, $input: UpdateGroupInput!) {
     updateGroup(id: $id, input: $input) {
       id
@@ -33,11 +27,18 @@ export const UPDATE_GROUP_MUTATION = gql`
     }
   }
 `
+export const DELETE_GROUP_MUTATION = gql`
+  mutation DeleteGroupMutation($id: Int!) {
+    deleteGroup(id: $id) {
+      id
+    }
+  }
+`
 
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className="rw-cell-error">{error.message}</div>
 )
 
 export const Success = ({ group }) => {
@@ -46,14 +47,20 @@ export const Success = ({ group }) => {
       toast.success('Group updated')
       navigate(routes.groups())
     },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
+
   const onSubmit = (data) => {
+    console.log('saving', data)
     /**TODO: FEAT Client Rules go here */
     onSave(data, group.id)
   }
   const onSave = (input, id) => {
     updateGroup({ variables: { id, input } })
   }
+
   const [deleteGroup] = useMutation(DELETE_GROUP_MUTATION, {
     onCompleted: () => {
       toast.success('Group deleted')
@@ -62,34 +69,30 @@ export const Success = ({ group }) => {
   })
 
   const onDelete = (id) => {
-    if (confirm('Are you sure you want to delete group ' + id + '?')) {
+    if (confirm('Are you sure you want to delete Group ' + id + '?')) {
       deleteGroup({ variables: { id } })
     }
   }
   const fields = [
     {
-      name: 'name',
-      prettyName: 'Name',
-    },
-    {
-      name: 'description',
-      prettyName: 'Description',
-      //type: 'dateTime',
-      //type: 'textArea',
+      name: 'field',
+      prettyName: 'Field',
+      required: 'message to show when empty',
     },
   ]
+
   const roles = {
     update: ['groupUpdate'],
     delete: ['groupDelete'],
   }
+
   return (
-    <>
+    <Fragment>
       <MetaTags
-        title={group.name}
-        description={`${group.name}`}
-        /* you should un-comment description and add a unique description, 155 characters or less
-      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+        title={`group.id`}
+        description="Replace me with 155 charactes about this page"
       />
+
       <FormComponent
         record={group}
         fields={fields}
@@ -100,8 +103,6 @@ export const Success = ({ group }) => {
         error={error}
         returnLink={routes.groups()}
       />
-      <GroupMembersByGroupCell groupID={group} />
-      <GroupRolesByGroupCell groupID={group} />
-    </>
+    </Fragment>
   )
 }

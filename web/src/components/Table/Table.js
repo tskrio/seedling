@@ -46,7 +46,7 @@ const Table = () => {
   //if (data) handleSearchResult(data)
   let output
   try {
-    output = loadedData.search.results.map((result) => {
+    output = loadedData?.search.results.map((result) => {
       return (
         <p key={result.id}>
           {result.name} ({result.id})

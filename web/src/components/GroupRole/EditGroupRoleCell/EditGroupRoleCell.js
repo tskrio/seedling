@@ -1,7 +1,9 @@
-import { useMutation } from '@redwoodjs/web'
+import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
+
+import { Fragment } from 'react'
 
 export const QUERY = gql`
   query EditGroupRoleById($id: Int!) {
@@ -11,16 +13,6 @@ export const QUERY = gql`
       updatedAt
       role
       groupId
-      group {
-        name
-      }
-    }
-  }
-`
-const DELETE_GROUP_ROLE_MUTATION = gql`
-  mutation DeleteGroupRoleMutation($id: Int!) {
-    deleteGroupRole(id: $id) {
-      id
     }
   }
 `
@@ -35,6 +27,13 @@ const UPDATE_GROUP_ROLE_MUTATION = gql`
     }
   }
 `
+export const DELETE_GROUP_ROLE_MUTATION = gql`
+  mutation DeleteGroupRoleMutation($id: Int!) {
+    deleteGroupRole(id: $id) {
+      id
+    }
+  }
+`
 
 export const Loading = () => <div>Loading...</div>
 
@@ -43,101 +42,71 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ groupRole }) => {
-  const [updateGroup, { loading, error }] = useMutation(
+  const [updateGroupRole, { loading, error }] = useMutation(
     UPDATE_GROUP_ROLE_MUTATION,
     {
       onCompleted: () => {
-        toast.success('Group Role updated')
+        toast.success('GroupRole updated')
         navigate(routes.groupRoles())
+      },
+      onError: (error) => {
+        toast.error(error.message)
       },
     }
   )
+
   const onSubmit = (data) => {
+    console.log('saving', data)
     /**TODO: FEAT Client Rules go here */
     onSave(data, groupRole.id)
   }
   const onSave = (input, id) => {
-    if (input?.groupId) {
-      input.groupId = parseInt(input.groupId, 10)
-    }
-    updateGroup({ variables: { id, input } })
+    const castInput = Object.assign(input, { groupId: parseInt(input.groupId) })
+    updateGroupRole({ variables: { id, input: castInput } })
   }
-  const [deleteGroup] = useMutation(DELETE_GROUP_ROLE_MUTATION, {
+
+  const [deleteGroupRole] = useMutation(DELETE_GROUP_ROLE_MUTATION, {
     onCompleted: () => {
-      toast.success('Group role deleted')
-      navigate(routes.users())
+      toast.success('GroupRole deleted')
+      navigate(routes.groupRoles())
     },
   })
 
   const onDelete = (id) => {
-    if (confirm('Are you sure you want to delete group role ' + id + '?')) {
-      deleteGroup({ variables: { id } })
+    if (confirm('Are you sure you want to delete GroupRole ' + id + '?')) {
+      deleteGroupRole({ variables: { id } })
     }
   }
   const fields = [
     {
-      prettyName: 'Group',
-      name: 'groupId',
-      type: 'reference',
-      display: 'name',
-      value: 'id',
-      defaultValue: groupRole.groupId,
-      defaultDisplay: groupRole.group.name,
-      QUERY: gql`
-        query FindReferenceFieldQueryGroupRoles($filter: String, $skip: Int) {
-          search: groups(filter: $filter, skip: $skip) {
-            count
-            take
-            skip
-            results {
-              id
-              name
-            }
-          }
-        }
-      `,
-    },
-    {
-      name: 'role',
-      prettyName: 'Role',
-      type: 'select',
-      display: 'name',
-      value: 'name',
-      data: [
-        { name: 'userCreate' },
-        { name: 'userRead' },
-        { name: 'userUpdate' },
-        { name: 'userDelete' },
-        { name: 'groupCreate' },
-        { name: 'groupRead' },
-        { name: 'groupUpdate' },
-        { name: 'groupDelete' },
-        { name: 'groupMemberCreate' },
-        { name: 'groupMemberRead' },
-        { name: 'groupMemberUpdate' },
-        { name: 'groupMemberDelete' },
-        { name: 'groupRoleCreate' },
-        { name: 'groupRoleRead' },
-        { name: 'groupRoleUpdate' },
-        { name: 'groupRoleDelete' },
-        { name: 'admin' },
-      ],
+      name: 'field',
+      prettyName: 'Field',
+      required: 'message to show when empty',
     },
   ]
+
   const roles = {
-    update: ['groupUpdate'],
-    delete: ['groupDelete'],
+    update: ['groupRoleUpdate'],
+    delete: ['groupRoleDelete'],
   }
+
   return (
-    <FormComponent
-      record={groupRole}
-      fields={fields}
-      roles={roles}
-      onSubmit={onSubmit}
-      onDelete={onDelete}
-      loading={loading}
-      error={error}
-      returnLink={routes.groupRoles()}
-    />
+    <Fragment>
+      <MetaTags
+        title={`groupRole.id`}
+        description="Replace me with 155 charactes about this page"
+      />
+
+      <FormComponent
+        record={groupRole}
+        fields={fields}
+        roles={roles}
+        onSubmit={onSubmit}
+        onDelete={onDelete}
+        loading={loading}
+        error={error}
+        returnLink={routes.groupRoles()}
+      />
+    </Fragment>
   )
 }
