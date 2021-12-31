@@ -4,16 +4,13 @@ import {
   Button,
   Box,
   Flex,
-  Spacer,
   Tbody,
   Td,
-  //  Tr,
   IconButton,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
-  //  Text,
 } from '@chakra-ui/react'
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
 import { useMutation } from '@redwoodjs/web'
@@ -31,7 +28,7 @@ const TableRows = ({
   const { hasRole /*currentUser*/ } = useAuth()
   let handleDeleteItem = (event) => {
     let id = parseInt(event.target.value, 10)
-    let foundRow = data.results.filter((user) => {
+    let foundRow = data.results?.filter((user) => {
       return user.id === id
     })
     let question = `Are you sure you want to delete ${foundRow[0][displayColumn]}?`
@@ -39,7 +36,7 @@ const TableRows = ({
       deleteRecord({ variables: { id } })
       setData({
         ...data,
-        results: data.results.filter((row) => {
+        results: data.results?.filter((row) => {
           return !(row.id === id)
         }),
         count: data.count - 1,
@@ -55,128 +52,140 @@ const TableRows = ({
       toast.success(`Deleted ${del.deletedRow[displayColumn]}`)
     },
   })
-
-  let rowsOutput = data.results.map((row) => {
-    if (hasRole([roles.deleteRecord].concat(['admin']))) {
-      try {
-        row.actions = (
-          <Button
-            value={row.id}
-            onClick={handleDeleteItem}
-            leftIcon={<CloseIcon />}
-            colorScheme="red"
-            variant="solid"
-            type="button"
+  let menu = (row, column) => {
+    let value = row[column.accessor]
+    if (column.field) value = row[column.accessor][column.field]
+    let rowActions = []
+    if (column.showMatching)
+      rowActions.push(
+        <MenuItem
+          key={'showMatching'}
+          onClick={() => {
+            navigate(column.showMatching(model, column, value))
+          }}
+        >
+          Show Matching {column.Header}
+        </MenuItem>
+      )
+    if (column.filterOut)
+      rowActions.push(
+        <MenuItem
+          key={'filterOut'}
+          onClick={() => {
+            navigate(column.filterOut(model, column, value))
+          }}
+        >
+          Filter Out {column.Header}
+        </MenuItem>
+      )
+    if (column.copy)
+      rowActions.push(
+        <MenuItem
+          key={'copy'}
+          onClick={() => {
+            column.copy(value)
+          }}
+        >
+          Copy {value}
+        </MenuItem>
+      )
+    if (rowActions.length > 0)
+      return (
+        <Menu>
+          <MenuButton
+            as={IconButton}
+            aria-label="Options"
+            icon={<HamburgerIcon />}
+            variant="outline"
             size="sm"
-          >
-            Remove
-          </Button>
+          />
+          <MenuList>{rowActions}</MenuList>
+        </Menu>
+      )
+    return <></>
+  }
+  let element = (row, column) => {
+    let nestedElements = row[column?.accessor]?.length
+    if (column.aggregate && column.link)
+      return <Link to={column.link(row.id)}>{nestedElements}</Link>
+    if (column.aggregate) return { nestedElements }
+    if (column.reference && column.link) {
+      return (
+        <>
+          {menu(row, column)}
+          <Box p="2">
+            <Link to={column.link(row[column.accessor].id)}>
+              {row[column.accessor][column.field]}
+            </Link>
+          </Box>
+        </>
+      )
+    }
+    if (column.reference) {
+      return (
+        <>
+          {menu(row, column)}
+          <Box p="2">{row[column.accessor][column.field]}</Box>
+        </>
+      )
+    }
+    if (column.link)
+      return (
+        <>
+          {menu(row, column)}
+          <Box p="2">
+            <Link title={row[column.accessor]} to={column.link(row.id)}>
+              {row[column.accessor]}
+            </Link>
+          </Box>
+        </>
+      )
+    if (row?.[column.accessor])
+      return (
+        <>
+          {menu(row, column)}
+          <Box p="2">{row[column.accessor]}</Box>
+        </>
+      )
+
+    if (column.accessor === 'actions') {
+      if (hasRole([roles.deleteRecord].concat(['admin']))) {
+        return (
+          <Box p="2">
+            <Button
+              value={row.id}
+              onClick={handleDeleteItem}
+              leftIcon={<CloseIcon />}
+              colorScheme="red"
+              variant="solid"
+              type="button"
+              size="sm"
+            >
+              Remove
+            </Button>
+          </Box>
         )
-      } catch (e) {
-        console.log('error', e)
       }
     }
-    let _elements = columns.map((column) => {
-      let key = `${row.id}_${column.accessor}`
-      let showMatchingOrFilterOut = column.showMatching || column.filterOut
-      let showMatchingOrFilterOutMenu = (() => {
-        if (column.showMatching || column.filterOut) {
-          //console.log(row, column)
-          let value = row[column.accessor]
-          if (column.field) value = row[column.accessor][column.field]
-          return (
-            <Menu>
-              <MenuButton
-                as={IconButton}
-                aria-label="Options"
-                icon={<HamburgerIcon />}
-                variant="outline"
-                size="sm"
-              />
-              <MenuList>
-                {column.showMatching && (
-                  <MenuItem
-                    onClick={() => {
-                      navigate(column.showMatching(model, column, value))
-                    }}
-                  >
-                    Show Matching {column.Header}
-                  </MenuItem>
-                )}
+  }
 
-                {column.filterOut && (
-                  <MenuItem
-                    onClick={() => {
-                      navigate(column.filterOut(model, column, value))
-                    }}
-                  >
-                    Filter Out {column.Header}
-                  </MenuItem>
-                )}
-              </MenuList>
-            </Menu>
-          )
-        }
-      })()
-      if (column.aggregate) {
-        let nestedElements = row[column.accessor].length
-        if (column.link) {
-          nestedElements = (
-            <Link to={column.link(row.id)}>{nestedElements}</Link>
-          )
-        }
-        return <Td key={key}>{nestedElements}</Td>
-      } else if (column.reference) {
+  return (
+    <Tbody>
+      {data.results?.map((row) => {
         return (
-          <Td key={key}>
-            <Flex>
-              <Box p="2">{row[column.accessor][column.field]} </Box>
-              <Spacer />
-              <Box p="2">
-                {showMatchingOrFilterOut && showMatchingOrFilterOutMenu}
-              </Box>
-            </Flex>
-          </Td>
+          <tr className={`${row.id}_row`} key={row.id}>
+            {columns.map((column) => {
+              return (
+                <Td key={`${row.id}_${column.accessor}`}>
+                  <Flex>{element(row, column)}</Flex>
+                </Td>
+              )
+            })}
+          </tr>
         )
-      } else if (column.link) {
-        return (
-          <Td key={key}>
-            <Flex>
-              <Box p="2">
-                <Link title={row[column.accessor]} to={column.link(row.id)}>
-                  {row[column.accessor]}
-                </Link>
-              </Box>
-              <Spacer />
-
-              <Box p="2">
-                {showMatchingOrFilterOut && showMatchingOrFilterOutMenu}
-              </Box>
-            </Flex>
-          </Td>
-        )
-      } else {
-        return (
-          <Td key={key}>
-            <Flex>
-              <Box p="2">{row[column.accessor]}</Box>
-              <Spacer />
-              <Box p="2">
-                {showMatchingOrFilterOut && showMatchingOrFilterOutMenu}
-              </Box>
-            </Flex>
-          </Td>
-        )
-      }
-    })
-    return (
-      <tr className={`${row.id}_row`} key={row.id}>
-        {_elements}
-      </tr>
-    )
-  })
-
-  return <Tbody>{rowsOutput}</Tbody>
+      })}
+    </Tbody>
+  )
 }
 
 export default TableRows

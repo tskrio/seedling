@@ -16,13 +16,13 @@ describe('groups', () => {
   scenario('creates a group', async () => {
     const result = await createGroup({
       input: {
-        updatedAt: '2021-08-13T19:04:07Z',
+        updatedAt: '2021-12-18T15:43:29Z',
         name: 'String',
         description: 'String',
       },
     })
 
-    expect(result.updatedAt).toEqual('2021-08-13T19:04:07Z')
+    expect(result.updatedAt).toEqual('2021-12-18T15:43:29Z')
     expect(result.name).toEqual('String')
     expect(result.description).toEqual('String')
   })
@@ -31,10 +31,10 @@ describe('groups', () => {
     const original = await group({ id: scenario.group.one.id })
     const result = await updateGroup({
       id: original.id,
-      input: { updatedAt: '2021-08-14T19:04:07Z' },
+      input: { updatedAt: '2021-12-19T15:43:29Z' },
     })
 
-    expect(result.updatedAt).toEqual('2021-08-14T19:04:07Z')
+    expect(result.updatedAt).toEqual('2021-12-19T15:43:29Z')
   })
 
   scenario('deletes a group', async (scenario) => {

@@ -1,39 +1,39 @@
-import { useMutation } from '@redwoodjs/web'
+import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
+
+import { Fragment } from 'react'
 
 export const QUERY = gql`
   query EditGroupMemberById($id: Int!) {
     groupMember: groupMember(id: $id) {
       id
+      createdAt
+      updatedAt
       userId
-      user {
-        name
-      }
       groupId
-      group {
-        name
-      }
     }
   }
 `
-const DELETE_GROUP_MEMBER_MUTATION = gql`
-  mutation DeleteGroupMemberMutation($id: Int!) {
-    deleteGroupMember(id: $id) {
-      id
-    }
-  }
-`
-export const UPDATE_GROUP_MEMBER_MUTATION = gql`
+const UPDATE_GROUP_MEMBER_MUTATION = gql`
   mutation UpdateGroupMemberMutation(
     $id: Int!
     $input: UpdateGroupMemberInput!
   ) {
     updateGroupMember(id: $id, input: $input) {
       id
+      createdAt
+      updatedAt
       userId
       groupId
+    }
+  }
+`
+export const DELETE_GROUP_MEMBER_MUTATION = gql`
+  mutation DeleteGroupMemberMutation($id: Int!) {
+    deleteGroupMember(id: $id) {
+      id
     }
   }
 `
@@ -41,124 +41,78 @@ export const UPDATE_GROUP_MEMBER_MUTATION = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className="rw-cell-error">{error.message}</div>
 )
 
 export const Success = ({ groupMember }) => {
-  const [updateGroup, { loading, error }] = useMutation(
+  const [updateGroupMember, { loading, error }] = useMutation(
     UPDATE_GROUP_MEMBER_MUTATION,
     {
       onCompleted: () => {
-        toast.success('Group Membership updated')
+        toast.success('GroupMember updated')
         navigate(routes.groupMembers())
+      },
+      onError: (error) => {
+        toast.error(error.message)
       },
     }
   )
 
   const onSubmit = (data) => {
+    console.log('saving', data)
     /**TODO: FEAT Client Rules go here */
     onSave(data, groupMember.id)
   }
   const onSave = (input, id) => {
-    if (input.groupId) {
-      input.groupId = parseInt(input.groupId, 10)
-    }
-    if (input.userId) {
-      input.userId = parseInt(input.userId, 10)
-    }
-    updateGroup({ variables: { id, input } })
+    const castInput = Object.assign(input, {
+      userId: parseInt(input.userId),
+      groupId: parseInt(input.groupId),
+    })
+    updateGroupMember({ variables: { id, input: castInput } })
   }
-  const [deleteGroup] = useMutation(DELETE_GROUP_MEMBER_MUTATION, {
+
+  const [deleteGroupMember] = useMutation(DELETE_GROUP_MEMBER_MUTATION, {
     onCompleted: () => {
-      toast.success('Group Membership deleted')
-      navigate(routes.users())
+      toast.success('GroupMember deleted')
+      navigate(routes.groupMembers())
     },
   })
 
   const onDelete = (id) => {
-    if (
-      confirm('Are you sure you want to delete group membership ' + id + '?')
-    ) {
-      deleteGroup({ variables: { id } })
+    if (confirm('Are you sure you want to delete GroupMember ' + id + '?')) {
+      deleteGroupMember({ variables: { id } })
     }
   }
   const fields = [
     {
-      prettyName: 'Group',
-      name: 'groupId',
-      type: 'reference',
-      display: 'name',
-      value: 'id',
-      defaultValue: groupMember.groupId,
-      defaultDisplay: groupMember.group.name,
-      QUERY: gql`
-        query FindReferenceFieldQueryEditGroupMembersGroups(
-          $filter: String
-          $skip: Int
-        ) {
-          search: groups(filter: $filter, skip: $skip) {
-            count
-            take
-            skip
-            results {
-              id
-              name
-            }
-          }
-        }
-      `,
-    },
-
-    {
-      prettyName: 'Users',
-      name: 'userId',
-      type: 'reference',
-      display: 'name',
-      value: 'id',
-      defaultValue: groupMember.userId,
-      defaultDisplay: groupMember.user.name,
-      QUERY: gql`
-        query FindReferenceFieldQueryEditGroupMembersMembers(
-          $filter: String
-          $skip: Int
-          $take: Int
-          $q: String
-          $orderBy: OrderByInput
-        ) {
-          search: users(
-            filter: $filter
-            skip: $skip
-            take: $take
-            q: $q
-            orderBy: $orderBy
-          ) {
-            count
-            take
-            skip
-            q
-            results {
-              id
-              name
-            }
-          }
-        }
-      `,
+      name: 'field',
+      prettyName: 'Field',
+      required: 'message to show when empty',
     },
   ]
+
   const roles = {
     update: ['groupMemberUpdate'],
     delete: ['groupMemberDelete'],
   }
+
   return (
-    <FormComponent
-      record={groupMember}
-      fields={fields}
-      roles={roles}
-      onSubmit={onSubmit}
-      onDelete={onDelete}
-      loading={loading}
-      error={error}
-      returnLink={routes.groups()}
-    />
+    <Fragment>
+      <MetaTags
+        title={`groupMember.id`}
+        description="Replace me with 155 charactes about this page"
+      />
+
+      <FormComponent
+        record={groupMember}
+        fields={fields}
+        roles={roles}
+        onSubmit={onSubmit}
+        onDelete={onDelete}
+        loading={loading}
+        error={error}
+        returnLink={routes.groupMembers()}
+      />
+    </Fragment>
   )
 }

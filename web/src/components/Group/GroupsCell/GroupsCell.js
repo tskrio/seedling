@@ -1,33 +1,61 @@
-import { Link, routes, useLocation } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
-import TableComponent from 'src/components/TableComponent'
-export const beforeQuery = () => {
+import { routes, useLocation } from '@redwoodjs/router'
+import { Fragment, useState } from 'react'
+import {
+  SimpleGrid,
+  Flex,
+  Table,
+  TableCaption,
+  Heading,
+} from '@chakra-ui/react'
+import TableColumns from 'src/components/TableColumns'
+import TableQuery from 'src/components/TableQuery'
+import TablePagination from 'src/components/TablePagination'
+import TableRows from 'src/components/TableRows/TableRows'
+import { initialColumns } from 'src/pages/Group/GroupsPage'
+
+import { DELETE_GROUP_MUTATION } from 'src/components/Group/EditGroupCell'
+
+export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { search } = useLocation()
+  const { search, pathname } = useLocation()
   let params = new URLSearchParams(search)
+  if (pathname !== '/groups') return
   return {
     variables: {
-      filter: params.get('filter'),
-      skip: parseInt(params.get('offset'), 10) || 0,
+      q: params.get('q'),
+      filter: params.get('filter') || props.fuzzyQuery,
+      skip: params.get('skip') || props.skip || 0,
+      take: params.get('take') || props.take || 10,
+      orderBy: params.get('orderBy') || props.orderBy,
     },
+
     fetchPolicy: 'no-cache',
   }
 }
-const DELETE_GROUP_MUTATION = gql`
-  mutation DeleteGroupMutation($id: Int!) {
-    deleteGroup(id: $id) {
-      id
-    }
-  }
-`
+
 export const QUERY = gql`
-  query FindGroups($filter: String, $skip: Int) {
-    groups(filter: $filter, skip: $skip) {
+  query FindGroups(
+    $filter: String
+    $skip: Int
+    $take: Int
+    $q: String
+    $orderBy: OrderByInput
+  ) {
+    groups(
+      filter: $filter
+      skip: $skip
+      take: $take
+      q: $q
+      orderBy: $orderBy
+    ) {
       count
       take
       skip
+      q
       results {
         id
+        createdAt
+        updatedAt
         name
         description
       }
@@ -37,89 +65,71 @@ export const QUERY = gql`
 
 export const Loading = () => <div>Loading...</div>
 
-export const Empty = () => {
-  return (
-    <div className="rw-text-center">
-      {'No groups yet. '}
-      <Link to={routes.newGroup()} className="rw-link">
-        {'Create one?'}
-      </Link>
-    </div>
-  )
-}
-
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className="rw-cell-error">{error.message}</div>
 )
 
-export const Success = ({ groups }) => {
-  let table = 'group'
-  let title = 'Groups'
-  let columns = [
-    {
-      Header: 'Name',
-      accessor: 'nameLink',
-    },
-    {
-      Header: 'Description',
-      accessor: 'description',
-    },
-    {
-      Header: 'Actions',
-      accessor: 'actions',
-    },
-  ]
-  let data = groups.results.map((group) => {
-    return {
-      ...group,
-      nameLink: <Link to={routes.group({ id: group.id })}>{group.name}</Link>,
-    }
-  })
-  let queries = {
-    QUERY: QUERY,
-    DELETEMUTATION: DELETE_GROUP_MUTATION,
-  }
-  let recordRoutes = {
-    editRecord: (prop) => {
-      return routes.group(prop)
-    },
-    createRecord: () => {
-      return routes.newGroup()
-    },
-    readRecords: (props) => {
-      return routes.groups(props)
-    },
-  }
-  let display = 'id'
-  let roles = {
-    createRecord: ['groupCreate'],
-    updateRecord: ['groupUpdate'],
-    readRecord: ['groupRead'],
-    deleteRecord: ['groupDelete'],
-  }
-  let queryVariables = {}
+export const Success = ({
+  groups,
+  fuzzyQuery,
+  setFuzzyQuery,
+  query,
+  setQuery,
+  columns,
+  setColumns,
+  orderBy,
+  setOrderBy,
+  skip,
+  setSkip,
+  take,
+  setTake,
+  roles,
+}) => {
+  let [data, setData] = useState(groups)
   return (
-    <>
-      <MetaTags
-        title="Groups"
-        description="All groups"
-        /* you should un-comment description and add a unique description, 155 characters or less
-      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+    <Fragment>
+      <Heading>Groups ({data.count})</Heading>
+      <TableQuery
+        query={query}
+        setQuery={setQuery}
+        fuzzyQuery={fuzzyQuery}
+        setFuzzyQuery={setFuzzyQuery}
+        rawQuery={groups.q}
+        inputPlaceholder="Search"
+        link={(query) => {
+          return routes.groups({ q: query })
+        }}
+        setSkip={setSkip}
       />
-      <TableComponent
-        title={title}
-        columns={columns}
-        data={data}
-        queries={queries}
-        routes={recordRoutes}
-        display={display}
-        roles={roles}
-        queryVariables={queryVariables}
-        count={groups.count}
-        skip={groups.skip}
-        take={groups.take}
-        table={table}
-      />
-    </>
+
+      <Table variant="striped" colorScheme={'green'} size="xs">
+        <TableCaption>List of Groups</TableCaption>
+
+        <TableColumns
+          columns={columns}
+          orderBy={orderBy}
+          setOrderBy={setOrderBy}
+          setColumns={setColumns}
+          initialColumns={initialColumns}
+          setTake={setTake}
+        />
+
+        <TableRows
+          columns={columns}
+          roles={roles}
+          setData={setData}
+          data={data}
+          model="groups"
+          deleteMutation={DELETE_GROUP_MUTATION}
+          displayColumn="id"
+        />
+      </Table>
+      <SimpleGrid columns={2} spacingX="40px" spacingY="20px">
+        <Flex padding="10px"></Flex>
+        <Flex padding="10px">
+          <TablePagination skip={skip} setSkip={setSkip} take={take} />
+        </Flex>
+      </SimpleGrid>
+    </Fragment>
   )
 }

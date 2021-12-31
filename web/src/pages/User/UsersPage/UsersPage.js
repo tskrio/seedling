@@ -3,19 +3,19 @@ import { useState } from 'react'
 import { routes } from '@redwoodjs/router'
 import { Fragment } from 'react'
 import { MetaTags } from '@redwoodjs/web'
-import { showMatching, filterOut } from '/src/lib/atomicFunctions'
+import { showMatching, filterOut, copy } from '/src/lib/atomicFunctions'
 export const initialColumns = [
-  {
-    Header: 'ID',
-    accessor: 'id',
-    dataType: 'integer',
-    //link: true,
-    link: (givenId) => {
-      return routes.user({ id: givenId })
-    },
-    showMatching,
-    filterOut,
-  },
+  // {
+  //   Header: 'ID',
+  //   accessor: 'id',
+  //   dataType: 'integer',
+  //   //link: true,
+  //   link: (givenId) => {
+  //     return routes.user({ id: givenId })
+  //   },
+  //   showMatching,
+  //   filterOut,
+  // },
   {
     Header: 'Name',
     accessor: 'name',
@@ -25,6 +25,7 @@ export const initialColumns = [
     canRemove: false,
     showMatching,
     filterOut,
+    copy,
   },
   {
     Header: 'Email',
@@ -46,7 +47,7 @@ export const initialColumns = [
     aggregate: true,
     model: 'group',
     link: (givenId) => {
-      return routes.groupMembers({ q: `{"userID":${givenId}}` })
+      return routes.groupMembers({ q: `{"userId":${givenId}}` })
     },
   },
   {

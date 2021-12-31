@@ -1,5 +1,5 @@
 import { logger } from 'src/lib/logger'
-import { apiProperties } from 'src/lib/apiProperties'
+import { db } from 'src/lib/db'
 let Mailgun = require('mailgun-js')
 module.exports = {
   active: true,
@@ -10,19 +10,23 @@ module.exports = {
   table: 'user',
   command: async function ({ record }) {
     try {
-      if (
-        process.env.MAILGUN_API_KEY &&
-        process.env.MAILGUN_DOMAIN &&
-        apiProperties.email.active &&
-        record.email.indexOf('@example.com') == -1
-      ) {
-        let mailgun = new Mailgun({
-          apiKey: process.env.MAILGUN_API_KEY,
-          domain: process.env.MAILGUN_DOMAIN,
-        })
-        let email = record.email
-        let name = record.name
-        let html = `<h1>Welcome ${name}</h1>
+      if (record.email.includes('@example.com')) return { record }
+      let activeProperty = await db.property.findFirst({
+        where: { entity: 'email' },
+      })
+      if (activeProperty.value !== 'active') return { record }
+      let apiKey = await db.property.findFirst({
+        where: { entity: 'MAILGUN_API_KEY' },
+      })
+      apiKey = apiKey.value
+      let domain = await db.property.findFirst({
+        where: { entity: 'MAILGUN_DOMAIN' },
+      })
+      domain = domain.value
+      let mailgun = new Mailgun({ apiKey, domain })
+      let email = record.email
+      let name = record.name
+      let html = `<h1>Welcome ${name}</h1>
 <p>I am thrilled that you're here. You’ll love automating your work with Tskr. </p>
 <p>Tskr was designed to get you tracking your stuff quickly in a way where it's your data end to end.</p>
 <p>One question before I go: reply to this email and let me know why you signed up? </p>
@@ -41,34 +45,23 @@ Jace</p>
   <li><a href="https://github.com/tskrio/tskr/issues/new?body=%0A%0A%0A---%0AI%27m+a+human.+Please+be+nice.">Contribute to the design</a></li>
 </ul>
 
-      If you'd like to poke around the site you can do so at <a href="https://demo.tskr.io">demo.tskr.io</a>
+      If you'd like to poke around the site you can do so at <a href="https://${domain}">${domain}</a>
       `
-        let mail = {
-          from: `Tskr <jace@${process.env.MAILGUN_DOMAIN}>`,
-          //'h:Reply-To': 'jace@tskr.io',//not working
-          to: email,
-          subject: `Welcome to Tskr`,
-          html: html,
-        }
-        mailgun.messages().send(mail, function (error, body) {
-          if (error) {
-            logger.error(error)
-          } else {
-            logger.info(body)
-            console.log('mailgun.message().send()', body)
-          }
-        })
-      } else {
-        logger.error(
-          `
-          mail not sent
-          - apiProperties.email.action=${apiProperties.email.active}
-          - record.email.indexOf('@example.com') == -1 ${
-            record.email.indexOf('@example.com') == -1
-          }
-          `
-        )
+      let mail = {
+        from: `Tskr <jace@${domain}>`,
+        'h:Reply-To': `jace@${domain}`, //not working
+        to: email,
+        subject: `Welcome to Tskr`,
+        html: html,
       }
+      mailgun.messages().send(mail, function (error, body) {
+        if (error) {
+          logger.error(error)
+        } else {
+          logger.info(body)
+          console.log('mailgun.message().send()', body)
+        }
+      })
     } catch (e) {
       logger.error(e)
     }

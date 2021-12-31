@@ -5,17 +5,16 @@ import { Fragment } from 'react'
 import { MetaTags } from '@redwoodjs/web'
 import { showMatching, filterOut } from '/src/lib/atomicFunctions'
 export const initialColumns = [
-  {
-    Header: 'Id',
-    accessor: 'id',
-    link: (givenId) => {
-      return routes.preference({ id: givenId })
-    },
-    dataType: 'integer',
-
-    showMatching,
-    filterOut,
-  },
+  // {
+  //   Header: 'Id',
+  //   accessor: 'id',
+  //   link: (givenId) => {
+  //     return routes.preference({ id: givenId })
+  //   },
+  //   dataType: 'integer',
+  //   showMatching,
+  //   filterOut,
+  // },
   {
     Header: 'Entity',
     accessor: 'entity',
@@ -70,8 +69,8 @@ const PreferencesPage = () => {
   return (
     <Fragment>
       <MetaTags
-        title={'Users'}
-        description={`Users`}
+        title={'Preferences'}
+        description={`Preferences`}
         /* you should un-comment description and add a unique description, 155 characters or less
   You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
       />

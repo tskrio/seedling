@@ -13,14 +13,9 @@ import TablePagination from 'src/components/TablePagination'
 
 import TableRows from 'src/components/TableRows/TableRows'
 import { initialColumns } from 'src/pages/User/UsersPage'
-const DELETE_USER_MUTATION = gql`
-  mutation DeleteUserMutation($id: Int!) {
-    deletedRow: deleteUser(id: $id) {
-      id
-      name
-    }
-  }
-`
+
+import { DELETE_USER_MUTATION } from 'src/components/User/EditUserCell'
+
 export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { search, pathname } = useLocation()

@@ -1,6 +1,9 @@
-import { useMutation } from '@redwoodjs/web'
+import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
+import { Fragment } from 'react'
+import FormComponent from 'src/components/FormComponent'
+
 import ${singularPascalName}Form from '${importComponentNameForm}'
 
 const CREATE_${singularConstantName}_MUTATION = gql`
@@ -22,20 +25,43 @@ const New${singularPascalName} = () => {
     },
   })
 
+  const onSubmit = (data) => {
+    /**TODO: FEAT Client Rules go here */
+    onSave(data)
+  }
+
   const onSave = (input) => {<% if (intForeignKeys.length) { %>
     const castInput = Object.assign(input, { <% intForeignKeys.forEach(key => { %>${key}: parseInt(input.${key}), <% }) %>})<% } %>
     create${singularPascalName}({ variables: { <% if (intForeignKeys.length) { %>input: castInput<% } else { %>input<% } %> } })
   }
+  const fields = [
+  <% columns.forEach(column => { %>{
+      name: '<%= column.name %>',
+      prettyName: '<%= column.label %>',
+    }, <% }) %>
+  ]
 
+  const roles = {
+    update: ['${singularCamelName}Update'],
+    delete: ['${singularCamelName}Delete'],
+  }
   return (
-    <div className="rw-segment">
-      <header className="rw-segment-header">
-        <h2 className="rw-heading rw-heading-secondary">New ${singularPascalName}</h2>
-      </header>
-      <div className="rw-segment-main">
-        <${singularPascalName}Form onSave={onSave} loading={loading} error={error} />
-      </div>
-    </div>
+    <Fragment>
+      <MetaTags
+        title="New ${singularPascalName}"
+        description="New ${singularPascalName} form"
+        /* you should un-comment description and add a unique description, 155 characters or less
+      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+      />
+      <FormComponent
+        fields={fields}
+        roles={roles}
+        onSubmit={onSubmit}
+        loading={loading}
+        error={error}
+        returnLink={routes.${pluralRouteName}()}
+      />
+    </Fragment>
   )
 }
 

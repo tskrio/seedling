@@ -2,7 +2,6 @@ import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
-import GroupMembersByUserCell from 'src/components/GroupMember/GroupMembersByUserCell'
 import { useAuth } from '@redwoodjs/auth'
 
 export const QUERY = gql`
@@ -27,7 +26,7 @@ export const UPDATE_USER_MUTATION = gql`
     }
   }
 `
-const DELETE_USER_MUTATION = gql`
+export const DELETE_USER_MUTATION = gql`
   mutation DeleteUserMutation($id: Int!) {
     deleteUser(id: $id) {
       id
@@ -112,7 +111,6 @@ export const Success = ({ user }) => {
         error={error}
         returnLink={routes.users()}
       />
-      <GroupMembersByUserCell userID={user} />
     </>
   )
 }

@@ -12,36 +12,38 @@ import {
   executeBeforeDeleteRules,
   executeAfterDeleteRules,
 } from 'src/lib/rules'
+
 let table = 'groupRole'
+
 export const createGroupRole = async ({ input }) => {
   try {
     let result = await executeBeforeCreateRules(table, {
       input,
       status: { code: 'success', message: '' },
     })
+
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
     let record = await db[table].create({
       data: result.input,
     })
+
     let afterResult = await executeAfterCreateRules(table, {
       record,
     })
+
     return afterResult.record
   } catch (error) {
     throw new UserInputError(error.message)
   }
 }
 
-export const groupRoles = async ({ orderBy, filter, skip }) => {
+export const groupRoles = async ({ filter, skip, orderBy, q }) => {
   try {
     let preferences = context.currentUser.preferences
     let take = (() => {
-      let limit =
-        parseInt(preferences['groupRole.pageSize'], 10) ||
-        parseInt(preferences['pageSize'], 10) ||
-        10
+      let limit = parseInt(preferences['user.pageSize'], 10) || 10
       if (limit > 100) {
         return 100 //return 100 or limit whatever is smaller
       } else {
@@ -49,18 +51,25 @@ export const groupRoles = async ({ orderBy, filter, skip }) => {
       }
     })()
     let where = (() => {
-      if (filter) {
-        let OR = [
-          { group: { name: { contains: filter, mode: 'insensitive' } } },
-          { role: { contains: filter, mode: 'insensitive' } },
-        ]
-        let castFilter = parseInt(filter, 10)
-        if (isNaN(castFilter) === false) {
-          OR.push({ group: { id: { equals: castFilter } } })
-          OR.push({ id: { equals: castFilter } })
+      try {
+        let returnObject = {}
+        if (filter) {
+          let OR = [
+            // { email: { contains: filter, mode: 'insensitive' } },
+            // { name: { contains: filter, mode: 'insensitive' } },
+          ]
+          let castFilter = parseInt(filter, 10)
+          if (isNaN(castFilter) === false) {
+            OR.push({ id: { equals: castFilter } })
+          }
+          returnObject.parsed = { OR }
         }
-        return { OR }
-      } else {
+        if (q) {
+          returnObject.parsed = JSON.parse(q)
+        }
+        return returnObject
+      } catch (error) {
+        console.log(error)
         return {}
       }
     })()
@@ -68,12 +77,26 @@ export const groupRoles = async ({ orderBy, filter, skip }) => {
     let result = await executeBeforeReadAllRules(table, {
       status: { code: 'success', message: '' },
     })
+
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
-    let readRecords = await db[table].findMany({ take, where, orderBy, skip })
-    let count = await db[table].count({ where })
-    let results = { results: readRecords, count, take, skip }
+    let readRecords = await db[table].findMany({
+      take,
+      where: where.parsed,
+      orderBy,
+      skip,
+    })
+
+    let count = await db[table].count({ where: where.parsed })
+    let results = {
+      results: readRecords,
+      count,
+      take,
+      skip,
+      q: JSON.stringify(where.parsed),
+    }
+
     readRecords = executeAfterReadAllRules(table, readRecords)
     return results
   } catch (error) {
@@ -87,12 +110,14 @@ export const groupRole = async ({ id }) => {
       id,
       status: { code: 'success', message: '' },
     })
+
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
     let readRecord = await db[table].findUnique({
       where: { id },
     })
+
     readRecord = executeAfterReadRules(table, readRecord)
     return readRecord
   } catch (error) {
@@ -107,6 +132,7 @@ export const updateGroupRole = async ({ id, input }) => {
       input,
       status: { code: 'success', message: '' },
     })
+
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
@@ -114,6 +140,7 @@ export const updateGroupRole = async ({ id, input }) => {
       data: result.input,
       where: { id },
     })
+
     updatedRecord = executeAfterUpdateRules(table, updatedRecord)
     return updatedRecord
   } catch (error) {
@@ -127,12 +154,14 @@ export const deleteGroupRole = async ({ id }) => {
       id,
       status: { code: 'success', message: '' },
     })
+
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
     let deletedRecord = await db[table].delete({
       where: { id },
     })
+
     deletedRecord = executeAfterDeleteRules(table, deletedRecord)
     return deletedRecord
   } catch (error) {
@@ -140,54 +169,7 @@ export const deleteGroupRole = async ({ id }) => {
   }
 }
 
-export const groupRolesByGroup = async ({ id, orderBy, filter, skip }) => {
-  //return db.groupRole.findMany({
-  //  where: { group: id },
-  //})
-  try {
-    let preferences = context.currentUser.preferences
-    let take = (() => {
-      let limit = parseInt(preferences['user.pageSize'], 10) || 10
-      if (limit > 100) {
-        return 100 //return 100 or limit whatever is smaller
-      } else {
-        return limit
-      }
-    })()
-    let where = (() => {
-      if (filter) {
-        let OR = [
-          { group: { name: { contains: filter, mode: 'insensitive' } } },
-          { role: { contains: filter, mode: 'insensitive' } },
-        ]
-        let castFilter = parseInt(filter, 10)
-        if (isNaN(castFilter) === false) {
-          OR.push({ group: { id: { equals: castFilter } } })
-          OR.push({ id: { equals: castFilter } })
-        }
-        return { AND: [{ OR }, { groupId: { equals: id } }] }
-      } else {
-        return {}
-      }
-    })()
-    if (!skip) skip = 0
-    let result = await executeBeforeReadAllRules(table, {
-      status: { code: 'success', message: '' },
-    })
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
-    }
-    let readRecords = await db[table].findMany({ take, where, orderBy, skip })
-    let count = await db[table].count({ where })
-    let results = { results: readRecords, count, take, skip }
-    readRecords = executeAfterReadAllRules(table, readRecords)
-    return results
-  } catch (error) {
-    throw new UserInputError(error.message)
-  }
-}
-
 export const GroupRole = {
   group: (_obj, { root }) =>
-    db.groupRole.findUnique({ where: { id: root.id } }).group(),
+    db[table].findUnique({ where: { id: root.id } }).group(),
 }

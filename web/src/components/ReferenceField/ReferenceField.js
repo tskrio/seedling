@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { SelectField } from '@redwoodjs/forms'
+//import { SelectField } from '@redwoodjs/forms'
 import { useState } from 'react'
 
 const ReferenceField = ({ field }) => {
@@ -52,7 +52,8 @@ const ReferenceField = ({ field }) => {
     handleSearchResult(data)
     console.log(data)
   }
-  let options = data.search.results.map((option) => {
+  let options = data?.search?.results?.map((option) => {
+    console.log('in options', option)
     try {
       if (option[field.value] !== field.defaultValue) {
         return (
@@ -66,11 +67,11 @@ const ReferenceField = ({ field }) => {
     }
   })
   let html = (
-    <SelectField defaultValue={field.defaultValue} name={field.name}>
+    <select defaultValue={field.defaultValue} name={field.name}>
       <option>Pick one</option>
       {defaultOption}
       {options}
-    </SelectField>
+    </select>
   )
   return (
     <div>

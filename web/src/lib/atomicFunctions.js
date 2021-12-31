@@ -16,3 +16,6 @@ export const filterOut = (model, field, value) => {
   if (field.field) _value = `${_value}}`
   return routes[model]({ q: `{${_field}: {"not":${_value}}}` })
 }
+export const copy = (value) => {
+  navigator.clipboard.writeText(value)
+}

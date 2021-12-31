@@ -131,24 +131,23 @@ const NavSidebar = ({ children, isAuthenticated, currentUser, hasRole }) => {
                   </li>
                 )}
                 {/**Properties */}
-                {/*}
+
                 {hasRole(['admin']) && (
                   <li>
                     <NavLink
-                      to={routes.preferences()}
+                      to={routes.properties()}
                       activeClassName={styles.active}
                       className={styles.notActive}
                       onClick={toggleMenu}
                     >
                       <span className=" text-gray-600">{icons.list}</span>
                       <span>
-                        {currentUser.messages['Preferences'] || 'Preferences'}
+                        {currentUser.messages['Properties'] || 'Properties'}
                       </span>
                     </NavLink>
                   </li>
                 )}
 
-                */}
                 <li>
                   {/*<a href="/#" className={styles.notActive}>
                     <span className="text-gray-600">{icons.settings}</span>
