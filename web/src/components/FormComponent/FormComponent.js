@@ -19,6 +19,7 @@ import { useForm } from 'react-hook-form'
 //import { useAuth } from '@redwoodjs/auth'
 //import ReferenceField from 'src/components/ReferenceField'
 import { Fragment } from 'react'
+import ReferenceField from '../ReferenceField/ReferenceField'
 const FormComponent = ({
   record,
   fields,
@@ -67,28 +68,29 @@ const FormComponent = ({
   } = useForm()
   let fieldsHtml = fields.map((field) => {
     //console.log(field, field.name, 'type', field.type)
-    let html
+    let html = (
+      <FormControl key={field.name} isInvalid={errors[field.name]}>
+        <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
+        <Input
+          id={field.name}
+          placeholder={field.placeholder || ''}
+          {...register(field.name, {
+            required: field?.required || false,
+            minLength: field.minLength,
+          })}
+          defaultValue={record?.[field.name]}
+        />
+        <FormErrorMessage>
+          {errors[field.name] && errors[field.name].message}
+        </FormErrorMessage>
+      </FormControl>
+    )
     if (field.type === 'password') {
       //console.log('field is password')
       html = <PasswordInput key={field.name} field={field} />
-    } else {
-      html = (
-        <FormControl key={field.name} isInvalid={errors[field.name]}>
-          <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
-          <Input
-            id={field.name}
-            placeholder={field.placeholder || ''}
-            {...register(field.name, {
-              required: field?.required || false,
-              minLength: field.minLength,
-            })}
-            defaultValue={record?.[field.name]}
-          />
-          <FormErrorMessage>
-            {errors[field.name] && errors[field.name].message}
-          </FormErrorMessage>
-        </FormControl>
-      )
+    }
+    if (field.type === 'reference') {
+      html = <ReferenceField key={field.name} field={field} />
     }
     return html
   })

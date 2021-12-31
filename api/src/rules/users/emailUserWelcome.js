@@ -45,11 +45,11 @@ Jace</p>
   <li><a href="https://github.com/tskrio/tskr/issues/new?body=%0A%0A%0A---%0AI%27m+a+human.+Please+be+nice.">Contribute to the design</a></li>
 </ul>
 
-      If you'd like to poke around the site you can do so at <a href="https://demo.tskr.io">demo.tskr.io</a>
+      If you'd like to poke around the site you can do so at <a href="https://${domain}">${domain}</a>
       `
       let mail = {
-        from: `Tskr <jace@${process.env.MAILGUN_DOMAIN}>`,
-        //'h:Reply-To': 'jace@tskr.io',//not working
+        from: `Tskr <jace@${domain}>`,
+        'h:Reply-To': `jace@${domain}`, //not working
         to: email,
         subject: `Welcome to Tskr`,
         html: html,

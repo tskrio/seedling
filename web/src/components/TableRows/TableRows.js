@@ -109,17 +109,18 @@ const TableRows = ({
     if (column.aggregate && column.link)
       return <Link to={column.link(row.id)}>{nestedElements}</Link>
     if (column.aggregate) return { nestedElements }
-    if (column.reference && column.link)
+    if (column.reference && column.link) {
       return (
         <>
           {menu(row, column)}
           <Box p="2">
-            <Link to={column.link(row.id)}>
+            <Link to={column.link(row[column.accessor].id)}>
               {row[column.accessor][column.field]}
             </Link>
           </Box>
         </>
       )
+    }
     if (column.reference) {
       return (
         <>

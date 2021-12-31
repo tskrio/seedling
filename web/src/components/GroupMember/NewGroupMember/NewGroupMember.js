@@ -38,22 +38,39 @@ const NewGroupMember = () => {
     })
     createGroupMember({ variables: { input: castInput } })
   }
+  let user = {
+    id: null,
+    name: null,
+  }
   const fields = [
+    //{
+    //  name: 'userId',
+    //  prettyName: 'User id',
+    //},
     {
-      name: 'id',
-      prettyName: 'Id',
-    },
-    {
-      name: 'createdAt',
-      prettyName: 'Created at',
-    },
-    {
-      name: 'updatedAt',
-      prettyName: 'Updated at',
-    },
-    {
+      prettyName: 'Users',
       name: 'userId',
-      prettyName: 'User id',
+      type: 'reference',
+      display: 'name',
+      value: 'id',
+      defaultValue: user.id,
+      defaultDisplay: user.name,
+      QUERY: gql`
+        query FindReferenceFieldQueryNewGroupMember(
+          $filter: String
+          $skip: Int
+        ) {
+          search: users(filter: $filter, skip: $skip) {
+            count
+            take
+            skip
+            results {
+              id
+              name
+            }
+          }
+        }
+      `,
     },
     {
       name: 'groupId',

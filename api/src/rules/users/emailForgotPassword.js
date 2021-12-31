@@ -31,9 +31,9 @@ module.exports = {
       let name = record.name
       let html = `<h1>Reset your password</h1>
         <p>${name} --- need to update your password?  Click the link below.</p>
-        <p><a href="https://demo.tskr.io/reset-password?resetToken=${record.resetToken}">Reset my password</a></p>`
+        <p><a href="https://${domain}/reset-password?resetToken=${record.resetToken}">Reset my password</a></p>`
       let mail = {
-        from: `Tskr <jace@${process.env.MAILGUN_DOMAIN}>`,
+        from: `Tskr <jace@${domain}>`,
         'h:Reply-To': 'jace@tskr.io', //not working
         to: email,
         subject: `Your password reset link`,

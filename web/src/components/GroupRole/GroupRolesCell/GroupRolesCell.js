@@ -60,6 +60,7 @@ export const QUERY = gql`
         groupId
         group {
           name
+          id
         }
       }
     }

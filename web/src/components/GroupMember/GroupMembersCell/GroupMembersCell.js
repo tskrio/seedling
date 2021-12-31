@@ -59,10 +59,12 @@ export const QUERY = gql`
         userId
         user {
           name
+          id
         }
         groupId
         group {
           name
+          id
         }
       }
     }
