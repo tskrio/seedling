@@ -15,7 +15,7 @@ import {
   CloseIcon,
   RepeatIcon,
   ChevronDownIcon,
-  DownloadIcon,
+  // DownloadIcon,
 } from '@chakra-ui/icons'
 const TableColumns = ({
   columns,
@@ -99,7 +99,7 @@ const TableColumns = ({
                   Reset Columns
                 </MenuItem>
               )}
-              {column.canExport && (
+              {/*{column.canExport && (
                 <MenuItem
                   icon={<DownloadIcon />}
                   onClick={() => {
@@ -108,7 +108,7 @@ const TableColumns = ({
                 >
                   TODO:Export
                 </MenuItem>
-              )}
+              )}*/}
               {column.canSetTake && (
                 <Fragment>
                   {[10, 20, 50, 100].map((takeSize) => {
