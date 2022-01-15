@@ -8,6 +8,7 @@ import {
   MenuList,
   MenuItem,
   Text,
+  Box,
 } from '@chakra-ui/react'
 import {
   TriangleUpIcon,
@@ -19,7 +20,7 @@ import {
 } from '@chakra-ui/icons'
 const TableColumns = ({
   columns,
-  //orderBy,
+  orderBy,
   setOrderBy,
   setColumns,
   initialColumns,
@@ -27,16 +28,26 @@ const TableColumns = ({
   setTake,
 }) => {
   let headers = columns.map((column) => {
+    let sortedAscending =
+      JSON.stringify({ [column.accessor]: 'asc' }) === JSON.stringify(orderBy)
+        ? 'a-z'
+        : ''
+    let sortedDescending =
+      JSON.stringify({ [column.accessor]: 'desc' }) === JSON.stringify(orderBy)
+        ? 'z-a'
+        : ''
+    let sorted = sortedAscending || sortedDescending
     let canDoSomething =
       column.canSort != false ||
       column.canRemove != false ||
       column.canReset === true ||
       column.canExport === true
+
     return (
       <Th p={3} bg={'grey.100'} key={column.accessor}>
         {!canDoSomething && <Text>{column.Header}</Text>}
         {canDoSomething && (
-          <Menu p={3} m={4}>
+          <Menu p={0} m={0}>
             <MenuButton
               px={4}
               py={2}
@@ -47,7 +58,11 @@ const TableColumns = ({
               _focus={{ boxShadow: 'outline' }}
               fontSize={24}
             >
-              {column.Header} <ChevronDownIcon />
+              <Box display="flex" w="100%">
+                <Text>{column.Header}</Text>
+                <ChevronDownIcon />
+              </Box>
+              <Box>{sorted}</Box>
             </MenuButton>
             <MenuList>
               {column.canSort != false && (

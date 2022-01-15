@@ -25,7 +25,7 @@ const TableComponent = ({
   //q,
   table,
   setSearchInput,
-  searchInput
+  searchInput,
 }) => {
   const { search } = useLocation()
   const { hasRole, currentUser } = useAuth()
@@ -109,12 +109,10 @@ const TableComponent = ({
       toast.error(error.message || `Error - not deleted`)
     },
     onCompleted: (del) => {
-      console.log('completed delete', del.deleteUser, data)
-      let newData = data.filter((record)=>{
+      let newData = data.filter((record) => {
         return del.deleteUser.id != record.id
       })
       setTableData(newData)
-      console.log('new data', newData)
       toast.success(`deleted`)
       //TODO: BUG List doesn't remove record when deleted
       updateData()

@@ -25,19 +25,16 @@ const Table = () => {
       skip,
     },
     onCompleted: () => {
-      //console.log(data)
       setLoadedData(data)
     },
   })
   let handleSkipUpdate = () => {
-    console.log('handleSearchResult')
     setSkip(skip + 1)
     refetch()
     //setLoadedData(data)
     //refetch()
   }
   let handleSearchInput = (event) => {
-    console.log(event.target.value)
     setFitlerString(event.target.value)
     refetch()
   }
@@ -54,7 +51,7 @@ const Table = () => {
       )
     })
   } catch (error) {
-    console.log(error.message)
+    console.error(error.message)
   }
 
   return (

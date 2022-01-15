@@ -31,11 +31,7 @@ const Pagination = ({ count, readRecord, pageSize, offset }) => {
     let pageNameArray = pageArray.map((page) => {
       return Math.ceil(page / pageSize)
     })
-    // console.log({
-    //   count,
-    //   pageSize,
-    //   pageArray,
-    // })
+
     return { pageArray, pageNameArray }
   }
   let something = getPageOffsets(offset, pageSize, count)

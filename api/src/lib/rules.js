@@ -43,7 +43,7 @@ let loadRules = async (allRules, table, when, operation) => {
     return `${rule.order} ${rule.file}`
   })
   let message = [arrRules.length, table, when, operation]
-  console.log(`${message.join(' ')} rules loaded \n${ruleNames.join('\n')}`)
+  logger.info(`${message.join(' ')} rules loaded \n${ruleNames.join('\n')}`)
   return (await arrRules) || []
 }
 export const executeBeforeCreateRules = async (table, input) => {

@@ -50,7 +50,6 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
   })
 
   const onSubmit = (data) => {
-    console.log('saving', data)
     /**TODO: FEAT Client Rules go here */
     onSave(data, ${singularCamelName}.id)
   }

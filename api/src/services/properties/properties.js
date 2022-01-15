@@ -12,6 +12,7 @@ import {
   executeBeforeDeleteRules,
   executeAfterDeleteRules,
 } from 'src/lib/rules'
+import { logger } from 'src/lib/logger'
 
 let table = 'property'
 
@@ -55,8 +56,8 @@ export const properties = async ({ filter, skip, orderBy, q }) => {
         let returnObject = {}
         if (filter) {
           let OR = [
-            // { email: { contains: filter, mode: 'insensitive' } },
-            // { name: { contains: filter, mode: 'insensitive' } },
+            { entity: { contains: filter, mode: 'insensitive' } },
+            { value: { contains: filter, mode: 'insensitive' } },
           ]
           let castFilter = parseInt(filter, 10)
           if (isNaN(castFilter) === false) {
@@ -69,7 +70,7 @@ export const properties = async ({ filter, skip, orderBy, q }) => {
         }
         return returnObject
       } catch (error) {
-        console.log(error)
+        logger.error(error)
         return {}
       }
     })()

@@ -59,7 +59,6 @@ export const Success = ({ groupMember }) => {
   )
 
   const onSubmit = (data) => {
-    console.log('saving', data)
     /**TODO: FEAT Client Rules go here */
     onSave(data, groupMember.id)
   }

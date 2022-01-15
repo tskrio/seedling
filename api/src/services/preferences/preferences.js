@@ -1,5 +1,6 @@
 import { db } from 'src/lib/db'
 import { UserInputError } from '@redwoodjs/graphql-server'
+import { logger } from 'src/lib/logger'
 import {
   executeBeforeCreateRules,
   executeAfterCreateRules,
@@ -67,10 +68,10 @@ export const preferences = async ({ filter, skip, orderBy, q, take }) => {
         if (q) {
           returnObject.parsed = JSON.parse(q)
         }
-        console.log('whereObject', returnObject)
+        logger.info('whereObject', returnObject)
         return returnObject
       } catch (error) {
-        console.log(error)
+        logger.error(error)
         return {}
       }
     })()

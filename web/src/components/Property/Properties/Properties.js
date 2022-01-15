@@ -1,116 +1,80 @@
-import { useMutation } from '@redwoodjs/web'
-import { toast } from '@redwoodjs/web/toast'
-import { Link, routes } from '@redwoodjs/router'
-
-import { QUERY } from 'src/components/Property/PropertiesCell'
-
-const DELETE_PROPERTY_MUTATION = gql`
-  mutation DeletePropertyMutation($id: Int!) {
-    deleteProperty(id: $id) {
-      id
-    }
-  }
-`
-
-const MAX_STRING_LENGTH = 150
-
-const truncate = (text) => {
-  let output = text
-  if (text && text.length > MAX_STRING_LENGTH) {
-    output = output.substring(0, MAX_STRING_LENGTH) + '...'
-  }
-  return output
-}
-
-const jsonTruncate = (obj) => {
-  return truncate(JSON.stringify(obj, null, 2))
-}
-
-const timeTag = (datetime) => {
-  return (
-    <time dateTime={datetime} title={datetime}>
-      {new Date(datetime).toUTCString()}
-    </time>
-  )
-}
-
-const checkboxInputTag = (checked) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
-
-const PropertiesList = ({ properties }) => {
-  const [deleteProperty] = useMutation(DELETE_PROPERTY_MUTATION, {
-    onCompleted: () => {
-      toast.success('Property deleted')
+import { routes } from '@redwoodjs/router'
+import { Fragment, useState } from 'react'
+import PropertiesCell from 'src/components/Property/PropertiesCell'
+import { showMatching, filterOut } from '/src/lib/atomicFunctions'
+export const initialColumns = [
+  {
+    Header: 'Id',
+    accessor: 'id',
+    link: (givenId) => {
+      return routes.property({ id: givenId })
     },
-    onError: (error) => {
-      toast.error(error.message)
+    dataType: 'integer',
+    showMatching,
+    filterOut,
+  },
+  {
+    Header: 'createdAt',
+    accessor: 'createdAt',
+    showMatching,
+    dataType: 'timestamp',
+    filterOut,
+  },
+
+  {
+    Header: 'Entity',
+    accessor: 'entity',
+    link: (givenId) => {
+      return routes.property({ id: givenId })
     },
-    // This refetches the query on the list page. Read more about other ways to
-    // update the cache over here:
-    // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
-    refetchQueries: [{ query: QUERY }],
-    awaitRefetchQueries: true,
-  })
+    showMatching,
+    filterOut,
+  },
+  {
+    Header: 'Value',
+    accessor: 'value',
+    showMatching,
+    filterOut,
+  },
 
-  const onDeleteClick = (id) => {
-    if (confirm('Are you sure you want to delete property ' + id + '?')) {
-      deleteProperty({ variables: { id } })
-    }
-  }
+  /** Insert your columns here **/
+  {
+    Header: 'Actions',
+    accessor: 'actions',
+    canSort: false,
+    canRemove: false,
+    canReset: true,
+    canExport: true,
+    canSetTake: true,
+  },
+]
 
+const PropertiesList = () => {
+  let [orderBy, setOrderBy] = useState({ id: 'asc' }) // default order
+  let [columns, setColumns] = useState(initialColumns) // default columns
+  let [skip, setSkip] = useState(0) // default reocrds to jump
+  let [take, setTake] = useState(10) // default records to take
+  let [query, setQuery] = useState({ entity: 'email' }) // default query // TODO: Fix this doesnt work
+  let [fuzzyQuery, setFuzzyQuery] = useState('') // default fuzzy query
   return (
-    <div className="rw-segment rw-table-wrapper-responsive">
-      <table className="rw-table">
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Created at</th>
-            <th>Updated at</th>
-            <th>Entity</th>
-            <th>Value</th>
-            <th>&nbsp;</th>
-          </tr>
-        </thead>
-        <tbody>
-          {properties.map((property) => (
-            <tr key={property.id}>
-              <td>{truncate(property.id)}</td>
-              <td>{timeTag(property.createdAt)}</td>
-              <td>{timeTag(property.updatedAt)}</td>
-              <td>{truncate(property.entity)}</td>
-              <td>{truncate(property.value)}</td>
-              <td>
-                <nav className="rw-table-actions">
-                  <Link
-                    to={routes.property({ id: property.id })}
-                    title={'Show property ' + property.id + ' detail'}
-                    className="rw-button rw-button-small"
-                  >
-                    Show
-                  </Link>
-                  <Link
-                    to={routes.editProperty({ id: property.id })}
-                    title={'Edit property ' + property.id}
-                    className="rw-button rw-button-small rw-button-blue"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    type="button"
-                    title={'Delete property ' + property.id}
-                    className="rw-button rw-button-small rw-button-red"
-                    onClick={() => onDeleteClick(property.id)}
-                  >
-                    Delete
-                  </button>
-                </nav>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Fragment>
+      <PropertiesCell
+        orderBy={orderBy}
+        setOrderBy={setOrderBy}
+        columns={columns}
+        setColumns={setColumns}
+        initialColumns={initialColumns}
+        take={take}
+        setTake={setTake}
+        skip={skip}
+        setSkip={setSkip}
+        query={query}
+        setQuery={setQuery}
+        fuzzyQuery={fuzzyQuery}
+        setFuzzyQuery={setFuzzyQuery}
+        displayColumn="entity"
+      />
+    </Fragment>
   )
 }
 

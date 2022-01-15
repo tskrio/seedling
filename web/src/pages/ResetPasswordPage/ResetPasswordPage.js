@@ -12,7 +12,6 @@ import {
 } from '@redwoodjs/forms'
 
 const ResetPasswordPage = ({ resetToken, wait }) => {
-  console.log('wait', wait)
   const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
     useAuth()
   const [enabled, setEnabled] = useState(true)

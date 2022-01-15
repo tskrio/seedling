@@ -31,6 +31,7 @@ export const DELETE_PROPERTY_MUTATION = gql`
   mutation DeletePropertyMutation($id: Int!) {
     deleteProperty(id: $id) {
       id
+      entity
     }
   }
 `
@@ -56,7 +57,6 @@ export const Success = ({ property }) => {
   )
 
   const onSubmit = (data) => {
-    console.log('saving', data)
     /**TODO: FEAT Client Rules go here */
     onSave(data, property.id)
   }

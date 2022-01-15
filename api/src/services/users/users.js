@@ -12,6 +12,7 @@ import {
   executeBeforeDeleteRules,
   executeAfterDeleteRules,
 } from 'src/lib/rules'
+import { logger } from 'src/lib/logger'
 let table = 'user'
 export const createUser = async ({ input }) => {
   try {
@@ -40,7 +41,7 @@ export const users = async ({ filter, skip, orderBy, q, take }) => {
     let _preferences = db.preference.findMany({
       where: { userID: context.currentUser.id },
     })
-    console.log('preferences', _preferences)
+    logger.info('preferences', _preferences)
     if (skip < 0) skip = 0
     let _take = (() => {
       let limit =
@@ -79,10 +80,10 @@ export const users = async ({ filter, skip, orderBy, q, take }) => {
             ],
           }
         }
-        console.log('whereObject', returnObject)
+        logger.info('whereObject', returnObject)
         return returnObject
       } catch (error) {
-        console.log(error)
+        logger.error(error)
         return {}
       }
     })()

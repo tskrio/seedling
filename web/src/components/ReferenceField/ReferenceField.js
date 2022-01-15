@@ -3,7 +3,6 @@ import { useQuery } from '@apollo/client'
 import { useState } from 'react'
 
 const ReferenceField = ({ field }) => {
-  console.log(field)
   let defaultOption = (
     <>
       {field.defaultValue && field.defaultDisplay && (
@@ -25,7 +24,6 @@ const ReferenceField = ({ field }) => {
   let handleSearchResult = () => {
     //refetch()
   }
-  //console.log(field.defaultValue, field.defaultDisplay)
   let input = (
     <>
       <input
@@ -41,19 +39,15 @@ const ReferenceField = ({ field }) => {
     </>
   )
   if (loading) {
-    console.log('loading')
     return <p>Loading Lazy Data</p>
   }
   if (error) {
-    console.log('error', error)
     return <p>`Error! ${error}`</p>
   }
   if (data) {
     handleSearchResult(data)
-    console.log(data)
   }
   let options = data?.search?.results?.map((option) => {
-    console.log('in options', option)
     try {
       if (option[field.value] !== field.defaultValue) {
         return (
@@ -63,7 +57,7 @@ const ReferenceField = ({ field }) => {
         )
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   })
   let html = (
