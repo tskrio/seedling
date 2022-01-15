@@ -1,47 +1,8 @@
-import ${pluralPascalName}Cell from '${importComponentNamesCell}'
-import { useState } from 'react'
-import { routes } from '@redwoodjs/router'
+import ${pluralPascalName} from '${importComponentNames}'
 import { Fragment } from 'react'
 import { MetaTags } from '@redwoodjs/web'
-import { showMatching, filterOut } from '/src/lib/atomicFunctions'
-import ${pluralPascalName} from '${importComponentNames}'
-import type { Find${pluralPascalName} } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
-export const initialColumns = [
-  {
-    Header: 'Id',
-    accessor: 'id',
-    link: (givenId) => {
-      return routes.${singularRouteName}({ id: givenId })
-    },
-    dataType: 'integer',
-    showMatching,
-    filterOut,
-  },
-  /** Insert your columns here **/
-  {
-    Header: 'Actions',
-    accessor: 'actions',
-    canSort: false,
-    canRemove: false,
-    canReset: true,
-    canExport: true,
-    canSetTake: true,
-  },
-]
 
 const ${pluralPascalName}Page = () => {
-  let [fuzzyQuery, setFuzzyQuery] = useState('')
-  let [query, setQuery] = useState('')
-  let [orderBy, setOrderBy] = useState({ id: 'asc' })
-  let [skip, setSkip] = useState(0)
-  let [take, setTake] = useState(10)
-  let [columns, setColumns] = useState(initialColumns)
-  let roles = {
-    createRecord: '${singularCamelName}Create',
-    updateRecord: '${singularCamelName}Update',
-    deleteRecord: '${singularCamelName}Delete',
-  }
   return (
   <Fragment>
       <MetaTags
@@ -50,21 +11,7 @@ const ${pluralPascalName}Page = () => {
         /* you should un-comment description and add a unique description, 155 characters or less
   You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
       />
-      <${pluralPascalName}Cell
-        fuzzyQuery={fuzzyQuery}
-        setFuzzyQuery={setFuzzyQuery}
-        query={query}
-        setQuery={setQuery}
-        columns={columns}
-        setColumns={setColumns}
-        orderBy={orderBy}
-        setOrderBy={setOrderBy}
-        skip={skip}
-        setSkip={setSkip}
-        take={take}
-        setTake={setTake}
-        roles={roles}
-      />
+      <${pluralPascalName} />
     </Fragment>
   )
 }

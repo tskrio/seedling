@@ -2,20 +2,20 @@ export const standard = defineScenario({
   preference: {
     one: {
       data: {
-        updatedAt: '2021-11-22T00:05:35Z',
+        updatedAt: '2022-01-15T22:17:11Z',
         entity: 'String',
         user: {
-          create: { updatedAt: '2021-11-22T00:05:35Z', email: 'String7057225' },
+          create: { updatedAt: '2022-01-15T22:17:11Z', email: 'String5952369' },
         },
       },
     },
 
     two: {
       data: {
-        updatedAt: '2021-11-22T00:05:35Z',
+        updatedAt: '2022-01-15T22:17:11Z',
         entity: 'String',
         user: {
-          create: { updatedAt: '2021-11-22T00:05:35Z', email: 'String7669215' },
+          create: { updatedAt: '2022-01-15T22:17:11Z', email: 'String8800311' },
         },
       },
     },

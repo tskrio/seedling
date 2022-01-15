@@ -2,7 +2,7 @@ export const standard = defineScenario({
   group: {
     one: {
       data: {
-        updatedAt: '2021-12-18T15:43:29Z',
+        updatedAt: '2022-01-15T22:41:51Z',
         name: 'String',
         description: 'String',
       },
@@ -10,7 +10,7 @@ export const standard = defineScenario({
 
     two: {
       data: {
-        updatedAt: '2021-12-18T15:43:29Z',
+        updatedAt: '2022-01-15T22:41:51Z',
         name: 'String',
         description: 'String',
       },

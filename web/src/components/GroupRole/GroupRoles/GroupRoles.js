@@ -1,116 +1,82 @@
-import { useMutation } from '@redwoodjs/web'
-import { toast } from '@redwoodjs/web/toast'
-import { Link, routes } from '@redwoodjs/router'
-
-import { QUERY } from 'src/components/GroupRole/GroupRolesCell'
-
-const DELETE_GROUP_ROLE_MUTATION = gql`
-  mutation DeleteGroupRoleMutation($id: Int!) {
-    deleteGroupRole(id: $id) {
-      id
-    }
-  }
-`
-
-const MAX_STRING_LENGTH = 150
-
-const truncate = (text) => {
-  let output = text
-  if (text && text.length > MAX_STRING_LENGTH) {
-    output = output.substring(0, MAX_STRING_LENGTH) + '...'
-  }
-  return output
-}
-
-const jsonTruncate = (obj) => {
-  return truncate(JSON.stringify(obj, null, 2))
-}
-
-const timeTag = (datetime) => {
-  return (
-    <time dateTime={datetime} title={datetime}>
-      {new Date(datetime).toUTCString()}
-    </time>
-  )
-}
-
-const checkboxInputTag = (checked) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
-
-const GroupRolesList = ({ groupRoles }) => {
-  const [deleteGroupRole] = useMutation(DELETE_GROUP_ROLE_MUTATION, {
-    onCompleted: () => {
-      toast.success('GroupRole deleted')
+import { routes } from '@redwoodjs/router'
+import { Fragment, useState } from 'react'
+import GroupRolesCell from 'src/components/GroupRole/GroupRolesCell'
+import { showMatching, filterOut } from '/src/lib/atomicFunctions'
+export const initialColumns = [
+  {
+    Header: 'Group',
+    accessor: 'group',
+    showMatching,
+    filterOut,
+    // dataType: 'integer',
+    // If this is a reference
+    // you may want to show a field
+    // instead of the number here.
+    // todo that remove type,
+    // updated your query on the cell to include the model
+    // update the accessor to a name not used by a column
+    // and add;
+    canSort: false,
+    reference: true,
+    model: 'group',
+    field: 'name',
+    link: (givenId) => {
+      return routes.group({ id: givenId })
     },
-    onError: (error) => {
-      toast.error(error.message)
+  },
+  {
+    Header: 'Role',
+    accessor: 'role',
+    link: (givenId) => {
+      return routes.groupRole({ id: givenId })
     },
-    // This refetches the query on the list page. Read more about other ways to
-    // update the cache over here:
-    // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
-    refetchQueries: [{ query: QUERY }],
-    awaitRefetchQueries: true,
-  })
+    showMatching,
+    filterOut,
+  },
+  {
+    Header: 'Actions',
+    accessor: 'actions',
+    canSort: false,
+    canRemove: false,
+    canReset: true,
+    canExport: true,
+    canSetTake: true,
+  },
+]
 
-  const onDeleteClick = (id) => {
-    if (confirm('Are you sure you want to delete groupRole ' + id + '?')) {
-      deleteGroupRole({ variables: { id } })
-    }
+const GroupRolesList = () => {
+  let [orderBy, setOrderBy] = useState({ id: 'asc' }) // default order
+  let [columns, setColumns] = useState(initialColumns) // default columns
+  let [skip, setSkip] = useState(0) // default reocrds to jump
+  let [take, setTake] = useState(10) // default records to take
+  let [query, setQuery] = useState() // default query // TODO: Fix this doesnt work
+  let [fuzzyQuery, setFuzzyQuery] = useState('') // default fuzzy query
+  let roles = {
+    createRecord: 'grouproleCreate',
+    updateRecord: 'grouproleUpdate',
+    deleteRecord: 'grouproleDelete',
   }
 
   return (
-    <div className="rw-segment rw-table-wrapper-responsive">
-      <table className="rw-table">
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Created at</th>
-            <th>Updated at</th>
-            <th>Role</th>
-            <th>Group id</th>
-            <th>&nbsp;</th>
-          </tr>
-        </thead>
-        <tbody>
-          {groupRoles.map((groupRole) => (
-            <tr key={groupRole.id}>
-              <td>{truncate(groupRole.id)}</td>
-              <td>{timeTag(groupRole.createdAt)}</td>
-              <td>{timeTag(groupRole.updatedAt)}</td>
-              <td>{truncate(groupRole.role)}</td>
-              <td>{truncate(groupRole.groupId)}</td>
-              <td>
-                <nav className="rw-table-actions">
-                  <Link
-                    to={routes.groupRole({ id: groupRole.id })}
-                    title={'Show groupRole ' + groupRole.id + ' detail'}
-                    className="rw-button rw-button-small"
-                  >
-                    Show
-                  </Link>
-                  <Link
-                    to={routes.editGroupRole({ id: groupRole.id })}
-                    title={'Edit groupRole ' + groupRole.id}
-                    className="rw-button rw-button-small rw-button-blue"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    type="button"
-                    title={'Delete groupRole ' + groupRole.id}
-                    className="rw-button rw-button-small rw-button-red"
-                    onClick={() => onDeleteClick(groupRole.id)}
-                  >
-                    Delete
-                  </button>
-                </nav>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Fragment>
+      <GroupRolesCell
+        orderBy={orderBy}
+        setOrderBy={setOrderBy}
+        columns={columns}
+        setColumns={setColumns}
+        initialColumns={initialColumns}
+        take={take}
+        setTake={setTake}
+        skip={skip}
+        setSkip={setSkip}
+        query={query}
+        setQuery={setQuery}
+        fuzzyQuery={fuzzyQuery}
+        setFuzzyQuery={setFuzzyQuery}
+        displayColumn="entity"
+        roles={roles}
+      />
+    </Fragment>
   )
 }
 

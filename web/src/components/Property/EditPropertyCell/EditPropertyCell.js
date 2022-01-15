@@ -31,7 +31,6 @@ export const DELETE_PROPERTY_MUTATION = gql`
   mutation DeletePropertyMutation($id: Int!) {
     deleteProperty(id: $id) {
       id
-      entity
     }
   }
 `
@@ -80,12 +79,11 @@ export const Success = ({ property }) => {
     {
       name: 'entity',
       prettyName: 'Entity',
-      required: 'message to show when empty',
+      required: 'This is required',
     },
     {
       name: 'value',
       prettyName: 'Value',
-      required: 'message to show when empty',
     },
   ]
 

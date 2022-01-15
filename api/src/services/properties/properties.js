@@ -12,7 +12,6 @@ import {
   executeBeforeDeleteRules,
   executeAfterDeleteRules,
 } from 'src/lib/rules'
-import { logger } from 'src/lib/logger'
 
 let table = 'property'
 
@@ -40,22 +39,23 @@ export const createProperty = async ({ input }) => {
   }
 }
 
-export const properties = async ({ filter, skip, orderBy, q }) => {
+export const properties = async ({ filter, skip, orderBy, q, take }) => {
   try {
     let preferences = context.currentUser.preferences
-    let take = (() => {
-      let limit = parseInt(preferences['user.pageSize'], 10) || 10
-      if (limit > 100) {
-        return 100 //return 100 or limit whatever is smaller
-      } else {
-        return limit
-      }
+    let _take = (() => {
+      let limit =
+        take ||
+        parseInt(preferences['property.pageSize'], 10) ||
+        parseInt(preferences['pageSize'], 10 || 10)
+      if (limit > 100) return 100 //return 100 or limit whatever is smaller
+      return limit
     })()
     let where = (() => {
       try {
         let returnObject = {}
         if (filter) {
           let OR = [
+            // TODO: You need to manually add the fields to search
             { entity: { contains: filter, mode: 'insensitive' } },
             { value: { contains: filter, mode: 'insensitive' } },
           ]
@@ -70,7 +70,7 @@ export const properties = async ({ filter, skip, orderBy, q }) => {
         }
         return returnObject
       } catch (error) {
-        logger.error(error)
+        console.log(error)
         return {}
       }
     })()
@@ -83,7 +83,7 @@ export const properties = async ({ filter, skip, orderBy, q }) => {
       throw new UserInputError(result.status.message)
     }
     let readRecords = await db[table].findMany({
-      take,
+      take: _take,
       where: where.parsed,
       orderBy,
       skip,
@@ -93,7 +93,7 @@ export const properties = async ({ filter, skip, orderBy, q }) => {
     let results = {
       results: readRecords,
       count,
-      take,
+      take: _take,
       skip,
       q: JSON.stringify(where.parsed),
     }

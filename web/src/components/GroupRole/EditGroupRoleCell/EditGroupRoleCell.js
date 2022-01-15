@@ -13,6 +13,10 @@ export const QUERY = gql`
       updatedAt
       role
       groupId
+      group {
+        name
+        id
+      }
     }
   }
 `
@@ -78,9 +82,42 @@ export const Success = ({ groupRole }) => {
   }
   const fields = [
     {
-      name: 'field',
-      prettyName: 'Field',
-      required: 'message to show when empty',
+      // {"name":"role","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"type":"String","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"Role","component":"TextField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
+      name: 'role',
+      prettyName: 'Role',
+      required: 'This is required',
+    },
+
+    {
+      // {"name":"groupId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"type":"Int","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"Group id","component":"NumberField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
+      name: 'groupId',
+      prettyName: 'Group id',
+      required: 'This is required',
+      // If this is a reference you probably want this below
+      // update the query above "EditGroupRoleById"
+      // to include the referenced data
+      // and uncomment and edit below to your needs
+      type: 'reference',
+      display: 'name',
+      value: 'id',
+      defaultValue: groupRole.group.id,
+      defaultDisplay: groupRole.group.name,
+      QUERY: gql`
+        query Find_referencedModelHere_FromGroupRoles(
+          $filter: String
+          $skip: Int
+        ) {
+          search: groups(filter: $filter, skip: $skip) {
+            count
+            take
+            skip
+            results {
+              id
+              name
+            }
+          }
+        }
+      `,
     },
   ]
 

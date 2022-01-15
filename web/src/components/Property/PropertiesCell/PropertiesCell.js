@@ -6,7 +6,6 @@ import {
   Table,
   TableCaption,
   Heading,
-  Text,
 } from '@chakra-ui/react'
 import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
@@ -74,8 +73,8 @@ export const Success = ({
   setFuzzyQuery,
   query,
   setQuery,
-  initialColumns,
   columns,
+  initialColumns,
   setColumns,
   orderBy,
   setOrderBy,
@@ -84,23 +83,17 @@ export const Success = ({
   take,
   setTake,
   displayColumn,
-  //roles,
+  roles,
 }) => {
-  let roles = {
-    createRecord: 'propertyCreate',
-    updateRecord: 'propertyUpdate',
-    deleteRecord: 'propertyDelete',
-  }
-
   let [data, setData] = useState(properties)
   return (
     <Fragment>
       <Heading>Properties ({data.count})</Heading>
-      <Text>orderBy: {JSON.stringify(orderBy).toString()}</Text>
+      {/*<Text>orderBy: {JSON.stringify(orderBy).toString()}</Text>
       <Text>query: {JSON.stringify(query).toString()}</Text>
       <Text>fuzzyQuery: {JSON.stringify(fuzzyQuery).toString()}</Text>
       <Text>take: {JSON.stringify(take).toString()}</Text>
-      <Text>skip: {JSON.stringify(skip).toString()}</Text>
+      <Text>skip: {JSON.stringify(skip).toString()}</Text>*/}
       <TableQuery
         query={query}
         setQuery={setQuery}

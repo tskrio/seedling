@@ -10,34 +10,160 @@ export const initialColumns = [
       return routes.property({ id: givenId })
     },
     dataType: 'integer',
+
     showMatching,
     filterOut,
-  },
+    /*
   {
-    Header: 'createdAt',
+  "name": "id",
+  "kind": "scalar",
+  "isList": false,
+  "isRequired": true,
+  "isUnique": false,
+  "isId": true,
+  "isReadOnly": false,
+  "type": "Int",
+  "hasDefaultValue": true,
+  "default": {
+  "name": "autoincrement",
+  "args": []
+  },
+  "isGenerated": false,
+  "isUpdatedAt": false,
+  "label": "Id",
+  "component": "NumberField",
+  "defaultProp": "defaultValue",
+  "deserilizeFunction": "",
+  "validation": "{{ required: true }}",
+  "listDisplayFunction": "truncate"
+  }
+  */
+  },
+
+  {
+    Header: 'Created at',
     accessor: 'createdAt',
-    showMatching,
+
     dataType: 'timestamp',
+    showMatching,
     filterOut,
+    /*
+  {
+  "name": "createdAt",
+  "kind": "scalar",
+  "isList": false,
+  "isRequired": true,
+  "isUnique": false,
+  "isId": false,
+  "isReadOnly": false,
+  "type": "DateTime",
+  "hasDefaultValue": true,
+  "default": {
+  "name": "now",
+  "args": []
+  },
+  "isGenerated": false,
+  "isUpdatedAt": false,
+  "label": "Created at",
+  "component": "DatetimeLocalField",
+  "defaultProp": "defaultValue",
+  "deserilizeFunction": "formatDatetime",
+  "validation": "{{ required: true }}",
+  "listDisplayFunction": "timeTag",
+  "displayFunction": "timeTag"
+  }
+  */
+  },
+
+  {
+    Header: 'Updated at',
+    accessor: 'updatedAt',
+
+    dataType: 'timestamp',
+    showMatching,
+    filterOut,
+    /*
+  {
+  "name": "updatedAt",
+  "kind": "scalar",
+  "isList": false,
+  "isRequired": true,
+  "isUnique": false,
+  "isId": false,
+  "isReadOnly": false,
+  "type": "DateTime",
+  "hasDefaultValue": false,
+  "isGenerated": false,
+  "isUpdatedAt": true,
+  "label": "Updated at",
+  "component": "DatetimeLocalField",
+  "defaultProp": "defaultValue",
+  "deserilizeFunction": "formatDatetime",
+  "validation": "{{ required: true }}",
+  "listDisplayFunction": "timeTag",
+  "displayFunction": "timeTag"
+  }
+  */
   },
 
   {
     Header: 'Entity',
     accessor: 'entity',
-    link: (givenId) => {
-      return routes.property({ id: givenId })
-    },
+
     showMatching,
     filterOut,
+    /*
+  {
+  "name": "entity",
+  "kind": "scalar",
+  "isList": false,
+  "isRequired": true,
+  "isUnique": false,
+  "isId": false,
+  "isReadOnly": false,
+  "type": "String",
+  "hasDefaultValue": false,
+  "isGenerated": false,
+  "isUpdatedAt": false,
+  "label": "Entity",
+  "component": "TextField",
+  "defaultProp": "defaultValue",
+  "deserilizeFunction": "",
+  "validation": "{{ required: true }}",
+  "listDisplayFunction": "truncate"
+  }
+  */
   },
+
   {
     Header: 'Value',
     accessor: 'value',
+
     showMatching,
     filterOut,
+    /*
+  {
+  "name": "value",
+  "kind": "scalar",
+  "isList": false,
+  "isRequired": false,
+  "isUnique": false,
+  "isId": false,
+  "isReadOnly": false,
+  "type": "String",
+  "hasDefaultValue": false,
+  "isGenerated": false,
+  "isUpdatedAt": false,
+  "label": "Value",
+  "component": "TextField",
+  "defaultProp": "defaultValue",
+  "deserilizeFunction": "",
+  "validation": null,
+  "listDisplayFunction": "truncate"
+  }
+  */
   },
 
-  /** Insert your columns here **/
   {
     Header: 'Actions',
     accessor: 'actions',
@@ -54,8 +180,14 @@ const PropertiesList = () => {
   let [columns, setColumns] = useState(initialColumns) // default columns
   let [skip, setSkip] = useState(0) // default reocrds to jump
   let [take, setTake] = useState(10) // default records to take
-  let [query, setQuery] = useState({ entity: 'email' }) // default query // TODO: Fix this doesnt work
+  let [query, setQuery] = useState() // default query // TODO: Fix this doesnt work
   let [fuzzyQuery, setFuzzyQuery] = useState('') // default fuzzy query
+  let roles = {
+    createRecord: 'propertyCreate',
+    updateRecord: 'propertyUpdate',
+    deleteRecord: 'propertyDelete',
+  }
+
   return (
     <Fragment>
       <PropertiesCell
@@ -73,6 +205,7 @@ const PropertiesList = () => {
         fuzzyQuery={fuzzyQuery}
         setFuzzyQuery={setFuzzyQuery}
         displayColumn="entity"
+        roles={roles}
       />
     </Fragment>
   )

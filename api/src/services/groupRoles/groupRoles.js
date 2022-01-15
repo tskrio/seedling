@@ -1,5 +1,4 @@
 import { db } from 'src/lib/db'
-import { logger } from 'src/lib/logger'
 import { UserInputError } from '@redwoodjs/graphql-server'
 import {
   executeBeforeCreateRules,
@@ -40,24 +39,26 @@ export const createGroupRole = async ({ input }) => {
   }
 }
 
-export const groupRoles = async ({ filter, skip, orderBy, q }) => {
+export const groupRoles = async ({ filter, skip, orderBy, q, take }) => {
   try {
     let preferences = context.currentUser.preferences
-    let take = (() => {
-      let limit = parseInt(preferences['user.pageSize'], 10) || 10
-      if (limit > 100) {
-        return 100 //return 100 or limit whatever is smaller
-      } else {
-        return limit
-      }
+    let _take = (() => {
+      let limit =
+        take ||
+        parseInt(preferences['grouprole.pageSize'], 10) ||
+        parseInt(preferences['pageSize'], 10 || 10)
+      if (limit > 100) return 100 //return 100 or limit whatever is smaller
+      return limit
     })()
     let where = (() => {
       try {
         let returnObject = {}
         if (filter) {
           let OR = [
-            // { email: { contains: filter, mode: 'insensitive' } },
-            // { name: { contains: filter, mode: 'insensitive' } },
+            // TODO: You need to manually add the fields to search
+            // { entity: { contains: filter, mode: 'insensitive' } },
+            { role: { contains: filter, mode: 'insensitive' } },
+            { group: { name: { contains: filter, mode: 'insensitive' } } },
           ]
           let castFilter = parseInt(filter, 10)
           if (isNaN(castFilter) === false) {
@@ -70,7 +71,7 @@ export const groupRoles = async ({ filter, skip, orderBy, q }) => {
         }
         return returnObject
       } catch (error) {
-        logger.error(error)
+        console.log(error)
         return {}
       }
     })()
@@ -83,7 +84,7 @@ export const groupRoles = async ({ filter, skip, orderBy, q }) => {
       throw new UserInputError(result.status.message)
     }
     let readRecords = await db[table].findMany({
-      take,
+      take: _take,
       where: where.parsed,
       orderBy,
       skip,
@@ -93,7 +94,7 @@ export const groupRoles = async ({ filter, skip, orderBy, q }) => {
     let results = {
       results: readRecords,
       count,
-      take,
+      take: _take,
       skip,
       q: JSON.stringify(where.parsed),
     }

@@ -27,34 +27,43 @@ const NewGroupRole = () => {
   )
 
   const onSubmit = (data) => {
+    console.log('data', data)
     /**TODO: FEAT Client Rules go here */
     onSave(data)
   }
 
   const onSave = (input) => {
+    console.log('input', input)
     const castInput = Object.assign(input, { groupId: parseInt(input.groupId) })
     createGroupRole({ variables: { input: castInput } })
   }
   const fields = [
     {
-      name: 'id',
-      prettyName: 'Id',
-    },
-    {
-      name: 'createdAt',
-      prettyName: 'Created at',
-    },
-    {
-      name: 'updatedAt',
-      prettyName: 'Updated at',
-    },
-    {
       name: 'role',
       prettyName: 'Role',
+      required: 'This is required',
     },
     {
       name: 'groupId',
       prettyName: 'Group id',
+      required: 'This is required',
+      // uncomment and edit below to your needs
+      type: 'reference',
+      display: 'name',
+      value: 'id',
+      QUERY: gql`
+        query FindUsersFromGroupRoleNew($filter: String, $skip: Int) {
+          search: groups(filter: $filter, skip: $skip) {
+            count
+            take
+            skip
+            results {
+              id
+              name
+            }
+          }
+        }
+      `,
     },
   ]
 
