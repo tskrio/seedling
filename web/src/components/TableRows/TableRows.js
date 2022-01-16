@@ -140,6 +140,8 @@ const TableRows = ({
           </Box>
         </>
       )
+    if (column.dataType === 'timestamp')
+      return <Box p="2">{new Date(row[column.accessor]).toLocaleString()}</Box>
     if (row?.[column.accessor])
       return (
         <>

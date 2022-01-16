@@ -12,22 +12,27 @@ import {
   executeBeforeDeleteRules,
   executeAfterDeleteRules,
 } from 'src/lib/rules'
+
 let table = 'preference'
+
 export const createPreference = async ({ input }) => {
   try {
     let result = await executeBeforeCreateRules(table, {
       input,
       status: { code: 'success', message: '' },
     })
+
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
     let record = await db[table].create({
       data: result.input,
     })
+
     let afterResult = await executeAfterCreateRules(table, {
       record,
     })
+
     return afterResult.record
   } catch (error) {
     throw new UserInputError(error.message)
@@ -36,16 +41,12 @@ export const createPreference = async ({ input }) => {
 
 export const preferences = async ({ filter, skip, orderBy, q, take }) => {
   try {
-    let _preferences = db.preference.findMany({
-      where: { userID: context.currentUser.id },
-    })
-    if (skip < 0) skip = 0
+    let preferences = context.currentUser.preferences
     let _take = (() => {
       let limit =
         take ||
-        parseInt(_preferences['preference.pageSize'], 10) ||
-        parseInt(_preferences['pageSize'], 10) ||
-        10
+        parseInt(preferences['preference.pageSize'], 10) ||
+        parseInt(preferences['pageSize'], 10 || 10)
       if (limit > 100) return 100 //return 100 or limit whatever is smaller
       return limit
     })()
@@ -54,6 +55,7 @@ export const preferences = async ({ filter, skip, orderBy, q, take }) => {
         let returnObject = {}
         if (filter) {
           let OR = [
+            // TODO: You need to manually add the fields to search
             { entity: { contains: filter, mode: 'insensitive' } },
             { value: { contains: filter, mode: 'insensitive' } },
             { user: { name: { contains: filter, mode: 'insensitive' } } },
@@ -67,7 +69,6 @@ export const preferences = async ({ filter, skip, orderBy, q, take }) => {
         if (q) {
           returnObject.parsed = JSON.parse(q)
         }
-        console.log('whereObject', returnObject)
         return returnObject
       } catch (error) {
         console.log(error)
@@ -78,6 +79,7 @@ export const preferences = async ({ filter, skip, orderBy, q, take }) => {
     let result = await executeBeforeReadAllRules(table, {
       status: { code: 'success', message: '' },
     })
+
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
@@ -87,6 +89,7 @@ export const preferences = async ({ filter, skip, orderBy, q, take }) => {
       orderBy,
       skip,
     })
+
     let count = await db[table].count({ where: where.parsed })
     let results = {
       results: readRecords,
@@ -95,6 +98,7 @@ export const preferences = async ({ filter, skip, orderBy, q, take }) => {
       skip,
       q: JSON.stringify(where.parsed),
     }
+
     readRecords = executeAfterReadAllRules(table, readRecords)
     return results
   } catch (error) {
@@ -108,12 +112,14 @@ export const preference = async ({ id }) => {
       id,
       status: { code: 'success', message: '' },
     })
+
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
     let readRecord = await db[table].findUnique({
       where: { id },
     })
+
     readRecord = executeAfterReadRules(table, readRecord)
     return readRecord
   } catch (error) {
@@ -128,6 +134,7 @@ export const updatePreference = async ({ id, input }) => {
       input,
       status: { code: 'success', message: '' },
     })
+
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
@@ -135,6 +142,7 @@ export const updatePreference = async ({ id, input }) => {
       data: result.input,
       where: { id },
     })
+
     updatedRecord = executeAfterUpdateRules(table, updatedRecord)
     return updatedRecord
   } catch (error) {
@@ -148,12 +156,14 @@ export const deletePreference = async ({ id }) => {
       id,
       status: { code: 'success', message: '' },
     })
+
     if (result.status.code !== 'success') {
       throw new UserInputError(result.status.message)
     }
     let deletedRecord = await db[table].delete({
       where: { id },
     })
+
     deletedRecord = executeAfterDeleteRules(table, deletedRecord)
     return deletedRecord
   } catch (error) {
@@ -163,5 +173,5 @@ export const deletePreference = async ({ id }) => {
 
 export const Preference = {
   user: (_obj, { root }) =>
-    db.preference.findUnique({ where: { id: root.id } }).user(),
+    db[table].findUnique({ where: { id: root.id } }).user(),
 }

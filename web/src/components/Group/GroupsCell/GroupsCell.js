@@ -11,8 +11,6 @@ import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
 import TablePagination from 'src/components/TablePagination'
 import TableRows from 'src/components/TableRows/TableRows'
-import { initialColumns } from 'src/pages/Group/GroupsPage'
-
 import { DELETE_GROUP_MUTATION } from 'src/components/Group/EditGroupCell'
 
 export const beforeQuery = (props) => {
@@ -32,7 +30,9 @@ export const beforeQuery = (props) => {
     fetchPolicy: 'no-cache',
   }
 }
-
+// Looks like you have some foreign keys
+// [] you may want to update the query
+// below to include the related values
 export const QUERY = gql`
   query FindGroups(
     $filter: String
@@ -76,6 +76,7 @@ export const Success = ({
   query,
   setQuery,
   columns,
+  initialColumns,
   setColumns,
   orderBy,
   setOrderBy,
@@ -83,12 +84,18 @@ export const Success = ({
   setSkip,
   take,
   setTake,
+  displayColumn,
   roles,
 }) => {
   let [data, setData] = useState(groups)
   return (
     <Fragment>
       <Heading>Groups ({data.count})</Heading>
+      {/*<Text>orderBy: {JSON.stringify(orderBy).toString()}</Text>
+      <Text>query: {JSON.stringify(query).toString()}</Text>
+      <Text>fuzzyQuery: {JSON.stringify(fuzzyQuery).toString()}</Text>
+      <Text>take: {JSON.stringify(take).toString()}</Text>
+      <Text>skip: {JSON.stringify(skip).toString()}</Text>*/}
       <TableQuery
         query={query}
         setQuery={setQuery}
@@ -121,7 +128,7 @@ export const Success = ({
           data={data}
           model="groups"
           deleteMutation={DELETE_GROUP_MUTATION}
-          displayColumn="id"
+          displayColumn={displayColumn}
         />
       </Table>
       <SimpleGrid columns={2} spacingX="40px" spacingY="20px">

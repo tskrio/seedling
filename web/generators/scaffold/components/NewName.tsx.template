@@ -35,9 +35,32 @@ const New${singularPascalName} = () => {
     create${singularPascalName}({ variables: { <% if (intForeignKeys.length) { %>input: castInput<% } else { %>input<% } %> } })
   }
   const fields = [
-  <% columns.forEach(column => { %>{
+  <% editableColumns.forEach(column => { %>{
       name: '<%= column.name %>',
       prettyName: '<%= column.label %>',
+      <% if(column.isRequired) { %>required: 'This is required',<% } %>
+      <% if (column.type === "Int" && column.isId === false){ %>// If this is a reference you probably want this below
+      // uncomment and edit below to your needs
+      // type: 'reference',
+      // display: 'name',
+      // value: 'id',
+      // QUERY: gql`
+      //   query Find_referencedModelHere_From${pluralPascalName}(
+      //     $filter: String
+      //     $skip: Int
+      //   ) {
+      //     search: _referencedPluralModelHere_(filter: $filter, skip: $skip) {
+      //       count
+      //       take
+      //       skip
+      //       results {
+      //         id
+      //         name
+      //       }
+      //     }
+      //   }
+      // `,
+      <%}%>
     }, <% }) %>
   ]
 

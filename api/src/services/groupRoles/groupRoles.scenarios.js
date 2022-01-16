@@ -2,11 +2,11 @@ export const standard = defineScenario({
   groupRole: {
     one: {
       data: {
-        updatedAt: '2021-12-18T15:43:13Z',
+        updatedAt: '2022-01-15T22:45:02Z',
         role: 'String',
         group: {
           create: {
-            updatedAt: '2021-12-18T15:43:13Z',
+            updatedAt: '2022-01-15T22:45:02Z',
             name: 'String',
             description: 'String',
           },
@@ -16,11 +16,11 @@ export const standard = defineScenario({
 
     two: {
       data: {
-        updatedAt: '2021-12-18T15:43:13Z',
+        updatedAt: '2022-01-15T22:45:02Z',
         role: 'String',
         group: {
           create: {
-            updatedAt: '2021-12-18T15:43:13Z',
+            updatedAt: '2022-01-15T22:45:02Z',
             name: 'String',
             description: 'String',
           },

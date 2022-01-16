@@ -50,7 +50,6 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
   })
 
   const onSubmit = (data) => {
-    console.log('saving', data)
     /**TODO: FEAT Client Rules go here */
     onSave(data, ${singularCamelName}.id)
   }
@@ -72,11 +71,38 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
     }
   }
   const fields = [
-    {
-      name: 'field',
-      prettyName: 'Field',
-      required: 'message to show when empty',
-    }
+      <% editableColumns.forEach(column => { %>{
+        // ${JSON.stringify(column)}
+      name: '<%= column.name %>',
+      prettyName: '<%= column.label %>',
+      <% if(column.isRequired) { %>required: 'This is required',<% } %>
+      <% if (column.type === "Int" && column.isId === false){ %>// If this is a reference you probably want this below
+      // update the query above "Edit${singularPascalName}ById"
+      // to include the referenced data
+      // and uncomment and edit below to your needs
+      // type: 'reference',
+      // display: 'name',
+      // value: 'id',
+      // defaultValue: ${singularPascalName.toLowerCase()}._referencedModelHere_.id,
+      // defaultDisplay: ${singularPascalName.toLowerCase()}._referencedModelHere_._displayColumn_,
+      // QUERY: gql`
+      //   query Find_referencedModelHere_From${pluralPascalName}(
+      //     $filter: String
+      //     $skip: Int
+      //   ) {
+      //     search: _referencedPluralModelHere_(filter: $filter, skip: $skip) {
+      //       count
+      //       take
+      //       skip
+      //       results {
+      //         id
+      //         name
+      //       }
+      //     }
+      //   }
+      // `,
+      <%}%>
+    }, <% }) %>
   ]
 
   const roles = {

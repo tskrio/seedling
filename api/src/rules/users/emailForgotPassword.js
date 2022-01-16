@@ -43,8 +43,7 @@ module.exports = {
         if (error) {
           logger.error(error)
         } else {
-          logger.info(body)
-          console.log('mailgun.message().send()', body)
+          logger.info(`mailgun.message().send() ${body}`)
         }
       })
     } catch (e) {

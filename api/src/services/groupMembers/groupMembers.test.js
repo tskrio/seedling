@@ -22,13 +22,13 @@ describe('groupMembers', () => {
   scenario('creates a groupMember', async (scenario) => {
     const result = await createGroupMember({
       input: {
-        updatedAt: '2021-12-31T03:03:59Z',
+        updatedAt: '2022-01-16T02:53:54Z',
         userId: scenario.groupMember.two.userId,
         groupId: scenario.groupMember.two.groupId,
       },
     })
 
-    expect(result.updatedAt).toEqual('2021-12-31T03:03:59Z')
+    expect(result.updatedAt).toEqual('2022-01-16T02:53:54Z')
     expect(result.userId).toEqual(scenario.groupMember.two.userId)
     expect(result.groupId).toEqual(scenario.groupMember.two.groupId)
   })
@@ -37,10 +37,10 @@ describe('groupMembers', () => {
     const original = await groupMember({ id: scenario.groupMember.one.id })
     const result = await updateGroupMember({
       id: original.id,
-      input: { updatedAt: '2022-01-01T03:03:59Z' },
+      input: { updatedAt: '2022-01-17T02:53:54Z' },
     })
 
-    expect(result.updatedAt).toEqual('2022-01-01T03:03:59Z')
+    expect(result.updatedAt).toEqual('2022-01-17T02:53:54Z')
   })
 
   scenario('deletes a groupMember', async (scenario) => {

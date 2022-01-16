@@ -11,8 +11,6 @@ import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
 import TablePagination from 'src/components/TablePagination'
 import TableRows from 'src/components/TableRows/TableRows'
-import { initialColumns } from 'src/pages/Property/PropertiesPage'
-
 import { DELETE_PROPERTY_MUTATION } from 'src/components/Property/EditPropertyCell'
 
 export const beforeQuery = (props) => {
@@ -76,6 +74,7 @@ export const Success = ({
   query,
   setQuery,
   columns,
+  initialColumns,
   setColumns,
   orderBy,
   setOrderBy,
@@ -83,12 +82,18 @@ export const Success = ({
   setSkip,
   take,
   setTake,
+  displayColumn,
   roles,
 }) => {
   let [data, setData] = useState(properties)
   return (
     <Fragment>
       <Heading>Properties ({data.count})</Heading>
+      {/*<Text>orderBy: {JSON.stringify(orderBy).toString()}</Text>
+      <Text>query: {JSON.stringify(query).toString()}</Text>
+      <Text>fuzzyQuery: {JSON.stringify(fuzzyQuery).toString()}</Text>
+      <Text>take: {JSON.stringify(take).toString()}</Text>
+      <Text>skip: {JSON.stringify(skip).toString()}</Text>*/}
       <TableQuery
         query={query}
         setQuery={setQuery}
@@ -121,7 +126,7 @@ export const Success = ({
           data={data}
           model="properties"
           deleteMutation={DELETE_PROPERTY_MUTATION}
-          displayColumn="id"
+          displayColumn={displayColumn}
         />
       </Table>
       <SimpleGrid columns={2} spacingX="40px" spacingY="20px">

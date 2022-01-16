@@ -56,7 +56,6 @@ export const Success = ({ property }) => {
   )
 
   const onSubmit = (data) => {
-    console.log('saving', data)
     /**TODO: FEAT Client Rules go here */
     onSave(data, property.id)
   }
@@ -80,12 +79,11 @@ export const Success = ({ property }) => {
     {
       name: 'entity',
       prettyName: 'Entity',
-      required: 'message to show when empty',
+      required: 'This is required',
     },
     {
       name: 'value',
       prettyName: 'Value',
-      required: 'message to show when empty',
     },
   ]
 

@@ -38,6 +38,7 @@ const NewProperty = () => {
     {
       name: 'entity',
       prettyName: 'Entity',
+      required: 'This is required',
     },
     {
       name: 'value',

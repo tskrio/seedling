@@ -15,7 +15,10 @@ import { db } from './db'
 export const getCurrentUser = async (session) => {
   try {
     // look up the user by the session id
-    let foundUser = await db.user.findUnique({ where: { id: session.id }, select: { id: true, name: true }})
+    let foundUser = await db.user.findUnique({
+      where: { id: session.id },
+      select: { id: true, name: true },
+    })
     // look up the group memberships of the user
     let foundGroups = await db.groupMember.findMany({
       where: { userId: session.id },
@@ -42,8 +45,6 @@ export const getCurrentUser = async (session) => {
     let foundMessages = await db.message.findMany({
       where: { language: preferences.language },
     })
-    //console.log('preferences.language', preference.language)
-    //console.log(foundMessages[0])
     let messages = {}
     foundMessages.forEach((message) => {
       messages[message.entity] = message.value
@@ -54,10 +55,8 @@ export const getCurrentUser = async (session) => {
       preferences,
       messages,
     }
-    console.log(returnUser)
     return returnUser
   } catch (error) {
-    console.log('error', error)
     return error
   }
 }

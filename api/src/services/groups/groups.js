@@ -39,24 +39,25 @@ export const createGroup = async ({ input }) => {
   }
 }
 
-export const groups = async ({ filter, skip, orderBy, q }) => {
+export const groups = async ({ filter, skip, orderBy, q, take }) => {
   try {
     let preferences = context.currentUser.preferences
-    let take = (() => {
-      let limit = parseInt(preferences['user.pageSize'], 10) || 10
-      if (limit > 100) {
-        return 100 //return 100 or limit whatever is smaller
-      } else {
-        return limit
-      }
+    let _take = (() => {
+      let limit =
+        take ||
+        parseInt(preferences['group.pageSize'], 10) ||
+        parseInt(preferences['pageSize'], 10 || 10) ||
+        10
+      if (limit > 100) return 100 //return 100 or limit whatever is smaller
+      return limit
     })()
     let where = (() => {
       try {
         let returnObject = {}
         if (filter) {
           let OR = [
-            // { email: { contains: filter, mode: 'insensitive' } },
-            // { name: { contains: filter, mode: 'insensitive' } },
+            { name: { contains: filter, mode: 'insensitive' } },
+            { description: { contains: filter, mode: 'insensitive' } },
           ]
           let castFilter = parseInt(filter, 10)
           if (isNaN(castFilter) === false) {
@@ -82,7 +83,7 @@ export const groups = async ({ filter, skip, orderBy, q }) => {
       throw new UserInputError(result.status.message)
     }
     let readRecords = await db[table].findMany({
-      take,
+      take: _take,
       where: where.parsed,
       orderBy,
       skip,
@@ -92,7 +93,7 @@ export const groups = async ({ filter, skip, orderBy, q }) => {
     let results = {
       results: readRecords,
       count,
-      take,
+      take: _take,
       skip,
       q: JSON.stringify(where.parsed),
     }

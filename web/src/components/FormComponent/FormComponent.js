@@ -42,6 +42,7 @@ const FormComponent = ({
             id={field.name}
             pr="4.5rem"
             type={show ? 'text' : 'password'}
+            defaultValue={field.defaultValue}
             placeholder={field.placeholder || 'Enter password'}
             {...register(field.name, {
               //            required: field?.required || false,
@@ -67,7 +68,6 @@ const FormComponent = ({
     formState: { errors, isSubmitting },
   } = useForm()
   let fieldsHtml = fields.map((field) => {
-    //console.log(field, field.name, 'type', field.type)
     let html = (
       <FormControl key={field.name} isInvalid={errors[field.name]}>
         <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
@@ -86,11 +86,12 @@ const FormComponent = ({
       </FormControl>
     )
     if (field.type === 'password') {
-      //console.log('field is password')
       html = <PasswordInput key={field.name} field={field} />
     }
     if (field.type === 'reference') {
-      html = <ReferenceField key={field.name} field={field} />
+      html = (
+        <ReferenceField key={field.name} field={field} register={register} />
+      )
     }
     return html
   })

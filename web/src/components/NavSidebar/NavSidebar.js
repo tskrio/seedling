@@ -147,6 +147,23 @@ const NavSidebar = ({ children, isAuthenticated, currentUser, hasRole }) => {
                     </NavLink>
                   </li>
                 )}
+                {/**Messages */}
+
+                {hasRole(['admin']) && (
+                  <li>
+                    <NavLink
+                      to={routes.messages()}
+                      activeClassName={styles.active}
+                      className={styles.notActive}
+                      onClick={toggleMenu}
+                    >
+                      <span className=" text-gray-600">{icons.list}</span>
+                      <span>
+                        {currentUser.messages['Messages'] || 'Messages'}
+                      </span>
+                    </NavLink>
+                  </li>
+                )}
 
                 <li>
                   {/*<a href="/#" className={styles.notActive}>

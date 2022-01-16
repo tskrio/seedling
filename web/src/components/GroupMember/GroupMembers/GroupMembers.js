@@ -1,116 +1,116 @@
-import { useMutation } from '@redwoodjs/web'
-import { toast } from '@redwoodjs/web/toast'
-import { Link, routes } from '@redwoodjs/router'
-
-import { QUERY } from 'src/components/GroupMember/GroupMembersCell'
-
-const DELETE_GROUP_MEMBER_MUTATION = gql`
-  mutation DeleteGroupMemberMutation($id: Int!) {
-    deleteGroupMember(id: $id) {
-      id
-    }
-  }
-`
-
-const MAX_STRING_LENGTH = 150
-
-const truncate = (text) => {
-  let output = text
-  if (text && text.length > MAX_STRING_LENGTH) {
-    output = output.substring(0, MAX_STRING_LENGTH) + '...'
-  }
-  return output
-}
-
-const jsonTruncate = (obj) => {
-  return truncate(JSON.stringify(obj, null, 2))
-}
-
-const timeTag = (datetime) => {
-  return (
-    <time dateTime={datetime} title={datetime}>
-      {new Date(datetime).toUTCString()}
-    </time>
-  )
-}
-
-const checkboxInputTag = (checked) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
-
-const GroupMembersList = ({ groupMembers }) => {
-  const [deleteGroupMember] = useMutation(DELETE_GROUP_MEMBER_MUTATION, {
-    onCompleted: () => {
-      toast.success('GroupMember deleted')
+import { routes } from '@redwoodjs/router'
+import { Fragment, useState } from 'react'
+import GroupMembersCell from 'src/components/GroupMember/GroupMembersCell'
+import { showMatching, filterOut } from '/src/lib/atomicFunctions'
+export const initialColumns = [
+  {
+    Header: 'Id',
+    accessor: 'id',
+    showMatching,
+    filterOut,
+    link: (givenId) => {
+      return routes.groupMember({ id: givenId })
     },
-    onError: (error) => {
-      toast.error(error.message)
+    dataType: 'integer',
+  },
+  {
+    Header: 'User id',
+    accessor: 'userId',
+    showMatching,
+    filterOut,
+    dataType: 'integer',
+  },
+  {
+    Header: 'User',
+    accessor: 'user',
+    showMatching,
+    filterOut,
+    // dataType: 'integer',
+    // If this is a reference
+    // you may want to show a field
+    // instead of the number here.
+    // todo that remove type,
+    // updated your query on the cell to include the model
+    // update the accessor to a name not used by a column
+    // and add;
+    canSort: false,
+    reference: true,
+    model: 'user',
+    field: 'name',
+    link: (givenId) => {
+      // e.g. return routes._insertPluralModelHere_({ q: {"id": givenId}})
+      // e.g. return routes.users({ q: `{"id": }` })// link to a list w/the query
+      return routes.user({ id: givenId }) // link to the record
     },
-    // This refetches the query on the list page. Read more about other ways to
-    // update the cache over here:
-    // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
-    refetchQueries: [{ query: QUERY }],
-    awaitRefetchQueries: true,
-  })
+  },
 
-  const onDeleteClick = (id) => {
-    if (confirm('Are you sure you want to delete groupMember ' + id + '?')) {
-      deleteGroupMember({ variables: { id } })
-    }
+  {
+    Header: 'Group',
+    accessor: 'group',
+    showMatching,
+    filterOut,
+    // dataType: 'integer',
+    // If this is a reference
+    // you may want to show a field
+    // instead of the number here.
+    // todo that remove type,
+    // updated your query on the cell to include the model
+    // update the accessor to a name not used by a column
+    // and add;
+    canSort: false,
+    reference: true,
+    //model: 'group',
+    field: 'name',
+    link: (givenId) => {
+      // e.g. return routes._insertPluralModelHere_({ q: {"id": givenId}})
+      // e.g. return routes.users({ q: `{"id": }` })// link to a list w/the query
+      return routes.group({ id: givenId }) // link to the record
+    },
+  },
+
+  {
+    Header: 'Actions',
+    accessor: 'actions',
+    canSort: false,
+    canRemove: false,
+    canReset: true,
+    canExport: true,
+    canSetTake: true,
+  },
+]
+
+const GroupMembersList = () => {
+  let [orderBy, setOrderBy] = useState({ id: 'asc' }) // default order
+  let [columns, setColumns] = useState(initialColumns) // default columns
+  let [skip, setSkip] = useState(0) // default reocrds to jump
+  let [take, setTake] = useState(10) // default records to take
+  let [query, setQuery] = useState() // default query // TODO: Fix this doesnt work
+  let [fuzzyQuery, setFuzzyQuery] = useState('') // default fuzzy query
+  let roles = {
+    createRecord: 'groupmemberCreate',
+    updateRecord: 'groupmemberUpdate',
+    deleteRecord: 'groupmemberDelete',
   }
-
   return (
-    <div className="rw-segment rw-table-wrapper-responsive">
-      <table className="rw-table">
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Created at</th>
-            <th>Updated at</th>
-            <th>User id</th>
-            <th>Group id</th>
-            <th>&nbsp;</th>
-          </tr>
-        </thead>
-        <tbody>
-          {groupMembers.map((groupMember) => (
-            <tr key={groupMember.id}>
-              <td>{truncate(groupMember.id)}</td>
-              <td>{timeTag(groupMember.createdAt)}</td>
-              <td>{timeTag(groupMember.updatedAt)}</td>
-              <td>{truncate(groupMember.userId)}</td>
-              <td>{truncate(groupMember.groupId)}</td>
-              <td>
-                <nav className="rw-table-actions">
-                  <Link
-                    to={routes.groupMember({ id: groupMember.id })}
-                    title={'Show groupMember ' + groupMember.id + ' detail'}
-                    className="rw-button rw-button-small"
-                  >
-                    Show
-                  </Link>
-                  <Link
-                    to={routes.editGroupMember({ id: groupMember.id })}
-                    title={'Edit groupMember ' + groupMember.id}
-                    className="rw-button rw-button-small rw-button-blue"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    type="button"
-                    title={'Delete groupMember ' + groupMember.id}
-                    className="rw-button rw-button-small rw-button-red"
-                    onClick={() => onDeleteClick(groupMember.id)}
-                  >
-                    Delete
-                  </button>
-                </nav>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Fragment>
+      <GroupMembersCell
+        orderBy={orderBy}
+        setOrderBy={setOrderBy}
+        columns={columns}
+        setColumns={setColumns}
+        initialColumns={initialColumns}
+        take={take}
+        setTake={setTake}
+        skip={skip}
+        setSkip={setSkip}
+        query={query}
+        setQuery={setQuery}
+        fuzzyQuery={fuzzyQuery}
+        setFuzzyQuery={setFuzzyQuery}
+        displayColumn="entity"
+        roles={roles}
+      />
+    </Fragment>
   )
 }
 

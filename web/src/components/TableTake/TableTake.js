@@ -2,7 +2,6 @@ import { Select } from '@chakra-ui/react'
 
 const TableTake = ({ take, setTake }) => {
   let handleTakeInput = (event) => {
-    console.log(event.target.value)
     setTake(parseInt(event.target.value, 10))
   }
   return (

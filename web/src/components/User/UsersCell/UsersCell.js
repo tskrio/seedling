@@ -10,10 +10,7 @@ import {
 import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
 import TablePagination from 'src/components/TablePagination'
-
 import TableRows from 'src/components/TableRows/TableRows'
-import { initialColumns } from 'src/pages/User/UsersPage'
-
 import { DELETE_USER_MUTATION } from 'src/components/User/EditUserCell'
 
 export const beforeQuery = (props) => {
@@ -29,9 +26,13 @@ export const beforeQuery = (props) => {
       take: params.get('take') || props.take || 10,
       orderBy: params.get('orderBy') || props.orderBy,
     },
+
     fetchPolicy: 'no-cache',
   }
 }
+// Looks like you have some foreign keys
+// [] you may want to update the query
+// below to include the related values
 export const QUERY = gql`
   query FindUsers(
     $filter: String
@@ -53,10 +54,6 @@ export const QUERY = gql`
         name
         GroupMember {
           id
-          group {
-            id
-            name
-          }
         }
         Preference {
           id
@@ -79,6 +76,7 @@ export const Success = ({
   query,
   setQuery,
   columns,
+  initialColumns,
   setColumns,
   orderBy,
   setOrderBy,
@@ -86,24 +84,31 @@ export const Success = ({
   setSkip,
   take,
   setTake,
+  displayColumn,
   roles,
 }) => {
   let [data, setData] = useState(users)
   return (
     <Fragment>
       <Heading>Users ({data.count})</Heading>
+      {/*<Text>orderBy: {JSON.stringify(orderBy).toString()}</Text>
+      <Text>query: {JSON.stringify(query).toString()}</Text>
+      <Text>fuzzyQuery: {JSON.stringify(fuzzyQuery).toString()}</Text>
+      <Text>take: {JSON.stringify(take).toString()}</Text>
+      <Text>skip: {JSON.stringify(skip).toString()}</Text>*/}
       <TableQuery
         query={query}
         setQuery={setQuery}
         fuzzyQuery={fuzzyQuery}
         setFuzzyQuery={setFuzzyQuery}
         rawQuery={users.q}
-        inputPlaceholder="Search id, name and email"
+        inputPlaceholder="Search"
         link={(query) => {
           return routes.users({ q: query })
         }}
         setSkip={setSkip}
       />
+
       <Table variant="striped" colorScheme={'green'} size="xs">
         <TableCaption>List of Users</TableCaption>
 
@@ -115,7 +120,7 @@ export const Success = ({
           initialColumns={initialColumns}
           setTake={setTake}
         />
-        {/*{tableRows(data.results)}*/}
+
         <TableRows
           columns={columns}
           roles={roles}
@@ -123,7 +128,7 @@ export const Success = ({
           data={data}
           model="users"
           deleteMutation={DELETE_USER_MUTATION}
-          displayColumn="name"
+          displayColumn={displayColumn}
         />
       </Table>
       <SimpleGrid columns={2} spacingX="40px" spacingY="20px">

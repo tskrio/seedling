@@ -33,24 +33,14 @@ const NewGroup = () => {
   }
   const fields = [
     {
-      name: 'id',
-      prettyName: 'Id',
-    },
-    {
-      name: 'createdAt',
-      prettyName: 'Created at',
-    },
-    {
-      name: 'updatedAt',
-      prettyName: 'Updated at',
-    },
-    {
       name: 'name',
       prettyName: 'Name',
+      required: 'This is required',
     },
     {
       name: 'description',
       prettyName: 'Description',
+      required: 'This is required',
     },
   ]
 

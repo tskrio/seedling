@@ -2,19 +2,18 @@ import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
-const DELETE_GROUP_MUTATION = gql`
-  mutation DeletePreferenceMutationEP($id: Int!) {
-    deleteGroup(id: $id) {
-      id
-    }
-  }
-`
+
+import { Fragment } from 'react'
+
 export const QUERY = gql`
   query EditPreferenceById($id: Int!) {
     preference: preference(id: $id) {
       id
+      createdAt
+      updatedAt
       entity
       value
+      userId
       user {
         id
         name
@@ -22,17 +21,22 @@ export const QUERY = gql`
     }
   }
 `
-export const UPDATE_PREFERENCE_MUTATION = gql`
+const UPDATE_PREFERENCE_MUTATION = gql`
   mutation UpdatePreferenceMutation($id: Int!, $input: UpdatePreferenceInput!) {
     updatePreference(id: $id, input: $input) {
       id
+      createdAt
+      updatedAt
       entity
       value
       userId
-      user {
-        name
-        id
-      }
+    }
+  }
+`
+export const DELETE_PREFERENCE_MUTATION = gql`
+  mutation DeletePreferenceMutation($id: Int!) {
+    deletePreference(id: $id) {
+      id
     }
   }
 `
@@ -40,7 +44,7 @@ export const UPDATE_PREFERENCE_MUTATION = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+  <div className="rw-cell-error">{error.message}</div>
 )
 
 export const Success = ({ preference }) => {
@@ -51,19 +55,22 @@ export const Success = ({ preference }) => {
         toast.success('Preference updated')
         navigate(routes.preferences())
       },
+      onError: (error) => {
+        toast.error(error.message)
+      },
     }
   )
+
   const onSubmit = (data) => {
     /**TODO: FEAT Client Rules go here */
     onSave(data, preference.id)
   }
   const onSave = (input, id) => {
-    if (input.userId) {
-      input.userId = parseInt(input.userId, 10)
-    }
-    updatePreference({ variables: { id, input } })
+    const castInput = Object.assign(input, { userId: parseInt(input.userId) })
+    updatePreference({ variables: { id, input: castInput } })
   }
-  const [deletePreference] = useMutation(DELETE_GROUP_MUTATION, {
+
+  const [deletePreference] = useMutation(DELETE_PREFERENCE_MUTATION, {
     onCompleted: () => {
       toast.success('Preference deleted')
       navigate(routes.preferences())
@@ -71,32 +78,40 @@ export const Success = ({ preference }) => {
   })
 
   const onDelete = (id) => {
-    if (confirm('Are you sure you want to delete preference ' + id + '?')) {
+    if (confirm('Are you sure you want to delete Preference ' + id + '?')) {
       deletePreference({ variables: { id } })
     }
   }
   const fields = [
     {
+      // {"name":"entity","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"type":"String","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"Entity","component":"TextField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
       name: 'entity',
       prettyName: 'Entity',
+      required: 'This is required',
     },
+
     {
+      // {"name":"value","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"type":"String","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"Value","component":"TextField","defaultProp":"defaultValue","deserilizeFunction":"","validation":null,"listDisplayFunction":"truncate"}
       name: 'value',
       prettyName: 'Value',
     },
+
     {
-      prettyName: 'Users',
+      // {"name":"userId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"type":"Int","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"User id","component":"NumberField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
       name: 'userId',
+      prettyName: 'User id',
+      required: 'This is required',
+      // If this is a reference you probably want this below
+      // update the query above "EditPreferenceById"
+      // to include the referenced data
+      // and uncomment and edit below to your needs
       type: 'reference',
       display: 'name',
       value: 'id',
       defaultValue: preference.user.id,
       defaultDisplay: preference.user.name,
       QUERY: gql`
-        query FindReferenceFieldQueryEditPreferencesUsers(
-          $filter: String
-          $skip: Int
-        ) {
+        query FindUserFromPreferences($filter: String, $skip: Int) {
           search: users(filter: $filter, skip: $skip) {
             count
             take
@@ -110,18 +125,19 @@ export const Success = ({ preference }) => {
       `,
     },
   ]
+
   const roles = {
-    update: [],
-    delete: [],
+    update: ['preferenceUpdate'],
+    delete: ['preferenceDelete'],
   }
+
   return (
-    <>
+    <Fragment>
       <MetaTags
-        title={preference.entity}
-        description={`${preference.entity}`}
-        /* you should un-comment description and add a unique description, 155 characters or less
-      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
+        title={`preference.id`}
+        description="Replace me with 155 charactes about this page"
       />
+
       <FormComponent
         record={preference}
         fields={fields}
@@ -132,6 +148,6 @@ export const Success = ({ preference }) => {
         error={error}
         returnLink={routes.preferences()}
       />
-    </>
+    </Fragment>
   )
 }

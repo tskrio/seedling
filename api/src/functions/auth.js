@@ -1,10 +1,11 @@
 import { DbAuthHandler } from '@redwoodjs/api'
 import { db } from 'src/lib/db'
+import { logger } from 'src/lib/logger'
 import { executeAfterCreateRules, executeAfterUpdateRules } from 'src/lib/rules'
 export const handler = async (event, context) => {
   const forgotPasswordOptions = {
     handler: async (user) => {
-      console.log(
+      logger.info(
         `${JSON.stringify(
           user
         )} forgot their password, and requested new one sent to ${

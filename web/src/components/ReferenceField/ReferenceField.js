@@ -1,9 +1,8 @@
 import { useQuery } from '@apollo/client'
 //import { SelectField } from '@redwoodjs/forms'
 import { useState } from 'react'
-
-const ReferenceField = ({ field }) => {
-  console.log(field)
+import { Select } from '@chakra-ui/react'
+const ReferenceField = ({ field, register }) => {
   let defaultOption = (
     <>
       {field.defaultValue && field.defaultDisplay && (
@@ -25,7 +24,6 @@ const ReferenceField = ({ field }) => {
   let handleSearchResult = () => {
     //refetch()
   }
-  //console.log(field.defaultValue, field.defaultDisplay)
   let input = (
     <>
       <input
@@ -41,37 +39,41 @@ const ReferenceField = ({ field }) => {
     </>
   )
   if (loading) {
-    console.log('loading')
     return <p>Loading Lazy Data</p>
   }
   if (error) {
-    console.log('error', error)
     return <p>`Error! ${error}`</p>
   }
   if (data) {
     handleSearchResult(data)
-    console.log(data)
   }
   let options = data?.search?.results?.map((option) => {
-    console.log('in options', option)
     try {
       if (option[field.value] !== field.defaultValue) {
         return (
           <option key={option.id} value={option[field.value]}>
-            {option[field.display]}
+            {option[field.display]} - {option[field.value]}
           </option>
         )
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   })
   let html = (
-    <select defaultValue={field.defaultValue} name={field.name}>
+    <Select
+      defaultValue={field.defaultValue}
+      id={field.name}
+      name={field.name}
+      {...register(field.name, {
+        required: field?.required || false,
+        minLength: field.minLength,
+      })}
+    >
       <option>Pick one</option>
       {defaultOption}
       {options}
-    </select>
+    </Select>
   )
   return (
     <div>
