@@ -100,8 +100,8 @@ export const Success = ({ groupRole }) => {
       type: 'reference',
       display: 'name',
       value: 'id',
-      defaultValue: groupRole.group.id,
-      defaultDisplay: groupRole.group.name,
+      defaultValue: groupRole?.group?.id,
+      defaultDisplay: groupRole?.group?.name,
       QUERY: gql`
         query Find_referencedModelHere_FromGroupRoles(
           $filter: String

@@ -49,7 +49,7 @@ export const ${pluralCamelName} = async ({ filter, skip, orderBy, q, take }) => 
   try {
     let preferences = context.currentUser.preferences
     let _take = (() => {
-      let limit = take || parseInt(preferences['${singularPascalName.toLowerCase()}.pageSize'], 10) || parseInt(preferences['pageSize'], 10 || 10)
+      let limit = take || parseInt(preferences['${singularPascalName.toLowerCase()}.pageSize'], 10) || parseInt(preferences['pageSize'], 10 || 10) || 10
       if (limit > 100) return 100 //return 100 or limit whatever is smaller
       return limit
     })()

@@ -4,7 +4,6 @@ import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
 import { Link, navigate, useLocation } from '@redwoodjs/router'
 import { useState, useEffect } from 'react'
-import { useQuery, ApolloClient } from '@apollo/client'
 
 ///import './table.css'
 //import Breadcrumbs from '../Breadcrumbs/Breadcrumbs'
@@ -55,7 +54,7 @@ const TableComponent = ({
       }
     })
     setColumnData(translatedColumns)
-  }, [data])
+  }, [data, currentUser.messages, columns])
   data = data.map((row) => {
     return {
       ...row,

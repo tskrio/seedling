@@ -9,7 +9,7 @@ export const initialColumns = [
   accessor: '${column.name}',
   showMatching,
   filterOut,<% if (column.isId){ %>link: (givenId) => {
-    return routes.${singularPascalName.toLowerCase()}({ id: givenId })
+    return routes.${singularRouteName}({ id: givenId })
   },<% } %>
   <% if (column.type === "Int"){ %>dataType: 'integer',<% } %><% if (column.type === "DateTime"){ %>dataType: 'timestamp',<% } %>
   <% if (column.type === "Int" && column.isId === false){ %>// If this is a reference
@@ -24,9 +24,9 @@ export const initialColumns = [
     // model: '_insertSingularModelHere_',
     // field: '_fieldFromModelHere_',
     // link: (givenId) => {
-    //   return routes._insertPluralModelHere_({ q: {"id": givenId}})
-    //   // e.g. return routes.users({ q: `{"id":${givenId}}` })// link to a list w/the query
-    //   // e.g. return routes.user({ q: `{"id":${givenId}}` })// link to the record
+    //   // e.g. return routes._insertPluralModelHere_({ q: {"id": givenId}})
+    //   // e.g. return routes.users({ q: `{"id": <% (()=>{ return "\${givenId}" })() %>}` })// link to a list w/the query
+    //   // e.g. return routes.user({ q: `{"id": <% (()=>{ return "\${givenId}" })() %>}` })// link to the record
     // },<% } %>
   },
 <% }) %>

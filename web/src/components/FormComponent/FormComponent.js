@@ -42,6 +42,7 @@ const FormComponent = ({
             id={field.name}
             pr="4.5rem"
             type={show ? 'text' : 'password'}
+            defaultValue={field.defaultValue}
             placeholder={field.placeholder || 'Enter password'}
             {...register(field.name, {
               //            required: field?.required || false,
@@ -88,7 +89,9 @@ const FormComponent = ({
       html = <PasswordInput key={field.name} field={field} />
     }
     if (field.type === 'reference') {
-      html = <ReferenceField key={field.name} field={field} />
+      html = (
+        <ReferenceField key={field.name} field={field} register={register} />
+      )
     }
     return html
   })

@@ -84,9 +84,66 @@ export const Success = ({ groupMember }) => {
   }
   const fields = [
     {
-      name: 'field',
-      prettyName: 'Field',
-      required: 'message to show when empty',
+      // {"name":"userId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"type":"Int","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"User id","component":"NumberField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
+      name: 'userId',
+      prettyName: 'User id',
+      required: 'This is required',
+      // If this is a reference you probably want this below
+      // update the query above "EditGroupMemberById"
+      // to include the referenced data
+      // and uncomment and edit below to your needs
+      // type: 'reference',
+      // display: 'name',
+      // value: 'id',
+      // defaultValue: groupmember._referencedModelHere_.id,
+      // defaultDisplay: groupmember._referencedModelHere_._displayColumn_,
+      // QUERY: gql`
+      //   query Find_referencedModelHere_FromGroupMembers(
+      //     $filter: String
+      //     $skip: Int
+      //   ) {
+      //     search: _referencedPluralModelHere_(filter: $filter, skip: $skip) {
+      //       count
+      //       take
+      //       skip
+      //       results {
+      //         id
+      //         name
+      //       }
+      //     }
+      //   }
+      // `,
+    },
+    {
+      // {"name":"groupId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"type":"Int","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"Group id","component":"NumberField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
+      name: 'groupId',
+      prettyName: 'Group id',
+      required: 'This is required',
+      // If this is a reference you probably want this below
+      // update the query above "EditGroupMemberById"
+      // to include the referenced data
+      // and uncomment and edit below to your needs
+      // type: 'reference',
+      // display: 'name',
+      // value: 'id',
+      // defaultValue: groupmember._referencedModelHere_.id,
+      // defaultDisplay: groupmember._referencedModelHere_._displayColumn_,
+      // QUERY: gql`
+      //   query Find_referencedModelHere_FromGroupMembers(
+      //     $filter: String
+      //     $skip: Int
+      //   ) {
+      //     search: _referencedPluralModelHere_(filter: $filter, skip: $skip) {
+      //       count
+      //       take
+      //       skip
+      //       results {
+      //         id
+      //         name
+      //       }
+      //     }
+      //   }
+      // `,
     },
   ]
 

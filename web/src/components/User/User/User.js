@@ -1,7 +1,7 @@
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { routes, navigate } from '@redwoodjs/router'
-import { useAuth } from '@redwoodjs/auth'
+import { Link, routes, navigate } from '@redwoodjs/router'
+
 const DELETE_USER_MUTATION = gql`
   mutation DeleteUserMutation($id: Int!) {
     deleteUser(id: $id) {
@@ -10,12 +10,34 @@ const DELETE_USER_MUTATION = gql`
   }
 `
 
-const User2 = ({ user }) => {
-  const { hasRole } = useAuth()
+const jsonDisplay = (obj) => {
+  return (
+    <pre>
+      <code>{JSON.stringify(obj, null, 2)}</code>
+    </pre>
+  )
+}
+
+const timeTag = (datetime) => {
+  return (
+    <time dateTime={datetime} title={datetime}>
+      {new Date(datetime).toUTCString()}
+    </time>
+  )
+}
+
+const checkboxInputTag = (checked) => {
+  return <input type="checkbox" checked={checked} disabled />
+}
+
+const User = ({ user }) => {
   const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
     onCompleted: () => {
       toast.success('User deleted')
       navigate(routes.users())
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 
@@ -27,96 +49,70 @@ const User2 = ({ user }) => {
 
   return (
     <>
-      <div className="rounded-md">
-        <form id="payment-form" method="POST" action="">
-          <section>
-            <h2 className="uppercase tracking-wide text-lg font-semibold text-gray-700 my-2">
-              {user.name}
-            </h2>
-            <fieldset className="mb-3 bg-white shadow-lg rounded text-gray-600">
-              <label className="flex border-b border-gray-200 h-12 py-3 items-center">
-                <span className="text-right px-2 w-1/6">Id</span>
-                <input
-                  name="name"
-                  className="focus:outline-none px-3 w-5/6"
-                  placeholder="System Generated"
-                  readOnly=""
-                  value={user.id}
-                />
-              </label>
-              <label className="flex border-b border-gray-200 h-12 py-3 items-center">
-                <span className="text-right px-2 w-1/6">Name</span>
-                <input
-                  name="email"
-                  type="email"
-                  className="focus:outline-none px-3 w-5/6"
-                  placeholder="try@example.com"
-                  required=""
-                  value={user.name}
-                />
-              </label>
-              <label className="flex border-b border-gray-200 h-12 py-3 items-center">
-                <span className="text-right px-2 w-1/6">Email</span>
-                <input
-                  name="email"
-                  type="email"
-                  className="focus:outline-none px-3 w-5/6"
-                  placeholder="try@example.com"
-                  required=""
-                  value={user.email}
-                />
-              </label>
-              <label className="flex border-b border-gray-200 h-12 py-3 items-center">
-                <span className="text-right px-2 w-1/6">Updated</span>
-                <input
-                  name="createdAt"
-                  className="focus:outline-none px-3 w-5/6"
-                  placeholder="YYYY-MM-DD HH:MM:SS"
-                  required=""
-                  value={user.updatedAt}
-                />
-              </label>
-              <label className="flex border-b border-gray-200 h-12 py-3 items-center">
-                <span className="text-right px-2 w-1/6">Created</span>
-                <input
-                  name="createdAt"
-                  className="focus:outline-none px-3 w-5/6"
-                  placeholder="YYYY-MM-DD HH:MM:SS"
-                  required=""
-                  value={user.createdAt}
-                />
-              </label>
-              <label className="flex border-b border-gray-200 h-12 py-3 items-center">
-                <span className="text-right px-2 w-1/6">Password</span>
-                <input
-                  name="city"
-                  className="focus:outline-none px-3 w-5/6"
-                  placeholder="Only put something here if you want to change it"
-                />
-              </label>
-            </fieldset>
-          </section>
-        </form>
+      <div className="rw-segment">
+        <header className="rw-segment-header">
+          <h2 className="rw-heading rw-heading-secondary">
+            User {user.id} Detail
+          </h2>
+        </header>
+        <table className="rw-table">
+          <tbody>
+            <tr>
+              <th>Id</th>
+              <td>{user.id}</td>
+            </tr>
+            <tr>
+              <th>Created at</th>
+              <td>{timeTag(user.createdAt)}</td>
+            </tr>
+            <tr>
+              <th>Updated at</th>
+              <td>{timeTag(user.updatedAt)}</td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td>{user.email}</td>
+            </tr>
+            <tr>
+              <th>Name</th>
+              <td>{user.name}</td>
+            </tr>
+            <tr>
+              <th>Hashed password</th>
+              <td>{user.hashedPassword}</td>
+            </tr>
+            <tr>
+              <th>Salt</th>
+              <td>{user.salt}</td>
+            </tr>
+            <tr>
+              <th>Reset token</th>
+              <td>{user.resetToken}</td>
+            </tr>
+            <tr>
+              <th>Reset token expires at</th>
+              <td>{timeTag(user.resetTokenExpiresAt)}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div className="flex">
-        <button
-          className="submit-button px-4 py-3 rounded-full bg-blue-400 hover:bg-blue-700 text-white focus:ring focus:outline-none w-2/3 text-xl font-semibold transition-colors"
+      <nav className="rw-button-group">
+        <Link
           to={routes.editUser({ id: user.id })}
+          className="rw-button rw-button-blue"
         >
-          Save
+          Edit
+        </Link>
+        <button
+          type="button"
+          className="rw-button rw-button-red"
+          onClick={() => onDeleteClick(user.id)}
+        >
+          Delete
         </button>
-        {hasRole(['userDelete', 'admin']) && (
-          <button
-            type="button"
-            className="submit-button px-4 py-3 rounded-full bg-red-400 hover:bg-red-700 text-white focus:ring focus:outline-none w-1/3 text-xl font-semibold transition-colors"
-            onClick={() => onDeleteClick(user.id)}
-          >
-            Delete
-          </button>
-        )}
-      </div>
+      </nav>
     </>
   )
 }
 
-export default User2
+export default User

@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 //import { SelectField } from '@redwoodjs/forms'
 import { useState } from 'react'
 import { Select } from '@chakra-ui/react'
-const ReferenceField = ({ field }) => {
+const ReferenceField = ({ field, register }) => {
   let defaultOption = (
     <>
       {field.defaultValue && field.defaultDisplay && (
@@ -61,7 +61,15 @@ const ReferenceField = ({ field }) => {
     }
   })
   let html = (
-    <Select defaultValue={field.defaultValue} id={field.name} name={field.name}>
+    <Select
+      defaultValue={field.defaultValue}
+      id={field.name}
+      name={field.name}
+      {...register(field.name, {
+        required: field?.required || false,
+        minLength: field.minLength,
+      })}
+    >
       <option>Pick one</option>
       {defaultOption}
       {options}

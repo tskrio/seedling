@@ -38,43 +38,58 @@ const NewGroupMember = () => {
     })
     createGroupMember({ variables: { input: castInput } })
   }
-  let user = {
-    id: null,
-    name: null,
-  }
   const fields = [
-    //{
-    //  name: 'userId',
-    //  prettyName: 'User id',
-    //},
     {
-      prettyName: 'Users',
       name: 'userId',
-      type: 'reference',
-      display: 'name',
-      value: 'id',
-      defaultValue: user.id,
-      defaultDisplay: user.name,
-      QUERY: gql`
-        query FindReferenceFieldQueryNewGroupMember(
-          $filter: String
-          $skip: Int
-        ) {
-          search: users(filter: $filter, skip: $skip) {
-            count
-            take
-            skip
-            results {
-              id
-              name
-            }
-          }
-        }
-      `,
+      prettyName: 'User id',
+      required: 'This is required',
+      // If this is a reference you probably want this below
+      // uncomment and edit below to your needs
+      // type: 'reference',
+      // display: 'name',
+      // value: 'id',
+      // QUERY: gql`
+      //   query Find_referencedModelHere_FromGroupMembers(
+      //     $filter: String
+      //     $skip: Int
+      //   ) {
+      //     search: _referencedPluralModelHere_(filter: $filter, skip: $skip) {
+      //       count
+      //       take
+      //       skip
+      //       results {
+      //         id
+      //         name
+      //       }
+      //     }
+      //   }
+      // `,
     },
     {
       name: 'groupId',
       prettyName: 'Group id',
+      required: 'This is required',
+      // If this is a reference you probably want this below
+      // uncomment and edit below to your needs
+      // type: 'reference',
+      // display: 'name',
+      // value: 'id',
+      // QUERY: gql`
+      //   query Find_referencedModelHere_FromGroupMembers(
+      //     $filter: String
+      //     $skip: Int
+      //   ) {
+      //     search: _referencedPluralModelHere_(filter: $filter, skip: $skip) {
+      //       count
+      //       take
+      //       skip
+      //       results {
+      //         id
+      //         name
+      //       }
+      //     }
+      //   }
+      // `,
     },
   ]
 
