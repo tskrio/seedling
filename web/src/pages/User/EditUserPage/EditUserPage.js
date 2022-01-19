@@ -7,7 +7,7 @@ const EditUserPage = ({ id }) => {
   return (
     <Fragment>
       <EditUserCell id={id} />
-      <Tabs variant="enclosed">
+      <Tabs isLazy variant="enclosed">
         <TabList>
           <Tab>Group Members</Tab>
           <Tab>Preferences</Tab>

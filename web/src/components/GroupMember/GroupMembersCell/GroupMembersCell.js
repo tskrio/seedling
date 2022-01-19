@@ -19,7 +19,7 @@ export const beforeQuery = (props) => {
   const { search, pathname } = useLocation()
   let params = new URLSearchParams(search)
   //if (pathname !== '/group-members') return
-  console.log('beforeQuery', props)
+  //console.log('beforeQuery', props)
   return {
     variables: {
       q: params.get('q') || props.query,
