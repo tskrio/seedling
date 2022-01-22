@@ -9,8 +9,7 @@ const AboutComponent = () => {
   let message = `Have an idea for a new project? Does getting the access,
   business logic, and automation drag on? Tskr is a tool that makes it
   easy to get started with your project. It's free, and it's open source.`
-  let imageToVideo =
-    'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=800&q=80'
+  let imageToVideo = './desk-g04ccd6cc7_1280.jpg'
   let imageAltText =
     'Find me in ./web/src/components/AboutComponent/AboutComponent.js'
   const { isAuthenticated } = useAuth()
