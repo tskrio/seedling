@@ -7,6 +7,7 @@ export const QUERY = gql`
       createdAt
       updatedAt
       entity
+      type
       value
     }
   }

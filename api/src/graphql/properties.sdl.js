@@ -4,6 +4,7 @@ export const schema = gql`
     createdAt: DateTime!
     updatedAt: DateTime!
     entity: String!
+    type: String!
     value: String
   }
 
@@ -29,11 +30,13 @@ export const schema = gql`
 
   input CreatePropertyInput {
     entity: String!
+    type: String!
     value: String
   }
 
   input UpdatePropertyInput {
     entity: String
+    type: String
     value: String
   }
 
