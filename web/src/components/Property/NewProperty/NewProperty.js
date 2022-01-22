@@ -40,6 +40,15 @@ const NewProperty = () => {
       prettyName: 'Entity',
       required: 'This is required',
     },
+
+    {
+      name: 'type',
+      prettyName: 'Type',
+      required: 'This is required',
+      type: 'select',
+      options: ['string', 'number', 'boolean', 'date', 'encrypted'],
+    },
+
     {
       name: 'value',
       prettyName: 'Value',

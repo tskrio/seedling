@@ -11,9 +11,9 @@ import {
   FormControl,
   FormLabel,
   FormErrorMessage,
+  Select,
   //  FormHelperText,
 } from '@chakra-ui/react'
-
 import { useForm } from 'react-hook-form'
 //import { Link, useLocation } from '@redwoodjs/router'
 //import { useAuth } from '@redwoodjs/auth'
@@ -91,6 +91,34 @@ const FormComponent = ({
     if (field.type === 'reference') {
       html = (
         <ReferenceField key={field.name} field={field} register={register} />
+      )
+    }
+    if (field.type === 'select') {
+      html = (
+        <FormControl key={field.name} isInvalid={errors[field.name]}>
+          <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
+          <Select
+            defaultValue={record?.[field.name]}
+            id={field.name}
+            name={field.name}
+            {...register(field.name, {
+              required: field?.required || false,
+              minLength: field.minLength,
+            })}
+          >
+            <option>Pick one</option>
+            {field.options.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+            {field.defaultOption}
+            {field.options}
+          </Select>
+          <FormErrorMessage>
+            {errors[field.name] && errors[field.name].message}
+          </FormErrorMessage>
+        </FormControl>
       )
     }
     return html

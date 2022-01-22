@@ -30,7 +30,9 @@ export const beforeQuery = (props) => {
     fetchPolicy: 'no-cache',
   }
 }
-
+// Looks like you have some foreign keys
+// [] you may want to update the query
+// below to include the related values
 export const QUERY = gql`
   query FindProperties(
     $filter: String
@@ -55,6 +57,7 @@ export const QUERY = gql`
         createdAt
         updatedAt
         entity
+        type
         value
       }
     }

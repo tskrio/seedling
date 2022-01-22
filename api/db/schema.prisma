@@ -29,6 +29,7 @@ model Property {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   entity    String
+  type      String   @default("string")
   value     String?
 }
 

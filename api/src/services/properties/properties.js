@@ -46,7 +46,8 @@ export const properties = async ({ filter, skip, orderBy, q, take }) => {
       let limit =
         take ||
         parseInt(preferences['property.pageSize'], 10) ||
-        parseInt(preferences['pageSize'], 10 || 10)
+        parseInt(preferences['pageSize'], 10 || 10) ||
+        10
       if (limit > 100) return 100 //return 100 or limit whatever is smaller
       return limit
     })()
@@ -58,6 +59,7 @@ export const properties = async ({ filter, skip, orderBy, q, take }) => {
             // TODO: You need to manually add the fields to search
             { entity: { contains: filter, mode: 'insensitive' } },
             { value: { contains: filter, mode: 'insensitive' } },
+            // { user: { name: { contains: filter, mode: 'insensitive' } } },
           ]
           let castFilter = parseInt(filter, 10)
           if (isNaN(castFilter) === false) {
@@ -97,7 +99,6 @@ export const properties = async ({ filter, skip, orderBy, q, take }) => {
       skip,
       q: JSON.stringify(where.parsed),
     }
-
     readRecords = executeAfterReadAllRules(table, readRecords)
     return results
   } catch (error) {

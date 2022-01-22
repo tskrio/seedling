@@ -74,6 +74,10 @@ const Property = ({ property }) => {
               <td>{property.entity}</td>
             </tr>
             <tr>
+              <th>Type</th>
+              <td>{property.type}</td>
+            </tr>
+            <tr>
               <th>Value</th>
               <td>{property.value}</td>
             </tr>
