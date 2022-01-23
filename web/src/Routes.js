@@ -20,13 +20,13 @@ import Standard from './layouts/Standard/Standard'
 const Routes = () => {
   return (
     <Router>
-      <Route prerender path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
-      <Route prerender path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
-      <Route prerender path="/login" page={LoginPage} name="login" />
-      <Route prerender path="/signup" page={SignupPage} name="signup" />
+      <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
+      <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
+      <Route path="/login" page={LoginPage} name="login" />
+      <Route path="/signup" page={SignupPage} name="signup" />
       <Set wrap={Standard}>
-        <Route prerender path="/logout" page={LogoutPage} name="logout" />
-        <Route prerender path="/" page={HomePage} name="home" />
+        <Route path="/logout" page={LogoutPage} name="logout" />
+        <Route path="/" page={HomePage} name="home" />
         <Private unauthenticated="home">
           <Route path="/about" page={AboutPage} name="about" />
           <Set wrap={MessagesLayout}>
