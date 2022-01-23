@@ -6,6 +6,7 @@
     "@redwoodjs/api": "^0.39.3",
     "@redwoodjs/graphql-server": "^0.39.3",
     "crypto-js": "^4.1.1",
-    "mailgun-js": "^0.22.0"
+    "mailgun-js": "^0.22.0",
+    "mjml": "^4.11.0"
   }
 }
