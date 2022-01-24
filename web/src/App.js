@@ -11,7 +11,7 @@ import 'src/scaffold.css'
 import 'src/reset.css'
 import 'src/index.css'
 
-window['__APOLLO_DEVTOOLS_GLOBAL_HOOK__'] = true // remove apollo dev tools message
+// window['__APOLLO_DEVTOOLS_GLOBAL_HOOK__'] = true // remove apollo dev tools message
 // https://smart-swatch.netlify.app
 const theme = extendTheme({
   colors: {

@@ -1,11 +1,12 @@
-import { useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 import { navigate, routes, Link } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
 
-const ForgotPasswordPage = ({ wait }) => {
+const ForgotPasswordPage = () => {
+  const [wait, setWait] = useState(false)
   const { isAuthenticated, forgotPassword } = useAuth()
 
   useEffect(() => {
@@ -32,7 +33,8 @@ const ForgotPasswordPage = ({ wait }) => {
         'A link to reset your password was sent to ' + response.email
       )
     }
-    navigate(routes.forgotPassword({ wait: true }))
+    setWait(true)
+    //navigate(routes.forgotPassword({ wait: true }))
   }
 
   return (
