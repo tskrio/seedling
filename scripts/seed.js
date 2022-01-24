@@ -6,6 +6,7 @@ const db = new PrismaClient()
 import { users, bulkUsers } from './seedFiles/userSeed'
 import { groups } from './seedFiles/groupSeed'
 import { messages } from './seedFiles/messageSeed'
+import { properties } from './seedFiles/propertySeed'
 
 async function main() {
   await db.groupRole.deleteMany({})
@@ -33,6 +34,11 @@ async function main() {
   for (let message of messages) {
     await db.message.create({
       data: message,
+    })
+  }
+  for (let property of properties) {
+    await db.property.create({
+      data: property,
     })
   }
 }

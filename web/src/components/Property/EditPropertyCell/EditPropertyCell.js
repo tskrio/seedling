@@ -79,23 +79,19 @@ export const Success = ({ property }) => {
   }
   const fields = [
     {
-      // {"name":"entity","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"type":"String","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"Entity","component":"TextField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
       name: 'entity',
       prettyName: 'Entity',
       required: 'This is required',
     },
 
     {
-      // {"name":"type","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"type":"String","hasDefaultValue":true,"default":"string","isGenerated":false,"isUpdatedAt":false,"label":"Type","component":"TextField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
       name: 'type',
       prettyName: 'Type',
       required: 'This is required',
       type: 'select',
       options: ['string', 'number', 'boolean', 'date', 'encrypted'],
     },
-
     {
-      // {"name":"value","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"type":"String","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"Value","component":"TextField","defaultProp":"defaultValue","deserilizeFunction":"","validation":null,"listDisplayFunction":"truncate"}
       name: 'value',
       prettyName: 'Value',
     },
