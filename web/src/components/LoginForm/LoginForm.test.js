@@ -1,11 +1,11 @@
 import { render } from '@redwoodjs/testing/web'
 
-import ForgotPassword from './ForgotPassword'
+import LoginForm from './LoginForm'
 
-describe('ForgotPassword', () => {
+describe('LoginForm', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<ForgotPassword />)
+      render(<LoginForm />)
     }).not.toThrow()
   })
 })

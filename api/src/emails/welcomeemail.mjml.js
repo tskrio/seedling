@@ -10,7 +10,7 @@ let mjml = (name) => {
     </mj-raw>
     <mj-section background-color="#f0f0f0">
       <mj-column>
-        <mj-text font-style="italic" font-size="20px" color="#626262">Welcome to Tskr</mj-text>
+        <mj-text font-style="italic" font-size="20px" color="#626262">Tskr</mj-text>
       </mj-column>
     </mj-section>
     <mj-raw>
@@ -68,7 +68,7 @@ let mjml = (name) => {
         <mj-button background-color="#fff" href="mailto:jace@tskr.io" color="#2f855a">Tell me what you think</mj-button>
         <mj-button background-color="#fff" href="https://tskr.io/" color="#2f855a">Try it out (Deploy to Netlify)</mj-button>
         <!--<mj-button background-color="#fff" href="https://tskr.io/" color="#2f855a">Try it out (Deploy to Render)</mj-button>-->
-        <mj-button background-color="#fff" href="mailto:jace@tskr.io" color="#2f855a">Take a stab at contributing</mj-button>
+        <mj-button background-color="#fff" href="https://github.com/tskrio/tskr#contributing" color="#2f855a">Take a stab at contributing</mj-button>
       </mj-column>
       <mj-column>
         ???
