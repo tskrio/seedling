@@ -8,6 +8,7 @@ Tskr is a 0 to Low cost solution to track records and make automation accessible
 Everything [RedwoodJS](https://github.com/redwoodjs/redwood#features) has.
 Everything [Prisma](https://www.prisma.io/docs/) gives as well.
 
+
 - [Authentication](https://redwoodjs.com/docs/authentication#self-hosted-auth-installation-and-setup)
 - [Users, Groups, and Group Roles](#Roles%20Management)
 - Rules that are similiar to Prisma Middleware, except we have access to raise messages to the user.
@@ -30,11 +31,6 @@ Everything [Prisma](https://www.prisma.io/docs/) gives as well.
 ### Roles Management
 
 Users are only given access to create, read, update and delete records via roles.  Roles are only given to a user from their groups.
-### Upcoming Features
-
-- [ ] Custom Generators that set up rules
-- [ ] Better looking UI
-- [ ] Internationalization set up with a simple key value messages file
 ## Contributing
 
 Contributions are always welcome!
