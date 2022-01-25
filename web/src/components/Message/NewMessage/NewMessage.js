@@ -3,7 +3,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import { Fragment } from 'react'
 import FormComponent from 'src/components/FormComponent'
-
+import { useForm } from 'react-hook-form'
 const CREATE_MESSAGE_MUTATION = gql`
   mutation CreateMessageMutation($input: CreateMessageInput!) {
     createMessage(input: $input) {
@@ -56,7 +56,11 @@ const NewMessage = () => {
     update: ['messageUpdate'],
     delete: ['messageDelete'],
   }
-
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm()
   return (
     <Fragment>
       <MetaTags
@@ -73,6 +77,9 @@ const NewMessage = () => {
         loading={loading}
         error={error}
         returnLink={routes.messages()}
+        handleSubmit={handleSubmit}
+        register={register}
+        formState={{ errors, isSubmitting }}
       />
     </Fragment>
   )

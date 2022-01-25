@@ -2,7 +2,7 @@ import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
-
+import { useForm } from 'react-hook-form'
 import { Fragment } from 'react'
 
 export const QUERY = gql`
@@ -130,7 +130,11 @@ export const Success = ({ preference }) => {
     update: ['preferenceUpdate'],
     delete: ['preferenceDelete'],
   }
-
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm()
   return (
     <Fragment>
       <MetaTags
@@ -147,6 +151,9 @@ export const Success = ({ preference }) => {
         loading={loading}
         error={error}
         returnLink={routes.preferences()}
+        handleSubmit={handleSubmit}
+        register={register}
+        formState={{ errors, isSubmitting }}
       />
     </Fragment>
   )

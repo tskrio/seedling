@@ -3,7 +3,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import { Fragment } from 'react'
 import FormComponent from 'src/components/FormComponent'
-
+import { useForm } from 'react-hook-form'
 const CREATE_USER_MUTATION = gql`
   mutation CreateUserMutation($input: CreateUserInput!) {
     createUser(input: $input) {
@@ -24,6 +24,7 @@ const NewUser = () => {
   })
 
   const onSubmit = (data) => {
+    console.log('onSubmit', data)
     /**TODO: FEAT Client Rules go here */
     onSave(data)
   }
@@ -72,6 +73,11 @@ const NewUser = () => {
     delete: ['userDelete'],
   }
 
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm()
   return (
     <Fragment>
       <MetaTags
@@ -88,6 +94,9 @@ const NewUser = () => {
         loading={loading}
         error={error}
         returnLink={routes.users()}
+        handleSubmit={handleSubmit}
+        register={register}
+        formState={{ errors, isSubmitting }}
       />
     </Fragment>
   )

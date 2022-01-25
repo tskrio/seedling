@@ -4,7 +4,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
 import { Fragment } from 'react'
 import { useAuth } from '@redwoodjs/auth'
-
+import { useForm } from 'react-hook-form'
 export const QUERY = gql`
   query EditUserById($id: Int!) {
     user: user(id: $id) {
@@ -134,7 +134,11 @@ export const Success = ({ user }) => {
     update: ['userUpdate'],
     delete: ['userDelete'],
   }
-
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm()
   return (
     <Fragment>
       <MetaTags
@@ -151,6 +155,9 @@ export const Success = ({ user }) => {
         loading={loading}
         error={error}
         returnLink={routes.users()}
+        handleSubmit={handleSubmit}
+        register={register}
+        formState={{ errors, isSubmitting }}
       />
     </Fragment>
   )

@@ -22,9 +22,9 @@ const Routes = () => {
   return (
     <Router>
       <Route prerender path="/forgot-password" whileLoadingAuth={() => <>Loading...</>} page={ForgotPasswordPage} name="forgotPassword" />
-      <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
-      <Route path="/login" page={LoginPage} name="login" />
-      <Route path="/signup" page={SignupPage} name="signup" />
+      <Route prerender path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
+      <Route prerender path="/login" page={LoginPage} name="login" />
+      <Route prerender path="/signup" page={SignupPage} name="signup" />
       <Set wrap={Standard}>
         <Route path="/logout" page={LogoutPage} name="logout" />
         <Route path="/" page={HomePage} name="home" />

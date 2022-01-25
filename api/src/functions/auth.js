@@ -86,14 +86,14 @@ export const handler = async (event, context) => {
           name: userAttributes.name,
         },
       })
-      await executeAfterCreateRules('user', { record: user })
-      return user
+      let modifiedUser = await executeAfterCreateRules('user', { record: user })
+      return modifiedUser.record
     },
 
     errors: {
       // `field` will be either "username" or "password"
       fieldMissing: '${field} is required',
-      usernameTaken: 'Username `${username}` already in use',
+      usernameTaken: '`${username}` already in use',
     },
   }
 
@@ -113,8 +113,8 @@ export const handler = async (event, context) => {
       username: 'email',
       hashedPassword: 'hashedPassword',
       salt: 'salt',
-      resetToken: 'resetToken', // <--- new
-      resetTokenExpiresAt: 'resetTokenExpiresAt', // <--- new
+      resetToken: 'resetToken',
+      resetTokenExpiresAt: 'resetTokenExpiresAt',
     },
 
     forgotPassword: forgotPasswordOptions,
