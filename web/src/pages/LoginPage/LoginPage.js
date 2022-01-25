@@ -1,14 +1,7 @@
-import { Fragment } from 'react'
-import Login from 'src/components/Login'
 import LoginForm from 'src/components/LoginForm'
 
 const LoginPage = () => {
-  return (
-    <Fragment>
-      {/*<Login />*/}
-      <LoginForm />
-    </Fragment>
-  )
+  return <LoginForm />
 }
 
 export default LoginPage

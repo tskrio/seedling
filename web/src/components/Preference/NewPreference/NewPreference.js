@@ -3,7 +3,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import { Fragment } from 'react'
 import FormComponent from 'src/components/FormComponent'
-
+import { useForm } from 'react-hook-form'
 const CREATE_PREFERENCE_MUTATION = gql`
   mutation CreatePreferenceMutation($input: CreatePreferenceInput!) {
     createPreference(input: $input) {
@@ -57,7 +57,11 @@ const NewPreference = () => {
     update: ['preferenceUpdate'],
     delete: ['preferenceDelete'],
   }
-
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm()
   return (
     <Fragment>
       <MetaTags
@@ -74,6 +78,9 @@ const NewPreference = () => {
         loading={loading}
         error={error}
         returnLink={routes.preferences()}
+        handleSubmit={handleSubmit}
+        register={register}
+        formState={{ errors, isSubmitting }}
       />
     </Fragment>
   )

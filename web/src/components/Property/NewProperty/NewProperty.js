@@ -3,7 +3,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import { Fragment } from 'react'
 import FormComponent from 'src/components/FormComponent'
-
+import { useForm } from 'react-hook-form'
 const CREATE_PROPERTY_MUTATION = gql`
   mutation CreatePropertyMutation($input: CreatePropertyInput!) {
     createProperty(input: $input) {
@@ -59,7 +59,11 @@ const NewProperty = () => {
     update: ['propertyUpdate'],
     delete: ['propertyDelete'],
   }
-
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm()
   return (
     <Fragment>
       <MetaTags
@@ -76,6 +80,9 @@ const NewProperty = () => {
         loading={loading}
         error={error}
         returnLink={routes.properties()}
+        handleSubmit={handleSubmit}
+        register={register}
+        formState={{ errors, isSubmitting }}
       />
     </Fragment>
   )

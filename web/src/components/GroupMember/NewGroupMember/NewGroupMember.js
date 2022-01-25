@@ -3,7 +3,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import { Fragment } from 'react'
 import FormComponent from 'src/components/FormComponent'
-
+import { useForm } from 'react-hook-form'
 const CREATE_GROUP_MEMBER_MUTATION = gql`
   mutation CreateGroupMemberMutation($input: CreateGroupMemberInput!) {
     createGroupMember(input: $input) {
@@ -97,7 +97,11 @@ const NewGroupMember = () => {
     update: ['groupMemberUpdate'],
     delete: ['groupMemberDelete'],
   }
-
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm()
   return (
     <Fragment>
       <MetaTags
@@ -114,6 +118,9 @@ const NewGroupMember = () => {
         loading={loading}
         error={error}
         returnLink={routes.groupMembers()}
+        handleSubmit={handleSubmit}
+        register={register}
+        formState={{ errors, isSubmitting }}
       />
     </Fragment>
   )

@@ -4,6 +4,7 @@ CREATE TABLE "Property" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "entity" TEXT NOT NULL,
+    "type" TEXT NOT NULL DEFAULT E'string',
     "value" TEXT,
 
     CONSTRAINT "Property_pkey" PRIMARY KEY ("id")

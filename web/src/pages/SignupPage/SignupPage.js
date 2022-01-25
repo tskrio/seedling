@@ -1,3 +1,12 @@
+import SignupForm from 'src/components/SignupForm'
+
+const SignupPage = () => {
+  return <SignupForm />
+}
+
+export default SignupPage
+
+/*
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { useRef } from 'react'
 import {
@@ -139,3 +148,4 @@ const SignupPage = () => {
 }
 
 export default SignupPage
+*/

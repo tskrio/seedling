@@ -11,7 +11,7 @@ import { Toaster, toast } from '@redwoodjs/web/toast'
 import { useEffect } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 import { navigate, routes } from '@redwoodjs/router'
-//import { useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import FormComponent from 'src/components/FormComponent'
 const LoginForm = () => {
   const { isAuthenticated, logIn } = useAuth()
@@ -21,9 +21,12 @@ const LoginForm = () => {
       navigate(routes.about())
     }
   }, [isAuthenticated])
-
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm()
   const onSubmit = async (data) => {
-    console.log('onSubmit data', data)
     const response = await logIn({ ...data })
     if (response.error) {
       toast.error(response.error)
@@ -52,7 +55,23 @@ const LoginForm = () => {
       <Flex p={8} flex={1} align={'center'} justify={'center'}>
         <Stack spacing={4} w={'full'} maxW={'md'}>
           <Heading fontSize={'2xl'}>Sign in to your account</Heading>
-          <FormComponent fields={fields} onSubmit={onSubmit} />
+          <FormComponent
+            fields={fields}
+            onSubmit={onSubmit}
+            handleSubmit={handleSubmit}
+            register={register}
+            formState={{ errors, isSubmitting }}
+          >
+            <Button
+              mt={4}
+              w={'100%'}
+              colorScheme="teal"
+              isLoading={isSubmitting}
+              type="submit"
+            >
+              Login
+            </Button>
+          </FormComponent>
           <Flex>
             <Box pl="4">
               <Button

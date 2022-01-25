@@ -2,9 +2,8 @@ import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
-
 import { Fragment } from 'react'
-
+import { useForm } from 'react-hook-form'
 export const QUERY = gql`
   query EditGroupById($id: Int!) {
     group: group(id: $id) {
@@ -92,7 +91,11 @@ export const Success = ({ group }) => {
     update: ['groupUpdate'],
     delete: ['groupDelete'],
   }
-
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm()
   return (
     <Fragment>
       <MetaTags
@@ -109,6 +112,9 @@ export const Success = ({ group }) => {
         loading={loading}
         error={error}
         returnLink={routes.groups()}
+        handleSubmit={handleSubmit}
+        register={register}
+        formState={{ errors, isSubmitting }}
       />
     </Fragment>
   )

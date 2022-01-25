@@ -14,7 +14,6 @@ import {
   Select,
   //  FormHelperText,
 } from '@chakra-ui/react'
-import { useForm } from 'react-hook-form'
 //import { Link, useLocation } from '@redwoodjs/router'
 //import { useAuth } from '@redwoodjs/auth'
 //import ReferenceField from 'src/components/ReferenceField'
@@ -24,11 +23,15 @@ const FormComponent = ({
   record,
   fields,
   //roles,
-  onSubmit,
   //onDelete,
   //loading,
   error,
   //returnLink,
+  onSubmit,
+  handleSubmit,
+  register,
+  formState: { errors, isSubmitting },
+  children,
 }) => {
   function PasswordInput({ field }) {
     const [show, setShow] = React.useState(false)
@@ -62,11 +65,11 @@ const FormComponent = ({
       </FormControl>
     )
   }
-  const {
-    handleSubmit,
-    register,
-    formState: { errors, isSubmitting },
-  } = useForm()
+  // const {
+  //   handleSubmit,
+  //   register,
+  //   formState: { errors, isSubmitting },
+  // } = useForm()
   let fieldsHtml = fields.map((field) => {
     let html = (
       <FormControl key={field.name} isInvalid={errors[field.name]}>
@@ -135,14 +138,20 @@ const FormComponent = ({
 
         <form onSubmit={handleSubmit(onSubmit)}>
           {fieldsHtml}
-          <Button
-            mt={4}
-            colorScheme="teal"
-            isLoading={isSubmitting}
-            type="submit"
-          >
-            Submit
-          </Button>
+          <Box>
+            {!children ? ( // if children is passed, we don't want to show the submit button }
+              <Button
+                mt={4}
+                colorScheme="teal"
+                isLoading={isSubmitting}
+                type="submit"
+              >
+                Submit
+              </Button>
+            ) : (
+              children
+            )}
+          </Box>
         </form>
       </Box>
     </Fragment>

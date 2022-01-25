@@ -1,48 +1,61 @@
-// TODO: UPDATE SignupPage to use this
 import {
   Button,
-  FormControl,
   Flex,
   Heading,
-  Input,
   Stack,
   useColorModeValue,
-  FormLabel,
-  FormErrorMessage,
 } from '@chakra-ui/react'
-import { useState, Fragment } from 'react'
+import { useEffect, useState, Fragment } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 import { navigate, routes } from '@redwoodjs/router'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import { useForm } from 'react-hook-form'
+import FormComponent from 'src/components/FormComponent'
 const SignupForm = () => {
   const [submitted, setSubmitted] = useState(false)
-  const [email, setEmail] = useState()
-  const { forgotPassword } = useAuth()
-
+  const { isAuthenticated, signUp } = useAuth()
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(routes.home())
+    }
+  }, [isAuthenticated])
   const onSubmit = async (data) => {
+    setSubmitted(true)
     console.log('data', data)
-    setEmail(data.email)
-    const response = await forgotPassword(data.email)
+    const response = await signUp({ ...data })
+    console.log('response', response)
     if (response.error) {
       toast.error(response.error)
     } else {
-      toast.success(
-        'A link to reset your password was sent to ' + response.email
-      )
+      toast.success('Account Created')
     }
-    setSubmitted(true)
   }
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
   } = useForm()
-  let field = {
-    name: 'email',
-    prettyName: 'Email to send the reset link to',
-    required: false,
-  }
+  let fields = [
+    {
+      name: 'name',
+      prettyName: 'Name',
+      placeholder: 'Deckard Cain',
+      required: 'This is required',
+    },
+    {
+      name: 'username',
+      prettyName: 'Email',
+      placeholder: 'you@tskr.io',
+      required: 'This is required',
+    },
+
+    {
+      name: 'password',
+      prettyName: 'Password',
+      required: 'This is required',
+      type: 'password',
+    },
+  ]
   return (
     <Flex
       minH={'100vh'}
@@ -64,51 +77,15 @@ const SignupForm = () => {
         {submitted === false && (
           <Fragment>
             <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
-              Forgot your password?
+              Create an account to login
             </Heading>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <FormControl key={field.name} isInvalid={errors[field.name]}>
-                <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
-                <Input
-                  id={field.name}
-                  placeholder={field.placeholder || ''}
-                  {...register(field.name, {
-                    required: field?.required || false,
-                    minLength: field.minLength,
-                  })}
-                />
-                <FormErrorMessage>
-                  {errors[field.name] && errors[field.name].message}
-                </FormErrorMessage>
-              </FormControl>
-              <Stack spacing={6}>
-                <Button
-                  mt={4}
-                  colorScheme="teal"
-                  isLoading={isSubmitting}
-                  type="submit"
-                >
-                  Request Reset
-                </Button>
-              </Stack>
-            </form>
-          </Fragment>
-        )}
-        {submitted && (
-          <Fragment>
-            <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
-              You should have an email
-            </Heading>
-            <Button
-              mt={4}
-              colorScheme="blue"
-              onClick={() => {
-                navigate(routes.login())
-              }}
+            <FormComponent
+              fields={fields}
+              onSubmit={onSubmit}
+              handleSubmit={handleSubmit}
+              register={register}
+              formState={{ errors, isSubmitting }}
             >
-              Go to Login Page
-            </Button>
-            <form onSubmit={handleSubmit(onSubmit)}>
               <Button
                 mt={4}
                 w={'100%'}
@@ -116,9 +93,16 @@ const SignupForm = () => {
                 isLoading={isSubmitting}
                 type="submit"
               >
-                Resend email to {email}
+                Create Your Account
               </Button>
-            </form>
+            </FormComponent>
+          </Fragment>
+        )}
+        {submitted && (
+          <Fragment>
+            <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
+              Creating your account!
+            </Heading>
           </Fragment>
         )}
       </Stack>

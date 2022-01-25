@@ -6,6 +6,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
 import { useAuth } from '@redwoodjs/auth'
+import { useForm } from 'react-hook-form'
 import { Fragment, useState } from 'react'
 
 import ${singularPascalName}Form from '${importComponentNameForm}'
@@ -72,7 +73,6 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
   }
   const fields = [
       <% editableColumns.forEach(column => { %>{
-        // ${JSON.stringify(column)}
       name: '<%= column.name %>',
       prettyName: '<%= column.label %>',
       <% if(column.isRequired) { %>required: 'This is required',<% } %>
@@ -109,6 +109,11 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
     update: ['${singularCamelName}Update'],
     delete: ['${singularCamelName}Delete'],
   }
+   const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm()
   return (
     <Fragment>
       <MetaTags
@@ -124,6 +129,9 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
         loading={loading}
         error={error}
         returnLink={routes.${pluralRouteName}()}
+        handleSubmit={handleSubmit}
+        register={register}
+        formState={{ errors, isSubmitting }}
       />
     </Fragment>
 
