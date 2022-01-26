@@ -28,7 +28,6 @@ const NewGroupRole = () => {
 
   const onSubmit = (data) => {
     console.log('data', data)
-    /**TODO: FEAT Client Rules go here */
     onSave(data)
   }
 

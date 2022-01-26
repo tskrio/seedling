@@ -52,7 +52,6 @@ export const Success = ({ group }) => {
   })
 
   const onSubmit = (data) => {
-    /**TODO: FEAT Client Rules go here */
     onSave(data, group.id)
   }
   const onSave = (input, id) => {

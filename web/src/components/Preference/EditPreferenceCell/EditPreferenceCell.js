@@ -62,7 +62,6 @@ export const Success = ({ preference }) => {
   )
 
   const onSubmit = (data) => {
-    /**TODO: FEAT Client Rules go here */
     onSave(data, preference.id)
   }
   const onSave = (input, id) => {
