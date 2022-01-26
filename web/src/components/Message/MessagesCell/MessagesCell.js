@@ -15,9 +15,8 @@ import { DELETE_MESSAGE_MUTATION } from 'src/components/Message/EditMessageCell'
 
 export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { search, pathname } = useLocation()
+  const { search } = useLocation()
   let params = new URLSearchParams(search)
-  if (pathname !== '/messages') return
   return {
     variables: {
       q: params.get('q'),

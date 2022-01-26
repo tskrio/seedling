@@ -7,10 +7,15 @@ import { Fragment } from 'react'
 const Standard = ({ children }) => {
   const { isAuthenticated, currentUser } = useAuth()
   const brand = 'Tskr'
+  let myProps = {
+    brand,
+    isAuthenticated,
+    currentUser,
+  }
   return (
     <Fragment>
       {isAuthenticated && currentUser && (
-        <SidebarWithHeader brand={brand}>{children}</SidebarWithHeader>
+        <SidebarWithHeader {...myProps}>{children}</SidebarWithHeader>
       )}
       {!isAuthenticated && (
         <Fragment>
