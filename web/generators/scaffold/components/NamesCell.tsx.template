@@ -18,7 +18,6 @@ export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { search, pathname } = useLocation()
   let params = new URLSearchParams(search)
-  if (pathname !== '/${pluralPascalName.toLowerCase()}') return
   return {
     variables: {
       q: params.get('q'),
