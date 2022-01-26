@@ -24,8 +24,9 @@ const NewUser = () => {
   })
 
   const onSubmit = (data) => {
-    console.log('onSubmit', data)
-    /**TODO: FEAT Client Rules go here */
+    // generate random salt
+    const salt = Math.random().toString(36).substring(2, 15)
+    data.salt = salt
     onSave(data)
   }
 
@@ -38,36 +39,18 @@ const NewUser = () => {
       prettyName: 'Email',
       required: 'This is required',
     },
-
     {
       name: 'name',
       prettyName: 'Name',
       required: 'This is required',
     },
-
     {
       name: 'hashedPassword',
-      prettyName: 'Hashed password',
+      prettyName: 'Password',
       required: 'This is required',
-    },
-
-    {
-      name: 'salt',
-      prettyName: 'Salt',
-      required: 'This is required',
-    },
-
-    {
-      name: 'resetToken',
-      prettyName: 'Reset token',
-    },
-
-    {
-      name: 'resetTokenExpiresAt',
-      prettyName: 'Reset token expires at',
+      type: 'password',
     },
   ]
-
   const roles = {
     update: ['userUpdate'],
     delete: ['userDelete'],
