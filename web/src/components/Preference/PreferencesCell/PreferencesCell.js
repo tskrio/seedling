@@ -15,9 +15,8 @@ import { DELETE_PREFERENCE_MUTATION } from 'src/components/Preference/EditPrefer
 
 export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { search, pathname } = useLocation()
+  const { search } = useLocation()
   let params = new URLSearchParams(search)
-  //if (pathname !== '/preferences') return
   return {
     variables: {
       q: params.get('q') || props.query,

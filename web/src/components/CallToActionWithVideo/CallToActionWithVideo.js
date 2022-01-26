@@ -12,7 +12,6 @@ import {
   //  IconProps,
   useColorModeValue,
 } from '@chakra-ui/react'
-
 export default function CallToActionWithVideo({
   children,
   header,

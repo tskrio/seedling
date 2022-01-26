@@ -16,9 +16,8 @@ import { DELETE_${singularConstantName}_MUTATION } from 'src/components/${singul
 
 export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { search, pathname } = useLocation()
+  const { search } = useLocation()
   let params = new URLSearchParams(search)
-  if (pathname !== '/${pluralPascalName.toLowerCase()}') return
   return {
     variables: {
       q: params.get('q'),

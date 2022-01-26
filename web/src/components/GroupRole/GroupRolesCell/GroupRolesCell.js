@@ -15,9 +15,8 @@ import { DELETE_GROUP_ROLE_MUTATION } from 'src/components/GroupRole/EditGroupRo
 
 export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { search, pathname } = useLocation()
+  const { search } = useLocation()
   let params = new URLSearchParams(search)
-  if (pathname !== '/group-roles') return
   return {
     variables: {
       q: params.get('q'),

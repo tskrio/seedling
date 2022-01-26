@@ -17,10 +17,8 @@ import { DELETE_GROUP_MEMBER_MUTATION } from 'src/components/GroupMember/EditGro
 
 export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { search, pathname } = useLocation()
+  const { search } = useLocation()
   let params = new URLSearchParams(search)
-  //if (pathname !== '/group-members') return
-  //console.log('beforeQuery', props)
   return {
     variables: {
       q: params.get('q') || props.query,

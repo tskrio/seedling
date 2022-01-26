@@ -15,9 +15,8 @@ import { DELETE_GROUP_MUTATION } from 'src/components/Group/EditGroupCell'
 
 export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { search, pathname } = useLocation()
+  const { search } = useLocation()
   let params = new URLSearchParams(search)
-  if (pathname !== '/groups') return
   return {
     variables: {
       q: params.get('q'),
