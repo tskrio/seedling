@@ -17,6 +17,7 @@ import GroupsLayout from 'src/layouts/GroupsLayout'
 import PreferencesLayout from 'src/layouts/PreferencesLayout'
 import Standard from './layouts/Standard/Standard'
 import AboutPage from 'src/pages/AboutPage'
+import HomePage from 'src/pages/HomePage'
 
 const Routes = () => {
   return (
@@ -26,14 +27,13 @@ const Routes = () => {
       <Route prerender path="/login" page={LoginPage} name="login" />
       <Route prerender path="/signup" page={SignupPage} name="signup" />
       <Set wrap={Standard}>
-        <Route path="/logout" page={LogoutPage} name="logout" />
-        <Route path="/" page={HomePage} name="home" />
+        <Route prerender path="/logout" page={LogoutPage} name="logout" />
+        <Route prerender path="/" page={HomePage} name="home" />
         <Private unauthenticated="home">
           <Route path="/about" page={AboutPage} name="about" />
           <Set wrap={MessagesLayout}>
             <Route path="/messages/new" page={MessageNewMessagePage} name="newMessage" />
-            <Route path="/messages/{id:Int}/edit" page={MessageEditMessagePage} name="editMessage" />
-            <Route path="/messages/{id:Int}" page={MessageMessagePage} name="message" />
+            <Route path="/messages/{id:Int}" page={MessageEditMessagePage} name="editMessage" />
             <Route path="/messages" page={MessageMessagesPage} name="messages" />
           </Set>
 

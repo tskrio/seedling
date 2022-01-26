@@ -73,18 +73,17 @@ export const Success = ({ group }) => {
   }
   const fields = [
     {
-      // {"name":"name","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"type":"String","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"Name","component":"TextField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
       name: 'name',
       prettyName: 'Name',
       required: 'This is required',
     },
 
     {
-      // {"name":"description","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"type":"String","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"Description","component":"TextField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
       name: 'description',
       prettyName: 'Description',
       required: 'This is required',
     },
+    { name: 'special field', prettyName: 'Special Field' },
   ]
 
   const roles = {

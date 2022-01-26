@@ -60,7 +60,6 @@ export const Success = ({ groupRole }) => {
   )
 
   const onSubmit = (data) => {
-    /**TODO: FEAT Client Rules go here */
     onSave(data, groupRole.id)
   }
   const onSave = (input, id) => {
@@ -80,16 +79,31 @@ export const Success = ({ groupRole }) => {
       deleteGroupRole({ variables: { id } })
     }
   }
+  let models = [
+    'user',
+    'group',
+    'groupMember',
+    'groupRole',
+    'message',
+    'property',
+    'preference',
+  ]
+  let crudRoles = ['admin']
+  models.forEach((model) => {
+    crudRoles.push(model + 'Create')
+    crudRoles.push(model + 'Read')
+    crudRoles.push(model + 'Update')
+    crudRoles.push(model + 'Delete')
+  })
   const fields = [
     {
-      // {"name":"role","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"type":"String","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"Role","component":"TextField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
       name: 'role',
       prettyName: 'Role',
       required: 'This is required',
+      type: 'select',
+      options: crudRoles,
     },
-
     {
-      // {"name":"groupId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"type":"Int","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"Group id","component":"NumberField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
       name: 'groupId',
       prettyName: 'Group id',
       required: 'This is required',

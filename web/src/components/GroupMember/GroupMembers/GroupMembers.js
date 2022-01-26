@@ -14,13 +14,6 @@ export const initialColumns = [
     dataType: 'integer',
   },
   {
-    Header: 'User id',
-    accessor: 'userId',
-    showMatching,
-    filterOut,
-    dataType: 'integer',
-  },
-  {
     Header: 'User',
     accessor: 'user',
     showMatching,

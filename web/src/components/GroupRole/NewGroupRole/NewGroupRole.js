@@ -37,11 +37,29 @@ const NewGroupRole = () => {
     const castInput = Object.assign(input, { groupId: parseInt(input.groupId) })
     createGroupRole({ variables: { input: castInput } })
   }
+  let models = [
+    'user',
+    'group',
+    'groupMember',
+    'groupRole',
+    'message',
+    'property',
+    'preference',
+  ]
+  let crudRoles = ['admin']
+  models.forEach((model) => {
+    crudRoles.push(model + 'Create')
+    crudRoles.push(model + 'Read')
+    crudRoles.push(model + 'Update')
+    crudRoles.push(model + 'Delete')
+  })
   const fields = [
     {
       name: 'role',
       prettyName: 'Role',
       required: 'This is required',
+      type: 'select',
+      options: crudRoles,
     },
     {
       name: 'groupId',

@@ -56,10 +56,8 @@ export const users = async ({ filter, skip, orderBy, q, take }) => {
         let returnObject = {}
         if (filter) {
           let OR = [
-            // TODO: You need to manually add the fields to search
             { email: { contains: filter, mode: 'insensitive' } },
             { name: { contains: filter, mode: 'insensitive' } },
-            // { user: { name: { contains: filter, mode: 'insensitive' } } },
           ]
           let castFilter = parseInt(filter, 10)
           if (isNaN(castFilter) === false) {

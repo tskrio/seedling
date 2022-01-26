@@ -27,69 +27,62 @@ const NewGroupMember = () => {
   )
 
   const onSubmit = (data) => {
-    /**TODO: FEAT Client Rules go here */
     onSave(data)
   }
 
   const onSave = (input) => {
-    const castInput = Object.assign(input, {
-      userId: parseInt(input.userId),
-      groupId: parseInt(input.groupId),
-    })
+    const castInput = {
+      userId: parseInt(input.user),
+      groupId: parseInt(input.group),
+    }
     createGroupMember({ variables: { input: castInput } })
   }
   const fields = [
     {
-      name: 'userId',
-      prettyName: 'User id',
+      name: 'user',
+      prettyName: 'User',
       required: 'This is required',
       // If this is a reference you probably want this below
       // uncomment and edit below to your needs
-      // type: 'reference',
-      // display: 'name',
-      // value: 'id',
-      // QUERY: gql`
-      //   query Find_referencedModelHere_FromGroupMembers(
-      //     $filter: String
-      //     $skip: Int
-      //   ) {
-      //     search: _referencedPluralModelHere_(filter: $filter, skip: $skip) {
-      //       count
-      //       take
-      //       skip
-      //       results {
-      //         id
-      //         name
-      //       }
-      //     }
-      //   }
-      // `,
+      type: 'reference',
+      display: 'name',
+      value: 'id',
+      QUERY: gql`
+        query FindUsersFromGroupMembers($filter: String, $skip: Int) {
+          search: users(filter: $filter, skip: $skip) {
+            count
+            take
+            skip
+            results {
+              id
+              name
+            }
+          }
+        }
+      `,
     },
     {
-      name: 'groupId',
-      prettyName: 'Group id',
+      name: 'group',
+      prettyName: 'Group',
       required: 'This is required',
       // If this is a reference you probably want this below
       // uncomment and edit below to your needs
-      // type: 'reference',
-      // display: 'name',
-      // value: 'id',
-      // QUERY: gql`
-      //   query Find_referencedModelHere_FromGroupMembers(
-      //     $filter: String
-      //     $skip: Int
-      //   ) {
-      //     search: _referencedPluralModelHere_(filter: $filter, skip: $skip) {
-      //       count
-      //       take
-      //       skip
-      //       results {
-      //         id
-      //         name
-      //       }
-      //     }
-      //   }
-      // `,
+      type: 'reference',
+      display: 'name',
+      value: 'id',
+      QUERY: gql`
+        query FindGroupFromGroupMembers($filter: String, $skip: Int) {
+          search: groups(filter: $filter, skip: $skip) {
+            count
+            take
+            skip
+            results {
+              id
+              name
+            }
+          }
+        }
+      `,
     },
   ]
 

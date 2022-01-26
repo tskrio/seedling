@@ -55,8 +55,6 @@ export const groupRoles = async ({ filter, skip, orderBy, q, take }) => {
         let returnObject = {}
         if (filter) {
           let OR = [
-            // TODO: You need to manually add the fields to search
-            // { entity: { contains: filter, mode: 'insensitive' } },
             { role: { contains: filter, mode: 'insensitive' } },
             { group: { name: { contains: filter, mode: 'insensitive' } } },
           ]
