@@ -18,7 +18,7 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(routes.about())
+      navigate(routes.home())
     }
   }, [isAuthenticated])
   const {

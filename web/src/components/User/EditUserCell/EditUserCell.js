@@ -62,7 +62,6 @@ export const Success = ({ user }) => {
   })
 
   const onSubmit = (data) => {
-    /**TODO: FEAT Client Rules go here */
     // if resetToken is empty delete it
     // if resetTokenExpiresAt is empty delete it
     if (data.resetToken === '') {
@@ -91,14 +90,11 @@ export const Success = ({ user }) => {
   }
   const fields = [
     {
-      // {"name":"email","kind":"scalar","isList":false,"isRequired":true,"isUnique":true,"isId":false,"isReadOnly":false,"type":"String","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"Email","component":"TextField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
       name: 'email',
       prettyName: 'Email',
       required: 'This is required',
     },
-
     {
-      // {"name":"name","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"type":"String","hasDefaultValue":true,"default":"","isGenerated":false,"isUpdatedAt":false,"label":"Name","component":"TextField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
       name: 'name',
       prettyName: 'Name',
       required: 'This is required',
@@ -113,23 +109,23 @@ export const Success = ({ user }) => {
       minLength: { value: 4, message: 'Minimum length should be 4' },
     })
   }
-  if (hasRole(['admin'])) {
-    fields.push({
-      name: 'resetToken',
-      prettyName: 'resetToken (only visible to admins)',
-      type: 'password',
-      defaultValue: user.resetToken, //doesn't work with password type
-      placeholder: 'Only set this if you want to change it',
-      //minLength: { value: 4, message: 'Minimum length should be 4' },
-    })
-    fields.push({
-      name: 'resetTokenExpiresAt',
-      prettyName: 'resetTokenExpires (only visible to admins)',
-      type: 'dateTime',
-      placeholder: 'Only set this if you want to change it',
-      //minLength: { value: 4, message: 'Minimum length should be 4' },
-    })
-  }
+  // if (hasRole(['admin'])) {
+  //   fields.push({
+  //     name: 'resetToken',
+  //     prettyName: 'resetToken (only visible to admins)',
+  //     type: 'password',
+  //     defaultValue: user.resetToken, //doesn't work with password type
+  //     placeholder: 'Only set this if you want to change it',
+  //     //minLength: { value: 4, message: 'Minimum length should be 4' },
+  //   })
+  //   fields.push({
+  //     name: 'resetTokenExpiresAt',
+  //     prettyName: 'resetTokenExpires (only visible to admins)',
+  //     type: 'dateTime',
+  //     placeholder: 'Only set this if you want to change it',
+  //     //minLength: { value: 4, message: 'Minimum length should be 4' },
+  //   })
+  // }
   const roles = {
     update: ['userUpdate'],
     delete: ['userDelete'],

@@ -27,7 +27,6 @@ const NewProperty = () => {
   )
 
   const onSubmit = (data) => {
-    /**TODO: FEAT Client Rules go here */
     onSave(data)
   }
 

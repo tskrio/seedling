@@ -8,14 +8,6 @@ export const initialColumns = [
     accessor: 'group',
     showMatching,
     filterOut,
-    // dataType: 'integer',
-    // If this is a reference
-    // you may want to show a field
-    // instead of the number here.
-    // todo that remove type,
-    // updated your query on the cell to include the model
-    // update the accessor to a name not used by a column
-    // and add;
     canSort: false,
     reference: true,
     model: 'group',

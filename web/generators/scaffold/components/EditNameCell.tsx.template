@@ -5,7 +5,6 @@ import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
-import { useAuth } from '@redwoodjs/auth'
 import { useForm } from 'react-hook-form'
 import { Fragment, useState } from 'react'
 
@@ -51,7 +50,6 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
   })
 
   const onSubmit = (data) => {
-    /**TODO: FEAT Client Rules go here */
     onSave(data, ${singularCamelName}.id)
   }
   const onSave = (input, id) => {<% if (intForeignKeys.length) { %>

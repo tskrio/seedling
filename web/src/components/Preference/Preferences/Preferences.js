@@ -4,39 +4,14 @@ import PreferencesCell from 'src/components/Preference/PreferencesCell'
 import { showMatching, filterOut } from '/src/lib/atomicFunctions'
 export const initialColumns = [
   {
-    Header: 'Id',
-    accessor: 'id',
-    showMatching,
-    filterOut,
+    Header: 'Entity',
+    accessor: 'entity',
     link: (givenId) => {
       return routes.preference({ id: givenId })
     },
-    dataType: 'integer',
-  },
-
-  {
-    Header: 'Created',
-    accessor: 'createdAt',
-    showMatching,
-    filterOut,
-    dataType: 'timestamp',
-  },
-
-  {
-    Header: 'Updated',
-    accessor: 'updatedAt',
-    showMatching,
-    filterOut,
-    dataType: 'timestamp',
-  },
-
-  {
-    Header: 'Entity',
-    accessor: 'entity',
     showMatching,
     filterOut,
   },
-
   {
     Header: 'Value',
     accessor: 'value',

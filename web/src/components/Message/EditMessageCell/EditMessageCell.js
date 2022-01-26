@@ -58,7 +58,6 @@ export const Success = ({ message }) => {
   )
 
   const onSubmit = (data) => {
-    /**TODO: FEAT Client Rules go here */
     onSave(data, message.id)
   }
   const onSave = (input, id) => {

@@ -7,6 +7,7 @@ import {
   TableCaption,
   Heading,
   Text,
+  Box,
 } from '@chakra-ui/react'
 import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
@@ -101,11 +102,13 @@ export const Success = ({
   return (
     <Fragment>
       <Heading>GroupMembers ({data.count})</Heading>
-      <Text>orderBy: {JSON.stringify(orderBy)?.toString()}</Text>
-      <Text>query: {JSON.stringify(query)?.toString()}</Text>
-      <Text>fuzzyQuery: {JSON.stringify(fuzzyQuery)?.toString()}</Text>
-      <Text>take: {JSON.stringify(take)?.toString()}</Text>
-      <Text>skip: {JSON.stringify(skip)?.toString()}</Text>
+      <Box style={{ display: 'none' }}>
+        <Text>orderBy: {JSON.stringify(orderBy)?.toString()}</Text>
+        <Text>query: {JSON.stringify(query)?.toString()}</Text>
+        <Text>fuzzyQuery: {JSON.stringify(fuzzyQuery)?.toString()}</Text>
+        <Text>take: {JSON.stringify(take)?.toString()}</Text>
+        <Text>skip: {JSON.stringify(skip)?.toString()}</Text>
+      </Box>
       <TableQuery
         query={query}
         setQuery={setQuery}

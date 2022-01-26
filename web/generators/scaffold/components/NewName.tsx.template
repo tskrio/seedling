@@ -2,6 +2,7 @@ import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import { Fragment } from 'react'
+import { useForm } from 'react-hook-form'
 import FormComponent from 'src/components/FormComponent'
 
 import ${singularPascalName}Form from '${importComponentNameForm}'
@@ -26,7 +27,6 @@ const New${singularPascalName} = () => {
   })
 
   const onSubmit = (data) => {
-    /**TODO: FEAT Client Rules go here */
     onSave(data)
   }
 
@@ -45,11 +45,11 @@ const New${singularPascalName} = () => {
       // display: 'name',
       // value: 'id',
       // QUERY: gql`
-      //   query Find_referencedModelHere_From${pluralPascalName}(
+      //   query Find${column.name}HereFrom${pluralPascalName}(
       //     $filter: String
       //     $skip: Int
       //   ) {
-      //     search: _referencedPluralModelHere_(filter: $filter, skip: $skip) {
+      //     search: removethisdot.referencedPluralModelHere(filter: $filter, skip: $skip) {
       //       count
       //       take
       //       skip
@@ -68,6 +68,11 @@ const New${singularPascalName} = () => {
     update: ['${singularCamelName}Update'],
     delete: ['${singularCamelName}Delete'],
   }
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm()
   return (
     <Fragment>
       <MetaTags
@@ -83,6 +88,9 @@ const New${singularPascalName} = () => {
         loading={loading}
         error={error}
         returnLink={routes.${pluralRouteName}()}
+        handleSubmit={handleSubmit}
+        register={register}
+        formState={{ errors, isSubmitting }}
       />
     </Fragment>
   )

@@ -11,7 +11,15 @@ export const QUERY = gql`
       createdAt
       updatedAt
       userId
+      user {
+        id
+        name
+      }
       groupId
+      group {
+        name
+        id
+      }
     }
   }
 `
@@ -58,7 +66,6 @@ export const Success = ({ groupMember }) => {
   )
 
   const onSubmit = (data) => {
-    /**TODO: FEAT Client Rules go here */
     onSave(data, groupMember.id)
   }
   const onSave = (input, id) => {
@@ -84,34 +91,34 @@ export const Success = ({ groupMember }) => {
   const fields = [
     {
       // {"name":"userId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"type":"Int","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"User id","component":"NumberField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
-      name: 'userId',
-      prettyName: 'User id',
+      name: 'user',
+      prettyName: 'User',
       required: 'This is required',
       // If this is a reference you probably want this below
       // update the query above "EditGroupMemberById"
       // to include the referenced data
       // and uncomment and edit below to your needs
-      // type: 'reference',
-      // display: 'name',
-      // value: 'id',
-      // defaultValue: groupmember._referencedModelHere_.id,
-      // defaultDisplay: groupmember._referencedModelHere_._displayColumn_,
-      // QUERY: gql`
-      //   query Find_referencedModelHere_FromGroupMembers(
-      //     $filter: String
-      //     $skip: Int
-      //   ) {
-      //     search: _referencedPluralModelHere_(filter: $filter, skip: $skip) {
-      //       count
-      //       take
-      //       skip
-      //       results {
-      //         id
-      //         name
-      //       }
-      //     }
-      //   }
-      // `,
+      type: 'reference',
+      display: 'name',
+      value: 'id',
+      defaultValue: groupMember.user.id,
+      defaultDisplay: groupMember.user.name,
+      QUERY: gql`
+        query Find_referencedModelHere_FromGroupMembers(
+          $filter: String
+          $skip: Int
+        ) {
+          search: users(filter: $filter, skip: $skip) {
+            count
+            take
+            skip
+            results {
+              id
+              name
+            }
+          }
+        }
+      `,
     },
     {
       // {"name":"groupId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"type":"Int","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"Group id","component":"NumberField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
@@ -122,27 +129,24 @@ export const Success = ({ groupMember }) => {
       // update the query above "EditGroupMemberById"
       // to include the referenced data
       // and uncomment and edit below to your needs
-      // type: 'reference',
-      // display: 'name',
-      // value: 'id',
-      // defaultValue: groupmember._referencedModelHere_.id,
-      // defaultDisplay: groupmember._referencedModelHere_._displayColumn_,
-      // QUERY: gql`
-      //   query Find_referencedModelHere_FromGroupMembers(
-      //     $filter: String
-      //     $skip: Int
-      //   ) {
-      //     search: _referencedPluralModelHere_(filter: $filter, skip: $skip) {
-      //       count
-      //       take
-      //       skip
-      //       results {
-      //         id
-      //         name
-      //       }
-      //     }
-      //   }
-      // `,
+      type: 'reference',
+      display: 'name',
+      value: 'id',
+      defaultValue: groupMember.group.id,
+      defaultDisplay: groupMember.group.name,
+      QUERY: gql`
+        query FindGroupFromGroupMembers($filter: String, $skip: Int) {
+          search: groups(filter: $filter, skip: $skip) {
+            count
+            take
+            skip
+            results {
+              id
+              name
+            }
+          }
+        }
+      `,
     },
   ]
 

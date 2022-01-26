@@ -55,7 +55,6 @@ export const messages = async ({ filter, skip, orderBy, q, take }) => {
         let returnObject = {}
         if (filter) {
           let OR = [
-            // TODO: You need to manually add the fields to search
             { entity: { contains: filter, mode: 'insensitive' } },
             { value: { contains: filter, mode: 'insensitive' } },
           ]
