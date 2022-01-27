@@ -15,8 +15,8 @@ export const email = async ({ provider }) => {
   if (provider === 'mailgun') {
     let apiKey = await _getProperty('MAILGUN_API_KEY')
     let domain = await _getProperty('MAILGUN_DOMAIN')
-    if (apiKey === false) return { error: 'MAILGUN_API_KEY not set' }
-    if (domain === false) return { error: 'MAILGUN_DOMAIN not set' }
+    if (!apiKey) return { error: 'MAILGUN_API_KEY not set' }
+    if (!domain) return { error: 'MAILGUN_DOMAIN not set' }
     let client = new Mailgun({ apiKey, domain })
     let send = async (mail, callback) => {
       // if email is to example, don't send
