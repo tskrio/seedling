@@ -1,8 +1,18 @@
 import { useQuery } from '@apollo/client'
 //import { SelectField } from '@redwoodjs/forms'
 import { useState } from 'react'
-import { Select } from '@chakra-ui/react'
+import {
+  Select,
+  FormControl,
+  FormLabel,
+  Input,
+  IconButton,
+  Flex,
+  Text,
+} from '@chakra-ui/react'
+import { MdFilterAlt } from 'react-icons/md'
 const ReferenceField = ({ field, register }) => {
+  let [searchVisible, setSearchVisible] = useState(false)
   let defaultOption = (
     <>
       {field.defaultValue && field.defaultDisplay && (
@@ -11,7 +21,7 @@ const ReferenceField = ({ field, register }) => {
     </>
   )
   let [filterString, setFitlerString] = useState('')
-  const { loading, error, data, refetch } = useQuery(field.QUERY, {
+  const { /*loading,*/ error, data /*refetch*/ } = useQuery(field.QUERY, {
     variables: {
       filter: filterString || '',
       //q: params.get('q'),
@@ -24,23 +34,9 @@ const ReferenceField = ({ field, register }) => {
   let handleSearchResult = () => {
     //refetch()
   }
-  let input = (
-    <>
-      <input
-        name={'reference.' + field.name}
-        defaultValue={filterString}
-        placeholder={'type a name here to filter...'}
-        onBlur={(event) => {
-          setFitlerString(event.target.value)
-        }}
-        onChange={() => {}}
-      />
-      <br />
-    </>
-  )
-  if (loading) {
-    return <p>Loading Lazy Data</p>
-  }
+  //  if (loading) {
+  //    return <p>Loading Lazy Data</p>
+  //  }
   if (error) {
     return <p>`Error! ${error}`</p>
   }
@@ -60,26 +56,54 @@ const ReferenceField = ({ field, register }) => {
       console.error(error)
     }
   })
-  let html = (
-    <Select
-      defaultValue={field.defaultValue}
-      id={field.name}
-      name={field.name}
-      {...register(field.name, {
-        required: field?.required || false,
-        minLength: field.minLength,
-      })}
-    >
-      <option>Pick one</option>
-      {defaultOption}
-      {options}
-    </Select>
-  )
+  let toggleSearch = () => {
+    setSearchVisible(!searchVisible)
+  }
   return (
-    <div>
-      {input}
-      {html}
-    </div>
+    <Flex pt={2}>
+      <FormControl key={field.name}>
+        <FormLabel htmlFor={field.name}>
+          <Flex>
+            <Text>{field.prettyName}</Text>
+
+            <IconButton
+              ml={2}
+              mr={2}
+              size={'sm'}
+              aria-label="Filter"
+              icon={<MdFilterAlt />}
+              onClick={toggleSearch}
+            />
+            {searchVisible && (
+              <Input
+                size={'sm'}
+                name={'reference.' + field.name}
+                defaultValue={filterString}
+                placeholder={'type a name here to filter...'}
+                onBlur={(event) => {
+                  setFitlerString(event.target.value)
+                }}
+                onChange={() => {}}
+              />
+            )}
+          </Flex>
+        </FormLabel>
+
+        <Select
+          defaultValue={field.defaultValue}
+          id={field.name}
+          name={field.name}
+          {...register(field.name, {
+            required: field?.required || false,
+            minLength: field.minLength,
+          })}
+        >
+          <option>Pick one</option>
+          {defaultOption}
+          {options}
+        </Select>
+      </FormControl>
+    </Flex>
   )
   //  return <p>{input}</p>
 }

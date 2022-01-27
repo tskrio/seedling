@@ -22,11 +22,7 @@ import ReferenceField from '../ReferenceField/ReferenceField'
 const FormComponent = ({
   record,
   fields,
-  //roles,
-  //onDelete,
-  //loading,
   error,
-  //returnLink,
   onSubmit,
   handleSubmit,
   register,
@@ -65,11 +61,6 @@ const FormComponent = ({
       </FormControl>
     )
   }
-  // const {
-  //   handleSubmit,
-  //   register,
-  //   formState: { errors, isSubmitting },
-  // } = useForm()
   let fieldsHtml = fields.map((field) => {
     let html = (
       <FormControl key={field.name} isInvalid={errors[field.name]}>

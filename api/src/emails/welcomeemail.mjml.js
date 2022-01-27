@@ -29,7 +29,7 @@ let mjml = (name) => {
     </mj-raw>
     <mj-section background-color="#fafafa">
       <mj-column width="400px">
-        <mj-text font-style="italic" font-size="20px" font-family="Helvetica Neue" color="#626262">What is this?</mj-text>
+        <mj-text font-style="italic" font-size="20px" font-family="Helvetica Neue" color="#626262">What is Tskr?</mj-text>
         <mj-text color="#525252">Tskr is a low-to-no cost accessible automation tool for forms and lists.  If you like to know where your data is.  Self hosted, or on the cloud somewhere, you can choose, this is great.  We have some guiding principals below.</mj-text>
         <mj-text color="#525252">Low to no cost.  How can this be possible?  Well, with the work the <a href="https://redwoodjs.com">RedwoodJS</a> team put in it's possible.  Hosts like <a href="https://netlify.com">Netlify</a>, <a href="https://vercel.com">Vercel</a>, and <a href="https://onrender.com">Render</a> help too!</mj-text>
         <mj-text color="#525252">Accessible. This is something needed from the beginning.  So it's here.  Right now, it means we're using <a href="https://chakra-ui.com">Chakra UI</a> to help on this front, but I'm sure there's other improvements we can take.</mj-text>

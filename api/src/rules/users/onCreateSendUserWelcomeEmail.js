@@ -10,13 +10,11 @@ module.exports = {
   table: 'user',
   command: async function ({ record }) {
     try {
-      let to = record.email
-      let name = record.name
-      let rendered = render({ name })
+      let rendered = render({ name: record.name })
       let client = await email({ provider: 'mailgun' })
       await client.send(
         {
-          to: to,
+          to: record.email,
           from: `Tskr <jace@${client.domain}>`,
           'h:Reply-To': `jace@$tskr.io`, //not working
           subject: `Welcome to Tskr`,

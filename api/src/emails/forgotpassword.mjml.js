@@ -1,8 +1,8 @@
 import mjml2html from 'mjml'
-export const render = ({ name, code, resetLink }) => {
-  return mjml2html(mjml(name, code, resetLink), {})
+export const render = ({ name, resetLink }) => {
+  return mjml2html(mjml(name, resetLink), {})
 }
-let mjml = (name, code, resetLink) => {
+let mjml = (name, resetLink) => {
   return `<mjml>
   <mj-body>
     <mj-raw>
