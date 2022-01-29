@@ -30,8 +30,9 @@ const UPDATE_PROPERTY_MUTATION = gql`
 `
 export const DELETE_PROPERTY_MUTATION = gql`
   mutation DeletePropertyMutation($id: Int!) {
-    deleteProperty(id: $id) {
+    deletedRow: deleteProperty(id: $id) {
       id
+      entity
     }
   }
 `

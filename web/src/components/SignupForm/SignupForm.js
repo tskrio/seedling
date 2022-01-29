@@ -21,9 +21,7 @@ const SignupForm = () => {
   }, [isAuthenticated])
   const onSubmit = async (data) => {
     setSubmitted(true)
-    console.log('data', data)
     const response = await signUp({ ...data })
-    console.log('response', response)
     if (response.error) {
       toast.error(response.error)
     } else {

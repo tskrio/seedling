@@ -84,7 +84,7 @@ const GroupsList = () => {
         setQuery={setQuery}
         fuzzyQuery={fuzzyQuery}
         setFuzzyQuery={setFuzzyQuery}
-        displayColumn="entity"
+        displayColumn="name"
         roles={roles}
       />
     </Fragment>

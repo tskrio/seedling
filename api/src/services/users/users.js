@@ -12,6 +12,7 @@ import {
   executeBeforeDeleteRules,
   executeAfterDeleteRules,
 } from 'src/lib/rules'
+import { logger } from 'src/lib/logger'
 
 let table = 'user'
 
@@ -35,7 +36,10 @@ export const createUser = async ({ input }) => {
 
     return afterResult.record
   } catch (error) {
-    throw new UserInputError(error.message)
+    let lastLine =
+      error.message.split('\n')[error.message.split('\n').length - 1]
+    logger.error(error.message)
+    throw new UserInputError(lastLine)
   }
 }
 
@@ -70,7 +74,7 @@ export const users = async ({ filter, skip, orderBy, q, take }) => {
         }
         return returnObject
       } catch (error) {
-        console.log(error)
+        logger.error(error)
         return {}
       }
     })()
@@ -101,7 +105,11 @@ export const users = async ({ filter, skip, orderBy, q, take }) => {
     readRecords = executeAfterReadAllRules(table, readRecords)
     return results
   } catch (error) {
-    throw new UserInputError(error.message)
+    //throw new UserInputError(error.message)
+    let lastLine =
+      error.message.split('\n')[error.message.split('\n').length - 1]
+    logger.error(error.message)
+    throw new UserInputError(lastLine)
   }
 }
 
@@ -122,7 +130,10 @@ export const user = async ({ id }) => {
     readRecord = executeAfterReadRules(table, readRecord)
     return readRecord
   } catch (error) {
-    throw new UserInputError(error.message)
+    let lastLine =
+      error.message.split('\n')[error.message.split('\n').length - 1]
+    logger.error(error.message)
+    throw new UserInputError(lastLine)
   }
 }
 
@@ -145,7 +156,10 @@ export const updateUser = async ({ id, input }) => {
     updatedRecord = executeAfterUpdateRules(table, updatedRecord)
     return updatedRecord
   } catch (error) {
-    throw new UserInputError(error.message)
+    let lastLine =
+      error.message.split('\n')[error.message.split('\n').length - 1]
+    logger.error(error.message)
+    throw new UserInputError(lastLine)
   }
 }
 
@@ -166,7 +180,10 @@ export const deleteUser = async ({ id }) => {
     deletedRecord = executeAfterDeleteRules(table, deletedRecord)
     return deletedRecord
   } catch (error) {
-    throw new UserInputError(error.message)
+    let lastLine =
+      error.message.split('\n')[error.message.split('\n').length - 1]
+    logger.error(error.message)
+    throw new UserInputError(lastLine)
   }
 }
 

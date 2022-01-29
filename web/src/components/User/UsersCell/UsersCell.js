@@ -1,4 +1,4 @@
-import { routes, useLocation } from '@redwoodjs/router'
+import { navigate, routes, useLocation } from '@redwoodjs/router'
 import { Fragment, useState } from 'react'
 import {
   SimpleGrid,
@@ -6,12 +6,16 @@ import {
   Table,
   TableCaption,
   Heading,
+  Button,
+  Box,
+  Spacer,
 } from '@chakra-ui/react'
 import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
 import TablePagination from 'src/components/TablePagination'
 import TableRows from 'src/components/TableRows/TableRows'
 import { DELETE_USER_MUTATION } from 'src/components/User/EditUserCell'
+import { MdAdd, MdKeyboardBackspace } from 'react-icons/md'
 
 export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -95,6 +99,35 @@ export const Success = ({
       <Text>fuzzyQuery: {JSON.stringify(fuzzyQuery).toString()}</Text>
       <Text>take: {JSON.stringify(take).toString()}</Text>
       <Text>skip: {JSON.stringify(skip).toString()}</Text>*/}
+      <Flex>
+        <Box>
+          {users.q !== null && (
+            <Button
+              leftIcon={<MdKeyboardBackspace />}
+              colorScheme="teal"
+              variant="solid"
+              onClick={() => {
+                setQuery('')
+                setFuzzyQuery('')
+                navigate(routes.users({}))
+              }}
+            >
+              All users
+            </Button>
+          )}
+        </Box>
+        <Spacer />
+        <Button
+          leftIcon={<MdAdd />}
+          colorScheme="teal"
+          variant="solid"
+          onClick={() => {
+            navigate(routes.newUser())
+          }}
+        >
+          New User
+        </Button>
+      </Flex>
       <TableQuery
         query={query}
         setQuery={setQuery}

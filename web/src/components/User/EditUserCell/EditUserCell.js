@@ -37,8 +37,9 @@ const UPDATE_USER_MUTATION = gql`
 `
 export const DELETE_USER_MUTATION = gql`
   mutation DeleteUserMutation($id: Int!) {
-    deleteUser(id: $id) {
+    deletedRow: deleteUser(id: $id) {
       id
+      name
     }
   }
 `

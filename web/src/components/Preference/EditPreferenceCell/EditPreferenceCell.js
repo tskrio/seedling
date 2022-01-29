@@ -35,8 +35,9 @@ const UPDATE_PREFERENCE_MUTATION = gql`
 `
 export const DELETE_PREFERENCE_MUTATION = gql`
   mutation DeletePreferenceMutation($id: Int!) {
-    deletePreference(id: $id) {
+    deletedRow: deletePreference(id: $id) {
       id
+      entity
     }
   }
 `

@@ -82,7 +82,7 @@ const UsersList = () => {
         setQuery={setQuery}
         fuzzyQuery={fuzzyQuery}
         setFuzzyQuery={setFuzzyQuery}
-        displayColumn="entity"
+        displayColumn="name"
         roles={roles}
       />
     </Fragment>

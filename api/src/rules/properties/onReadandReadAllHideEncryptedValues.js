@@ -9,7 +9,6 @@ module.exports = {
   command: async function (records) {
     try {
       // if type is encrypted, delete it from the data
-      console.log('records', records, 'isArray', Array.isArray(records))
       if (Array.isArray(records)) {
         return await records.map((record) => {
           if (record.type === 'encrypted') {

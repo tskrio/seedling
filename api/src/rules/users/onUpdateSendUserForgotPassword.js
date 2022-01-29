@@ -27,8 +27,8 @@ module.exports = {
           html: rendered.html,
         },
         (error, body) => {
-          if (error) console.log(error)
-          console.log(body)
+          if (error) logger.error(error)
+          logger.info(body)
         }
       )
     } catch (e) {

@@ -72,7 +72,7 @@ const FormComponent = ({
             required: field?.required || false,
             minLength: field.minLength,
           })}
-          defaultValue={record?.[field.name]}
+          defaultValue={record?.[field.name] || field.defaultValue}
         />
         <FormErrorMessage>
           {errors[field.name] && errors[field.name].message}

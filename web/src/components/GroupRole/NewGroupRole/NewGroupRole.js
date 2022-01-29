@@ -27,12 +27,10 @@ const NewGroupRole = () => {
   )
 
   const onSubmit = (data) => {
-    console.log('data', data)
     onSave(data)
   }
 
   const onSave = (input) => {
-    console.log('input', input)
     const castInput = Object.assign(input, { groupId: parseInt(input.groupId) })
     createGroupRole({ variables: { input: castInput } })
   }

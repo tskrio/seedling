@@ -21,7 +21,12 @@ module.exports = {
     try {
       //if were given a password, we make a new salt, hash it and set both salt and hash
       let hashedPassword = input?.hashedPassword
-      if (hashedPassword) {
+      if (input?.skipPassword) {
+        // if user is signing up, encryption has already been done
+        delete input.skipPassword
+        return await { input, status }
+      }
+      if (hashedPassword || !input?.skipPassword) {
         let salt = randomString(30)
         input.salt = salt.toString()
         let encryptedPassword = CryptoJS.PBKDF2(hashedPassword, salt, {
@@ -30,6 +35,7 @@ module.exports = {
         input.hashedPassword = encryptedPassword
       } else {
         //hashpassword is empty.. lets not set this.
+        delete input?.skipPassword
         delete input.hashedPassword
       }
     } catch (e) {

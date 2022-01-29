@@ -23,12 +23,12 @@ export default function Footer() {
         align={{ base: 'center', md: 'center' }}
       >
         <Stack direction={'row'} spacing={6}>
-          <Link href={'#'}>Home</Link>
-          <Link href={'#'}>About</Link>
-          <Link href={'#'}>Blog</Link>
-          <Link href={'#'}>Contact</Link>
+          <Link href={'/'}>Home</Link>
+          <Link href={'https://tskr.io/about/'}>About</Link>
+          <Link href={'https://tskr.io/docs/'}>Blog</Link>
+          <Link href={'https://twitter.com/IoTskr'}>Twitter</Link>
         </Stack>
-        <Text>© 2020 Chakra Templates. All rights reserved</Text>
+        <Text>© 2022 Tskr. All rights reserved</Text>
       </Container>
     </Box>
   )

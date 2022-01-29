@@ -1,5 +1,5 @@
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
-import { preference } from 'src/services/preferences/preferences'
+//import { preference } from 'src/services/preferences/preferences'
 import { db } from './db'
 
 // The session object sent in as the first argument to getCurrentUser() will

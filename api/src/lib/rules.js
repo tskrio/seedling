@@ -1,5 +1,11 @@
 import { logger } from 'src/lib/logger'
+let timeRemaining = 10000
 import allRules from 'src/rules/**/**.{js,ts}'
+let shortenFile = (fileName) => {
+  // return everything after /rules/
+  let regex = /(.+\/rules)(.+)/gm
+  return fileName.replace(regex, `$2`)
+}
 let loadRules = async (allRules, table, when, operation) => {
   let arrRules = Object.keys(allRules).map((k) => allRules[k])
   arrRules.sort((a, b) => a.order - b.order)
@@ -39,18 +45,37 @@ let loadRules = async (allRules, table, when, operation) => {
       return false
     }
   })
-  let ruleNames = arrRules.map((rule) => {
-    return `${rule.order} ${rule.file}`
-  })
-  let message = [arrRules.length, table, when, operation]
-  logger.info(`${message.join(' ')} rules loaded \n${ruleNames.join('\n')}`)
+  //let ruleNames = arrRules.map((rule) => {
+  //  return `${rule.order} ${shortenFile(rule.file)}`
+  //})
+  //let message = [arrRules.length, table, when, operation]
+  //logger.info(`${message.join(' ')} rules loaded \n${ruleNames.join('\n')}`)
   return (await arrRules) || []
 }
 export const executeBeforeCreateRules = async (table, input) => {
+  // track time passed.  cannot exceed 10 seconds
   let rules = await loadRules(allRules, table, 'before', 'create')
   if (rules.length > 0) {
     rules.forEach(async (rule) => {
+      // track time passed
+      let startRule = Date.now()
       input = await rule.command(input)
+      // track time passed
+      let endRule = Date.now()
+      let timePassed = endRule - startRule
+      timeRemaining -= timePassed
+      logger.info(
+        `${timeRemaining / 1000}s / 10s ${rule.order} ${shortenFile(
+          rule.file
+        )} took ${timePassed / 1000}s to execute.`
+      )
+      if (timeRemaining < 0) {
+        logger.error(
+          `${shortenFile(rule.file)} exceeded 10 seconds for ${table} ${
+            rule.when
+          } ${rule.operation}`
+        )
+      }
     })
   }
   return await input
@@ -59,7 +84,27 @@ export const executeAfterCreateRules = async (table, record) => {
   let rules = await loadRules(allRules, table, 'after', 'create')
   if (rules.length > 0) {
     rules.forEach(async (rule) => {
+      // track time passed
+      let startRule = Date.now()
       record = await rule.command(record)
+
+      // track time passed
+      let endRule = Date.now()
+      let timePassed = endRule - startRule
+      timeRemaining -= timePassed
+      logger.info(
+        `${timeRemaining / 1000}s / 10s ${shortenFile(rule.file)} took ${
+          timePassed / 1000
+        }s to execute.`
+      )
+
+      if (timeRemaining < 0) {
+        logger.error(
+          `${shortenFile(rule.file)} exceeded 10 seconds for ${table} ${
+            rule.when
+          } ${rule.operation}`
+        )
+      }
     })
   }
   return await record

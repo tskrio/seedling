@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   IconButton,
-  Avatar,
   Box,
   CloseButton,
   Flex,
@@ -19,7 +18,7 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react'
-import { Link, NavLink, routes, navigate } from '@redwoodjs/router'
+import { NavLink, routes, navigate } from '@redwoodjs/router'
 import {
   MdGroups,
   MdPerson,
@@ -29,7 +28,6 @@ import {
   MdRoomPreferences,
   MdSettings,
   MdLanguage,
-  MdSettingsApplications,
   MdLogout,
   MdMenu,
   MdDoorbell,
@@ -83,7 +81,7 @@ const SidebarWithHeader = ({ brand, children }) => {
 
 //const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 const SidebarContent = ({ brand, onClose, ...rest }) => {
-  const { isAuthenticated, currentUser, hasRole, logOut } = useAuth()
+  const { hasRole } = useAuth()
   const LinkItems = [
     { name: 'Home', icon: MdHome, navigateTo: 'home' },
     { name: 'Users', icon: MdPerson, role: 'userRead', navigateTo: 'users' },
@@ -203,7 +201,7 @@ const NavItem = ({ icon, navigateTo, children, ...rest }) => {
 // }
 // const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 const MobileNav = ({ brand, onOpen, ...rest }) => {
-  const { isAuthenticated, currentUser, hasRole, logOut } = useAuth()
+  const { currentUser, logOut } = useAuth()
   return (
     <Flex
       ml={{ base: 0, md: 60 }}

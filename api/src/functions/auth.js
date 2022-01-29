@@ -1,7 +1,8 @@
 import { DbAuthHandler } from '@redwoodjs/api'
 import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
-import { executeAfterCreateRules, executeAfterUpdateRules } from 'src/lib/rules'
+//import { executeAfterCreateRules, executeAfterUpdateRules, executeBeforeCreateRules } from 'src/lib/rules'
+import { createUser, updateUser } from 'src/services/users/users'
 export const handler = async (event, context) => {
   const forgotPasswordOptions = {
     handler: async (user) => {
@@ -12,7 +13,7 @@ export const handler = async (event, context) => {
           user.email
         }...`
       )
-      await executeAfterUpdateRules('user', { record: user })
+      //await executeAfterUpdateRules('user', { record: user })
       return user
     },
     expires: 60 * 60 * 24,
@@ -47,7 +48,8 @@ export const handler = async (event, context) => {
     },
 
     // How long a user will remain logged in, in seconds
-    expires: 60 * 60 * 24 * 365 * 10,
+    // expires: 60 * 60 * 24 * 365 * 10, // 10 years
+    expires: 60 * 60 * 1, // 1 hour
   }
   const resetPasswordOptions = {
     handler: (/*user*/) => {
@@ -78,16 +80,25 @@ export const handler = async (event, context) => {
     // If this returns anything else, it will be returned by the
     // `signUp()` function in the form of: `{ message: 'String here' }`.
     handler: async ({ username, hashedPassword, salt, userAttributes }) => {
-      let user = await db.user.create({
-        data: {
+      //let user = await db.user.create({
+      //  data: {
+      //    email: username,
+      //    hashedPassword: hashedPassword,
+      //    salt: salt,
+      //    name: userAttributes.name,
+      //  },
+      //})
+      //let modifiedUser = await executeAfterCreateRules('user', { record: user })
+      return await createUser({
+        input: {
           email: username,
           hashedPassword: hashedPassword,
           salt: salt,
           name: userAttributes.name,
+          skipPassword: true,
         },
       })
-      let modifiedUser = await executeAfterCreateRules('user', { record: user })
-      return modifiedUser.record
+      //return modifiedUser.record
     },
 
     errors: {
