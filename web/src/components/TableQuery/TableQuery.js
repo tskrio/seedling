@@ -51,22 +51,6 @@ const TableQuery = ({
             <Link to={link(rawQuery || '')}>
               <Text>{rawQuery || 'All Users'}</Text>
             </Link>
-            {rawQuery && (
-              <Button
-                onClick={() => {
-                  params.delete('q')
-                  setQuery('')
-                  setFuzzyQuery('')
-                  navigate(link(''))
-                }}
-                colorScheme="red"
-                variant="solid"
-                type="button"
-                size="xs"
-              >
-                Clear Query
-              </Button>
-            )}
           </Flex>
           <Flex padding="10px">
             <Input
