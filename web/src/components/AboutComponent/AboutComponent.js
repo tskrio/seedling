@@ -4,7 +4,7 @@ import CallToActionWithVideo from 'src/components/CallToActionWithVideo/'
 import { navigate } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 import { Fragment, useEffect, useRef, useState } from 'react'
-import { gsap } from 'gsap/all'
+//import { gsap } from 'gsap/all'
 const AboutComponent = () => {
   let header = { lineOne: 'Accessible', lineTwo: 'Automation' }
   let message = `Have an idea for a new project? Does getting the access,
@@ -74,7 +74,7 @@ const AboutComponent = () => {
   let buttonRef = useRef()
   let [buttonClicked, setButtonClicked] = useState(0)
   useEffect(() => {
-    gsap.to(buttonRef.current, { rotation: '+=720', duration: 2 })
+    //gsap.to(buttonRef.current, { rotation: '+=720', duration: 2 })
   }, [buttonClicked])
   let authenticatedMessage = (
     <Fragment>
