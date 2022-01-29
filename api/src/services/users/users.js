@@ -74,7 +74,7 @@ export const users = async ({ filter, skip, orderBy, q, take }) => {
         }
         return returnObject
       } catch (error) {
-        console.log(error)
+        logger.error(error)
         return {}
       }
     })()

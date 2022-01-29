@@ -31,8 +31,9 @@ const UPDATE_MESSAGE_MUTATION = gql`
 `
 export const DELETE_MESSAGE_MUTATION = gql`
   mutation DeleteMessageMutation($id: Int!) {
-    deleteMessage(id: $id) {
+    deletedRow: deleteMessage(id: $id) {
       id
+      entity
     }
   }
 `

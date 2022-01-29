@@ -20,16 +20,16 @@ const ForgotPasswordForm = () => {
   const { forgotPassword } = useAuth()
 
   const onSubmit = async (data) => {
-    console.log('data', data)
     setEmail(data.email)
     const response = await forgotPassword(data.email)
-    if (response.error) {
-      toast.error(response.error)
-    } else {
-      toast.success(
-        'A link to reset your password was sent to ' + response.email
-      )
-    }
+    toast.success('If the email is on file, an email has been sent.')
+    // if (response.error) {
+    //   toast.error(response.error)
+    // } else {
+    //   toast.success(
+    //     'A link to reset your password was sent to ' + response.email
+    //   )
+    // }
     setSubmitted(true)
   }
   const {

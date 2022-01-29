@@ -3,7 +3,8 @@ import { PlayIcon } from 'src/components/CallToActionWithVideo/'
 import CallToActionWithVideo from 'src/components/CallToActionWithVideo/'
 import { navigate } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
+import { gsap } from 'gsap/all'
 const AboutComponent = () => {
   let header = { lineOne: 'Accessible', lineTwo: 'Automation' }
   let message = `Have an idea for a new project? Does getting the access,
@@ -70,7 +71,29 @@ const AboutComponent = () => {
       </CallToActionWithVideo>
     </>
   )
-  return (!isAuthenticated && unauthenticatedCTA) || <>Welcome back</>
+  let buttonRef = useRef()
+  let [buttonClicked, setButtonClicked] = useState(0)
+  useEffect(() => {
+    gsap.to(buttonRef.current, { rotation: '+=720', duration: 2 })
+  }, [buttonClicked])
+  let authenticatedMessage = (
+    <Fragment>
+      <Button
+        ref={buttonRef}
+        colorScheme="teal"
+        variant="solid"
+        onClick={() => {
+          setButtonClicked(buttonClicked + 1)
+        }}
+      >
+        Hello
+      </Button>
+    </Fragment>
+  )
+  return (
+    (!isAuthenticated && unauthenticatedCTA) ||
+    (isAuthenticated && authenticatedMessage)
+  )
 }
 
 export default AboutComponent

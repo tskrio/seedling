@@ -7,7 +7,6 @@ module.exports = {
   table: 'user',
   file: __filename,
   command: async function ({ id, status }) {
-    console.log('context', context)
     let record = await db.user.findUnique({
       where: { id },
     })

@@ -27,12 +27,12 @@ const NewPreference = () => {
   )
 
   const onSubmit = (data) => {
-    /**TODO: FEAT Client Rules go here */
     onSave(data)
   }
 
   const onSave = (input) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId) })
+    const castInput = Object.assign(input, { userId: parseInt(input.user) })
+    delete castInput.user
     createPreference({ variables: { input: castInput } })
   }
   const fields = [
@@ -47,9 +47,27 @@ const NewPreference = () => {
     },
 
     {
-      name: 'userId',
-      prettyName: 'User id',
+      name: 'user',
+      prettyName: 'User',
       required: 'This is required',
+      // If this is a reference you probably want this below
+      // uncomment and edit below to your needs
+      type: 'reference',
+      display: 'name',
+      value: 'id',
+      QUERY: gql`
+        query FindUsersFromGroupMembers($filter: String, $skip: Int) {
+          search: users(filter: $filter, skip: $skip) {
+            count
+            take
+            skip
+            results {
+              id
+              name
+            }
+          }
+        }
+      `,
     },
   ]
 

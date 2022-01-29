@@ -12,6 +12,7 @@ import {
   executeBeforeDeleteRules,
   executeAfterDeleteRules,
 } from 'src/lib/rules'
+import { logger } from 'src/lib/logger'
 
 let table = 'preference'
 
@@ -70,7 +71,7 @@ export const preferences = async ({ filter, skip, orderBy, q, take }) => {
         }
         return returnObject
       } catch (error) {
-        console.log(error)
+        logger.error(error)
         return {}
       }
     })()

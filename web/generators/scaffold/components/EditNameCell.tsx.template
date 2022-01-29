@@ -26,7 +26,7 @@ const UPDATE_${singularConstantName}_MUTATION = gql`
 `
 export const DELETE_${singularConstantName}_MUTATION = gql`
   mutation Delete${singularPascalName}Mutation($id: Int!) {
-    delete${singularPascalName}(id: $id) {
+    deletedRow: delete${singularPascalName}(id: $id) {
       id
     }
   }

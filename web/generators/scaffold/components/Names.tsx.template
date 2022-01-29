@@ -69,7 +69,7 @@ const ${pluralPascalName}List = () => {
         setQuery={setQuery}
         fuzzyQuery={fuzzyQuery}
         setFuzzyQuery={setFuzzyQuery}
-        displayColumn="entity"
+        displayColumn="id"
         roles={roles}
       />
     </Fragment>

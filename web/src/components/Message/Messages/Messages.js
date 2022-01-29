@@ -7,7 +7,7 @@ export const initialColumns = [
     Header: 'Language',
     accessor: 'language',
     link: (givenId) => {
-      return routes.message({ id: givenId })
+      return routes.messages({ id: givenId })
     },
     showMatching,
     filterOut,
