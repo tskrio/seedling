@@ -35,13 +35,13 @@ const NewUser = () => {
   }
   const fields = [
     {
-      name: 'email',
-      prettyName: 'Email',
+      name: 'name',
+      prettyName: 'Name',
       required: 'This is required',
     },
     {
-      name: 'name',
-      prettyName: 'Name',
+      name: 'email',
+      prettyName: 'Email',
       required: 'This is required',
     },
     {

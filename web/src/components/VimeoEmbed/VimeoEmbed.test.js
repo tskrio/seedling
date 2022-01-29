@@ -1,11 +1,11 @@
 import { render } from '@redwoodjs/testing/web'
 
-import TableTake from './TableTake'
+import VimeoEmbed from './VimeoEmbed'
 
-describe('TableTake', () => {
+describe('VimeoEmbed', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<TableTake />)
+      render(<VimeoEmbed />)
     }).not.toThrow()
   })
 })

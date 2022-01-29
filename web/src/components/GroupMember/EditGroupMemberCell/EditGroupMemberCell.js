@@ -90,14 +90,9 @@ export const Success = ({ groupMember }) => {
   }
   const fields = [
     {
-      // {"name":"userId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"type":"Int","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"User id","component":"NumberField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
       name: 'user',
       prettyName: 'User',
       required: 'This is required',
-      // If this is a reference you probably want this below
-      // update the query above "EditGroupMemberById"
-      // to include the referenced data
-      // and uncomment and edit below to your needs
       type: 'reference',
       display: 'name',
       value: 'id',

@@ -12,16 +12,21 @@ import {
   //  IconProps,
   useColorModeValue,
 } from '@chakra-ui/react'
+import { Fragment } from 'react'
+import VimeoEmbed from 'src/components/VimeoEmbed'
 export default function CallToActionWithVideo({
   children,
   header,
   message,
   imageAltText,
   image,
+  displayVideo,
+  setDisplayVideo,
 }) {
   return (
     <Container maxW={'7xl'}>
       <Stack
+        w={[500, 900]}
         align={'center'}
         spacing={{ base: 8, md: 10 }}
         py={{ base: 20, md: 28 }}
@@ -80,32 +85,42 @@ export default function CallToActionWithVideo({
           />
           <Box
             position={'relative'}
-            height={'300px'}
             rounded={'2xl'}
             boxShadow={'2xl'}
             width={'full'}
             overflow={'hidden'}
           >
-            <IconButton
-              aria-label={'Play Button'}
-              variant={'ghost'}
-              _hover={{ bg: 'transparent' }}
-              icon={<PlayIcon w={12} h={12} />}
-              size={'lg'}
-              color={'white'}
-              position={'absolute'}
-              left={'50%'}
-              top={'50%'}
-              transform={'translateX(-50%) translateY(-50%)'}
-            />
-            <Image
-              alt={imageAltText}
-              fit={'cover'}
-              align={'center'}
-              w={'100%'}
-              h={'100%'}
-              src={image}
-            />
+            {!displayVideo && (
+              <Fragment>
+                <IconButton
+                  aria-label={'Play Button'}
+                  variant={'ghost'}
+                  _hover={{ bg: 'transparent' }}
+                  icon={<PlayIcon w={12} h={12} />}
+                  size={'lg'}
+                  color={'white'}
+                  position={'absolute'}
+                  left={'50%'}
+                  top={'50%'}
+                  transform={'translateX(-50%) translateY(-50%)'}
+                  onClick={() => {
+                    setDisplayVideo(true)
+                  }}
+                />
+
+                <Image
+                  alt={imageAltText}
+                  fit={'cover'}
+                  align={'center'}
+                  w={'100%'}
+                  h={'100%'}
+                  src={image}
+                />
+              </Fragment>
+            )}
+            {displayVideo && (
+              <VimeoEmbed embedId={'359801094'} w={'100%'} h={'100%'} />
+            )}
           </Box>
         </Flex>
       </Stack>

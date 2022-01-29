@@ -12,19 +12,24 @@ module.exports = {
     try {
       let rendered = render({ name: record.name })
       let client = await email({ provider: 'mailgun' })
-      await client.send(
-        {
-          to: record.email,
-          from: `Tskr <jace@${client.domain}>`,
-          'h:Reply-To': `jace@$tskr.io`, //not working
-          subject: `Welcome to Tskr`,
-          html: rendered.html,
-        },
-        (error, body) => {
-          if (error) console.log(error)
-          console.log(body)
-        }
-      )
+      if (!client.error) {
+        await client?.send(
+          {
+            to: record.email,
+            from: `Tskr <jace@${client.domain}>`,
+            'h:Reply-To': `jace@$tskr.io`, //not working
+            subject: `Welcome to Tskr`,
+            html: rendered.html,
+          },
+          (error, body) => {
+            if (error) console.log(error)
+            console.log(body)
+          }
+        )
+      }
+      if (client.error) {
+        logger.error(`${client.error}`)
+      }
     } catch (e) {
       logger.error(e)
     }

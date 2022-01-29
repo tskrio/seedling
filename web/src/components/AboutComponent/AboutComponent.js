@@ -3,7 +3,7 @@ import { PlayIcon } from 'src/components/CallToActionWithVideo/'
 import CallToActionWithVideo from 'src/components/CallToActionWithVideo/'
 import { navigate } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 const AboutComponent = () => {
   let header = { lineOne: 'Accessible', lineTwo: 'Automation' }
   let message = `Have an idea for a new project? Does getting the access,
@@ -13,13 +13,17 @@ const AboutComponent = () => {
   let imageAltText =
     'Find me in ./web/src/components/AboutComponent/AboutComponent.js'
   const { isAuthenticated } = useAuth()
-  return (
+  let [displayVideo, setDisplayVideo] = useState(false)
+
+  let unauthenticatedCTA = (
     <>
       <CallToActionWithVideo
         header={header}
         message={message}
         imageAltText={imageAltText}
         image={imageToVideo}
+        displayVideo={displayVideo}
+        setDisplayVideo={setDisplayVideo}
       >
         {!isAuthenticated && (
           <Fragment>
@@ -56,6 +60,9 @@ const AboutComponent = () => {
           fontWeight={'normal'}
           px={6}
           colorScheme={'blue'}
+          onClick={() => {
+            setDisplayVideo(true)
+          }}
           leftIcon={<PlayIcon h={4} w={4} color={'gray.400'} />}
         >
           How It Works
@@ -63,6 +70,7 @@ const AboutComponent = () => {
       </CallToActionWithVideo>
     </>
   )
+  return (!isAuthenticated && unauthenticatedCTA) || <>Welcome back</>
 }
 
 export default AboutComponent
