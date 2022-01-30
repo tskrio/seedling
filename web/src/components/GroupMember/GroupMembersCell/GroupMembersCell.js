@@ -1,4 +1,4 @@
-import { routes, useLocation } from '@redwoodjs/router'
+import { routes, navigate, useLocation } from '@redwoodjs/router'
 import { Fragment, useState } from 'react'
 import {
   SimpleGrid,
@@ -8,12 +8,15 @@ import {
   Heading,
   Text,
   Box,
+  Spacer,
+  Button,
 } from '@chakra-ui/react'
 import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
 import TablePagination from 'src/components/TablePagination'
 import TableRows from 'src/components/TableRows/TableRows'
 import { DELETE_GROUP_MEMBER_MUTATION } from 'src/components/GroupMember/EditGroupMemberCell'
+import { MdAdd, MdKeyboardBackspace } from 'react-icons/md'
 
 export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -99,14 +102,36 @@ export const Success = ({
   let [data, setData] = useState(groupMembers)
   return (
     <Fragment>
-      <Heading>GroupMembers ({data.count})</Heading>
-      <Box style={{ display: 'none' }}>
-        <Text>orderBy: {JSON.stringify(orderBy)?.toString()}</Text>
-        <Text>query: {JSON.stringify(query)?.toString()}</Text>
-        <Text>fuzzyQuery: {JSON.stringify(fuzzyQuery)?.toString()}</Text>
-        <Text>take: {JSON.stringify(take)?.toString()}</Text>
-        <Text>skip: {JSON.stringify(skip)?.toString()}</Text>
-      </Box>
+      <Heading pb={2}>GroupMembers ({data.count})</Heading>
+      <Flex>
+        <Box>
+          {groupMembers.q !== null && (
+            <Button
+              leftIcon={<MdKeyboardBackspace />}
+              colorScheme="teal"
+              variant="solid"
+              onClick={() => {
+                setQuery('')
+                setFuzzyQuery('')
+                navigate(routes.groupMembers({}))
+              }}
+            >
+              All group members
+            </Button>
+          )}
+        </Box>
+        <Spacer />
+        <Button
+          leftIcon={<MdAdd />}
+          colorScheme="teal"
+          variant="solid"
+          onClick={() => {
+            navigate(routes.newGroupMember())
+          }}
+        >
+          New group member
+        </Button>
+      </Flex>
       <TableQuery
         query={query}
         setQuery={setQuery}

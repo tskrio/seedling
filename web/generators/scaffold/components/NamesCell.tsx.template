@@ -1,4 +1,4 @@
-import { routes, useLocation } from '@redwoodjs/router'
+import { navigate, routes, useLocation } from '@redwoodjs/router'
 import { Fragment, useState } from 'react'
 import {
   SimpleGrid,
@@ -7,12 +7,16 @@ import {
   TableCaption,
   Heading,
   Text,
+  Box,
+  Spacer,
+  Button,
 } from '@chakra-ui/react'
 import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
 import TablePagination from 'src/components/TablePagination'
 import TableRows from 'src/components/TableRows/TableRows'
 import { DELETE_${singularConstantName}_MUTATION } from 'src/components/${singularPascalName}/Edit${singularPascalName}Cell'
+import { MdAdd, MdKeyboardBackspace } from 'react-icons/md'
 
 export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -56,7 +60,7 @@ export const QUERY = gql`
 export const Loading = () => <div>Loading...</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
-  <div className="rw-cell-error">{error.message}</div>
+  <div className="rw-cell-error">{error.${singularCamelName}}</div>
 )
 
 export const Success = ({
@@ -80,11 +84,35 @@ export const Success = ({
     let [data, setData] = useState(${pluralCamelName})
   return <Fragment>
     <Heading>${pluralPascalName} ({data.count})</Heading>
-    {/*<Text>orderBy: {JSON.stringify(orderBy).toString()}</Text>
-    <Text>query: {JSON.stringify(query).toString()}</Text>
-    <Text>fuzzyQuery: {JSON.stringify(fuzzyQuery).toString()}</Text>
-    <Text>take: {JSON.stringify(take).toString()}</Text>
-    <Text>skip: {JSON.stringify(skip).toString()}</Text>*/}
+     <Flex>
+        <Box>
+          {${pluralCamelName}.q !== null && (
+            <Button
+              leftIcon={<MdKeyboardBackspace />}
+              colorScheme="teal"
+              variant="solid"
+              onClick={() => {
+                setQuery('')
+                setFuzzyQuery('')
+                navigate(routes.${pluralCamelName}({}))
+              }}
+            >
+              All ${pluralCamelName}
+            </Button>
+          )}
+        </Box>
+        <Spacer />
+        <Button
+          leftIcon={<MdAdd />}
+          colorScheme="teal"
+          variant="solid"
+          onClick={() => {
+            navigate(routes.${newRouteName}())
+          }}
+        >
+          New ${singularCamelName}
+        </Button>
+      </Flex>
       <TableQuery
         query={query}
         setQuery={setQuery}

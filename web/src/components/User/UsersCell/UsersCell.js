@@ -93,12 +93,7 @@ export const Success = ({
   let [data, setData] = useState(users)
   return (
     <Fragment>
-      <Heading>Users ({data.count})</Heading>
-      {/*<Text>orderBy: {JSON.stringify(orderBy).toString()}</Text>
-      <Text>query: {JSON.stringify(query).toString()}</Text>
-      <Text>fuzzyQuery: {JSON.stringify(fuzzyQuery).toString()}</Text>
-      <Text>take: {JSON.stringify(take).toString()}</Text>
-      <Text>skip: {JSON.stringify(skip).toString()}</Text>*/}
+      <Heading pb={2}>Users ({data.count})</Heading>
       <Flex>
         <Box>
           {users.q !== null && (
@@ -125,7 +120,7 @@ export const Success = ({
             navigate(routes.newUser())
           }}
         >
-          New User
+          New user
         </Button>
       </Flex>
       <TableQuery
