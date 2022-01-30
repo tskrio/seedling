@@ -99,7 +99,7 @@ const LoginForm = () => {
         <Image
           alt={'Login Image'}
           objectFit={'cover'}
-          src={'/laptop-g6c0e6e461_1920.jpg'}
+          src={'/laptop-g6c0e6e461_1920.webp'}
         />
       </Flex>
     </Stack>
