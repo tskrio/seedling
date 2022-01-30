@@ -1,4 +1,4 @@
-import { routes, useLocation } from '@redwoodjs/router'
+import { navigate, routes, useLocation } from '@redwoodjs/router'
 import { Fragment, useState } from 'react'
 import {
   SimpleGrid,
@@ -6,12 +6,16 @@ import {
   Table,
   TableCaption,
   Heading,
+  Box,
+  Spacer,
+  Button,
 } from '@chakra-ui/react'
 import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
 import TablePagination from 'src/components/TablePagination'
 import TableRows from 'src/components/TableRows/TableRows'
 import { DELETE_PROPERTY_MUTATION } from 'src/components/Property/EditPropertyCell'
+import { MdAdd, MdKeyboardBackspace } from 'react-icons/md'
 
 export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -91,11 +95,35 @@ export const Success = ({
   return (
     <Fragment>
       <Heading>Properties ({data.count})</Heading>
-      {/*<Text>orderBy: {JSON.stringify(orderBy).toString()}</Text>
-      <Text>query: {JSON.stringify(query).toString()}</Text>
-      <Text>fuzzyQuery: {JSON.stringify(fuzzyQuery).toString()}</Text>
-      <Text>take: {JSON.stringify(take).toString()}</Text>
-      <Text>skip: {JSON.stringify(skip).toString()}</Text>*/}
+       <Flex>
+        <Box>
+          {properties.q !== null && (
+            <Button
+              leftIcon={<MdKeyboardBackspace />}
+              colorScheme="teal"
+              variant="solid"
+              onClick={() => {
+                setQuery('')
+                setFuzzyQuery('')
+                navigate(routes.properties({}))
+              }}
+            >
+              All properties
+            </Button>
+          )}
+        </Box>
+        <Spacer />
+        <Button
+          leftIcon={<MdAdd />}
+          colorScheme="teal"
+          variant="solid"
+          onClick={() => {
+            navigate(routes.newProperty())
+          }}
+        >
+          New property
+        </Button>
+      </Flex>
       <TableQuery
         query={query}
         setQuery={setQuery}

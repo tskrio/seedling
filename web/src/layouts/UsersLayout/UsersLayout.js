@@ -1,11 +1,14 @@
+import { Box } from '@chakra-ui/react'
 import { Toaster } from '@redwoodjs/web/toast'
+import { Fragment } from 'react'
 const UsersLayout = ({ children }) => {
   return (
-    <div className="rw-scaffold">
+    <Fragment>
       <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
-      <header className="rw-header"></header>
-      <main className="rw-main">{children}</main>
-    </div>
+      <Box p={4} background={"white"}>
+        {children}
+      </Box>
+    </Fragment>
   )
 }
 

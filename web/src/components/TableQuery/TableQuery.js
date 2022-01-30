@@ -46,25 +46,26 @@ const TableQuery = ({
   return (
     <Fragment>
       <SimpleGrid columns={1} spacingX="40px" spacingY="20px">
-        <Box padding="5px" height="160px">
-          <Flex padding="10px">
-            <Link to={link(rawQuery || '')}>
-              <Text>{rawQuery || 'All Users'}</Text>
-            </Link>
-          </Flex>
-          <Flex padding="10px">
+        <Box pt={1} pb={1}>
+          <Flex>
             <Input
               placeholder={inputPlaceholder || 'Search'}
               ref={searchInput}
               padding="10px"
               defaultValue={fuzzyQuery}
               onKeyPress={handleSearchKeyDown}
+              mr={2}
             />
             <IconButton
               aria-label="Search database"
               onClick={handleSearchButton}
               icon={<SearchIcon />}
             />
+          </Flex>
+          <Flex>
+            <Link to={link(rawQuery || '')}>
+              <Text>{rawQuery}</Text>
+            </Link>
           </Flex>
           <Text color="white">{fuzzyQuery.toString()}</Text>
         </Box>
