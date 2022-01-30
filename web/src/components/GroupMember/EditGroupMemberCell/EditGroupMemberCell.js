@@ -4,6 +4,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
 import { Fragment } from 'react'
 import { useForm } from 'react-hook-form'
+import FormSkeleton from 'src/components/FormSkeleton/FormSkeleton'
 export const QUERY = gql`
   query EditGroupMemberById($id: Int!) {
     groupMember: groupMember(id: $id) {
@@ -45,7 +46,7 @@ export const DELETE_GROUP_MEMBER_MUTATION = gql`
   }
 `
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => <FormSkeleton />
 
 export const Failure = ({ error }) => (
   <div className="rw-cell-error">{error.message}</div>

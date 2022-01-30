@@ -4,6 +4,7 @@ import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
 import { useForm } from 'react-hook-form'
 import { Fragment } from 'react'
+import FormSkeleton from 'src/components/FormSkeleton/FormSkeleton'
 
 export const QUERY = gql`
   query EditMessageById($id: Int!) {
@@ -38,7 +39,7 @@ export const DELETE_MESSAGE_MUTATION = gql`
   }
 `
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => <FormSkeleton />
 
 export const Failure = ({ error }) => (
   <div className="rw-cell-error">{error.message}</div>

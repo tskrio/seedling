@@ -9,6 +9,7 @@ import {
   Box,
   Spacer,
   Button,
+  Skeleton, SkeletonCircle, SkeletonText, Stack
 } from '@chakra-ui/react'
 import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
@@ -16,6 +17,7 @@ import TablePagination from 'src/components/TablePagination'
 import TableRows from 'src/components/TableRows/TableRows'
 import { DELETE_MESSAGE_MUTATION } from 'src/components/Message/EditMessageCell'
 import { MdAdd, MdKeyboardBackspace } from 'react-icons/md'
+import TableSkeleton from 'src/components/TableSkeleton/TableSkeleton'
 
 export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -65,7 +67,7 @@ export const QUERY = gql`
   }
 `
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => (<TableSkeleton />)
 
 export const Failure = ({ error }) => (
   <div className="rw-cell-error">{error.message}</div>

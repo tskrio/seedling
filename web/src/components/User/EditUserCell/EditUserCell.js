@@ -5,6 +5,7 @@ import FormComponent from 'src/components/FormComponent'
 import { Fragment } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 import { useForm } from 'react-hook-form'
+import FormSkeleton from 'src/components/FormSkeleton/FormSkeleton'
 export const QUERY = gql`
   query EditUserById($id: Int!) {
     user: user(id: $id) {
@@ -44,7 +45,7 @@ export const DELETE_USER_MUTATION = gql`
   }
 `
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => <FormSkeleton />
 
 export const Failure = ({ error }) => (
   <div className="rw-cell-error">{error.message}</div>

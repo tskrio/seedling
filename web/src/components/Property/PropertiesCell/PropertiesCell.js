@@ -16,6 +16,7 @@ import TablePagination from 'src/components/TablePagination'
 import TableRows from 'src/components/TableRows/TableRows'
 import { DELETE_PROPERTY_MUTATION } from 'src/components/Property/EditPropertyCell'
 import { MdAdd, MdKeyboardBackspace } from 'react-icons/md'
+import TableSkeleton from 'src/components/TableSkeleton/TableSkeleton'
 
 export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -67,7 +68,7 @@ export const QUERY = gql`
   }
 `
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => <TableSkeleton />
 
 export const Failure = ({ error }) => (
   <div className="rw-cell-error">{error.message}</div>
