@@ -1,62 +1,75 @@
 import Cookies from 'js-cookie'
-import { useState, useRef, useEffect } from 'react'
+import {
+  Box,
+  Flex,
+  Spacer,
+  Stack,
+  Text,
+  Button,
+  Drawer,
+  DrawerBody,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerHeader,
+  useDisclosure,
+} from '@chakra-ui/react'
+import { FcLock } from 'react-icons/fc'
+
+import { useState, useRef, useEffect, Fragment } from 'react'
 
 const CookieModal = () => {
   let previouslyAccepted = Cookies.get('acceptCookies') == 'true'
   const [acceptedCookies, setCookies] = useState(previouslyAccepted)
   const buttonRef = useRef(null)
+  const { isOpen, onOpen, onClose } = useDisclosure(true)
+  const [placement /*setPlacement*/] = useState('bottom')
 
   useEffect(() => {
-    if (buttonRef.current) {
-      buttonRef.current.focus()
+    if (!acceptedCookies) {
+      onOpen()
     }
-  }, [''])
+  }, [acceptedCookies, onOpen])
+
   return (
-    <>
+    <Fragment>
       {!acceptedCookies && (
-        <>
-          <div className="flex items-center justify-center fixed left-0 bottom-0 w-full h-full bg-gray-800">
-            <div className="bg-white rounded-lg w-1/2">
-              <div className="flex flex-col items-start p-4">
-                <div className="flex items-center w-full text-center">
-                  <div className="text-gray-900 font-medium text-lg w-full">
-                    Before you contine to Tskr
-                  </div>
-                </div>
-                <hr />
-                <div className="">
-                  <p>
-                    We use cookies and similiar technologies to allow you the
-                    ability to log in, as well as track if you have accepted
-                    this notice.
-                  </p>
-                  <p>
-                    By clicking {'"'}I accept{'"'}, or by using our site, you
-                    consent to the use of cookies unless you have disabled them.
-                  </p>
-                </div>
-                <hr />
-                <div className="ml-auto">
-                  <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    ref={buttonRef}
-                    onClick={() => {
-                      Cookies.set('acceptCookies', true, {
-                        secure: true,
-                        sameSite: 'strict',
-                      })
-                      setCookies(true)
-                    }}
-                  >
-                    Agree
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
+        <Drawer placement={placement} onClose={onClose} isOpen={isOpen}>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerHeader borderBottomWidth="1px">Your Privacy</DrawerHeader>
+            <DrawerBody>
+              <Box pb={4}>
+                <Text fontSize={{ base: 'sm' }} textAlign={'left'} maxW={'4xl'}>
+                  We use cookies and similiar technologies to allow you the
+                  ability to log in, as well as track if you have accepted this
+                  notice.
+                </Text>
+                <Text fontSize={{ base: 'sm' }} textAlign={'left'} maxW={'4xl'}>
+                  By clicking {'"'}OK{'"'}, or by using our site, you consent to
+                  the use of cookies unless you have disabled them.
+                </Text>
+              </Box>
+              <Flex>
+                <Spacer />
+                <Button
+                  colorScheme="green"
+                  ref={buttonRef}
+                  onClick={() => {
+                    Cookies.set('acceptCookies', true, {
+                      secure: true,
+                      sameSite: 'strict',
+                    })
+                    setCookies(true)
+                  }}
+                >
+                  OK
+                </Button>
+              </Flex>
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
       )}
-    </>
+    </Fragment>
   )
 }
 
