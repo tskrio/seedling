@@ -104,7 +104,7 @@ export const Success = ({
       <Text>fuzzyQuery: {JSON.stringify(fuzzyQuery).toString()}</Text>
       <Text>take: {JSON.stringify(take).toString()}</Text>
       <Text>skip: {JSON.stringify(skip).toString()}</Text>*/}
-       <Flex>
+      <Flex>
         <Box>
           {groupRoles.q !== null && (
             <Button
@@ -146,28 +146,68 @@ export const Success = ({
         setSkip={setSkip}
       />
 
-      <Table variant="striped" colorScheme={'green'} size="xs">
-        <TableCaption>List of GroupRoles</TableCaption>
+      <Box
+        // mobile
+        display={{ sm: 'block', md: 'block', lg: 'none', xl: 'none' }}
+      >
+        <Table variant="striped" colorScheme={'green'} size="xs">
+          <TableCaption>List of Group Roles</TableCaption>
 
-        <TableColumns
-          columns={columns}
-          orderBy={orderBy}
-          setOrderBy={setOrderBy}
-          setColumns={setColumns}
-          initialColumns={initialColumns}
-          setTake={setTake}
-        />
+          <TableColumns
+            columns={columns.reduce(
+              (acc, curr, i) =>
+                i === 0 || i === columns.length - 1 ? [...acc, curr] : acc,
+              []
+            )}
+            orderBy={orderBy}
+            setOrderBy={setOrderBy}
+            setColumns={setColumns}
+            initialColumns={initialColumns}
+            setTake={setTake}
+          />
 
-        <TableRows
-          columns={columns}
-          roles={roles}
-          setData={setData}
-          data={data}
-          model="groupRoles"
-          deleteMutation={DELETE_GROUP_ROLE_MUTATION}
-          displayColumn={displayColumn}
-        />
-      </Table>
+          <TableRows
+            columns={columns.reduce(
+              (acc, curr, i) =>
+                i === 0 || i === columns.length - 1 ? [...acc, curr] : acc,
+              []
+            )}
+            roles={roles}
+            setData={setData}
+            data={data}
+            model="groupRoles"
+            deleteMutation={DELETE_GROUP_ROLE_MUTATION}
+            displayColumn={displayColumn}
+          />
+        </Table>
+      </Box>
+      <Box
+        // desktop
+        display={{ sm: 'none', md: 'none', lg: 'block', xl: 'block' }}
+      >
+        <Table variant="striped" colorScheme={'green'} size="xs">
+          <TableCaption>List of Group Roles</TableCaption>
+
+          <TableColumns
+            columns={columns}
+            orderBy={orderBy}
+            setOrderBy={setOrderBy}
+            setColumns={setColumns}
+            initialColumns={initialColumns}
+            setTake={setTake}
+          />
+
+          <TableRows
+            columns={columns}
+            roles={roles}
+            setData={setData}
+            data={data}
+            model="groupRoles"
+            deleteMutation={DELETE_GROUP_ROLE_MUTATION}
+            displayColumn={displayColumn}
+          />
+        </Table>
+      </Box>
       <SimpleGrid columns={2} spacingX="40px" spacingY="20px">
         <Flex padding="10px"></Flex>
         <Flex padding="10px">

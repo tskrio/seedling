@@ -54,7 +54,6 @@ export const QUERY = gql`
         id
         createdAt
         updatedAt
-        email
         name
         GroupMember {
           id
@@ -70,7 +69,7 @@ export const QUERY = gql`
 export const Loading = () => <TableSkeleton />
 
 export const Failure = ({ error }) => (
-  <div className="rw-cell-error">{error.message}</div>
+  <div className="rw-cell-error">...{error.message}</div>
 )
 
 export const Success = ({
@@ -92,6 +91,14 @@ export const Success = ({
   roles,
 }) => {
   let [data, setData] = useState(users)
+  /**
+   *   breakpoints: {
+    sm: '320px',
+    md: '768px',
+    lg: '960px',
+    xl: '1200px',
+  },
+   */
   return (
     <Fragment>
       <Heading pb={2}>Users ({data.count})</Heading>
@@ -136,29 +143,68 @@ export const Success = ({
         }}
         setSkip={setSkip}
       />
+      <Box
+        // mobile
+        display={{ sm: 'block', md: 'block', lg: 'none', xl: 'none' }}
+      >
+        <Table variant="striped" colorScheme={'green'} size="xs">
+          <TableCaption>List of Users</TableCaption>
 
-      <Table variant="striped" colorScheme={'green'} size="xs">
-        <TableCaption>List of Users</TableCaption>
+          <TableColumns
+            columns={columns.reduce(
+              (acc, curr, i) =>
+                i === 0 || i === columns.length - 1 ? [...acc, curr] : acc,
+              []
+            )}
+            orderBy={orderBy}
+            setOrderBy={setOrderBy}
+            setColumns={setColumns}
+            initialColumns={initialColumns}
+            setTake={setTake}
+          />
 
-        <TableColumns
-          columns={columns}
-          orderBy={orderBy}
-          setOrderBy={setOrderBy}
-          setColumns={setColumns}
-          initialColumns={initialColumns}
-          setTake={setTake}
-        />
+          <TableRows
+            columns={columns.reduce(
+              (acc, curr, i) =>
+                i === 0 || i === columns.length - 1 ? [...acc, curr] : acc,
+              []
+            )}
+            roles={roles}
+            setData={setData}
+            data={data}
+            model="users"
+            deleteMutation={DELETE_USER_MUTATION}
+            displayColumn={displayColumn}
+          />
+        </Table>
+      </Box>
+      <Box
+        // desktop
+        display={{ sm: 'none', md: 'none', lg: 'block', xl: 'block' }}
+      >
+        <Table variant="striped" colorScheme={'green'} size="xs">
+          <TableCaption>List of Users</TableCaption>
 
-        <TableRows
-          columns={columns}
-          roles={roles}
-          setData={setData}
-          data={data}
-          model="users"
-          deleteMutation={DELETE_USER_MUTATION}
-          displayColumn={displayColumn}
-        />
-      </Table>
+          <TableColumns
+            columns={columns}
+            orderBy={orderBy}
+            setOrderBy={setOrderBy}
+            setColumns={setColumns}
+            initialColumns={initialColumns}
+            setTake={setTake}
+          />
+
+          <TableRows
+            columns={columns}
+            roles={roles}
+            setData={setData}
+            data={data}
+            model="users"
+            deleteMutation={DELETE_USER_MUTATION}
+            displayColumn={displayColumn}
+          />
+        </Table>
+      </Box>
       <SimpleGrid columns={2} spacingX="40px" spacingY="20px">
         <Flex padding="10px"></Flex>
         <Flex padding="10px">
