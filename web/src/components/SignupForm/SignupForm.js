@@ -42,8 +42,8 @@ const SignupForm = () => {
     },
     {
       name: 'username',
-      prettyName: 'Email',
-      placeholder: 'you@tskr.io',
+      prettyName: 'Username',
+      placeholder: 'deckard.cain',
       required: 'This is required',
     },
 

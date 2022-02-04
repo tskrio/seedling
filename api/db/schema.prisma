@@ -46,13 +46,13 @@ model User {
   id                  Int           @id @default(autoincrement())
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
-  // Users's email
-  email               String        @unique
   name                String        @default("")
-  hashedPassword      String        @default("")
-  salt                String        @default("")
-  resetToken          String?
-  resetTokenExpiresAt DateTime?
+  username            String        @unique @default("") // will have username OR subject keep masked
+  email               String?       @default("") // not needed for accounts.. but is needed for communications
+  hashedPassword      String?       @default("") //      // used for dbAuth
+  salt                String?       @default("") //      // used for dbAuth
+  resetToken          String? //                         // used for dbAuth
+  resetTokenExpiresAt DateTime? //                       // used for dbAuth
   GroupMember         GroupMember[] @relation("UserGroupMember")
   Preference          Preference[]  @relation("UserPreference")
 }

@@ -1,65 +1,37 @@
+//import { parseJWT } from '@redwoodjs/api'
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
-//import { preference } from 'src/services/preferences/preferences'
-import { db } from './db'
+import { getUser } from './authProviders/auth0.js'
+//import { getUser } from './authProviders/dbAuth'
+/**
+ * Represents the user attributes returned by the decoding the
+ * Authentication provider's JWT together with an optional list of roles.
+ */
 
-// The session object sent in as the first argument to getCurrentUser() will
-// have a single key `id` containing the unique ID of the logged in user
-// (whatever field you set as `authFields.id` in your auth function config).
-// You'll need to update the call to `db` below if you use a different model
-// name or unique field name:
-//
-//   return await db.profile.findUnique({ where: { email: session.id } })
-//                   ───┬───                       ──┬──
-//      model accessor ─┘      unique id field name ─┘
-
-export const getCurrentUser = async (session) => {
-  try {
-    // look up the user by the session id
-    let foundUser = await db.user.findUnique({
-      where: { id: session.id },
-      select: { id: true, name: true },
-    })
-    // look up the group memberships of the user
-    let foundGroups = await db.groupMember.findMany({
-      where: { userId: session.id },
-    })
-    // look up the roles of the groups the user is a member of
-    let foundGroupRoles = await db.groupRole.findMany({
-      where: {
-        groupId: { in: foundGroups.map((group) => group.groupId) },
-      },
-    })
-    // assign the roles to the user
-    let roles = foundGroupRoles.map((groupRole) => groupRole.role)
-    // get user's preferences and store them as part of the user
-    let foundPreferences = await db.preference.findMany({
-      where: { userId: session.id },
-    })
-    let preferences = {}
-    foundPreferences.forEach((preference) => {
-      preferences[preference.entity] = preference.value
-    })
-    if (!preferences.language) {
-      preferences.language = 'en'
-    }
-    let foundMessages = await db.message.findMany({
-      where: { language: preferences.language },
-    })
-    let messages = {}
-    foundMessages.forEach((message) => {
-      messages[message.entity] = message.value
-    })
-    let returnUser = {
-      roles,
-      ...foundUser,
-      preferences,
-      messages,
-    }
-    return returnUser
-  } catch (error) {
-    return error
-  }
+/**
+ * getCurrentUser returns the user information together with
+ * an optional collection of roles used by requireAuth() to check
+ * if the user is authenticated or has role-based access
+ *
+ * @param decoded - The decoded access token containing user info and JWT claims like `sub`. Note could be null.
+ * @param { token, SupportedAuthTypes type } - The access token itself as well as the auth provider type
+ * @param { APIGatewayEvent event, Context context } - An object which contains information from the invoker
+ * such as headers and cookies, and the context information about the invocation such as IP Address
+ *
+ * !! BEWARE !! Anything returned from this function will be available to the
+ * client--it becomes the content of `currentUser` on the web side (as well as
+ * `context.currentUser` on the api side). You should carefully add additional
+ * fields to the return object only once you've decided they are safe to be seen
+ * if someone were to open the Web Inspector in their browser.
+ *
+ * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
+ *
+ * @returns RedwoodUser
+ */
+export const getCurrentUser = async (session, context) => {
+  let loadeduser = await getUser(session, { context })
+  return loadeduser
 }
+
 /**
  * The user is authenticated if there is a currentUser in the context
  *

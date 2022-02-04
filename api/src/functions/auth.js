@@ -2,7 +2,7 @@ import { DbAuthHandler } from '@redwoodjs/api'
 import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
 //import { executeAfterCreateRules, executeAfterUpdateRules, executeBeforeCreateRules } from 'src/lib/rules'
-import { createUser, updateUser } from 'src/services/users/users'
+import { createUser /*, updateUser*/ } from 'src/services/users/users'
 export const handler = async (event, context) => {
   const forgotPasswordOptions = {
     handler: async (user) => {
@@ -10,7 +10,7 @@ export const handler = async (event, context) => {
         `${JSON.stringify(
           user
         )} forgot their password, and requested new one sent to ${
-          user.email
+          user?.email
         }...`
       )
       //await executeAfterUpdateRules('user', { record: user })
@@ -91,7 +91,7 @@ export const handler = async (event, context) => {
       //let modifiedUser = await executeAfterCreateRules('user', { record: user })
       return await createUser({
         input: {
-          email: username,
+          username: username,
           hashedPassword: hashedPassword,
           salt: salt,
           name: userAttributes.name,
@@ -121,7 +121,7 @@ export const handler = async (event, context) => {
     // something like `id` or `userId` or even `email`)
     authFields: {
       id: 'id',
-      username: 'email',
+      username: 'username',
       hashedPassword: 'hashedPassword',
       salt: 'salt',
       resetToken: 'resetToken',

@@ -13,12 +13,6 @@ export const initialColumns = [
     filterOut,
   },
   {
-    Header: 'Email',
-    accessor: 'email',
-    showMatching,
-    filterOut,
-  },
-  {
     Header: 'Groups',
     accessor: 'GroupMember',
     canSort: false,

@@ -59,10 +59,7 @@ export const users = async ({ filter, skip, orderBy, q, take }) => {
       try {
         let returnObject = {}
         if (filter) {
-          let OR = [
-            { email: { contains: filter, mode: 'insensitive' } },
-            { name: { contains: filter, mode: 'insensitive' } },
-          ]
+          let OR = [{ name: { contains: filter, mode: 'insensitive' } }]
           let castFilter = parseInt(filter, 10)
           if (isNaN(castFilter) === false) {
             OR.push({ id: { equals: castFilter } })

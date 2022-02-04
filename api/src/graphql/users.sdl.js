@@ -1,22 +1,18 @@
 export const schema = gql`
   type User {
-    "The unique key auto assigned on create"
     id: Int!
-    "DateTime set when created by database"
     createdAt: DateTime!
-    "DateTime set when updated by database"
     updatedAt: DateTime!
-    "The email is used for notifications and authentication"
-    email: String! @masked
-    "Identifer used for the user"
     name: String!
-    "Password that is salted and hashed"
-    hashedPassword: String! @masked
-    "Random string generated on password change used when hashing password"
-    salt: String! @masked
-    "String to allow the changing of the password without the password"
-    resetToken: String
-    "DateTime the resetToken expires"
+    "Used to auth for Auth0 OR dbAuth"
+    username: String! @masked
+    email: String @masked
+    "Used to encrypt password with dbAuth"
+    salt: String @masked
+    hashedPassword: String @masked
+    "Used to reset password with dbAuth"
+    resetToken: String @masked
+    "Controls how long a reset token is good for with dbAuth"
     resetTokenExpiresAt: DateTime
     GroupMember: [GroupMember]!
     Preference: [Preference]!
@@ -43,21 +39,17 @@ export const schema = gql`
   }
 
   input CreateUserInput {
-    email: String!
+    username: String!
     name: String!
-    hashedPassword: String!
-    salt: String!
-    resetToken: String
-    resetTokenExpiresAt: DateTime
+    salt: String
+    hashedPassword: String
   }
 
   input UpdateUserInput {
     email: String
     name: String
-    hashedPassword: String
     salt: String
-    resetToken: String
-    resetTokenExpiresAt: DateTime
+    hashedPassword: String
   }
 
   type Mutation {
