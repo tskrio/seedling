@@ -19,13 +19,18 @@ module.exports = {
   file: __filename,
   command: async function ({ input, status }) {
     try {
+      //if we're using auth0 exit
+      if (process.env.AUTH0_DOMAIN) {
+        return { input, status }
+      }
+
       //if were given a password, we make a new salt, hash it and set both salt and hash
-      let hashedPassword = input?.hashedPassword
       if (input?.skipPassword) {
         // if user is signing up, encryption has already been done
         delete input.skipPassword
         return await { input, status }
       }
+      let hashedPassword = input?.hashedPassword
       if (hashedPassword || !input?.skipPassword) {
         let salt = randomString(30)
         input.salt = salt.toString()

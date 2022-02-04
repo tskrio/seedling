@@ -33,6 +33,19 @@ const NewUser = () => {
   const onSave = (input) => {
     createUser({ variables: { input } })
   }
+  let randomCompanyGenerator = () => {
+    let companies = [
+      '@acme.com',
+      '@globex.com',
+      '@soylent.com',
+      '@initech.com',
+      '@umbrella.com',
+      '@hooli.com',
+      '@vehement.com',
+      '@massive-dynamic.com',
+    ]
+    return companies[Math.floor(companies.length * Math.random()) - 1]
+  }
   let randomNameGenerator = () => {
     let firstNames = [
       'Ashley',
@@ -74,12 +87,14 @@ const NewUser = () => {
       'Victoria',
       'Zarah',
     ]
+
     let lastNames = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
     let firstName = firstNames[Math.floor(firstNames.length * Math.random())]
     let lastName = lastNames[Math.floor(lastNames.length * Math.random()) - 1]
     return `${firstName} ${lastName}`
   }
   let randomName = randomNameGenerator()
+  let randomEmail = randomCompanyGenerator()
   const fields = [
     {
       name: 'name',
@@ -88,18 +103,18 @@ const NewUser = () => {
       defaultValue: randomName,
     },
     {
-      name: 'email',
-      prettyName: 'Email',
+      name: 'username',
+      prettyName: 'Username',
       required: 'This is required',
-      defaultValue: `${randomName.replace(' ', '.').toLowerCase()}@example.com`,
+      defaultValue: randomName.toLowerCase().replace(' ', '.') + randomEmail,
     },
-    {
-      name: 'hashedPassword',
-      prettyName: 'Password',
-      required: 'This is required',
-      type: 'password',
-      defaultValue: 'password',
-    },
+    // {
+    //   name: 'hashedPassword',
+    //   prettyName: 'Password',
+    //   required: 'This is required',
+    //   type: 'password',
+    //   defaultValue: 'password',
+    // },
   ]
   const roles = {
     update: ['userUpdate'],

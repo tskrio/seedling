@@ -1,19 +1,23 @@
 import { db } from '../db.js'
-import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
-export const getUser = async (session, { token, type, event, context }) => {
-  let debugObj = {
-    session,
-    token,
-    type,
-    event,
-    context,
-  }
+import {
+  AuthenticationError /*, ForbiddenError*/,
+} from '@redwoodjs/graphql-server'
+export const getUser = async (
+  session /*, { token, type, event, context }*/
+) => {
+  // let debugObj = {
+  //   session,
+  //   token,
+  //   type,
+  //   event,
+  //   context,
+  // }
   //console.table(debugObj)
   //return debugObj
   try {
     // look up the user by the session id
     //let foundUser = await db.user.findUnique({
-    let email = session?.['https://auth0.tskr.io/email']
+    //let email = session?.['https://auth0.tskr.io/email']
     let name = session?.['https://auth0.tskr.io/name']
     let foundUser = await db.user.findFirst({
       //where: { id: session.id },//dbAuth

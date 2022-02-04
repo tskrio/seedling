@@ -1,5 +1,5 @@
 import { navigate, routes, useLocation } from '@redwoodjs/router'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import {
   SimpleGrid,
   Flex,
@@ -9,6 +9,7 @@ import {
   Box,
   Spacer,
   Button,
+  useMediaQuery,
 } from '@chakra-ui/react'
 import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
@@ -93,10 +94,20 @@ export const Success = ({
   roles,
 }) => {
   let [data, setData] = useState(properties)
+  const [isSmallScreen] = useMediaQuery(`(max-width: ${950}px)`)
+  // if small screen remove inner array from columns and data.
+  let returnFirstAndLast = (arrayOfThings) => {
+    let { 0: a, [arrayOfThings.length - 1]: b } = arrayOfThings
+    return [a, b]
+  }
+  useEffect(() => {
+    if (isSmallScreen) setColumns(returnFirstAndLast(columns))
+    if (!isSmallScreen) setColumns(initialColumns)
+  }, [isSmallScreen, setColumns, initialColumns])
   return (
     <Fragment>
       <Heading>Properties ({data.count})</Heading>
-       <Flex>
+      <Flex>
         <Box>
           {properties.q !== null && (
             <Button

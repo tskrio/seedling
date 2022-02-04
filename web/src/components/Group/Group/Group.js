@@ -1,14 +1,7 @@
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'
-
-const DELETE_GROUP_MUTATION = gql`
-  mutation DeleteGroupMutation($id: Int!) {
-    deleteGroup(id: $id) {
-      id
-    }
-  }
-`
+import { DELETE_GROUP_MUTATION } from 'src/components/Group/EditGroupCell'
 
 const jsonDisplay = (obj) => {
   return (

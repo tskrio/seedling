@@ -80,11 +80,6 @@ export const Success = ({ message }) => {
   }
   const fields = [
     {
-      name: 'language',
-      prettyName: 'Language',
-      required: 'This is required',
-    },
-    {
       name: 'entity',
       prettyName: 'Entity',
       required: 'This is required',
@@ -92,6 +87,11 @@ export const Success = ({ message }) => {
     {
       name: 'value',
       prettyName: 'Value',
+      required: 'This is required',
+    },
+    {
+      name: 'language',
+      prettyName: 'Language',
       required: 'This is required',
     },
   ]

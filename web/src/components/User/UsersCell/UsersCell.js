@@ -1,5 +1,5 @@
 import { navigate, routes, useLocation } from '@redwoodjs/router'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import {
   SimpleGrid,
   Flex,
@@ -9,6 +9,7 @@ import {
   Button,
   Box,
   Spacer,
+  useMediaQuery,
 } from '@chakra-ui/react'
 import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
@@ -17,7 +18,6 @@ import TableRows from 'src/components/TableRows/TableRows'
 import { DELETE_USER_MUTATION } from 'src/components/User/EditUserCell'
 import { MdAdd, MdKeyboardBackspace } from 'react-icons/md'
 import TableSkeleton from 'src/components/TableSkeleton/TableSkeleton'
-
 export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { search } = useLocation()
@@ -91,9 +91,25 @@ export const Success = ({
   roles,
 }) => {
   let [data, setData] = useState(users)
+  const [isSmallScreen] = useMediaQuery(`(max-width: ${950}px)`)
+  // if small screen remove inner array from columns and data.
+  let returnFirstAndLast = (arrayOfThings) => {
+    let { 0: a, [arrayOfThings.length - 1]: b } = arrayOfThings
+    return [a, b]
+  }
+  useEffect(() => {
+    if (isSmallScreen) setColumns(returnFirstAndLast(columns))
+    if (!isSmallScreen) setColumns(initialColumns)
+  }, [isSmallScreen, setColumns, initialColumns])
   return (
     <Fragment>
       <Heading pb={2}>Users ({data.count})</Heading>
+      isSmallScreen {isSmallScreen}
+      {isSmallScreen ? (
+        <>this is small {columns.length}</>
+      ) : (
+        <>This is not small</>
+      )}
       <Flex>
         <Box>
           {users.q !== null && (
@@ -135,7 +151,6 @@ export const Success = ({
         }}
         setSkip={setSkip}
       />
-
       <Table variant="striped" colorScheme={'green'} size="xs">
         <TableCaption>List of Users</TableCaption>
 

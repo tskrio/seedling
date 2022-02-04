@@ -3,7 +3,6 @@ import {
   Box,
   Flex,
   Spacer,
-  Stack,
   Text,
   Button,
   Drawer,
@@ -13,7 +12,6 @@ import {
   DrawerHeader,
   useDisclosure,
 } from '@chakra-ui/react'
-import { FcLock } from 'react-icons/fc'
 
 import { useState, useRef, useEffect, Fragment } from 'react'
 

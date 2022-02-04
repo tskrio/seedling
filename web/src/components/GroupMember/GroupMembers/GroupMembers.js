@@ -3,16 +3,16 @@ import { Fragment, useState } from 'react'
 import GroupMembersCell from 'src/components/GroupMember/GroupMembersCell'
 import { showMatching, filterOut } from '/src/lib/atomicFunctions'
 export const initialColumns = [
-  {
-    Header: 'Id',
-    accessor: 'id',
-    showMatching,
-    filterOut,
-    link: (givenId) => {
-      return routes.groupMember({ id: givenId })
-    },
-    dataType: 'integer',
-  },
+  //{
+  //  Header: 'Id',
+  //  accessor: 'id',
+  //  showMatching,
+  //  filterOut,
+  //  link: (givenId) => {
+  //    return routes.groupMember({ id: givenId })
+  //  },
+  //  dataType: 'integer',
+  //},
   {
     Header: 'User',
     accessor: 'user',
