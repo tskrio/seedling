@@ -3,7 +3,7 @@ import { PlayIcon } from 'src/components/CallToActionWithVideo/'
 import CallToActionWithVideo from 'src/components/CallToActionWithVideo/'
 import { navigate } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment /*, useEffect, useRef*/, useState } from 'react'
 //import { gsap } from 'gsap/all'
 const AboutComponent = () => {
   let header = { lineOne: 'Accessible', lineTwo: 'Automation' }
@@ -13,9 +13,14 @@ const AboutComponent = () => {
   let imageToVideo = './desk-g04ccd6cc7_1280.webp'
   let imageAltText =
     'Find me in ./web/src/components/AboutComponent/AboutComponent.js'
-  const { isAuthenticated } = useAuth()
+  const { loading, isAuthenticated, logIn, logOut /*, currentUser*/, type } =
+    useAuth()
   let [displayVideo, setDisplayVideo] = useState(false)
 
+  if (loading) {
+    // auth is rehydrating
+    return null
+  }
   let unauthenticatedCTA = (
     <>
       <CallToActionWithVideo
@@ -47,11 +52,25 @@ const AboutComponent = () => {
               fontWeight={'normal'}
               px={6}
               colorScheme={'green'}
-              onClick={() => {
-                navigate('/login')
+              onClick={async () => {
+                if (type === 'auth0') {
+                  if (isAuthenticated) {
+                    await logOut({ returnTo: process.env.AUTH0_REDIRECT_URI })
+                  } else {
+                    const searchParams = new URLSearchParams(
+                      window.location.search
+                    )
+                    await logIn({
+                      appState: { targetUrl: searchParams.get('redirectTo') },
+                    })
+                  }
+                }
+                if (type === 'dbAuth') {
+                  navigate('/login')
+                }
               }}
             >
-              Log in
+              {isAuthenticated ? 'Log out' : 'Log in'}
             </Button>
           </Fragment>
         )}
@@ -71,19 +90,20 @@ const AboutComponent = () => {
       </CallToActionWithVideo>
     </>
   )
-  let buttonRef = useRef()
+  /*let buttonRef = useRef()
   let [buttonClicked, setButtonClicked] = useState(0)
   useEffect(() => {
     //gsap.to(buttonRef.current, { rotation: '+=720', duration: 2 })
   }, [buttonClicked])
+  */
   let authenticatedMessage = (
     <Fragment>
       <Button
-        ref={buttonRef}
         colorScheme="teal"
         variant="solid"
         onClick={() => {
-          setButtonClicked(buttonClicked + 1)
+          //setButtonClicked(buttonClicked + 1)
+          console.log('clicked')
         }}
       >
         Hello

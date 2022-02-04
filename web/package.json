@@ -13,8 +13,9 @@
     ]
   },
   "dependencies": {
+    "@auth0/auth0-spa-js": "^1.19.4",
     "@chakra-ui/icons": "^1.1.1",
-    "@redwoodjs/auth": "^0.42.1",
+    "@redwoodjs/auth": "0.42.1",
     "@redwoodjs/forms": "^0.42.1",
     "@redwoodjs/router": "^0.42.1",
     "@redwoodjs/web": "^0.42.1",

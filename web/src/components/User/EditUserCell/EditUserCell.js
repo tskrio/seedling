@@ -3,7 +3,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
 import { Fragment } from 'react'
-import { useAuth } from '@redwoodjs/auth'
+//import { useAuth } from '@redwoodjs/auth'
 import { useForm } from 'react-hook-form'
 import FormSkeleton from 'src/components/FormSkeleton/FormSkeleton'
 export const QUERY = gql`
@@ -12,12 +12,7 @@ export const QUERY = gql`
       id
       createdAt
       updatedAt
-      email
       name
-      hashedPassword
-      salt
-      resetToken
-      resetTokenExpiresAt
     }
   }
 `
@@ -27,12 +22,7 @@ const UPDATE_USER_MUTATION = gql`
       id
       createdAt
       updatedAt
-      email
       name
-      hashedPassword
-      salt
-      resetToken
-      resetTokenExpiresAt
     }
   }
 `
@@ -52,7 +42,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ user }) => {
-  const { currentUser, hasRole } = useAuth()
+  //const { currentUser, hasRole } = useAuth()
   const [updateUser, { loading, error }] = useMutation(UPDATE_USER_MUTATION, {
     onCompleted: () => {
       toast.success('User updated')
@@ -92,25 +82,20 @@ export const Success = ({ user }) => {
   }
   const fields = [
     {
-      name: 'email',
-      prettyName: 'Email',
-      required: 'This is required',
-    },
-    {
       name: 'name',
       prettyName: 'Name',
       required: 'This is required',
     },
   ]
-  if (currentUser.id === user.id) {
-    fields.push({
-      name: 'hashedPassword',
-      prettyName: 'Password',
-      type: 'password',
-      placeholder: 'Only set this if you want to change it',
-      minLength: { value: 4, message: 'Minimum length should be 4' },
-    })
-  }
+  // if (currentUser.id === user.id) {
+  //   fields.push({
+  //     name: 'hashedPassword',
+  //     prettyName: 'Password',
+  //     type: 'password',
+  //     placeholder: 'Only set this if you want to change it',
+  //     minLength: { value: 4, message: 'Minimum length should be 4' },
+  //   })
+  // }
   // if (hasRole(['admin'])) {
   //   fields.push({
   //     name: 'resetToken',

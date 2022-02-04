@@ -54,7 +54,6 @@ export const QUERY = gql`
         id
         createdAt
         updatedAt
-        email
         name
         GroupMember {
           id
@@ -70,7 +69,7 @@ export const QUERY = gql`
 export const Loading = () => <TableSkeleton />
 
 export const Failure = ({ error }) => (
-  <div className="rw-cell-error">{error.message}</div>
+  <div className="rw-cell-error">...{error.message}</div>
 )
 
 export const Success = ({
