@@ -4,18 +4,12 @@ import MessagesCell from 'src/components/Message/MessagesCell'
 import { showMatching, filterOut } from '/src/lib/atomicFunctions'
 export const initialColumns = [
   {
-    Header: 'Language',
-    accessor: 'language',
+    Header: 'Entity',
+    accessor: 'entity',
     link: (givenId) => {
       return routes.editMessage({ id: givenId })
     },
-    showMatching,
-    filterOut,
-  },
 
-  {
-    Header: 'Entity',
-    accessor: 'entity',
     showMatching,
     filterOut,
   },
@@ -23,6 +17,12 @@ export const initialColumns = [
   {
     Header: 'Value',
     accessor: 'value',
+    showMatching,
+    filterOut,
+  },
+  {
+    Header: 'Language',
+    accessor: 'language',
     showMatching,
     filterOut,
   },

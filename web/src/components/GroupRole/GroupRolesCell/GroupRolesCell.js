@@ -1,5 +1,5 @@
 import { navigate, routes, useLocation } from '@redwoodjs/router'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import {
   SimpleGrid,
   Flex,
@@ -9,6 +9,7 @@ import {
   Box,
   Spacer,
   Button,
+  useMediaQuery,
 } from '@chakra-ui/react'
 import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
@@ -96,6 +97,16 @@ export const Success = ({
   roles,
 }) => {
   let [data, setData] = useState(groupRoles)
+  const [isSmallScreen] = useMediaQuery(`(max-width: ${950}px)`)
+  // if small screen remove inner array from columns and data.
+  let returnFirstAndLast = (arrayOfThings) => {
+    let { 0: a, [arrayOfThings.length - 1]: b } = arrayOfThings
+    return [a, b]
+  }
+  useEffect(() => {
+    if (isSmallScreen) setColumns(returnFirstAndLast(columns))
+    if (!isSmallScreen) setColumns(initialColumns)
+  }, [isSmallScreen, setColumns, initialColumns])
   return (
     <Fragment>
       <Heading pb={2}>GroupRoles ({data.count})</Heading>
@@ -104,7 +115,7 @@ export const Success = ({
       <Text>fuzzyQuery: {JSON.stringify(fuzzyQuery).toString()}</Text>
       <Text>take: {JSON.stringify(take).toString()}</Text>
       <Text>skip: {JSON.stringify(skip).toString()}</Text>*/}
-       <Flex>
+      <Flex>
         <Box>
           {groupRoles.q !== null && (
             <Button

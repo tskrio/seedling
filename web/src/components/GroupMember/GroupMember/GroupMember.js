@@ -1,22 +1,15 @@
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'
+import { DELETE_GROUP_MEMBER_MUTATION } from 'src/components/GroupMember/EditGroupMemberCell'
 
-const DELETE_GROUP_MEMBER_MUTATION = gql`
-  mutation DeleteGroupMemberMutation($id: Int!) {
-    deleteGroupMember(id: $id) {
-      id
-    }
-  }
-`
-
-const jsonDisplay = (obj) => {
-  return (
-    <pre>
-      <code>{JSON.stringify(obj, null, 2)}</code>
-    </pre>
-  )
-}
+// const jsonDisplay = (obj) => {
+//   return (
+//     <pre>
+//       <code>{JSON.stringify(obj, null, 2)}</code>
+//     </pre>
+//   )
+// }
 
 const timeTag = (datetime) => {
   return (
@@ -26,9 +19,9 @@ const timeTag = (datetime) => {
   )
 }
 
-const checkboxInputTag = (checked) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
+// const checkboxInputTag = (checked) => {
+//   return <input type="checkbox" checked={checked} disabled />
+// }
 
 const GroupMember = ({ groupMember }) => {
   const [deleteGroupMember] = useMutation(DELETE_GROUP_MEMBER_MUTATION, {

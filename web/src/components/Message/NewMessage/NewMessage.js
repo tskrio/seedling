@@ -35,13 +35,13 @@ const NewMessage = () => {
   }
   const fields = [
     {
-      name: 'language',
-      prettyName: 'Language',
+      name: 'entity',
+      prettyName: 'Entity',
       required: 'This is required',
     },
     {
-      name: 'entity',
-      prettyName: 'Entity',
+      name: 'language',
+      prettyName: 'Language',
       required: 'This is required',
     },
     {

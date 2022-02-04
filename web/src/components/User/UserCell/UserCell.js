@@ -8,10 +8,6 @@ export const QUERY = gql`
       updatedAt
       email
       name
-      hashedPassword
-      salt
-      resetToken
-      resetTokenExpiresAt
     }
   }
 `

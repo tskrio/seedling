@@ -49,8 +49,8 @@ const TableColumns = ({
         {canDoSomething && (
           <Menu p={0} m={0}>
             <MenuButton
-              px={4}
-              py={2}
+              pl={2}
+              pr={2}
               transition="all 0.2s"
               borderRadius="md"
               _hover={{ bg: 'gray.400' }}

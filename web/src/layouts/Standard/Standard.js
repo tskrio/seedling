@@ -14,6 +14,7 @@ const Standard = ({ children }) => {
   }
   return (
     <Fragment>
+      <CookieModal />
       {isAuthenticated && currentUser && (
         <SidebarWithHeader {...myProps}>{children}</SidebarWithHeader>
       )}
@@ -23,7 +24,6 @@ const Standard = ({ children }) => {
           <Footer />
         </Fragment>
       )}
-      <CookieModal />
     </Fragment>
   )
 }

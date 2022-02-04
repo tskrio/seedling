@@ -1,5 +1,5 @@
 import { navigate, routes, useLocation } from '@redwoodjs/router'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import {
   SimpleGrid,
   Flex,
@@ -9,7 +9,7 @@ import {
   Box,
   Spacer,
   Button,
-  Skeleton, SkeletonCircle, SkeletonText, Stack
+  useMediaQuery,
 } from '@chakra-ui/react'
 import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
@@ -67,7 +67,7 @@ export const QUERY = gql`
   }
 `
 
-export const Loading = () => (<TableSkeleton />)
+export const Loading = () => <TableSkeleton />
 
 export const Failure = ({ error }) => (
   <div className="rw-cell-error">{error.message}</div>
@@ -92,10 +92,20 @@ export const Success = ({
   roles,
 }) => {
   let [data, setData] = useState(messages)
+  const [isSmallScreen] = useMediaQuery(`(max-width: ${950}px)`)
+  // if small screen remove inner array from columns and data.
+  let returnFirstAndLast = (arrayOfThings) => {
+    let { 0: a, [arrayOfThings.length - 1]: b } = arrayOfThings
+    return [a, b]
+  }
+  useEffect(() => {
+    if (isSmallScreen) setColumns(returnFirstAndLast(columns))
+    if (!isSmallScreen) setColumns(initialColumns)
+  }, [isSmallScreen, setColumns, initialColumns])
   return (
     <Fragment>
       <Heading>Messages ({data.count})</Heading>
-       <Flex>
+      <Flex>
         <Box>
           {messages.q !== null && (
             <Button

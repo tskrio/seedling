@@ -84,7 +84,6 @@ export const Success = ({ group }) => {
       prettyName: 'Description',
       required: 'This is required',
     },
-    { name: 'special field', prettyName: 'Special Field' },
   ]
 
   const roles = {
