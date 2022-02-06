@@ -3,19 +3,20 @@ module.exports = {
   order: 10, //              controls the order this runs
   when: ['before'], //       used to filter rules to run
   operation: ['readAll'], // used to filter rules to run
-  table: 'property', //         used to filter rules to run
+  table: 'user', //         used to filter rules to run
   file: __filename, //       used for logging
   command: async function ({ where, filter, q }) {
-    // if (!context.currentUser.roles.includes('admin')) {
-    //   where.push({ entity: 'jace' }) // required for all queries
-    // }
+    console.log(context.currentUser)
+    //if (!context.currentUser.roles.includes('admin')) {
+    //  where.push({ entity: 'jace' }) // required for all queries
+    //}
     if (filter) {
       where.push({
         OR: [
           // not required
-          { entity: { contains: filter, mode: 'insensitive' } },
+          { name: { contains: filter, mode: 'insensitive' } },
           //{ username: { contains: filter, mode: 'insensitive' } },
-          { value: { contains: filter, mode: 'insensitive' } },
+          { email: { contains: filter, mode: 'insensitive' } },
         ],
       })
     }

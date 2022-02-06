@@ -56,7 +56,7 @@ const NewPreference = () => {
       display: 'name',
       value: 'id',
       QUERY: gql`
-        query FindUsersFromGroupMembers(
+        query FindUsersFromPreferences(
           $filter: String
           $skip: Int
           $take: Int

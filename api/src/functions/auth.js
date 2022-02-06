@@ -95,7 +95,7 @@ export const handler = async (event, context) => {
           hashedPassword: hashedPassword,
           salt: salt,
           name: userAttributes.name,
-          skipPassword: true,
+          // skipPassword: true,
         },
       })
       //return modifiedUser.record

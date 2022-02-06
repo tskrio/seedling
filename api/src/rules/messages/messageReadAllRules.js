@@ -6,14 +6,14 @@ module.exports = {
   table: 'message', //       used to filter rules to run
   file: __filename, //       used for logging
   command: async function ({ where, filter, q }) {
-    if (!context.currentUser.roles.includes('admsin')) {
+    if (!context.currentUser.roles.includes('dadmin')) {
       where.push({ entity: 'jace' }) // required for all queries
     }
     if (filter) {
       where.push({
         OR: [
           // not required
-          { entity: { contains: filter, mode: 'insensitive' } },
+          { entity: { contains: filter } },
           { value: { contains: filter, mode: 'insensitive' } },
         ],
       })

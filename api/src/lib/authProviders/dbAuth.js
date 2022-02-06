@@ -10,7 +10,15 @@ export const getUser = async (session) => {
     // look up the group memberships of the user
     let foundGroups = await db.groupMember.findMany({
       where: { userId: session.id },
+      include: {
+        group: {
+          include: { GroupRole: true },
+        },
+      },
     })
+    console.log('stringifyied', JSON.stringify(foundGroups))
+    //TODO TEST THIS: //let roles = foundGroups.map((membership)=>{return [...membership?.group?.GroupRole].map((role)=>{return role.role})})
+    //TODO TEST GIVING GROUPS TO CONTEXT//let groups = foundGroups.map((membership)=>{return [...membership?.group?.GroupRole].map((role)=>{return role.role})})
     // look up the roles of the groups the user is a member of
     let foundGroupRoles = await db.groupRole.findMany({
       where: {
@@ -42,6 +50,7 @@ export const getUser = async (session) => {
       ...foundUser,
       preferences,
       messages,
+      foundGroups,
     }
     return returnUser
   } catch (error) {

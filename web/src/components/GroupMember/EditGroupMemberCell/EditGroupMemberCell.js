@@ -131,8 +131,12 @@ export const Success = ({ groupMember }) => {
       defaultValue: groupMember.group.id,
       defaultDisplay: groupMember.group.name,
       QUERY: gql`
-        query FindGroupFromGroupMembers($filter: String, $skip: Int) {
-          search: groups(filter: $filter, skip: $skip) {
+        query FindGroupFromGroupMembers(
+          $filter: String
+          $skip: Int
+          $take: Int
+        ) {
+          search: groups(filter: $filter, skip: $skip, take: $take) {
             count
             take
             skip
