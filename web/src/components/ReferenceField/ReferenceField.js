@@ -21,24 +21,21 @@ const ReferenceField = ({ field, register }) => {
     </>
   )
   let [filterString, setFitlerString] = useState('')
-  const { /*loading,*/ error, data /*refetch*/ } = useQuery(field.QUERY, {
+  const { loading, error, data /*, refetch*/ } = useQuery(field.QUERY, {
     variables: {
       filter: filterString || '',
-      //q: params.get('q'),
-      //filter: props.fuzzyQuery || params.get('filter'),
-      skip: /*props.skip ||*/ 0,
-      take: /*props.take ||*/ 10,
-      //orderBy: props.orderBy || params.get('orderBy'),
+      skip: 0,
+      take: 10,
     },
   })
   let handleSearchResult = () => {
-    //refetch()
+    //    refetch()
   }
-  //  if (loading) {
-  //    return <p>Loading Lazy Data</p>
-  //  }
+  if (loading) {
+    //return <p>Loading Lazy Data</p>
+  }
   if (error) {
-    return <p>`Error! ${error}`</p>
+    //return <p>`Error! ${error}`</p>
   }
   if (data) {
     handleSearchResult(data)

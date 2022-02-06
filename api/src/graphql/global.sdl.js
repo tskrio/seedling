@@ -3,6 +3,10 @@ export const schema = gql`
     asc
     desc
   }
+  type Status {
+    code: String
+    message: String
+  }
   input FilterInput {
     filter: String
   }
@@ -27,5 +31,6 @@ export const schema = gql`
     group: Sort
     "on GroupMember"
     user: Sort
+    language: Sort
   }
 `

@@ -6,8 +6,9 @@ import FormComponent from 'src/components/FormComponent'
 import { useForm } from 'react-hook-form'
 const CREATE_MESSAGE_MUTATION = gql`
   mutation CreateMessageMutation($input: CreateMessageInput!) {
-    createMessage(input: $input) {
+    message: createMessage(input: $input) {
       id
+      entity
     }
   }
 `
@@ -16,8 +17,10 @@ const NewMessage = () => {
   const [createMessage, { loading, error }] = useMutation(
     CREATE_MESSAGE_MUTATION,
     {
-      onCompleted: () => {
-        toast.success('Message created')
+      onCompleted: (data) => {
+        console.log(data.message)
+        toast.success(`Message "${data.message.entity}" created`)
+        //navigate(routes.editMessage({ id: data.message.id }))
         navigate(routes.messages())
       },
       onError: (error) => {
@@ -27,6 +30,7 @@ const NewMessage = () => {
   )
 
   const onSubmit = (data) => {
+    //console.log('data from onsubmit', data)
     onSave(data)
   }
 

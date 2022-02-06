@@ -83,9 +83,13 @@ const FormComponent = ({
       html = <PasswordInput key={field.name} field={field} />
     }
     if (field.type === 'reference') {
-      html = (
-        <ReferenceField key={field.name} field={field} register={register} />
-      )
+      try {
+        html = (
+          <ReferenceField key={field.name} field={field} register={register} />
+        )
+      } catch (e) {
+        console.log('error', e)
+      }
     }
     if (field.type === 'select') {
       html = (

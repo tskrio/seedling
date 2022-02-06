@@ -112,8 +112,8 @@ export const Success = ({ preference }) => {
       defaultValue: preference.user.id,
       defaultDisplay: preference.user.name,
       QUERY: gql`
-        query FindUserFromPreferences($filter: String, $skip: Int) {
-          search: users(filter: $filter, skip: $skip) {
+        query FindUserFromPreferences($filter: String, $skip: Int, $take: Int) {
+          search: users(filter: $filter, skip: $skip, take: $take) {
             count
             take
             skip
