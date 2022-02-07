@@ -1,4 +1,5 @@
 import { logger } from 'src/lib/logger'
+import { UserInputError } from '@redwoodjs/graphql-server'
 let timeRemaining = 10000
 import allRules from 'src/rules/**/**.{js,ts}'
 let shortenFile = (fileName) => {
@@ -51,6 +52,69 @@ let loadRules = async (allRules, table, when, operation) => {
   //let message = [arrRules.length, table, when, operation]
   //logger.info(`${message.join(' ')} rules loaded \n${ruleNames.join('\n')}`)
   return (await arrRules) || []
+}
+
+/**
+ * Runs the rules before create across all models
+ * @param {string} table - the model you're running rules for
+ * https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#create
+ * @param {object} data - the object of elements you want to insert
+ * @returns {object} { data, status }
+ */
+export const executeBeforeCreateRulesV2 = async ({ table, data }) => {
+  let rules = await loadRules(allRules, table, 'before', 'create')
+  let status = { code: 'success', message: '' }
+  rules.forEach(async (rule) => {
+    await rule.command({ data, status })
+  })
+  if (status.code != 'success') {
+    throw new UserInputError('fromrules-' + status?.message)
+  }
+  return { data, status }
+}
+
+/**
+ * Runs the rules before create across all models
+ * @param {string} table - the model you're running rules for
+ * https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#create
+ * @param {object} data - the object of elements you want to insert
+ * @returns {object} { data, status }
+ */
+export const executeAfterCreateRulesV2 = async ({ table, data }) => {
+  let rules = await loadRules(allRules, table, 'after', 'create')
+  let status = { code: 'success', message: '' }
+  rules.forEach(async (rule) => {
+    await rule.command({ data, status })
+  })
+  // we return status as part of the return object
+  return { record: data, status }
+}
+/**
+ * Runs the rules before create across all models
+ * @param {string} table - the model you're running rules for
+ * https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#create
+ * @param {object} data - the object of elements you want to insert
+ * @returns {object} { data, status }
+ */
+export const executeBeforeReadAllRulesV2 = async ({ table, filter, q }) => {
+  let rules = await loadRules(allRules, table, 'before', 'readAll')
+  console.log('before query rules', filter, q)
+  let where = []
+  rules.forEach(async (rule) => {
+    await rule.command({ where, filter, q })
+  })
+  // console.log('rules where', where)
+  // we return status as part of the return object
+  return { where, filter, q }
+}
+export const executeAfterReadAllRulesV2 = async ({ table, data }) => {
+  let rules = await loadRules(allRules, table, 'after', 'readAll')
+  let status = { code: 'success', message: '' }
+  rules.forEach(async (rule) => {
+    await rule.command({ data, status })
+  })
+  // we return status as part of the return object
+  return { records: data, status }
 }
 export const executeBeforeCreateRules = async (table, input) => {
   // track time passed.  cannot exceed 10 seconds

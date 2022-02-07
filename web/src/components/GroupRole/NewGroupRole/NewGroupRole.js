@@ -67,8 +67,12 @@ const NewGroupRole = () => {
       display: 'name',
       value: 'id',
       QUERY: gql`
-        query FindUsersFromGroupRoleNew($filter: String, $skip: Int) {
-          search: groups(filter: $filter, skip: $skip) {
+        query FindUsersFromGroupRoleNew(
+          $filter: String
+          $skip: Int
+          $take: Int
+        ) {
+          search: groups(filter: $filter, skip: $skip, take: $take) {
             count
             take
             skip

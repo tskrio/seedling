@@ -43,6 +43,7 @@ const FormComponent = ({
             type={show ? 'text' : 'password'}
             defaultValue={field.defaultValue}
             placeholder={field.placeholder || 'Enter password'}
+            disabled={field?.disabled}
             {...register(field.name, {
               //            required: field?.required || false,
               //            minLength: field.minLength,
@@ -83,9 +84,13 @@ const FormComponent = ({
       html = <PasswordInput key={field.name} field={field} />
     }
     if (field.type === 'reference') {
-      html = (
-        <ReferenceField key={field.name} field={field} register={register} />
-      )
+      try {
+        html = (
+          <ReferenceField key={field.name} field={field} register={register} />
+        )
+      } catch (e) {
+        console.log('error', e)
+      }
     }
     if (field.type === 'select') {
       html = (

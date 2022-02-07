@@ -3,23 +3,40 @@ import { db } from '../db.js'
 export const getUser = async (session) => {
   try {
     // look up the user by the session id
-    let foundUser = await db.user.findUnique({
+    console.log(`authenticating on dbauth with ${session.id}`)
+    let userData = await db.user.findUnique({
       where: { id: session.id },
-      select: { id: true, name: true },
-    })
-    // look up the group memberships of the user
-    let foundGroups = await db.groupMember.findMany({
-      where: { userId: session.id },
-    })
-    // look up the roles of the groups the user is a member of
-    let foundGroupRoles = await db.groupRole.findMany({
-      where: {
-        groupId: { in: foundGroups.map((group) => group.groupId) },
+      select: {
+        id: true,
+        name: true,
+        GroupMember: {
+          select: {
+            group: {
+              select: {
+                name: true,
+                id: true,
+                GroupRole: {
+                  select: {
+                    role: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     })
-    // assign the roles to the user
-    let roles = foundGroupRoles.map((groupRole) => groupRole.role)
-    // get user's preferences and store them as part of the user
+    // look up the group memberships of the user's groups, and roles
+    let roles = userData?.GroupMember.map((member) => {
+      return [...member?.group?.GroupRole].map((role) => {
+        return role.role
+      })
+    })
+      .join(',')
+      .split(',')
+    let groups = userData?.GroupMember.map((member) => {
+      return { name: member?.group?.name, id: member?.group?.id }
+    }) // look up the roles of the groups the user is a member of
     let foundPreferences = await db.preference.findMany({
       where: { userId: session.id },
     })
@@ -39,10 +56,13 @@ export const getUser = async (session) => {
     })
     let returnUser = {
       roles,
-      ...foundUser,
+      groups,
+      ...userData,
+      //...foundUser,
       preferences,
       messages,
     }
+    //console.log('returnUser', returnUser)
     return returnUser
   } catch (error) {
     return error

@@ -6,9 +6,14 @@ import {
   Box,
   Input,
   Text,
-  Button,
+  //Button,
   Flex,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  //BreadcrumbSeparator,
 } from '@chakra-ui/react'
+
 import { SearchIcon } from '@chakra-ui/icons'
 
 const TableQuery = ({
@@ -42,6 +47,11 @@ const TableQuery = ({
       navigate(link(''))
     }
   }
+  let query = JSON.parse(rawQuery)
+  let [ANDQuery, ...ORQuery] = query.AND
+  //console.log('ANDQuery[0]', ANDQuery)
+  //console.log('ANDQuery', ANDQuery, 'ORQuery', ORQuery)
+  ORQuery = ORQuery[0]?.OR
 
   return (
     <Fragment>
@@ -62,13 +72,49 @@ const TableQuery = ({
               icon={<SearchIcon />}
             />
           </Flex>
-          <Flex>
-            <Link to={link(rawQuery || '')}>
-              <Text>{rawQuery}</Text>
-            </Link>
-          </Flex>
-          <Text color="white">{fuzzyQuery.toString()}</Text>
         </Box>
+        {ANDQuery && (
+          <Breadcrumb>
+            <BreadcrumbItem>
+              <BreadcrumbLink
+                onClick={() => {
+                  //console.log('going to ', ANDQuery)
+                  //navigate(link(JSON.stringify(ANDQuery)))
+                  params.delete('q')
+                  setFuzzyQuery('')
+                  setSkip(0)
+
+                  navigate(link(''))
+                }}
+              >
+                Required Query = {JSON.stringify(ANDQuery)}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          </Breadcrumb>
+        )}
+        {ORQuery && (
+          <Breadcrumb>
+            {ORQuery?.map((orQueryPart, index) => {
+              let key = Object.keys(orQueryPart)
+              return (
+                <BreadcrumbItem key={`orQuery-${index}`}>
+                  <BreadcrumbLink
+                    onClick={() => {
+                      //{ key: orQueryPart[key]?.contains }
+                      navigate(
+                        link(
+                          `{"${key}":{"contains":"${orQueryPart[key]?.contains}"}}`
+                        )
+                      )
+                    }}
+                  >
+                    {key} CONTAINS {orQueryPart[key]?.contains}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              )
+            })}
+          </Breadcrumb>
+        )}
       </SimpleGrid>
     </Fragment>
   )

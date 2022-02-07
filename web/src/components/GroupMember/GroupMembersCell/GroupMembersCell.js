@@ -11,6 +11,7 @@ import {
   Spacer,
   Button,
   useMediaQuery,
+  Center,
 } from '@chakra-ui/react'
 import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
@@ -179,12 +180,14 @@ export const Success = ({
           displayColumn={displayColumn}
         />
       </Table>
-      <SimpleGrid columns={2} spacingX="40px" spacingY="20px">
-        <Flex padding="10px"></Flex>
-        <Flex padding="10px">
-          <TablePagination skip={skip} setSkip={setSkip} take={take} />
-        </Flex>
-      </SimpleGrid>
+      <Center>
+        <TablePagination
+          count={data.count}
+          skip={skip}
+          setSkip={setSkip}
+          take={take}
+        />
+      </Center>
     </Fragment>
   )
 }

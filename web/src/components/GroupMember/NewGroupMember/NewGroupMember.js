@@ -48,8 +48,12 @@ const NewGroupMember = () => {
       display: 'name',
       value: 'id',
       QUERY: gql`
-        query FindUsersFromGroupMembers($filter: String, $skip: Int) {
-          search: users(filter: $filter, skip: $skip) {
+        query FindUsersFromGroupMembers(
+          $filter: String
+          $skip: Int
+          $take: Int
+        ) {
+          search: users(filter: $filter, skip: $skip, take: $take) {
             count
             take
             skip
@@ -71,8 +75,12 @@ const NewGroupMember = () => {
       display: 'name',
       value: 'id',
       QUERY: gql`
-        query FindGroupFromGroupMembers($filter: String, $skip: Int) {
-          search: groups(filter: $filter, skip: $skip) {
+        query FindGroupFromGroupMembers(
+          $filter: String
+          $skip: Int
+          $take: Int
+        ) {
+          search: groups(filter: $filter, skip: $skip, take: $take) {
             count
             take
             skip

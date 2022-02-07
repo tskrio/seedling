@@ -6,12 +6,12 @@ import { createUser /*, updateUser*/ } from 'src/services/users/users'
 export const handler = async (event, context) => {
   const forgotPasswordOptions = {
     handler: async (user) => {
+      if (user.email === '') {
+        logger.info(`${user.username} forgot password but no email on file
+        /reset-password?resetToken=${user.resetToken}`)
+      }
       logger.info(
-        `${JSON.stringify(
-          user
-        )} forgot their password, and requested new one sent to ${
-          user?.email
-        }...`
+        `${user.username} forgot their password, and requested new one sent to ${user?.email}...`
       )
       //await executeAfterUpdateRules('user', { record: user })
       return user
@@ -95,7 +95,7 @@ export const handler = async (event, context) => {
           hashedPassword: hashedPassword,
           salt: salt,
           name: userAttributes.name,
-          skipPassword: true,
+          // skipPassword: true,
         },
       })
       //return modifiedUser.record

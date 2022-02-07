@@ -1,3 +1,11 @@
+import ResetPasswordForm from 'src/components/ResetPasswordForm'
+
+const ResetPasswordPage = ({ resetToken, wait }) => {
+  return <ResetPasswordForm resetToken={resetToken} wait={wait} />
+}
+
+export default ResetPasswordPage
+/*
 import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 import { navigate, routes } from '@redwoodjs/router'
@@ -124,3 +132,4 @@ const ResetPasswordPage = ({ resetToken, wait }) => {
 }
 
 export default ResetPasswordPage
+*/
