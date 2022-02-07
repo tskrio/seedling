@@ -63,7 +63,7 @@ export const users = async ({ filter, skip, orderBy, q, take }) => {
       table,
       data: readRecords,
     })
-    console.log('records', records[0], 'status', status)
+    //console.log('records', records[0], 'status', status)
     return {
       results: records,
       count,

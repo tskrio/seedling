@@ -3,7 +3,7 @@ module.exports = {
   active: true,
   order: 10,
   when: ['after'],
-  operation: ['readall', 'read'],
+  operation: ['readAll', 'read'],
   table: 'property',
   file: __filename,
   command: async function (records) {

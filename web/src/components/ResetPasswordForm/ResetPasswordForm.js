@@ -5,29 +5,57 @@ import {
   Stack,
   useColorModeValue,
 } from '@chakra-ui/react'
-import { useEffect, useState, Fragment } from 'react'
+import { useEffect, useState, Fragment, useRef } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 import { navigate, routes } from '@redwoodjs/router'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import { useForm } from 'react-hook-form'
 import FormComponent from 'src/components/FormComponent'
-const SignupForm = () => {
+const ResetPasswordForm = ({ wait, resetToken }) => {
   const [submitted, setSubmitted] = useState(false)
-  const { isAuthenticated, signUp } = useAuth()
+  const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
+    useAuth()
+  const [enabled, setEnabled] = useState(true)
   useEffect(() => {
     if (isAuthenticated) {
       navigate(routes.home())
     }
   }, [isAuthenticated])
+
+  useEffect(() => {
+    const validateToken = async () => {
+      const response = await validateResetToken(resetToken)
+      if (response.error) {
+        setEnabled(false)
+        toast.error(response.error)
+      } else {
+        setEnabled(true)
+      }
+    }
+    validateToken()
+  }, [])
+  // const passwordRef = useRef()
+  // useEffect(() => {
+  //   passwordRef.current.focus()
+  // }, [])
+
   const onSubmit = async (data) => {
+    console.log('onSubmit data', data)
     setSubmitted(true)
-    const response = await signUp({ ...data })
+    const response = await resetPassword({
+      resetToken,
+      password: data.password,
+    })
+
     if (response.error) {
       toast.error(response.error)
     } else {
-      toast.success('Account Created')
+      toast.success('Password changed!')
+      await reauthenticate()
+      navigate(routes.login())
     }
   }
+
   const {
     handleSubmit,
     register,
@@ -35,28 +63,12 @@ const SignupForm = () => {
   } = useForm()
   let fields = [
     {
-      name: 'name',
-      prettyName: 'Name',
-      placeholder: 'Deckard Cain',
-      required: 'This is required',
-    },
-    {
-      name: 'username',
-      prettyName: 'Username',
-      placeholder: 'deckard.cain',
-      required: 'This is required',
-    },
-    {
-      name: 'email',
-      prettyName: 'Email (not required, used for password resets*)',
-      placeholder: 'deckard.cain@example.com',
-    },
-
-    {
       name: 'password',
       prettyName: 'Password',
       required: 'This is required',
       type: 'password',
+      disabled: !enabled,
+      //ref: passwordRef,
     },
   ]
   return (
@@ -80,31 +92,34 @@ const SignupForm = () => {
         {submitted === false && (
           <Fragment>
             <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
-              Create an account to login
+              Reset Password
             </Heading>
-            <FormComponent
-              fields={fields}
-              onSubmit={onSubmit}
-              handleSubmit={handleSubmit}
-              register={register}
-              formState={{ errors, isSubmitting }}
-            >
-              <Button
-                mt={4}
-                w={'100%'}
-                colorScheme="teal"
-                isLoading={isSubmitting}
-                type="submit"
+            {wait && <>Waiting for code?</>}
+            {!wait && (
+              <FormComponent
+                fields={fields}
+                onSubmit={onSubmit}
+                handleSubmit={handleSubmit}
+                register={register}
+                formState={{ errors, isSubmitting }}
               >
-                Create Your Account
-              </Button>
-            </FormComponent>
+                <Button
+                  mt={4}
+                  w={'100%'}
+                  colorScheme="teal"
+                  isLoading={isSubmitting}
+                  type="submit"
+                >
+                  Reset your password
+                </Button>
+              </FormComponent>
+            )}
           </Fragment>
         )}
         {submitted && (
           <Fragment>
             <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
-              Creating your account!
+              Redirecting you to login
             </Heading>
           </Fragment>
         )}
@@ -113,4 +128,4 @@ const SignupForm = () => {
   )
 }
 
-export default SignupForm
+export default ResetPasswordForm

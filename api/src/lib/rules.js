@@ -103,7 +103,7 @@ export const executeBeforeReadAllRulesV2 = async ({ table, filter, q }) => {
   rules.forEach(async (rule) => {
     await rule.command({ where, filter, q })
   })
-  console.log('rules where', where)
+  // console.log('rules where', where)
   // we return status as part of the return object
   return { where, filter, q }
 }

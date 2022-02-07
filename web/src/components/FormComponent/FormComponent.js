@@ -43,6 +43,7 @@ const FormComponent = ({
             type={show ? 'text' : 'password'}
             defaultValue={field.defaultValue}
             placeholder={field.placeholder || 'Enter password'}
+            disabled={field?.disabled}
             {...register(field.name, {
               //            required: field?.required || false,
               //            minLength: field.minLength,
