@@ -7,19 +7,19 @@ module.exports = {
   operation: ['update', 'create'],
   table: 'user',
   file: __filename,
-  command: async function ({ input, status }) {
+  command: async function ({ data, status }) {
+    console.log('input', data)
     try {
-      var data = input.hashedPassword
-      if (data.length === 0) {
+      if (data?.hashedPassword?.length === 0) {
         // if password is empty, remove it.
-        delete input.hashedPassword
-      } else if (data.length < 4) {
+        delete data.hashedPassword
+      } else if (data?.hashedPassword?.length < 4) {
         status.code = 'error'
         status.message = 'Password not long enough.  Update not saved'
       }
     } catch (e) {
       logger.error(e)
     }
-    return await { input, status }
+    return await { data, status }
   },
 }

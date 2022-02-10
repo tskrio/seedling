@@ -3,7 +3,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
 import { Fragment } from 'react'
-//import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from '@redwoodjs/auth'
 import { useForm } from 'react-hook-form'
 import FormSkeleton from 'src/components/FormSkeleton/FormSkeleton'
 export const QUERY = gql`
@@ -13,6 +13,7 @@ export const QUERY = gql`
       createdAt
       updatedAt
       name
+      email
     }
   }
 `
@@ -23,6 +24,7 @@ const UPDATE_USER_MUTATION = gql`
       createdAt
       updatedAt
       name
+      email
     }
   }
 `
@@ -42,7 +44,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ user }) => {
-  //const { currentUser, hasRole } = useAuth()
+  const { currentUser, hasRole } = useAuth()
   const [updateUser, { loading, error }] = useMutation(UPDATE_USER_MUTATION, {
     onCompleted: () => {
       toast.success('User updated')
@@ -96,7 +98,12 @@ export const Success = ({ user }) => {
   //     minLength: { value: 4, message: 'Minimum length should be 4' },
   //   })
   // }
-  // if (hasRole(['admin'])) {
+  if (hasRole(['admin'] || currentUser.id === user.id)) {
+    fields.push({
+      prettyName: 'Email',
+      name: 'email',
+    })
+  }
   //   fields.push({
   //     name: 'resetToken',
   //     prettyName: 'resetToken (only visible to admins)',

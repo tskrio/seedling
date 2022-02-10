@@ -11,8 +11,10 @@ import {
   executeAfterReadAllRulesV2,
   executeBeforeReadRules,
   executeAfterReadRules,
-  executeBeforeUpdateRules,
-  executeAfterUpdateRules,
+  //executeBeforeUpdateRules,
+  executeBeforeUpdateRulesV2,
+  //executeAfterUpdateRules,
+  executeAfterUpdateRulesV2,
   executeBeforeDeleteRules,
   executeAfterDeleteRules,
 } from 'src/lib/rules'
@@ -63,7 +65,6 @@ export const users = async ({ filter, skip, orderBy, q, take }) => {
       table,
       data: readRecords,
     })
-    //console.log('records', records[0], 'status', status)
     return {
       results: records,
       count,
@@ -99,7 +100,7 @@ export const user = async ({ id }) => {
     throw new UserInputError(lastLine)
   }
 }
-
+/*
 export const updateUser = async ({ id, input }) => {
   try {
     let result = await executeBeforeUpdateRules(table, {
@@ -116,13 +117,32 @@ export const updateUser = async ({ id, input }) => {
       where: { id },
     })
 
-    updatedRecord = executeAfterUpdateRules(table, updatedRecord)
+    let { record } = executeAfterUpdateRules(table, updatedRecord)
     return updatedRecord
   } catch (error) {
     let lastLine =
       error.message.split('\n')[error.message.split('\n').length - 1]
     logger.error(error.message)
     throw new UserInputError(lastLine)
+  }
+}
+*/
+export const updateUser = async ({ id, input }) => {
+  try {
+    let { data } = await executeBeforeUpdateRulesV2({ table, data: input, id })
+    let updatedRecord = await db[table].update({ data, where: { id } }) // TODO: Figure out where here
+
+    let { record } = await executeAfterUpdateRulesV2({
+      table,
+      data: updatedRecord,
+      id,
+    })
+
+    console.log('after create record, status', record)
+    return { ...record }
+    //return afterResult.record
+  } catch (error) {
+    throw new UserInputError(error.message)
   }
 }
 

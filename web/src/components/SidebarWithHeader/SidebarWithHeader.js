@@ -32,6 +32,7 @@ import {
   MdMenu,
   MdDoorbell,
   MdOutlineKeyboardArrowDown,
+  MdSettingsApplications,
 } from 'react-icons/md'
 import { useAuth } from '@redwoodjs/auth'
 // interface LinkItemProps {
@@ -98,7 +99,12 @@ const SidebarContent = ({ brand, onClose, ...rest }) => {
       role: 'groupRoleRead',
       navigateTo: 'groupRoles',
     },
-    { name: 'Preferences', icon: MdRoomPreferences, navigateTo: 'preferences' },
+    {
+      name: 'Preferences',
+      icon: MdRoomPreferences,
+      roles: 'preferenceRead',
+      navigateTo: 'preferences',
+    },
     {
       name: 'Properties',
       icon: MdSettings,
@@ -111,12 +117,12 @@ const SidebarContent = ({ brand, onClose, ...rest }) => {
       role: 'messageRead',
       navigateTo: 'messages',
     },
-    // {
-    //   name: 'Settings',
-    //   icon: MdSettingsApplications,
-    //   role: 'settingRead',
-    //   navigateTo: 'settings',
-    // },
+    {
+      name: 'Logs',
+      icon: MdSettingsApplications,
+      role: 'admin',
+      navigateTo: 'logs',
+    },
     { name: 'Logout', icon: MdLogout, navigateTo: 'logout' },
   ].filter((item) => {
     return hasRole(item.role) || hasRole('admin') || !item.role
@@ -268,7 +274,7 @@ const MobileNav = ({ brand, onOpen, ...rest }) => {
             >
               <MenuItem
                 onClick={() => {
-                  navigate(routes.user({ id: currentUser.id }))
+                  navigate(routes.myProfile())
                 }}
               >
                 Profile

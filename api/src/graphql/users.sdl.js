@@ -41,13 +41,15 @@ export const schema = gql`
   input CreateUserInput {
     username: String!
     name: String!
+    email: String
     salt: String
     hashedPassword: String
   }
 
   input UpdateUserInput {
-    email: String
+    username: String!
     name: String
+    email: String
     salt: String
     hashedPassword: String
   }

@@ -5,11 +5,24 @@ module.exports = {
   operation: ['readAll'], // used to filter rules to run
   table: 'user', //         used to filter rules to run
   file: __filename, //       used for logging
+  /**
+   *
+   * @param {Array} where // array of where clauses, if the query Object is just pushed without a preceing "OR" it will be required see
+   * https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#where
+   * where: { AND: [ this is where the local where pushed ]}
+   * exampeld if you say i can only see the logged in user
+   * where.push({id: myuserId})
+   * the executed where will be
+   * * where: { AND: [ {id: myuserId},{OR: [{name: ocntains: jace}, {email...}]} ]}
+   * if you want to do mutlipled and
+   * @param {object} filter // object to look up records
+   * @param {object} q // string from URL maybe malformed Object
+   * @returns
+   */
   command: async function ({ where, filter, q }) {
-    console.log(context.currentUser)
-    //if (!context.currentUser.roles.includes('admin')) {
-    //  where.push({ entity: 'jace' }) // required for all queries
-    //}
+    if (context.currentUser.roles.includes('userRead')) {
+      where.push({ id: context.currentUser.id }) // required for all queries
+    }
     if (filter) {
       where.push({
         OR: [
@@ -22,9 +35,11 @@ module.exports = {
     }
     if (q && q.length > 0) {
       try {
-        where.push({
-          OR: [JSON.parse(q)],
-        })
+        let urlQuery = JSON.parse(q)
+        where.push(
+          urlQuery
+          //OR: [JSON.parse(q)],
+        )
       } catch (error) {
         console.log('cannot parse from rule', error)
       }

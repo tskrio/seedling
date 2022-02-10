@@ -44,7 +44,7 @@ const NewUser = () => {
       '@vehement.com',
       '@massive-dynamic.com',
     ]
-    return companies[Math.floor(companies.length * Math.random()) - 1]
+    return companies[Math.floor(companies.length * Math.random())]
   }
   let randomNameGenerator = () => {
     let firstNames = [
@@ -106,15 +106,21 @@ const NewUser = () => {
       name: 'username',
       prettyName: 'Username',
       required: 'This is required',
+      defaultValue: randomName.toLowerCase().replace(' ', '.'),
+    },
+    {
+      name: 'email',
+      prettyName: 'Email',
+      required: 'This is required',
       defaultValue: randomName.toLowerCase().replace(' ', '.') + randomEmail,
     },
-    // {
-    //   name: 'hashedPassword',
-    //   prettyName: 'Password',
-    //   required: 'This is required',
-    //   type: 'password',
-    //   defaultValue: 'password',
-    // },
+    {
+      name: 'hashedPassword',
+      prettyName: 'Password',
+      required: 'This is required',
+      type: 'password',
+      defaultValue: randomName.toLowerCase().replace(' ', '.'),
+    },
   ]
   const roles = {
     update: ['userUpdate'],

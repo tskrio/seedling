@@ -43,13 +43,16 @@ if (process.env.AUTH0_DOMAIN) {
     }
   })
 }
-export const users = () => {
+export const users = (() => {
   if (process.env.AUTH0_DOMAIN) {
+    console.log('auth0_domain defined....')
     return []
   } else {
+    console.log('auth0_domain not defined')
     return [
       {
         name: 'Adam Admin',
+        username: 'admin',
         email: 'admin@example.com',
         hashedPassword:
           '5f5f56d40b9ae6bf2abfd7804e97e607f9d7432feebb6371849f2676a5058999',
@@ -62,9 +65,10 @@ export const users = () => {
       },
       {
         name: 'Mike Manager',
+        username: 'manager',
         email: 'manager@example.com',
         hashedPassword:
-          '5f5f56d40b9ae6bf2abfd7804e97e607f9d7432feebb6371849f2676a5058999',
+          '4536e33d926d3ea79cfed471a61b679041231cc132f672362aca1554fbba88cf',
         salt: '881aed4f5703af38eaaab6e788d8e860',
         GroupMember: {
           create: {
@@ -74,6 +78,7 @@ export const users = () => {
       },
       {
         name: 'Eve Employee',
+        username: 'employee',
         email: 'employee@example.com',
         hashedPassword:
           '01328ad2d2463d077f3e2f5dace839eff9eaf86e6d41b2d579df8c33a552f594',
@@ -86,6 +91,7 @@ export const users = () => {
       },
     ]
   }
-}
+})()
 console.log(_users[0])
+_users.push({})
 export const bulkUsers = _users

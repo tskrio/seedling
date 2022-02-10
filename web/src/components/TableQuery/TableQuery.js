@@ -5,13 +5,10 @@ import {
   IconButton,
   Box,
   Input,
-  Text,
-  //Button,
   Flex,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  //BreadcrumbSeparator,
 } from '@chakra-ui/react'
 
 import { SearchIcon } from '@chakra-ui/icons'
@@ -48,7 +45,8 @@ const TableQuery = ({
     }
   }
   let query = JSON.parse(rawQuery)
-  let [ANDQuery, ...ORQuery] = query.AND
+  let [ANDQuery, ...ORQuery] = query.AND //TODO: First query is not always the AND.
+  // TODO: Parse the query.AND for objects where the first property is,
   //console.log('ANDQuery[0]', ANDQuery)
   //console.log('ANDQuery', ANDQuery, 'ORQuery', ORQuery)
   ORQuery = ORQuery[0]?.OR

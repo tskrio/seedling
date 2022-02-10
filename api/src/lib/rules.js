@@ -98,12 +98,10 @@ export const executeAfterCreateRulesV2 = async ({ table, data }) => {
  */
 export const executeBeforeReadAllRulesV2 = async ({ table, filter, q }) => {
   let rules = await loadRules(allRules, table, 'before', 'readAll')
-  console.log('before query rules', filter, q)
   let where = []
   rules.forEach(async (rule) => {
     await rule.command({ where, filter, q })
   })
-  // console.log('rules where', where)
   // we return status as part of the return object
   return { where, filter, q }
 }
@@ -115,6 +113,42 @@ export const executeAfterReadAllRulesV2 = async ({ table, data }) => {
   })
   // we return status as part of the return object
   return { records: data, status }
+}
+
+/**
+ * Runs the rules before create across all models
+ * @param {string} table - the model you're running rules for
+ * https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#create
+ * @param {object} data - the object of elements you want to insert
+ * @returns {object} { data, status }
+ */
+export const executeBeforeUpdateRulesV2 = async ({ table, data }) => {
+  let rules = await loadRules(allRules, table, 'before', 'update')
+  let status = { code: 'success', message: '' }
+  rules.forEach(async (rule) => {
+    await rule.command({ data, status })
+  })
+  if (status.code != 'success') {
+    throw new UserInputError('fromrules-' + status?.message)
+  }
+  return { data, status }
+}
+
+/**
+ * Runs the rules before create across all models
+ * @param {string} table - the model you're running rules for
+ * https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#create
+ * @param {object} data - the object of elements you want to insert
+ * @returns {object} { data, status }
+ */
+export const executeAfterUpdateRulesV2 = async ({ table, data }) => {
+  let rules = await loadRules(allRules, table, 'after', 'update')
+  let status = { code: 'success', message: '' }
+  rules.forEach(async (rule) => {
+    await rule.command({ data, status })
+  })
+  // we return status as part of the return object
+  return { record: data, status }
 }
 export const executeBeforeCreateRules = async (table, input) => {
   // track time passed.  cannot exceed 10 seconds
@@ -144,7 +178,7 @@ export const executeBeforeCreateRules = async (table, input) => {
   }
   return await input
 }
-export const executeAfterCreateRules = async (table, record) => {
+export const executeAfterCreateRules = async ({ table, record }) => {
   let rules = await loadRules(allRules, table, 'after', 'create')
   if (rules.length > 0) {
     rules.forEach(async (rule) => {

@@ -3,12 +3,17 @@ import { db } from '../db.js'
 export const getUser = async (session) => {
   try {
     // look up the user by the session id
-    console.log(`authenticating on dbauth with ${session.id}`)
     let userData = await db.user.findUnique({
       where: { id: session.id },
       select: {
         id: true,
         name: true,
+        email: true,
+        Preference: {
+          select: {
+            entity: true,
+          },
+        },
         GroupMember: {
           select: {
             group: {
@@ -58,11 +63,9 @@ export const getUser = async (session) => {
       roles,
       groups,
       ...userData,
-      //...foundUser,
       preferences,
       messages,
     }
-    //console.log('returnUser', returnUser)
     return returnUser
   } catch (error) {
     return error

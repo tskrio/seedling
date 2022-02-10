@@ -57,7 +57,7 @@ const ReferenceField = ({ field, register }) => {
     setSearchVisible(!searchVisible)
   }
   return (
-    <Flex pt={2}>
+    <Flex pt={field.pt}>
       <FormControl key={field.name}>
         <FormLabel htmlFor={field.name}>
           <Flex>

@@ -1,15 +1,15 @@
 import { navigate, routes, useLocation } from '@redwoodjs/router'
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import {
-  SimpleGrid,
   Flex,
   Table,
   TableCaption,
   Heading,
-  Text,
   Box,
   Spacer,
   Button,
+  useMediaQuery,
+  Center,
 } from '@chakra-ui/react'
 import TableColumns from 'src/components/TableColumns'
 import TableQuery from 'src/components/TableQuery'
@@ -17,6 +17,7 @@ import TablePagination from 'src/components/TablePagination'
 import TableRows from 'src/components/TableRows/TableRows'
 import { DELETE_${singularConstantName}_MUTATION } from 'src/components/${singularPascalName}/Edit${singularPascalName}Cell'
 import { MdAdd, MdKeyboardBackspace } from 'react-icons/md'
+import TableSkeleton from 'src/components/TableSkeleton/TableSkeleton'
 
 export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -57,7 +58,7 @@ export const QUERY = gql`
   }
 `
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => <TableSkeleton />
 
 export const Failure = ({ error }: CellFailureProps) => (
   <div className="rw-cell-error">{error.${singularCamelName}}</div>
@@ -81,7 +82,17 @@ export const Success = ({
   displayColumn,
   roles,
   }: CellSuccessProps<Find${pluralPascalName}>) => {
-    let [data, setData] = useState(${pluralCamelName})
+  let [data, setData] = useState(${pluralCamelName})
+  const [isSmallScreen] = useMediaQuery(`(max-width: ${950}px)`)
+  // if small screen remove inner array from columns and data.
+  let returnFirstAndLast = (arrayOfThings) => {
+    let { 0: a, [arrayOfThings.length - 1]: b } = arrayOfThings
+    return [a, b]
+  }
+  useEffect(() => {
+    if (isSmallScreen) setColumns(returnFirstAndLast(columns))
+    if (!isSmallScreen) setColumns(initialColumns)
+  }, [isSmallScreen, setColumns, initialColumns])
   return <Fragment>
     <Heading>${pluralPascalName} ({data.count})</Heading>
      <Flex>
@@ -146,11 +157,13 @@ export const Success = ({
           displayColumn={displayColumn}
         />
       </Table>
-      <SimpleGrid columns={2} spacingX="40px" spacingY="20px">
-        <Flex padding="10px"></Flex>
-        <Flex padding="10px">
-          <TablePagination skip={skip} setSkip={setSkip} take={take} />
-        </Flex>
-      </SimpleGrid>
+      <Center>
+        <TablePagination
+          count={data.count}
+          skip={skip}
+          setSkip={setSkip}
+          take={take}
+        />
+      </Center>
   </Fragment>
 }

@@ -2,22 +2,16 @@ import {
   Input,
   Alert,
   AlertIcon,
-  //  AlertTitle,
-  //  AlertDescription,
   Box,
-  InputGroup,
-  InputRightElement,
   Button,
   FormControl,
   FormLabel,
   FormErrorMessage,
   Select,
-  //  FormHelperText,
 } from '@chakra-ui/react'
-//import { Link, useLocation } from '@redwoodjs/router'
-//import { useAuth } from '@redwoodjs/auth'
-//import ReferenceField from 'src/components/ReferenceField'
+
 import { Fragment } from 'react'
+import PasswordField from '../PasswordField/PasswordField'
 import ReferenceField from '../ReferenceField/ReferenceField'
 const FormComponent = ({
   record,
@@ -29,42 +23,29 @@ const FormComponent = ({
   formState: { errors, isSubmitting },
   children,
 }) => {
-  function PasswordInput({ field }) {
-    const [show, setShow] = React.useState(false)
-    const handleClick = () => setShow(!show)
-
-    return (
-      <FormControl key={field.name} isInvalid={errors[field.name]}>
-        <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
-        <InputGroup size="md">
-          <Input
-            id={field.name}
-            pr="4.5rem"
-            type={show ? 'text' : 'password'}
-            defaultValue={field.defaultValue}
-            placeholder={field.placeholder || 'Enter password'}
-            disabled={field?.disabled}
-            {...register(field.name, {
-              //            required: field?.required || false,
-              //            minLength: field.minLength,
-            })}
-          />
-          <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm" onClick={handleClick}>
-              {show ? 'Hide' : 'Show'}
-            </Button>
-          </InputRightElement>
-        </InputGroup>
-
-        <FormErrorMessage>
-          {errors[field.name] && errors[field.name].message}
-        </FormErrorMessage>
-      </FormControl>
-    )
-  }
+  fields = fields.filter((field) => {
+    if (!field.name) {
+      console.error('Field missing name', field)
+    }
+    return field.name
+  })
+  let fieldNames = fields
+    .map((field) => {
+      return field.name
+    })
+    .sort()
+  fieldNames.map((field, index) => {
+    if (field === fieldNames[index - 1])
+      throw `Multiple fields with name "${field}" are present`
+  })
   let fieldsHtml = fields.map((field) => {
+    field.pt = 2
     let html = (
-      <FormControl key={field.name} isInvalid={errors[field.name]}>
+      <FormControl
+        pt={field.pt}
+        key={field.name}
+        isInvalid={errors[field.name]}
+      >
         <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
         <Input
           id={field.name}
@@ -81,7 +62,14 @@ const FormComponent = ({
       </FormControl>
     )
     if (field.type === 'password') {
-      html = <PasswordInput key={field.name} field={field} />
+      html = (
+        <PasswordField
+          key={field.name}
+          field={field}
+          errors={errors}
+          register={register}
+        />
+      )
     }
     if (field.type === 'reference') {
       try {
@@ -94,7 +82,7 @@ const FormComponent = ({
     }
     if (field.type === 'select') {
       html = (
-        <FormControl key={field.name} isInvalid={errors[field.name]}>
+        <FormControl pt={2} key={field.name} isInvalid={errors[field.name]}>
           <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
           <Select
             defaultValue={record?.[field.name]}
@@ -118,6 +106,13 @@ const FormComponent = ({
             {errors[field.name] && errors[field.name].message}
           </FormErrorMessage>
         </FormControl>
+      )
+    }
+    if (field.type === 'json') {
+      html = (
+        <pre key={field.name}>
+          {JSON.stringify(record?.[field.name], null, '  ')}
+        </pre>
       )
     }
     return html
