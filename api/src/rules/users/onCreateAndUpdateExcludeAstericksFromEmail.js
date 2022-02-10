@@ -7,15 +7,16 @@ module.exports = {
   operation: ['update', 'create'],
   table: 'user',
   file: __filename,
-  command: async function ({ input, status }) {
+  command: async function ({ data, status }) {
+    console.log('exclude astericks', data, status)
     try {
-      if (input.email?.includes('*')) {
+      if (data.email?.includes('*')) {
         // if password is empty, remove it.
-        delete input.email
+        delete data.email
       }
     } catch (e) {
       logger.error(e)
     }
-    return await { input, status }
+    return await { data, status }
   },
 }

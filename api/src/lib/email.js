@@ -1,20 +1,15 @@
 let Mailgun = require('mailgun-js')
-import { db } from 'src/lib/db'
-let _getProperty = async (entity) => {
-  let record = await db.property.findFirst({
-    where: { entity: entity },
-  })
-  if (!record) return false
-  return record.value
-}
+import getProperty from 'src/lib/util'
 
 export const email = async ({ provider }) => {
-  let activeProperty = await _getProperty('email')
+  console.log('in email.js', provider)
+  let activeProperty = await getProperty('email')
+  console.log('activeProperty', activeProperty)
   if (activeProperty !== 'active')
     return { error: `Email is ${activeProperty} not active` }
   if (provider === 'mailgun') {
-    let apiKey = await _getProperty('MAILGUN_API_KEY')
-    let domain = await _getProperty('MAILGUN_DOMAIN')
+    let apiKey = await getProperty('MAILGUN_API_KEY')
+    let domain = await getProperty('MAILGUN_DOMAIN')
     if (!apiKey) return { error: 'MAILGUN_API_KEY not set' }
     if (!domain) return { error: 'MAILGUN_DOMAIN not set' }
     let client = new Mailgun({ apiKey, domain })

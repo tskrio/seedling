@@ -1,6 +1,7 @@
 import { logger } from 'src/lib/logger'
 import { email } from 'src/lib/email'
 import { render } from 'src/emails/forgotpassword.mjml.js'
+import { log } from 'src/lib/util'
 module.exports = {
   active: true,
   order: 100,
@@ -8,23 +9,25 @@ module.exports = {
   operation: ['update'],
   file: __filename,
   table: 'user',
-  command: async function ({ record }) {
+  command: async function ({ data }) {
+    console.log('onUpdateSendUserForgotPass', data)
     try {
-      if (!record.resetToken) return { record }
-      if (record.email === '') {
-        // if record is blank, log the link for debugging
+      console.log(creasdsda)
+      if (!data.resetToken) return { data }
+      if (data.email === '') {
+        // if data is blank, log the link for debugging
         // we dont have an email, so i guess, we can't recover teh account
         console.log(
-          `${record.username} does not have an email, here's thelink for the password reset
-          https://${client.domain}/reset-password?resetToken=${record.resetToken}`
+          `${data.username} does not have an email, here's the link for the password reset
+          https://${client.domain}/reset-password?resetToken=${data.resetToken}`
         )
       }
-      if (new Date(record.resetTokenExpiresAt) < new Date()) return { record }
-      let to = record.email
-      let name = record.name
+      if (new Date(data.resetTokenExpiresAt) < new Date()) return { data }
+      let to = data.email
+      let name = data.name
       let client = await email({ provider: 'mailgun' })
-      let code = record.resetToken
-      let resetLink = `https://${client.domain}/reset-password?resetToken=${record.resetToken}`
+      let code = data.resetToken
+      let resetLink = `https://${client.domain}/reset-password?resetToken=${data.resetToken}`
 
       let rendered = render({ name, code, resetLink })
       await client.send(
@@ -42,7 +45,8 @@ module.exports = {
       )
     } catch (e) {
       logger.error(e)
+      log(e.message)
     }
-    return await { record }
+    return await { data }
   },
 }

@@ -1,14 +1,7 @@
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { Link, routes, navigate } from '@redwoodjs/router'
-
-const DELETE_${singularConstantName}_MUTATION = gql`
-  mutation Delete${singularPascalName}Mutation($id: ${idType}!) {
-    delete${singularPascalName}(id: $id) {
-      id
-    }
-  }
-`
+import { DELETE_${singularConstantName}_MUTATION } from 'src/components/${singularPascalName}/Edit${singularPascalName}Cell'
 
 const jsonDisplay = (obj) => {
   return (

@@ -51,11 +51,6 @@ export const messages = [
   },
   {
     language: 'es',
-    entity: 'Delete',
-    value: 'Borrar',
-  },
-  {
-    language: 'es',
     entity: 'New Record',
     value: 'Nuevo récord',
   },
@@ -173,10 +168,5 @@ export const messages = [
     language: 'es',
     entity: 'Preferences',
     value: 'Preferencia',
-  },
-  {
-    language: 'es',
-    entity: 'Preferences',
-    value: 'Preferencias',
   },
 ]

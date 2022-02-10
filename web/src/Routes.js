@@ -8,6 +8,7 @@
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
 import { Set, Router, Route, Private } from '@redwoodjs/router'
+import LogsLayout from 'src/layouts/LogsLayout'
 import MessagesLayout from 'src/layouts/MessagesLayout'
 import PropertiesLayout from 'src/layouts/PropertiesLayout'
 import GroupRolesLayout from 'src/layouts/GroupRolesLayout'
@@ -22,21 +23,27 @@ import HomePage from 'src/pages/HomePage'
 const Routes = () => {
   return (
     <Router>
-      <Route prerender path="/forgot-password" whileLoadingAuth={() => <>Loading...</>} page={ForgotPasswordPage} name="forgotPassword" />
-      <Route prerender path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
-      <Route prerender path="/login" page={LoginPage} name="login" />
-      <Route prerender path="/signup" page={SignupPage} name="signup" />
+      <Route path="/forgot-password" whileLoadingAuth={() => <>Loading...</>} page={ForgotPasswordPage} name="forgotPassword" />
+      <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
+      <Route path="/login" page={LoginPage} name="login" />
+      <Route path="/signup" page={SignupPage} name="signup" />
       <Set wrap={Standard}>
         <Route prerender path="/logout" page={LogoutPage} name="logout" />
         <Route prerender path="/" page={HomePage} name="home" />
         <Private unauthenticated="home">
           <Route path="/about" page={AboutPage} name="about" />
+          <Route path="/my-profile" page={MyProfilePage} name="myProfile" />
           <Set wrap={MessagesLayout}>
             <Route path="/messages/new" page={MessageNewMessagePage} name="newMessage" />
             <Route path="/messages/{id:Int}" page={MessageEditMessagePage} name="editMessage" />
             <Route path="/messages" page={MessageMessagesPage} name="messages" />
           </Set>
-
+          <Set wrap={LogsLayout}>
+            <Route path="/logs/new" page={LogNewLogPage} name="newLog" />
+            <Route path="/logs/{id}/edit" page={LogEditLogPage} name="editLog" />
+            <Route path="/logs/{id}" page={LogLogPage} name="log" />
+            <Route path="/logs" page={LogLogsPage} name="logs" />
+          </Set>
           <Set wrap={PropertiesLayout}>
             <Route path="/properties/new" page={PropertyNewPropertyPage} name="newProperty" />
             <Route path="/properties/{id:Int}/edit" page={PropertyEditPropertyPage} name="editProperty" />

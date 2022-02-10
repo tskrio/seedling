@@ -17,35 +17,36 @@ module.exports = {
   operation: ['update', 'create'],
   table: 'user',
   file: __filename,
-  command: async function ({ input, status }) {
+  command: async function ({ data, status }) {
     try {
       //if we're using auth0 exit
       if (process.env.AUTH0_DOMAIN) {
-        return { input, status }
+        return { data, status }
       }
 
       //if were given a password, we make a new salt, hash it and set both salt and hash
-      if (input?.skipPassword) {
+      if (data?.skipPassword) {
         // if user is signing up, encryption has already been done
-        delete input.skipPassword
-        return await { input, status }
+        delete data.skipPassword
+        return await { data, status }
       }
-      let hashedPassword = input?.hashedPassword
-      if (hashedPassword || !input?.skipPassword) {
+      let hashedPassword = data?.hashedPassword
+      console.log('hashedPassword', hashedPassword)
+      if (hashedPassword) {
         let salt = randomString(30)
-        input.salt = salt.toString()
+        data.salt = salt.toString()
         let encryptedPassword = CryptoJS.PBKDF2(hashedPassword, salt, {
           keySize: 256 / 32,
         }).toString()
-        input.hashedPassword = encryptedPassword
+        data.hashedPassword = encryptedPassword
       } else {
         //hashpassword is empty.. lets not set this.
-        delete input?.skipPassword
-        delete input.hashedPassword
+        delete data?.skipPassword
+        delete data.hashedPassword
       }
     } catch (e) {
       logger.error(e)
     }
-    return await { input, status }
+    return await { data, status }
   },
 }

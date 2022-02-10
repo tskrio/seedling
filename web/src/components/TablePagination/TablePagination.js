@@ -33,7 +33,20 @@ const TablePagination = ({ count, skip, setSkip, take }) => {
           />
           <IconButton
             onClick={() => {
-              setSkip(count - take)
+              // results = 103
+              // take = 10
+              // i want to get 100-110
+              // today  this results to 93
+              // if 93%10 === 0 then return else
+              // // figure out 3
+              // return take + 93%10
+              let calculatedTake = count - take
+              if (calculatedTake % take === 0) {
+                setSkip(count - take)
+              }
+              if (calculatedTake % take !== 0) {
+                setSkip(count - (calculatedTake % take))
+              }
             }}
             aria-label="Last Page"
             disabled={skip + take > count}

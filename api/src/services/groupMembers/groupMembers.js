@@ -29,9 +29,7 @@ export const createGroupMember = async ({ input }) => {
       table,
       data: createdRecord,
     })
-    console.log('after create record, status', record)
     return { ...record }
-    //return afterResult.record
   } catch (error) {
     throw new UserInputError(error.message)
   }

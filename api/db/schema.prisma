@@ -28,7 +28,7 @@ model Property {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  entity    String
+  entity    String   @unique
   type      String   @default("string")
   value     String?
 }
@@ -40,6 +40,8 @@ model Message {
   language  String
   entity    String
   value     String
+
+  @@unique([entity, language])
 }
 
 model User {
@@ -48,6 +50,8 @@ model User {
   updatedAt           DateTime      @updatedAt
   name                String        @default("")
   username            String        @unique @default("") // will have username OR subject keep masked
+  verifiedAt          DateTime? //               // used to verify account for password reset purposes and for actual access
+  // as anyone with auth0 can say I have access to any domain
   email               String?       @default("") // not needed for accounts.. but is needed for communications
   hashedPassword      String?       @default("") //      // used for dbAuth
   salt                String?       @default("") //      // used for dbAuth
@@ -65,13 +69,15 @@ model Preference {
   value     String?
   userId    Int
   user      User     @relation("UserPreference", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([entity, userId])
 }
 
 model Group {
   id          Int           @id @default(autoincrement())
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
-  name        String
+  name        String        @unique
   description String
   GroupMember GroupMember[]
   GroupRole   GroupRole[]
@@ -85,6 +91,8 @@ model GroupMember {
   groupId   Int
   group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
   user      User     @relation("UserGroupMember", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, groupId])
 }
 
 model GroupRole {
@@ -94,4 +102,14 @@ model GroupRole {
   role      String
   groupId   Int
   group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, role])
+}
+
+model Log {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  context   Json
+  message   String
+  source    String
 }

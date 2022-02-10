@@ -30,7 +30,6 @@ const NewMessage = () => {
   )
 
   const onSubmit = (data) => {
-    //console.log('data from onsubmit', data)
     onSave(data)
   }
 

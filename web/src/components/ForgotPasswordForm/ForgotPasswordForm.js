@@ -1,47 +1,47 @@
 import {
   Button,
-  FormControl,
   Flex,
   Heading,
-  Input,
   Stack,
   useColorModeValue,
-  FormLabel,
-  FormErrorMessage,
 } from '@chakra-ui/react'
-import { useState, Fragment } from 'react'
+import { useState, Fragment, useEffect } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 import { navigate, routes } from '@redwoodjs/router'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+import FormComponent from 'src/components/FormComponent'
 import { useForm } from 'react-hook-form'
 const ForgotPasswordForm = () => {
   const [submitted, setSubmitted] = useState(false)
-  const [email, setEmail] = useState()
+  const [username, setUsername] = useState()
   const { forgotPassword } = useAuth()
 
   const onSubmit = async (data) => {
-    setEmail(data.email)
-    const response = await forgotPassword(data.email)
-    toast.success('If the email is on file, an email has been sent.')
-    // if (response.error) {
-    //   toast.error(response.error)
-    // } else {
-    //   toast.success(
-    //     'A link to reset your password was sent to ' + response.email
-    //   )
-    // }
+    setUsername(data.username)
+    const response = await forgotPassword(data.username)
+    if (response.error) {
+      toast.error(response.error)
+    } else {
+      toast.success('If email is verified on that account.')
+    }
     setSubmitted(true)
   }
   const {
     handleSubmit,
     register,
+    setFocus,
     formState: { errors, isSubmitting },
   } = useForm()
-  let field = {
-    name: 'email',
-    prettyName: 'Email to send the reset link to',
-    required: false,
-  }
+  let fields = [
+    {
+      name: 'username',
+      prettyName: 'Username',
+      required: "Without this, we don't know who to email.",
+    },
+  ]
+  useEffect(() => {
+    setFocus('username')
+  }, [setFocus])
   return (
     <Flex
       minH={'100vh'}
@@ -65,32 +65,23 @@ const ForgotPasswordForm = () => {
             <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
               Forgot your password?
             </Heading>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <FormControl key={field.name} isInvalid={errors[field.name]}>
-                <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
-                <Input
-                  id={field.name}
-                  placeholder={field.placeholder || ''}
-                  {...register(field.name, {
-                    required: field?.required || false,
-                    minLength: field.minLength,
-                  })}
-                />
-                <FormErrorMessage>
-                  {errors[field.name] && errors[field.name].message}
-                </FormErrorMessage>
-              </FormControl>
-              <Stack spacing={6}>
-                <Button
-                  mt={4}
-                  colorScheme="teal"
-                  isLoading={isSubmitting}
-                  type="submit"
-                >
-                  Request Reset
-                </Button>
-              </Stack>
-            </form>
+            <FormComponent
+              fields={fields}
+              onSubmit={onSubmit}
+              handleSubmit={handleSubmit}
+              register={register}
+              formState={{ errors, isSubmitting }}
+            >
+              <Button
+                mt={4}
+                w={'100%'}
+                colorScheme="teal"
+                isLoading={isSubmitting}
+                type="submit"
+              >
+                Request Reset
+              </Button>
+            </FormComponent>
           </Fragment>
         )}
         {submitted && (
@@ -115,7 +106,7 @@ const ForgotPasswordForm = () => {
                 isLoading={isSubmitting}
                 type="submit"
               >
-                Resend email to {email}
+                Resend email to {username}
               </Button>
             </form>
           </Fragment>

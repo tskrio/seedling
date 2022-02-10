@@ -6,13 +6,11 @@ import { createUser /*, updateUser*/ } from 'src/services/users/users'
 export const handler = async (event, context) => {
   const forgotPasswordOptions = {
     handler: async (user) => {
-      if (user.email === '') {
-        logger.info(`${user.username} forgot password but no email on file
-        /reset-password?resetToken=${user.resetToken}`)
-      }
       logger.info(
-        `${user.username} forgot their password, and requested new one sent to ${user?.email}...`
+        `${user.username} forgot password /reset-password?resetToken=${user.resetToken}`
       )
+      if (user.email === '') throw 'No email on file'
+      if (user.verified === null) throw 'Email not verified'
       //await executeAfterUpdateRules('user', { record: user })
       return user
     },
@@ -40,11 +38,13 @@ export const handler = async (event, context) => {
 
     errors: {
       usernameOrPasswordMissing: 'Both username and password are required',
-      usernameNotFound: 'Username ${username} not found',
+      //usernameNotFound: 'Username ${username} not found',
+      usernameNotFound: 'Incorrect username or password.',
       // For security reasons you may want to make this the same as the
       // usernameNotFound error so that a malicious user can't use the error
       // to narrow down if it's the username or password that's incorrect
-      incorrectPassword: 'Incorrect password for ${username}',
+      // incorrectPassword: 'Incorrect password for ${username}',
+      incorrectPassword: 'Incorrect username or password.',
     },
 
     // How long a user will remain logged in, in seconds
@@ -88,13 +88,13 @@ export const handler = async (event, context) => {
       //    name: userAttributes.name,
       //  },
       //})
-      //let modifiedUser = await executeAfterCreateRules('user', { record: user })
       return await createUser({
         input: {
           username: username,
           hashedPassword: hashedPassword,
           salt: salt,
           name: userAttributes.name,
+          email: userAttributes.email,
           // skipPassword: true,
         },
       })
