@@ -47,7 +47,7 @@ export const schema = gql`
   }
 
   input UpdateUserInput {
-    username: String!
+    username: String
     name: String
     email: String
     salt: String
