@@ -3,7 +3,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
 import { Fragment } from 'react'
-import { useAuth } from '@redwoodjs/auth'
+//import { useAuth } from '@redwoodjs/auth'
 import { useForm } from 'react-hook-form'
 import FormSkeleton from 'src/components/FormSkeleton/FormSkeleton'
 
@@ -35,7 +35,7 @@ export const DELETE_MY_PROFILE_MUTATION = gql`
     }
   }
 `
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => <FormSkeleton />
 
 export const Empty = () => <div>Empty</div>
 

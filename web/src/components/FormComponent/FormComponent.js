@@ -9,10 +9,10 @@ import {
   FormErrorMessage,
   Select,
 } from '@chakra-ui/react'
+
 import { Fragment } from 'react'
 import PasswordField from '../PasswordField/PasswordField'
 import ReferenceField from '../ReferenceField/ReferenceField'
-import ReactJson from 'react-json-view'
 const FormComponent = ({
   record,
   fields,
@@ -109,7 +109,11 @@ const FormComponent = ({
       )
     }
     if (field.type === 'json') {
-      html = <ReactJson key={field.name} src={record?.[field.name]} />
+      html = (
+        <pre key={field.name}>
+          {JSON.stringify(record?.[field.name], null, '  ')}
+        </pre>
+      )
     }
     return html
   })

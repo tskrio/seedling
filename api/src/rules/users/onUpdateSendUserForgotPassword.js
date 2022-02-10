@@ -12,7 +12,6 @@ module.exports = {
   command: async function ({ data }) {
     console.log('onUpdateSendUserForgotPass', data)
     try {
-      console.log(creasdsda)
       if (!data.resetToken) return { data }
       if (data.email === '') {
         // if data is blank, log the link for debugging
