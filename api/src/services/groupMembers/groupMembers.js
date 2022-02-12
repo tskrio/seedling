@@ -1,22 +1,18 @@
 import { db } from 'src/lib/db'
 import { UserInputError } from '@redwoodjs/graphql-server'
 import {
-  //executeBeforeCreateRules,
   executeBeforeCreateRulesV2,
-  //executeAfterCreateRules,
   executeAfterCreateRulesV2,
-  //executeBeforeReadAllRules,
   executeBeforeReadAllRulesV2,
-  //executeAfterReadAllRules,
   executeAfterReadAllRulesV2,
-  executeBeforeReadRules,
+  executeBeforeReadRulesV2,
+  executeBeforeUpdateRulesV2,
+  executeAfterUpdateRulesV2,
+  //
   executeAfterReadRules,
-  executeBeforeUpdateRules,
-  executeAfterUpdateRules,
   executeBeforeDeleteRules,
   executeAfterDeleteRules,
 } from 'src/lib/rules'
-import { logger } from 'src/lib/logger'
 
 let table = 'groupMember'
 
@@ -57,7 +53,7 @@ export const groupMembers = async ({ filter, skip, orderBy, q, take }) => {
       orderBy,
       skip, // if this were 101, return skip-take
     })
-    let { records, status } = await executeAfterReadAllRulesV2({
+    let { records } = await executeAfterReadAllRulesV2({
       table,
       data: readRecords,
     })
@@ -75,18 +71,13 @@ export const groupMembers = async ({ filter, skip, orderBy, q, take }) => {
 
 export const groupMember = async ({ id }) => {
   try {
-    let result = await executeBeforeReadRules(table, {
-      id,
-      status: { code: 'success', message: '' },
-    })
-
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
+    let { where } = await executeBeforeReadRulesV2({ table, id })
+    if (!where) {
+      // if where is falsy, return { id }
+      where = { id }
     }
-    let readRecord = await db[table].findUnique({
-      where: { id },
-    })
 
+    let readRecord = await db[table].findUnique({ where })
     readRecord = executeAfterReadRules(table, readRecord)
     return readRecord
   } catch (error) {
@@ -96,22 +87,17 @@ export const groupMember = async ({ id }) => {
 
 export const updateGroupMember = async ({ id, input }) => {
   try {
-    let result = await executeBeforeUpdateRules(table, {
+    let { data } = await executeBeforeUpdateRulesV2({ table, data: input, id })
+    let updatedRecord = await db[table].update({ data, where: { id } }) // TODO: Figure out where here
+
+    let { record } = await executeAfterUpdateRulesV2({
+      table,
+      data: updatedRecord,
       id,
-      input,
-      status: { code: 'success', message: '' },
     })
 
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
-    }
-    let updatedRecord = await db[table].update({
-      data: result.input,
-      where: { id },
-    })
-
-    updatedRecord = executeAfterUpdateRules(table, updatedRecord)
-    return updatedRecord
+    console.log('after create record, status', record)
+    return { ...record }
   } catch (error) {
     throw new UserInputError(error.message)
   }

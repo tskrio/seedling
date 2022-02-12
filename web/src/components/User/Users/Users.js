@@ -12,16 +12,16 @@ export const initialColumns = [
     showMatching,
     filterOut,
   },
-  {
-    Header: 'Groups',
-    accessor: 'GroupMember',
-    canSort: false,
-    aggregate: true,
-    model: 'group',
-    link: (givenId) => {
-      return routes.groupMembers({ q: `{"userId":${givenId}}` })
-    },
-  },
+  //{
+  //  Header: 'Groups',
+  //  accessor: 'GroupMember',
+  //  canSort: false,
+  //  aggregate: true,
+  //  model: 'group',
+  //  link: (givenId) => {
+  //    return routes.groupMembers({ q: `{"userId":${givenId}}` })
+  //  },
+  //},
   {
     Header: 'Preferences',
     accessor: 'Preference',

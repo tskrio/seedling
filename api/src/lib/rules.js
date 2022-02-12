@@ -1,12 +1,12 @@
 import { logger } from 'src/lib/logger'
 import { UserInputError } from '@redwoodjs/graphql-server'
-let timeRemaining = 10000
+// let timeRemaining = 10000
 import allRules from 'src/rules/**/**.{js,ts}'
-let shortenFile = (fileName) => {
-  // return everything after /rules/
-  let regex = /(.+\/rules)(.+)/gm
-  return fileName.replace(regex, `$2`)
-}
+// let shortenFile = (fileName) => {
+//   // return everything after /rules/
+//   let regex = /(.+\/rules)(.+)/gm
+//   return fileName.replace(regex, `$2`)
+// }
 let loadRules = async (allRules, table, when, operation) => {
   let arrRules = Object.keys(allRules).map((k) => allRules[k])
   arrRules.sort((a, b) => a.order - b.order)
@@ -150,81 +150,20 @@ export const executeAfterUpdateRulesV2 = async ({ table, data }) => {
   // we return status as part of the return object
   return { record: data, status }
 }
-export const executeBeforeCreateRules = async (table, input) => {
-  // track time passed.  cannot exceed 10 seconds
-  let rules = await loadRules(allRules, table, 'before', 'create')
-  if (rules.length > 0) {
-    rules.forEach(async (rule) => {
-      // track time passed
-      let startRule = Date.now()
-      input = await rule.command(input)
-      // track time passed
-      let endRule = Date.now()
-      let timePassed = endRule - startRule
-      timeRemaining -= timePassed
-      logger.info(
-        `${timeRemaining / 1000}s / 10s ${rule.order} ${shortenFile(
-          rule.file
-        )} took ${timePassed / 1000}s to execute.`
-      )
-      if (timeRemaining < 0) {
-        logger.error(
-          `${shortenFile(rule.file)} exceeded 10 seconds for ${table} ${
-            rule.when
-          } ${rule.operation}`
-        )
-      }
-    })
-  }
-  return await input
-}
-export const executeAfterCreateRules = async ({ table, record }) => {
-  let rules = await loadRules(allRules, table, 'after', 'create')
-  if (rules.length > 0) {
-    rules.forEach(async (rule) => {
-      // track time passed
-      let startRule = Date.now()
-      record = await rule.command(record)
 
-      // track time passed
-      let endRule = Date.now()
-      let timePassed = endRule - startRule
-      timeRemaining -= timePassed
-      logger.info(
-        `${timeRemaining / 1000}s / 10s ${shortenFile(rule.file)} took ${
-          timePassed / 1000
-        }s to execute.`
-      )
+export const executeBeforeReadRulesV2 = async ({ table, id }) => {
+  let rules = await loadRules(allRules, table, 'before', 'read')
+  let where = []
+  let status = { code: 'success', message: '' }
+  rules.forEach(async (rule) => {
+    await rule.command({ where, id, status: status })
+  })
+  if (status.code != 'success') {
+    throw new UserInputError(`${status?.code}\n${status?.message}`)
+  }
+  return { where: where[0], id, status }
+}
 
-      if (timeRemaining < 0) {
-        logger.error(
-          `${shortenFile(rule.file)} exceeded 10 seconds for ${table} ${
-            rule.when
-          } ${rule.operation}`
-        )
-      }
-    })
-  }
-  return await record
-}
-export const executeBeforeReadAllRules = async (table, status) => {
-  let rules = await loadRules(allRules, table, 'before', 'readall')
-  if (rules.length > 0) {
-    rules.forEach(async (rule) => {
-      status = await rule.command()
-    })
-  }
-  return await status
-}
-export const executeAfterReadAllRules = async (table, records) => {
-  let rules = await loadRules(allRules, table, 'after', 'readall')
-  if (rules.length > 0) {
-    rules.forEach(async (rule) => {
-      records = await rule.command(records)
-    })
-  }
-  return await records
-}
 export const executeBeforeReadRules = async (table, id) => {
   let rules = await loadRules(allRules, table, 'before', 'read')
   if (rules.length > 0) {

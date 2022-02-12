@@ -8,7 +8,7 @@ import {
   executeBeforeCreateRulesV2,
   //executeAfterCreateRules,
   executeAfterCreateRulesV2,
-  //executeBeforeReadAllRules,
+
   executeBeforeReadAllRulesV2,
   //executeAfterReadAllRules,
   executeAfterReadAllRulesV2,
@@ -143,23 +143,6 @@ export const delete${singularPascalName} = async ({ id }: Prisma.${singularPasca
 }<% } %>
 
 <% if (!crud) {%>
-
-
-export const ${pluralCamelName} = async () => {
-  try {
-    let result = await executeBeforeReadAllRules(table, {
-      status: { code: 'success', message: '' },
-    })
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
-    }
-    let readRecords = await db[table].findMany({})
-    readRecords = executeAfterReadAllRules(table, readRecords)
-    return readRecords
-  } catch (error) {
-    throw new UserInputError(error.message)
-  }
-}
 
 export const ${singularCamelName} = async ({ id }: Prisma.${singularPascalName}WhereUniqueInput) => {
   try {

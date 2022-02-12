@@ -4,8 +4,8 @@ export const schema = gql`
     name: String!
     username: String!
     email: String
-    createdAt: DateTime
-    updatedAt: DateTime
+    #createdAt: DateTime
+    #updatedAt: DateTime
   }
   type Query {
     myProfile: MyProfile! @requireAuth

@@ -5,7 +5,7 @@ import {
   executeBeforeCreateRulesV2,
   //executeAfterCreateRules,
   executeAfterCreateRulesV2,
-  //executeBeforeReadAllRules,
+
   executeBeforeReadAllRulesV2,
   //executeAfterReadAllRules,
   executeAfterReadAllRulesV2,

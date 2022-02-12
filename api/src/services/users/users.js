@@ -1,20 +1,15 @@
 import { db } from 'src/lib/db'
 import { UserInputError } from '@redwoodjs/graphql-server'
 import {
-  //executeBeforeCreateRules,
   executeBeforeCreateRulesV2,
-  //executeAfterCreateRules,
   executeAfterCreateRulesV2,
-  //executeBeforeReadAllRules,
   executeBeforeReadAllRulesV2,
-  //executeAfterReadAllRules,
   executeAfterReadAllRulesV2,
-  executeBeforeReadRules,
-  executeAfterReadRules,
-  //executeBeforeUpdateRules,
+  executeBeforeReadRulesV2,
   executeBeforeUpdateRulesV2,
-  //executeAfterUpdateRules,
   executeAfterUpdateRulesV2,
+  //
+  executeAfterReadRules,
   executeBeforeDeleteRules,
   executeAfterDeleteRules,
 } from 'src/lib/rules'
@@ -31,9 +26,7 @@ export const createUser = async ({ input }) => {
       table,
       data: createdRecord,
     })
-    console.log('after create record, status', record)
     return { ...record }
-    //return afterResult.record
   } catch (error) {
     throw new UserInputError(error.message)
   }
@@ -61,7 +54,7 @@ export const users = async ({ filter, skip, orderBy, q, take }) => {
       orderBy,
       skip, // if this were 101, return skip-take
     })
-    let { records, status } = await executeAfterReadAllRulesV2({
+    let { records } = await executeAfterReadAllRulesV2({
       table,
       data: readRecords,
     })
@@ -79,58 +72,26 @@ export const users = async ({ filter, skip, orderBy, q, take }) => {
 
 export const user = async ({ id }) => {
   try {
-    let result = await executeBeforeReadRules(table, {
-      id,
-      status: { code: 'success', message: '' },
-    })
-
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
-    }
-    let readRecord = await db[table].findUnique({
-      where: { id },
-    })
-
+    let { where } = await executeBeforeReadRulesV2({ table, id })
+    let readRecord = await db[table].findUnique({ where })
     readRecord = executeAfterReadRules(table, readRecord)
     return readRecord
   } catch (error) {
-    let lastLine =
-      error.message.split('\n')[error.message.split('\n').length - 1]
-    logger.error(error.message)
-    throw new UserInputError(lastLine)
+    throw new UserInputError(error.message)
   }
 }
-/*
 export const updateUser = async ({ id, input }) => {
   try {
-    let result = await executeBeforeUpdateRules(table, {
+    let { data, where } = await executeBeforeUpdateRulesV2({
+      table,
+      data: input,
       id,
-      input,
-      status: { code: 'success', message: '' },
     })
-
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
+    if (!where) {
+      // if where is falsy, return { id }
+      where = { id }
     }
-    let updatedRecord = await db[table].update({
-      data: result.input,
-      where: { id },
-    })
-
-    let { record } = executeAfterUpdateRules(table, updatedRecord)
-    return updatedRecord
-  } catch (error) {
-    let lastLine =
-      error.message.split('\n')[error.message.split('\n').length - 1]
-    logger.error(error.message)
-    throw new UserInputError(lastLine)
-  }
-}
-*/
-export const updateUser = async ({ id, input }) => {
-  try {
-    let { data } = await executeBeforeUpdateRulesV2({ table, data: input, id })
-    let updatedRecord = await db[table].update({ data, where: { id } }) // TODO: Figure out where here
+    let updatedRecord = await db[table].update({ data, where })
 
     let { record } = await executeAfterUpdateRulesV2({
       table,
@@ -140,7 +101,6 @@ export const updateUser = async ({ id, input }) => {
 
     console.log('after create record, status', record)
     return { ...record }
-    //return afterResult.record
   } catch (error) {
     throw new UserInputError(error.message)
   }
