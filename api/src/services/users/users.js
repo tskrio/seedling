@@ -6,14 +6,12 @@ import {
   executeBeforeReadAllRulesV2,
   executeAfterReadAllRulesV2,
   executeBeforeReadRulesV2,
+  executeAfterReadRulesV2,
   executeBeforeUpdateRulesV2,
   executeAfterUpdateRulesV2,
-  //
-  executeAfterReadRules,
-  executeBeforeDeleteRules,
-  executeAfterDeleteRules,
+  executeBeforeDeleteRulesV2,
+  executeAfterDeleteRulesV2,
 } from 'src/lib/rules'
-import { logger } from 'src/lib/logger'
 
 let table = 'user'
 
@@ -73,9 +71,15 @@ export const users = async ({ filter, skip, orderBy, q, take }) => {
 export const user = async ({ id }) => {
   try {
     let { where } = await executeBeforeReadRulesV2({ table, id })
+    if (!where /* if where is falsy, return { id } */) {
+      where = { id }
+    }
     let readRecord = await db[table].findUnique({ where })
-    readRecord = executeAfterReadRules(table, readRecord)
-    return readRecord
+    let { record } = await executeAfterReadRulesV2({
+      table,
+      data: readRecord,
+    })
+    return record
   } catch (error) {
     throw new UserInputError(error.message)
   }
@@ -98,8 +102,6 @@ export const updateUser = async ({ id, input }) => {
       data: updatedRecord,
       id,
     })
-
-    console.log('after create record, status', record)
     return { ...record }
   } catch (error) {
     throw new UserInputError(error.message)
@@ -108,24 +110,22 @@ export const updateUser = async ({ id, input }) => {
 
 export const deleteUser = async ({ id }) => {
   try {
-    let result = await executeBeforeDeleteRules(table, {
+    let { where } = await executeBeforeDeleteRulesV2({
+      table,
       id,
-      status: { code: 'success', message: '' },
     })
-
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
+    if (!where /* if where is falsy, return { id } */) {
+      where = { id }
     }
     let deletedRecord = await db[table].delete({
       where: { id },
     })
 
-    deletedRecord = executeAfterDeleteRules(table, deletedRecord)
+    await executeAfterDeleteRulesV2({ table, data: deletedRecord })
     return deletedRecord
   } catch (error) {
     let lastLine =
       error.message.split('\n')[error.message.split('\n').length - 1]
-    logger.error(error.message)
     throw new UserInputError(lastLine)
   }
 }

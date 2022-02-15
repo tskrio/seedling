@@ -6,18 +6,19 @@ module.exports = {
   operation: ['create', 'update'],
   table: 'user',
   file: __filename,
-  command: async function ({ input, status }) {
+  command: async function ({ data, status }) {
     try {
-      if (input?.name) {
-        let name = input.name
+      if (data?.name) {
+        let name = data.name
         let firstCharacter = name.charAt(0)
         if (firstCharacter !== firstCharacter.toUpperCase()) {
-          input.name = name[0].toUpperCase() + name.substring(1)
+          data.name = name[0].toUpperCase() + name.substring(1)
         }
       }
+      return { data, status }
     } catch (e) {
+      console.log('oncreateandupdatepropercasename', e)
       logger.error(e)
     }
-    return await { input, status }
   },
 }

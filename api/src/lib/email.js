@@ -2,9 +2,7 @@ let Mailgun = require('mailgun-js')
 import getProperty from 'src/lib/util'
 
 export const email = async ({ provider }) => {
-  console.log('in email.js', provider)
   let activeProperty = await getProperty('email')
-  console.log('activeProperty', activeProperty)
   if (activeProperty !== 'active')
     return { error: `Email is ${activeProperty} not active` }
   if (provider === 'mailgun') {

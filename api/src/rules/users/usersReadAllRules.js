@@ -41,7 +41,7 @@ module.exports = {
           //OR: [JSON.parse(q)],
         )
       } catch (error) {
-        console.log('cannot parse from rule', error)
+        console.error('cannot parse from rule', error)
       }
     }
     return { where }

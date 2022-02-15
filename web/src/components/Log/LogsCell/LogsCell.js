@@ -29,7 +29,7 @@ export const beforeQuery = (props) => {
       filter: params.get('filter') || props.fuzzyQuery,
       skip: params.get('skip') || props.skip || 0,
       take: params.get('take') || props.take || 10,
-      orderBy: params.get('orderBy') || props.orderBy,
+      orderBy: params.get('orderBy') || props.orderBy || { createdAt: 'desc' },
     },
 
     fetchPolicy: 'no-cache',

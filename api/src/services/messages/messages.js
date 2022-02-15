@@ -1,20 +1,16 @@
 import { db } from 'src/lib/db'
 import { UserInputError } from '@redwoodjs/graphql-server'
 import {
-  //executeBeforeCreateRules,
   executeBeforeCreateRulesV2,
-  //executeAfterCreateRules,
   executeAfterCreateRulesV2,
-
   executeBeforeReadAllRulesV2,
-  //executeAfterReadAllRules,
   executeAfterReadAllRulesV2,
-  executeBeforeReadRules,
-  executeAfterReadRules,
-  executeBeforeUpdateRules,
-  executeAfterUpdateRules,
-  executeBeforeDeleteRules,
-  executeAfterDeleteRules,
+  executeBeforeReadRulesV2,
+  executeAfterReadRulesV2,
+  executeBeforeUpdateRulesV2,
+  executeAfterUpdateRulesV2,
+  executeBeforeDeleteRulesV2,
+  executeAfterDeleteRulesV2,
 } from 'src/lib/rules'
 //import { logger } from 'src/lib/logger'
 
@@ -29,9 +25,7 @@ export const createMessage = async ({ input }) => {
       table,
       data: createdRecord,
     })
-    console.log('after create record, status', record)
     return { ...record }
-    //return afterResult.record
   } catch (error) {
     throw new UserInputError(error.message)
   }
@@ -59,7 +53,7 @@ export const messages = async ({ filter, skip, orderBy, q, take }) => {
       orderBy,
       skip, // if this were 101, return skip-take
     })
-    let { records, status } = await executeAfterReadAllRulesV2({
+    let { records } = await executeAfterReadAllRulesV2({
       table,
       data: readRecords,
     })
@@ -77,20 +71,16 @@ export const messages = async ({ filter, skip, orderBy, q, take }) => {
 
 export const message = async ({ id }) => {
   try {
-    let result = await executeBeforeReadRules(table, {
-      id,
-      status: { code: 'success', message: '' },
-    })
-
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
+    let { where } = await executeBeforeReadRulesV2({ table, id })
+    if (!where /* if where is falsy, return { id } */) {
+      where = { id }
     }
-    let readRecord = await db[table].findUnique({
-      where: { id },
+    let readRecord = await db[table].findUnique({ where })
+    let { record } = await executeAfterReadRulesV2({
+      table,
+      data: readRecord,
     })
-
-    readRecord = executeAfterReadRules(table, readRecord)
-    return readRecord
+    return record
   } catch (error) {
     throw new UserInputError(error.message)
   }
@@ -98,22 +88,23 @@ export const message = async ({ id }) => {
 
 export const updateMessage = async ({ id, input }) => {
   try {
-    let result = await executeBeforeUpdateRules(table, {
+    let { data, where } = await executeBeforeUpdateRulesV2({
+      table,
+      data: input,
       id,
-      input,
-      status: { code: 'success', message: '' },
     })
-
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
+    if (!where) {
+      // if where is falsy, return { id }
+      where = { id }
     }
-    let updatedRecord = await db[table].update({
-      data: result.input,
-      where: { id },
-    })
+    let updatedRecord = await db[table].update({ data, where })
 
-    updatedRecord = executeAfterUpdateRules(table, updatedRecord)
-    return updatedRecord
+    let { record } = await executeAfterUpdateRulesV2({
+      table,
+      data: updatedRecord,
+      id,
+    })
+    return { ...record }
   } catch (error) {
     throw new UserInputError(error.message)
   }
@@ -121,21 +112,22 @@ export const updateMessage = async ({ id, input }) => {
 
 export const deleteMessage = async ({ id }) => {
   try {
-    let result = await executeBeforeDeleteRules(table, {
+    let { where } = await executeBeforeDeleteRulesV2({
+      table,
       id,
-      status: { code: 'success', message: '' },
     })
-
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
+    if (!where /* if where is falsy, return { id } */) {
+      where = { id }
     }
     let deletedRecord = await db[table].delete({
       where: { id },
     })
 
-    deletedRecord = executeAfterDeleteRules(table, deletedRecord)
+    await executeAfterDeleteRulesV2({ table, data: deletedRecord })
     return deletedRecord
   } catch (error) {
-    throw new UserInputError(error.message)
+    let lastLine =
+      error.message.split('\n')[error.message.split('\n').length - 1]
+    throw new UserInputError(lastLine)
   }
 }

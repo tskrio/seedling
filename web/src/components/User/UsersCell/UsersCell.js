@@ -1,7 +1,6 @@
 import { navigate, routes, useLocation } from '@redwoodjs/router'
 import { Fragment, useEffect, useState } from 'react'
 import {
-  SimpleGrid,
   Flex,
   Table,
   TableCaption,
@@ -19,10 +18,7 @@ import TableRows from 'src/components/TableRows/TableRows'
 import { DELETE_USER_MUTATION } from 'src/components/User/EditUserCell'
 import { MdAdd, MdKeyboardBackspace } from 'react-icons/md'
 import TableSkeleton from 'src/components/TableSkeleton/TableSkeleton'
-import { useAuth } from '@redwoodjs/auth'
 export const beforeQuery = (props) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { hasRole } = useAuth()
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { search } = useLocation()
   let params = new URLSearchParams(search)
@@ -33,7 +29,6 @@ export const beforeQuery = (props) => {
       skip: params.get('skip') || props.skip || 0,
       take: params.get('take') || props.take || 10,
       orderBy: params.get('orderBy') || props.orderBy,
-      //canSeeGroupMembers: hasRole('groupMemberRead') || hasRole('admin'),
     },
 
     fetchPolicy: 'no-cache',
@@ -48,15 +43,9 @@ export const QUERY = gql`
     $skip: Int
     $take: Int
     $q: String
-    $orderBy: OrderByInput #$canSeeGroupMembers: Boolean!
+    $orderBy: OrderByInput
   ) {
-    users(
-      filter: $filter
-      skip: $skip
-      take: $take
-      q: $q
-      orderBy: $orderBy #canSeeGroupMembers: $canSeeGroupMembers
-    ) {
+    users(filter: $filter, skip: $skip, take: $take, q: $q, orderBy: $orderBy) {
       count
       take
       skip

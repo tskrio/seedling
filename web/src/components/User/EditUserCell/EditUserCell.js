@@ -88,6 +88,12 @@ export const Success = ({ user }) => {
       prettyName: 'Name',
       required: 'This is required',
     },
+    {
+      name: 'role',
+      prettyName: 'Role',
+      type: 'json',
+      defaultValue: { foo: 'bar' },
+    },
   ]
   // if (currentUser.id === user.id) {
   //   fields.push({

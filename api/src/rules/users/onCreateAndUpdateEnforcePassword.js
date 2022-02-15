@@ -8,7 +8,6 @@ module.exports = {
   table: 'user',
   file: __filename,
   command: async function ({ data, status }) {
-    console.log('input', data)
     try {
       if (data?.hashedPassword?.length === 0) {
         // if password is empty, remove it.

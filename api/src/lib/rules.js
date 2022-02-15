@@ -1,4 +1,5 @@
 import { logger } from 'src/lib/logger'
+import { log } from 'src/lib/util'
 import { UserInputError } from '@redwoodjs/graphql-server'
 // let timeRemaining = 10000
 import allRules from 'src/rules/**/**.{js,ts}'
@@ -53,7 +54,16 @@ let loadRules = async (allRules, table, when, operation) => {
   //logger.info(`${message.join(' ')} rules loaded \n${ruleNames.join('\n')}`)
   return (await arrRules) || []
 }
-
+let exitWhenNotSuccess = (status) => {
+  if (status.code != 'success') {
+    console.log(`Error in ${status?.file}`)
+    log(
+      `${status.message || `Status code != "success"`}`,
+      `api\\${status.file}`
+    )
+    throw new UserInputError(status?.message || `Error in ${status?.file}`)
+  }
+}
 /**
  * Runs the rules before create across all models
  * @param {string} table - the model you're running rules for
@@ -67,9 +77,7 @@ export const executeBeforeCreateRulesV2 = async ({ table, data }) => {
   rules.forEach(async (rule) => {
     await rule.command({ data, status })
   })
-  if (status.code != 'success') {
-    throw new UserInputError('fromrules-' + status?.message)
-  }
+  exitWhenNotSuccess(status)
   return { data, status }
 }
 
@@ -86,6 +94,7 @@ export const executeAfterCreateRulesV2 = async ({ table, data }) => {
   rules.forEach(async (rule) => {
     await rule.command({ data, status })
   })
+  exitWhenNotSuccess(status)
   // we return status as part of the return object
   return { record: data, status }
 }
@@ -99,9 +108,11 @@ export const executeAfterCreateRulesV2 = async ({ table, data }) => {
 export const executeBeforeReadAllRulesV2 = async ({ table, filter, q }) => {
   let rules = await loadRules(allRules, table, 'before', 'readAll')
   let where = []
+  let status = { code: 'success', message: '' }
   rules.forEach(async (rule) => {
-    await rule.command({ where, filter, q })
+    await rule.command({ where, filter, q, status })
   })
+  exitWhenNotSuccess(status)
   // we return status as part of the return object
   return { where, filter, q }
 }
@@ -111,6 +122,7 @@ export const executeAfterReadAllRulesV2 = async ({ table, data }) => {
   rules.forEach(async (rule) => {
     await rule.command({ data, status })
   })
+  exitWhenNotSuccess(status)
   // we return status as part of the return object
   return { records: data, status }
 }
@@ -122,15 +134,49 @@ export const executeAfterReadAllRulesV2 = async ({ table, data }) => {
  * @param {object} data - the object of elements you want to insert
  * @returns {object} { data, status }
  */
-export const executeBeforeUpdateRulesV2 = async ({ table, data }) => {
+export const executeBeforeUpdateRulesV2 = async ({ table, data, id }) => {
   let rules = await loadRules(allRules, table, 'before', 'update')
+  let status = { code: 'success', message: '' }
+  for (let rule of rules /* needs to be a for of to allow break */) {
+    try {
+      if (status.code == 'success') {
+        status.file = rule.file.split('\\dist\\')[1]
+        let output = await rule.command({ data, status, id })
+        status = output.status
+      }
+    } catch (error) {
+      status = { code: 'error from catch', message: error }
+      break // stops other rules from running
+    }
+  }
+  exitWhenNotSuccess(status)
+  return { data, status }
+}
+
+export const executeBeforeDeleteRulesV2 = async ({ table, id }) => {
+  let rules = await loadRules(allRules, table, 'before', 'delete')
+  let status = { code: 'success', message: '' }
+  for (let rule of rules /* needs to be a for of to allow break */) {
+    try {
+      let output = await rule.command({ id, status })
+      status = output.status
+    } catch (error) {
+      console.log(error)
+      status = { code: 'error from catch', message: error }
+      break
+    }
+  }
+  exitWhenNotSuccess(status)
+  return { id, status }
+}
+export const executeAfterDeleteRulesV2 = async ({ table, data }) => {
+  console.log('starting executeafterdeleterulesv2', table, data)
+  let rules = await loadRules(allRules, table, 'after', 'delete')
   let status = { code: 'success', message: '' }
   rules.forEach(async (rule) => {
     await rule.command({ data, status })
   })
-  if (status.code != 'success') {
-    throw new UserInputError('fromrules-' + status?.message)
-  }
+  exitWhenNotSuccess(status)
   return { data, status }
 }
 
@@ -147,6 +193,7 @@ export const executeAfterUpdateRulesV2 = async ({ table, data }) => {
   rules.forEach(async (rule) => {
     await rule.command({ data, status })
   })
+  exitWhenNotSuccess(status)
   // we return status as part of the return object
   return { record: data, status }
 }
@@ -158,10 +205,18 @@ export const executeBeforeReadRulesV2 = async ({ table, id }) => {
   rules.forEach(async (rule) => {
     await rule.command({ where, id, status: status })
   })
-  if (status.code != 'success') {
-    throw new UserInputError(`${status?.code}\n${status?.message}`)
-  }
+  exitWhenNotSuccess(status)
   return { where: where[0], id, status }
+}
+
+export const executeAfterReadRulesV2 = async ({ table, data }) => {
+  let rules = await loadRules(allRules, table, 'after', 'read')
+  let status = { code: 'success', message: '' }
+  rules.forEach(async (rule) => {
+    await rule.command({ data, status })
+  })
+  // we return status as part of the return object
+  return { record: data, status }
 }
 
 export const executeBeforeReadRules = async (table, id) => {

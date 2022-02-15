@@ -6,11 +6,12 @@ module.exports = {
   table: 'message',
   file: __filename,
   command: async function ({ data, status }) {
-    data.forEach((m) => {
+    data = data.map((m) => {
       if (m.value.length > 3) {
-        m.value = m.value.substr(0, 3) + '(shortened by after rule)'
+        m.value = m.value.substr(0, 3) + '...'
       }
     })
-    status.code = 'confused'
+    console.log(data)
+    return { data, status }
   },
 }

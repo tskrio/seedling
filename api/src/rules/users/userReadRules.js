@@ -20,16 +20,13 @@ module.exports = {
    * @returns
    */
   command: async function ({ where, id }) {
-    console.log('running before read rule')
     if (context.currentUser.roles.includes('userRead')) {
       where.push({ id: context.currentUser.id }) // required for all queries
-      console.log('returning where in if', where)
       //return where
       return { where, id }
     }
     where.push({ id })
 
-    console.log('returning where', where)
     return { where, id }
   },
 }

@@ -5,7 +5,6 @@ import {
   executeBeforeCreateRulesV2,
   //executeAfterCreateRules,
   executeAfterCreateRulesV2,
-
   executeBeforeReadAllRulesV2,
   //executeAfterReadAllRules,
   executeAfterReadAllRulesV2,
@@ -28,8 +27,6 @@ export const createLog = async ({ input }) => {
       table,
       data: createdRecord,
     })
-
-    console.log('after create record, status', record)
     return { ...record }
     //return afterResult.record
   } catch (error) {
