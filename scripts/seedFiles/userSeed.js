@@ -89,6 +89,14 @@ export const users = (() => {
           },
         },
       },
+      {
+        name: 'Tron',
+        username: 'tron',
+        email: 'tron@encom.com',
+        hashedPassword:
+          '01328ad2d2463d077f3e2f5dace839eff9eaf86e6d41b2d579df8c33a552f594',
+        salt: '3e6780c35a4e5ad17aafc7a6230b1163',
+      },
     ]
   }
 })()

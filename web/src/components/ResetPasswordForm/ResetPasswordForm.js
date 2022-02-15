@@ -40,7 +40,6 @@ const ResetPasswordForm = ({ wait, resetToken }) => {
   // }, [])
 
   const onSubmit = async (data) => {
-    console.log('onSubmit data', data)
     setSubmitted(true)
     const response = await resetPassword({
       resetToken,

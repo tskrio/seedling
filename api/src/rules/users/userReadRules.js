@@ -2,7 +2,7 @@ module.exports = {
   active: true, //           controls if this runs
   order: 10, //              controls the order this runs
   when: ['before'], //       used to filter rules to run
-  operation: ['readAll'], // used to filter rules to run
+  operation: ['read'], // used to filter rules to run
   table: 'user', //         used to filter rules to run
   file: __filename, //       used for logging
   /**
@@ -19,31 +19,14 @@ module.exports = {
    * @param {object} q // string from URL maybe malformed Object
    * @returns
    */
-  command: async function ({ where, filter, q }) {
+  command: async function ({ where, id }) {
     if (context.currentUser.roles.includes('userRead')) {
       where.push({ id: context.currentUser.id }) // required for all queries
+      //return where
+      return { where, id }
     }
-    if (filter) {
-      where.push({
-        OR: [
-          // not required
-          { name: { contains: filter, mode: 'insensitive' } },
-          //{ username: { contains: filter, mode: 'insensitive' } },
-          { email: { contains: filter, mode: 'insensitive' } },
-        ],
-      })
-    }
-    if (q && q.length > 0) {
-      try {
-        let urlQuery = JSON.parse(q)
-        where.push(
-          urlQuery
-          //OR: [JSON.parse(q)],
-        )
-      } catch (error) {
-        console.error('cannot parse from rule', error)
-      }
-    }
-    return { where }
+    where.push({ id })
+
+    return { where, id }
   },
 }

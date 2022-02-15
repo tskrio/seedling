@@ -1,6 +1,6 @@
-const { db } = require('../../lib/db')
+import { db } from 'src/lib/db'
 module.exports = {
-  active: true,
+  active: false,
   order: 1,
   when: ['before'],
   operation: ['delete'],

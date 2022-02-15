@@ -9,7 +9,6 @@ module.exports = {
   file: __filename,
   table: 'user',
   command: async function ({ record }) {
-    console.log(this.file, record)
     try {
       let rendered = render({ name: record.name })
       let client = await email({ provider: 'mailgun' })

@@ -31,7 +31,6 @@ module.exports = {
         return await { data, status }
       }
       let hashedPassword = data?.hashedPassword
-      console.log('hashedPassword', hashedPassword)
       if (hashedPassword) {
         let salt = randomString(30)
         data.salt = salt.toString()

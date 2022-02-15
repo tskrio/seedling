@@ -49,7 +49,8 @@ const FormComponent = ({
         <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
         <Input
           id={field.name}
-          placeholder={field.placeholder || ''}
+          placeholder={field.placeholder || '...' || ''}
+          readOnly={field.readOnly || false}
           {...register(field.name, {
             required: field?.required || false,
             minLength: field.minLength,
@@ -76,8 +77,8 @@ const FormComponent = ({
         html = (
           <ReferenceField key={field.name} field={field} register={register} />
         )
-      } catch (e) {
-        console.log('error', e)
+      } catch (error) {
+        console.error(error)
       }
     }
     if (field.type === 'select') {

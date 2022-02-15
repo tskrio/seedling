@@ -16,6 +16,8 @@ export const getUser = async (session) => {
         },
         GroupMember: {
           select: {
+            createdAt: true,
+            id: true,
             group: {
               select: {
                 name: true,

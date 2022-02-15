@@ -10,7 +10,6 @@ module.exports = {
   file: __filename,
   table: 'user',
   command: async function ({ data }) {
-    console.log('onUpdateSendUserForgotPass', data)
     try {
       if (!data.resetToken) return { data }
       if (data.email === '') {

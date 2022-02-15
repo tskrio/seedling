@@ -1,7 +1,6 @@
 import { navigate, routes, useLocation } from '@redwoodjs/router'
 import { Fragment, useEffect, useState } from 'react'
 import {
-  SimpleGrid,
   Flex,
   Table,
   TableCaption,
@@ -56,9 +55,10 @@ export const QUERY = gql`
         createdAt
         updatedAt
         name
-        GroupMember {
-          id
-        }
+        #GroupMember @include(if: $canSeeGroupMembers) {
+        #GroupMember {
+        #  id
+        #}
         Preference {
           id
         }

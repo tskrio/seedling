@@ -18,7 +18,6 @@ const NewMessage = () => {
     CREATE_MESSAGE_MUTATION,
     {
       onCompleted: (data) => {
-        console.log(data.message)
         toast.success(`Message "${data.message.entity}" created`)
         //navigate(routes.editMessage({ id: data.message.id }))
         navigate(routes.messages())

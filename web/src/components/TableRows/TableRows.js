@@ -34,13 +34,6 @@ const TableRows = ({
     let question = `Are you sure you want to delete ${foundRow[0][displayColumn]}?`
     if (confirm(question)) {
       deleteRecord({ variables: { id } })
-      setData({
-        ...data,
-        results: data.results?.filter((row) => {
-          return !(row.id === id)
-        }),
-        count: data.count - 1,
-      })
     }
   }
 
@@ -50,6 +43,14 @@ const TableRows = ({
     },
     onCompleted: (del) => {
       toast.success(`Deleted ${del.deletedRow[displayColumn]}`)
+      console.log(del)
+      setData({
+        ...data,
+        results: data.results?.filter((row) => {
+          return !(row.id === del.deletedRow.id)
+        }),
+        count: data.count - 1,
+      })
     },
   })
   let menu = (row, column) => {
@@ -98,6 +99,9 @@ const TableRows = ({
             icon={<HamburgerIcon />}
             variant="outline"
             size="sm"
+            marginLeft={1}
+            marginTop={1}
+            marginRight={1}
           />
           <MenuList>{rowActions}</MenuList>
         </Menu>

@@ -12,16 +12,19 @@ export const initialColumns = [
     showMatching,
     filterOut,
   },
-  {
-    Header: 'Groups',
-    accessor: 'GroupMember',
-    canSort: false,
-    aggregate: true,
-    model: 'group',
-    link: (givenId) => {
-      return routes.groupMembers({ q: `{"userId":${givenId}}` })
-    },
-  },
+  // TODO: check if the logged in user can see groupMembers,
+  // TODO: ln2 and add this appropriately
+  // TODO: ln3 somehow include/exclude the data from the graphql call
+  //{
+  //  Header: 'Groups',
+  //  accessor: 'GroupMember',
+  //  canSort: false,
+  //  aggregate: true,
+  //  model: 'group',
+  //  link: (givenId) => {
+  //    return routes.groupMembers({ q: `{"userId":${givenId}}` })
+  //  },
+  //},
   {
     Header: 'Preferences',
     accessor: 'Preference',

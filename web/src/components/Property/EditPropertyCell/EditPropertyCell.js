@@ -89,11 +89,12 @@ export const Success = ({ property }) => {
       prettyName: 'Type',
       required: 'This is required',
       type: 'select',
-      options: ['string', 'number', 'boolean', 'date', 'encrypted'],
+      options: ['string', 'number', 'boolean', 'date', 'hidden'],
     },
     {
       name: 'value',
       prettyName: 'Value',
+      placeholder: 'Only change if you want to set this.',
     },
   ]
 

@@ -2,8 +2,8 @@ module.exports = {
   active: true, //           controls if this runs
   order: 10, //              controls the order this runs
   when: ['before'], //       used to filter rules to run
-  operation: ['readAll'], // used to filter rules to run
-  table: 'user', //         used to filter rules to run
+  operation: ['read'], // used to filter rules to run
+  table: 'groupMember', //         used to filter rules to run
   file: __filename, //       used for logging
   /**
    *
@@ -19,31 +19,28 @@ module.exports = {
    * @param {object} q // string from URL maybe malformed Object
    * @returns
    */
-  command: async function ({ where, filter, q }) {
-    if (context.currentUser.roles.includes('userRead')) {
-      where.push({ id: context.currentUser.id }) // required for all queries
+  command: async function ({ status, where, id }) {
+    // if admin or groupMemberRead, return the record
+    // status.code = 'NOOOOOOO'
+    // return
+    console.log(context.currentUser)
+    let roles = context.currentUser.roles
+    if (roles.includes('admin') || roles.includes('groupMemberRead')) {
+      console.log('user has roles to see all members of', roles)
+      where.push({ id })
+      return { where }
     }
-    if (filter) {
-      where.push({
-        OR: [
-          // not required
-          { name: { contains: filter, mode: 'insensitive' } },
-          //{ username: { contains: filter, mode: 'insensitive' } },
-          { email: { contains: filter, mode: 'insensitive' } },
-        ],
-      })
+    // otherwise if the user has this membership, return it
+    if (
+      context.currentUser.GroupMember.filter((membership) => {
+        return id === membership.id
+      }).length === 0
+    ) {
+      status.code = 'hacking!?'
+      status.message = 'you cannot look at others memberships'
+      return { status }
     }
-    if (q && q.length > 0) {
-      try {
-        let urlQuery = JSON.parse(q)
-        where.push(
-          urlQuery
-          //OR: [JSON.parse(q)],
-        )
-      } catch (error) {
-        console.error('cannot parse from rule', error)
-      }
-    }
-    return { where }
+    // otherwise
+    return { status, where }
   },
 }

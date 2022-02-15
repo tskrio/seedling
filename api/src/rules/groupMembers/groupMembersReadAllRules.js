@@ -6,9 +6,6 @@ module.exports = {
   table: 'groupMember', //         used to filter rules to run
   file: __filename, //       used for logging
   command: async function ({ where, filter, q }) {
-    // if (!context.currentUser.roles.includes('admin')) {
-    //   where.push({ entity: 'jace' }) // required for all queries
-    // }
     if (filter) {
       where.push({
         OR: [

@@ -1,24 +1,17 @@
 import { db } from 'src/lib/db'
 import { UserInputError } from '@redwoodjs/graphql-server'
 import {
-  //executeBeforeCreateRules,
   executeBeforeCreateRulesV2,
-  //executeAfterCreateRules,
   executeAfterCreateRulesV2,
-  //executeBeforeReadAllRules,
   executeBeforeReadAllRulesV2,
-  //executeAfterReadAllRules,
   executeAfterReadAllRulesV2,
-  executeBeforeReadRules,
-  executeAfterReadRules,
-  //executeBeforeUpdateRules,
+  executeBeforeReadRulesV2,
+  executeAfterReadRulesV2,
   executeBeforeUpdateRulesV2,
-  //executeAfterUpdateRules,
   executeAfterUpdateRulesV2,
-  executeBeforeDeleteRules,
-  executeAfterDeleteRules,
+  executeBeforeDeleteRulesV2,
+  executeAfterDeleteRulesV2,
 } from 'src/lib/rules'
-import { logger } from 'src/lib/logger'
 
 let table = 'user'
 
@@ -31,9 +24,7 @@ export const createUser = async ({ input }) => {
       table,
       data: createdRecord,
     })
-    console.log('after create record, status', record)
     return { ...record }
-    //return afterResult.record
   } catch (error) {
     throw new UserInputError(error.message)
   }
@@ -61,7 +52,7 @@ export const users = async ({ filter, skip, orderBy, q, take }) => {
       orderBy,
       skip, // if this were 101, return skip-take
     })
-    let { records, status } = await executeAfterReadAllRulesV2({
+    let { records } = await executeAfterReadAllRulesV2({
       table,
       data: readRecords,
     })
@@ -79,68 +70,39 @@ export const users = async ({ filter, skip, orderBy, q, take }) => {
 
 export const user = async ({ id }) => {
   try {
-    let result = await executeBeforeReadRules(table, {
-      id,
-      status: { code: 'success', message: '' },
-    })
-
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
+    let { where } = await executeBeforeReadRulesV2({ table, id })
+    if (!where /* if where is falsy, return { id } */) {
+      where = { id }
     }
-    let readRecord = await db[table].findUnique({
-      where: { id },
+    let readRecord = await db[table].findUnique({ where })
+    let { record } = await executeAfterReadRulesV2({
+      table,
+      data: readRecord,
     })
-
-    readRecord = executeAfterReadRules(table, readRecord)
-    return readRecord
+    return record
   } catch (error) {
-    let lastLine =
-      error.message.split('\n')[error.message.split('\n').length - 1]
-    logger.error(error.message)
-    throw new UserInputError(lastLine)
+    throw new UserInputError(error.message)
   }
 }
-/*
 export const updateUser = async ({ id, input }) => {
   try {
-    let result = await executeBeforeUpdateRules(table, {
+    let { data, where } = await executeBeforeUpdateRulesV2({
+      table,
+      data: input,
       id,
-      input,
-      status: { code: 'success', message: '' },
     })
-
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
+    if (!where) {
+      // if where is falsy, return { id }
+      where = { id }
     }
-    let updatedRecord = await db[table].update({
-      data: result.input,
-      where: { id },
-    })
-
-    let { record } = executeAfterUpdateRules(table, updatedRecord)
-    return updatedRecord
-  } catch (error) {
-    let lastLine =
-      error.message.split('\n')[error.message.split('\n').length - 1]
-    logger.error(error.message)
-    throw new UserInputError(lastLine)
-  }
-}
-*/
-export const updateUser = async ({ id, input }) => {
-  try {
-    let { data } = await executeBeforeUpdateRulesV2({ table, data: input, id })
-    let updatedRecord = await db[table].update({ data, where: { id } }) // TODO: Figure out where here
+    let updatedRecord = await db[table].update({ data, where })
 
     let { record } = await executeAfterUpdateRulesV2({
       table,
       data: updatedRecord,
       id,
     })
-
-    console.log('after create record, status', record)
     return { ...record }
-    //return afterResult.record
   } catch (error) {
     throw new UserInputError(error.message)
   }
@@ -148,24 +110,22 @@ export const updateUser = async ({ id, input }) => {
 
 export const deleteUser = async ({ id }) => {
   try {
-    let result = await executeBeforeDeleteRules(table, {
+    let { where } = await executeBeforeDeleteRulesV2({
+      table,
       id,
-      status: { code: 'success', message: '' },
     })
-
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
+    if (!where /* if where is falsy, return { id } */) {
+      where = { id }
     }
     let deletedRecord = await db[table].delete({
       where: { id },
     })
 
-    deletedRecord = executeAfterDeleteRules(table, deletedRecord)
+    await executeAfterDeleteRulesV2({ table, data: deletedRecord })
     return deletedRecord
   } catch (error) {
     let lastLine =
       error.message.split('\n')[error.message.split('\n').length - 1]
-    logger.error(error.message)
     throw new UserInputError(lastLine)
   }
 }

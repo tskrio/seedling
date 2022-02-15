@@ -15,6 +15,7 @@ export const schema = gql`
     "Controls how long a reset token is good for with dbAuth"
     resetTokenExpiresAt: DateTime
     GroupMember: [GroupMember]!
+      @requireAuth(roles: ["groupMemberRead", "admin"])
     Preference: [Preference]!
   }
 

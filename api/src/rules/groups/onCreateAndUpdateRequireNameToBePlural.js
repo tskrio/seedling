@@ -7,13 +7,14 @@ module.exports = {
   operation: ['update', 'create'],
   table: 'group',
   file: __filename,
-  command: async function ({ input, status }) {
-    if (pluralize(input?.name) !== input?.name) {
+  command: async function ({ data, status }) {
+    if (pluralize(data?.name) !== data?.name) {
       status.code = 'error'
       status.message = `Groups are for the many, try "${pluralize(
-        input.name
+        data.name
       )}" plural.`
+      return { status }
     }
-    return await { input, status }
+    return { data, status }
   },
 }

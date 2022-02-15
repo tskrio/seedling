@@ -103,8 +103,9 @@ export const Success = ({ groupMember }) => {
         query Find_referencedModelHere_FromGroupMembers(
           $filter: String
           $skip: Int
+          $take: Int
         ) {
-          search: users(filter: $filter, skip: $skip) {
+          search: users(filter: $filter, skip: $skip, take: $take) {
             count
             take
             skip

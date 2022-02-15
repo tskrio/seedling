@@ -45,11 +45,12 @@ const NewProperty = () => {
       prettyName: 'Type',
       required: 'This is required',
       type: 'select',
-      options: ['string', 'number', 'boolean', 'date', 'encrypted'],
+      options: ['string', 'number', 'boolean', 'date', 'hidden'],
     },
 
     {
       name: 'value',
+      placeholder: "If type is hidden, this won't be visible after save",
       prettyName: 'Value',
     },
   ]
