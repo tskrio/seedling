@@ -8,8 +8,10 @@ import {
   FormLabel,
   FormErrorMessage,
   Select,
+  Spacer,
+  Flex,
 } from '@chakra-ui/react'
-
+import { useAuth } from '@redwoodjs/auth'
 import { Fragment } from 'react'
 import PasswordField from '../PasswordField/PasswordField'
 import ReferenceField from '../ReferenceField/ReferenceField'
@@ -17,12 +19,15 @@ const FormComponent = ({
   record,
   fields,
   error,
+  roles,
   onSubmit,
+  onDelete,
   handleSubmit,
   register,
   formState: { errors, isSubmitting },
   children,
 }) => {
+  const { hasRole /*currentUser*/ } = useAuth()
   fields = fields.filter((field) => {
     if (!field.name) {
       console.error('Field missing name', field)
@@ -132,14 +137,30 @@ const FormComponent = ({
           {fieldsHtml}
           <Box>
             {!children ? ( // if children is passed, we don't want to show the submit button }
-              <Button
-                mt={4}
-                colorScheme="teal"
-                isLoading={isSubmitting}
-                type="submit"
-              >
-                Submit
-              </Button>
+              <Fragment>
+                <Flex>
+                  <Button
+                    mt={4}
+                    colorScheme="teal"
+                    isLoading={isSubmitting}
+                    type="submit"
+                  >
+                    Submit
+                  </Button>
+                  <Spacer />
+                  {hasRole([roles.deleteRecord].concat(['admin'])) && (
+                    <Button
+                      mt={4}
+                      colorScheme="red"
+                      isLoading={isSubmitting}
+                      type="button"
+                      onClick={onDelete}
+                    >
+                      Delete
+                    </Button>
+                  )}
+                </Flex>
+              </Fragment>
             ) : (
               children
             )}

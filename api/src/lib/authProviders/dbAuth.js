@@ -35,9 +35,13 @@ export const getUser = async (session) => {
     })
     // look up the group memberships of the user's groups, and roles
     let roles = userData?.GroupMember.map((member) => {
-      return [...member?.group?.GroupRole].map((role) => {
-        return role.role
-      })
+      if (member?.group?.GroupRole) {
+        return [...member.group.GroupRole].map((role) => {
+          return role.role
+        })
+      } else {
+        return []
+      }
     })
       .join(',')
       .split(',')

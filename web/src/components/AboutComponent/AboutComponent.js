@@ -21,6 +21,10 @@ const AboutComponent = () => {
     // auth is rehydrating
     return null
   }
+  let loginButtonString = 'Login'
+  if (process.env.AUTH0_DOMAIN) {
+    loginButtonString = 'Login/Signup'
+  }
   let unauthenticatedCTA = (
     <>
       <CallToActionWithVideo
@@ -33,19 +37,20 @@ const AboutComponent = () => {
       >
         {!isAuthenticated && (
           <Fragment>
-            <Button
-              rounded={'full'}
-              size={'lg'}
-              fontWeight={'normal'}
-              px={6}
-              colorScheme={'green'}
-              onClick={() => {
-                navigate('/signup')
-              }}
-            >
-              Signup
-            </Button>
-
+            {!process.env.AUTH0_DOMAIN && (
+              <Button
+                rounded={'full'}
+                size={'lg'}
+                fontWeight={'normal'}
+                px={6}
+                colorScheme={'green'}
+                onClick={() => {
+                  navigate('/signup')
+                }}
+              >
+                Signup
+              </Button>
+            )}
             <Button
               rounded={'full'}
               size={'lg'}
@@ -70,7 +75,7 @@ const AboutComponent = () => {
                 }
               }}
             >
-              {isAuthenticated ? 'Log out' : 'Log in'}
+              {isAuthenticated ? 'Log out' : loginButtonString}
             </Button>
           </Fragment>
         )}

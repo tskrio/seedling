@@ -1,7 +1,7 @@
 //import { parseJWT } from '@redwoodjs/api'
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
-//import { getUser } from './authProviders/auth0.js'
-import { getUser } from './authProviders/dbAuth'
+import { getUser as getUserAuth0 } from './authProviders/auth0.js'
+import { getUser as getUserDBAuth } from './authProviders/dbAuth'
 /**
  * Represents the user attributes returned by the decoding the
  * Authentication provider's JWT together with an optional list of roles.
@@ -28,7 +28,13 @@ import { getUser } from './authProviders/dbAuth'
  * @returns RedwoodUser
  */
 export const getCurrentUser = async (session, context) => {
-  let loadeduser = await getUser(session, { context })
+  let loadeduser
+  if (process.env.AUTH0_DOMAIN) {
+    loadeduser = await getUserAuth0(session, { context })
+  }
+  if (!process.env.AUTH0_DOMAIN) {
+    loadeduser = await getUserDBAuth(session, { context })
+  }
   return loadeduser
 }
 
