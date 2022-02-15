@@ -3,9 +3,10 @@ import { toast } from '@redwoodjs/web/toast'
 import { navigate, routes } from '@redwoodjs/router'
 import FormComponent from 'src/components/FormComponent'
 import { Fragment } from 'react'
-//import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from '@redwoodjs/auth'
 import { useForm } from 'react-hook-form'
 import FormSkeleton from 'src/components/FormSkeleton/FormSkeleton'
+import { Button, Flex, Spacer } from '@chakra-ui/react'
 
 export const QUERY = gql`
   query getMyProfile {
@@ -20,8 +21,6 @@ const UPDATE_MY_PROFILE_MUTATION = gql`
   mutation UpdateMyProfileMutation($input: UpdateUserInput!) {
     updateMyProfile(input: $input) {
       id
-      createdAt
-      updatedAt
       name
       email
     }
@@ -44,6 +43,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ myProfile }) => {
+  const { logOut /*currentUser*/ } = useAuth()
   let user = myProfile
 
   const [updateMyProfile, { loading, error }] = useMutation(
@@ -76,7 +76,7 @@ export const Success = ({ myProfile }) => {
   const [deleteMyProfile] = useMutation(DELETE_MY_PROFILE_MUTATION, {
     onCompleted: () => {
       toast.success("You're account has been deleted")
-      navigate(routes.users())
+      logOut()
     },
   })
   const onDelete = () => {
@@ -84,30 +84,27 @@ export const Success = ({ myProfile }) => {
       deleteMyProfile()
     }
   }
-
   let fields = [
     {
-      name: 'username',
-      prettyName: 'Username',
-      required: 'This is required',
-    },
-    {
       name: 'name',
-      prettyName: 'Name',
+      prettyName: 'Name (Visible by others)',
       required: 'This is required',
     },
     {
       name: 'email',
-      prettyName: 'email',
+      prettyName: 'Email (required to send you details)',
       required: 'Yep',
     },
-    {
+  ]
+  if (!process.env.AUTH0_DOMAIN) {
+    fields.push({
       name: 'hashedPassword',
       prettyName: 'Password',
       required: 'Yep',
       type: 'password',
-    },
-  ]
+    })
+  }
+
   let roles = []
   const {
     handleSubmit,
@@ -132,7 +129,29 @@ export const Success = ({ myProfile }) => {
         handleSubmit={handleSubmit}
         register={register}
         formState={{ errors, isSubmitting }}
-      />
+      >
+        <Flex>
+          <Button
+            mt={4}
+            colorScheme="teal"
+            isLoading={isSubmitting}
+            type="submit"
+          >
+            Submit
+          </Button>
+          <Spacer />
+
+          <Button
+            mt={4}
+            colorScheme="red"
+            isLoading={isSubmitting}
+            type="button"
+            onClick={onDelete}
+          >
+            Delete
+          </Button>
+        </Flex>
+      </FormComponent>
     </Fragment>
   )
 }

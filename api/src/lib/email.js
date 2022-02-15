@@ -1,5 +1,5 @@
 let Mailgun = require('mailgun-js')
-import getProperty from 'src/lib/util'
+import { getProperty } from 'src/lib/util'
 
 export const email = async ({ provider }) => {
   let activeProperty = await getProperty('email')

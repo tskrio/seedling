@@ -75,10 +75,14 @@ export const Success = ({ user }) => {
       toast.success('User deleted')
       navigate(routes.users())
     },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
 
-  const onDelete = (id) => {
-    if (confirm('Are you sure you want to delete User ' + id + '?')) {
+  const onDelete = () => {
+    let id = user.id
+    if (confirm('Are you sure you want to delete this user?')) {
       deleteUser({ variables: { id } })
     }
   }

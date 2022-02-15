@@ -8,14 +8,15 @@ module.exports = {
   operation: ['create'],
   file: __filename,
   table: 'user',
-  command: async function ({ record }) {
+  command: async function ({ data }) {
+    console.log('data')
     try {
-      let rendered = render({ name: record.name })
+      let rendered = render({ name: data.name })
       let client = await email({ provider: 'mailgun' })
       if (!client.error) {
         await client?.send(
           {
-            to: record.email,
+            to: data.email,
             from: `Tskr <jace@${client.domain}>`,
             'h:Reply-To': `jace@$tskr.io`, //not working
             subject: `Welcome to Tskr`,
@@ -33,6 +34,6 @@ module.exports = {
     } catch (e) {
       logger.error(e)
     }
-    return await { record }
+    return await { data }
   },
 }
