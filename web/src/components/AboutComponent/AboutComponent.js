@@ -1,4 +1,4 @@
-import { Button } from '@chakra-ui/react'
+import { Box, Button } from '@chakra-ui/react'
 import { PlayIcon } from 'src/components/CallToActionWithVideo/'
 import CallToActionWithVideo from 'src/components/CallToActionWithVideo/'
 import { navigate } from '@redwoodjs/router'
@@ -113,6 +113,32 @@ const AboutComponent = () => {
       >
         Hello
       </Button>
+      <Box backgroundColor={'#7ed957'} maxWidth={'200px'} maxHeight={'200px'}>
+        <svg
+          version="1.0"
+          xmlns="http://www.w3.org/2000/svg"
+          //width="553.000000pt"
+          //height="544.000000pt"
+          viewBox="0 0 553.000000 544.000000"
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <g
+            transform="translate(0.000000,544.000000) scale(0.100000,-0.100000)"
+            fill="#00275b"
+            stroke="none"
+          >
+            <path
+              d="M0 2720 l0 -2720 2765 0 2765 0 0 2720 0 2720 -2765 0 -2765 0 0
+-2720z m2870 2277 c20 -10 278 -260 600 -582 l565 -565 -602 -602 -603 -603
+-298 298 -297 297 -145 -145 -145 -145 440 -440 440 -440 747 747 748 748 376
+-375 c248 -247 382 -389 395 -415 24 -52 24 -138 0 -190 -13 -28 -356 -377
+-1112 -1131 -1027 -1025 -1097 -1092 -1141 -1104 -56 -15 -114 -8 -166 20 -56
+29 -2198 2176 -2217 2222 -19 48 -19 128 0 176 11 26 333 355 1098 1121 860
+860 1092 1088 1132 1107 58 29 127 29 185 1z"
+            />
+          </g>
+        </svg>
+      </Box>
     </Fragment>
   )
   return (
