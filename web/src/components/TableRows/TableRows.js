@@ -139,7 +139,10 @@ const TableRows = ({
           {menu(row, column)}
           <Box p="2">
             <Link title={row[column.accessor]} to={column.link(row.id)}>
-              {row[column.accessor]}
+              {column.dataType === 'timestamp' && (
+                <>{new Date(row[column.accessor]).toLocaleString()} </>
+              )}
+              {column.dataType !== 'timestamp' && <>{row[column.accessor]}</>}
             </Link>
           </Box>
         </>

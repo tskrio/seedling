@@ -1,4 +1,4 @@
-import { navigate, useLocation, Link } from '@redwoodjs/router'
+import { navigate, useLocation } from '@redwoodjs/router'
 import { Fragment, useRef } from 'react'
 import {
   SimpleGrid,

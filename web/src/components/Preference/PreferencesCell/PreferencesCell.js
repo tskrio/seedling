@@ -121,7 +121,7 @@ export const Success = ({
           {preferences.q !== null && (
             <Button
               leftIcon={<MdKeyboardBackspace />}
-              colorScheme="teal"
+              colorScheme={'green'}
               variant="solid"
               onClick={() => {
                 setQuery('')
@@ -136,7 +136,7 @@ export const Success = ({
         <Spacer />
         <Button
           leftIcon={<MdAdd />}
-          colorScheme="teal"
+          colorScheme={'green'}
           variant="solid"
           onClick={() => {
             navigate(routes.newPreference())

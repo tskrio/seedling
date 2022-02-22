@@ -92,7 +92,7 @@ const SignupForm = () => {
               <Button
                 mt={4}
                 w={'100%'}
-                colorScheme="teal"
+                colorScheme={'green'}
                 isLoading={isSubmitting}
                 type="submit"
               >

@@ -1,0 +1,7 @@
+{
+  "name": "emails",
+  "version": "1.0.0",
+  "main": "watchAndBuild.js",
+  "license": "MIT",
+  "type": "module"
+}

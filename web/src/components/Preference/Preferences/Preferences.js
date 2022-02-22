@@ -25,13 +25,6 @@ export const initialColumns = [
     showMatching,
     filterOut,
     dataType: 'integer',
-    // If this is a reference
-    // you may want to show a field
-    // instead of the number here.
-    // todo that remove type,
-    // updated your query on the cell to include the model
-    // update the accessor to a name not used by a column
-    // and add;
     canSort: false,
     reference: true,
     model: 'user',
@@ -57,7 +50,7 @@ const PreferencesList = ({ initialQuery }) => {
   let [columns, setColumns] = useState(initialColumns) // default columns
   let [skip, setSkip] = useState(0) // default reocrds to jump
   let [take, setTake] = useState(10) // default records to take
-  let [query, setQuery] = useState(initialQuery) // default query // TODO: Fix this doesnt work
+  let [query, setQuery] = useState(initialQuery) // default query
   let [fuzzyQuery, setFuzzyQuery] = useState('') // default fuzzy query
   let roles = {
     createRecord: 'preferenceCreate',

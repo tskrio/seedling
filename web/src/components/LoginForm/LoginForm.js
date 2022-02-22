@@ -65,7 +65,8 @@ const LoginForm = () => {
             <Button
               mt={4}
               w={'100%'}
-              colorScheme="teal"
+              backgroundColor={'green'}
+              color={'white'}
               isLoading={isSubmitting}
               type="submit"
             >

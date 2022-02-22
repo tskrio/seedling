@@ -11,9 +11,9 @@ import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 
-import 'src/scaffold.css'
-import 'src/reset.css'
-import 'src/index.css'
+//import 'src/scaffold.css'
+//import 'src/reset.css'
+//import 'src/index.css'
 
 const auth0 = new Auth0Client({
   domain: process.env.AUTH0_DOMAIN, // https://auth0.com/docs/quickstart/spa/react#get-your-application-keys

@@ -133,7 +133,7 @@ export const Success = ({ myProfile }) => {
         <Flex>
           <Button
             mt={4}
-            colorScheme="teal"
+            colorScheme={'green'}
             isLoading={isSubmitting}
             type="submit"
           >

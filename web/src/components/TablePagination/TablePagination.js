@@ -14,6 +14,7 @@ const TablePagination = ({ count, skip, setSkip, take }) => {
             aria-label="First Page"
             disabled={skip < take}
             icon={<MdFirstPage />}
+            colorScheme={'green'}
           />
           <IconButton
             onClick={() => {
@@ -22,6 +23,7 @@ const TablePagination = ({ count, skip, setSkip, take }) => {
             aria-label="Previous Page"
             disabled={skip < take}
             icon={<ChevronLeftIcon />}
+            colorScheme={'green'}
           />
           <IconButton
             onClick={() => {
@@ -30,6 +32,7 @@ const TablePagination = ({ count, skip, setSkip, take }) => {
             aria-label="Next Page"
             disabled={skip + take > count}
             icon={<ChevronRightIcon />}
+            colorScheme={'green'}
           />
           <IconButton
             onClick={() => {
@@ -51,6 +54,7 @@ const TablePagination = ({ count, skip, setSkip, take }) => {
             aria-label="Last Page"
             disabled={skip + take > count}
             icon={<MdLastPage />}
+            colorScheme={'green'}
           />
         </Flex>
         <Text>
