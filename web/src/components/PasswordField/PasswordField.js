@@ -13,7 +13,11 @@ const PasswordField = ({ field, errors, register }) => {
   const handleClick = () => setShow(!show)
 
   return (
-    <FormControl key={field.name} pt={field.pt} isInvalid={errors[field.name]}>
+    <FormControl
+      key={field.name}
+      pt={field.pt}
+      isInvalid={errors?.[field.name]}
+    >
       <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
       <InputGroup size="md">
         <Input
@@ -29,14 +33,20 @@ const PasswordField = ({ field, errors, register }) => {
           })}
         />
         <InputRightElement width="4.5rem">
-          <Button h="1.75rem" size="sm" onClick={handleClick}>
+          <Button
+            h="1.75rem"
+            size="sm"
+            onClick={handleClick}
+            color={'white'}
+            backgroundColor={'green'}
+          >
             {show ? 'Hide' : 'Show'}
           </Button>
         </InputRightElement>
       </InputGroup>
 
       <FormErrorMessage>
-        {errors[field.name] && errors[field.name].message}
+        {errors?.[field.name] && errors?.[field.name].message}
       </FormErrorMessage>
     </FormControl>
   )

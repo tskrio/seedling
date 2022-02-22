@@ -1,71 +1,103 @@
+Tskr is the beginning of your next project.  It builds on RedwoodJS with some conventions that will save you time at the cost of choice.  However, if you're prototyping you may not want to choose how auth, email, and automation are built in and would rather just write the code that adds value.
 
-# Tskr
+# Technologies
 
-Tskr is a 0 to Low cost solution to track records and make automation accessible to everyone.
+This is dependent on the following technologies.
 
-## Features
+- [RedwoodJS](https://redwoodjs.com)
+  - [dbAuth](https://redwoodjs.com/docs/authentication.html#self-hosted-auth-installation-and-setup)
+  - [Auth0](https://redwoodjs.com/docs/authentication.html#auth0)
+- [Postgresql]()
+- [MJML](https://mjml.io)
+- [Chakra UI](https://chakra-ui.com)
 
-Everything [RedwoodJS](https://github.com/redwoodjs/redwood#features) has.
-Everything [Prisma](https://www.prisma.io/docs/) gives as well.
+# Features
 
+<details><summary>Convention over configuration</summary><br/>
 
-- [Authentication](https://redwoodjs.com/docs/authentication#self-hosted-auth-installation-and-setup)
-- [Users, Groups, and Group Roles](#Roles%20Management)
-- Rules that are similiar to Prisma Middleware, except we have access to raise messages to the user.
-- Accessiblity conscience
-- Internationalization conscience
-- Custom Generators to speed up development
-- *RedwoodJS* [Generators](https://redwoodjs.com/docs/cli-commands#generate-alias-g) - Generators allow you to spin up most things quickly without having to recreate them from scratch
-- *RedwoodJS* [Cells](https://redwoodjs.com/docs/cells) - React components with State included
-- *RedwoodJS* [Role Based Access Controls](https://redwoodjs.com/cookbook/role-based-access-control-rbac#role-matrix-for-blog-rbac)
-- *RedwoodJS* [Component Driven Development via Storybook](https://redwoodjs.com/docs/storybook)
-- *RedwoodJS* [Testing](https://redwoodjs.com/docs/testing#redwood-and-testing)
-- *RedwoodJS* [Deploy Targets](https://redwoodjs.com/docs/deploy) - With RedwoodJS, you can deploy to your choice of hosts including self-hosted
-- *Prisma* [Studio](https://www.prisma.io/docs/concepts/components/prisma-studio) - A simple viewer/editor for tables on your database
-- *Prisma* [Database Connections](https://www.prisma.io/docs/concepts/database-connectors) - With Prisma you can connect to most types of databases
-- *Prisma* [Middleware](https://www.prisma.io/docs/concepts/components/prisma-client/middleware) - A way to modify data before it's written
-- *Prisma* [Aggregation, Grouping, and Summarizing](https://www.prisma.io/docs/concepts/components/prisma-client/aggregation-grouping-summarizing)
-- *Prisma* [Database polyfills](https://www.prisma.io/docs/concepts/components/prisma-client/database-polyfills)
-- *Prisma* [Raw database access](https://www.prisma.io/docs/concepts/components/prisma-client/raw-database-access)
+We want a clear way to solve most problems, if it can be solved it should be done in a repeatable way.<hr /></details>
 
-### Roles Management
+<details><summary>Authentication providers</summary><br/>
 
-Users are only given access to create, read, update and delete records via roles.  Roles are only given to a user from their groups.
-## Contributing
+Today we support dbAuth, and Auth0. Just change your environment variables to switch.<hr /></details>
 
-Contributions are always welcome!
+<details><summary>Beautiful Responsive Emails</summary><br/>
 
-We follow the [Github Flow], we're still new to this so bear with us.
+No one likes the minefield that is email. MJML helps build your templates and make them beautiful on every client.<hr /></details>
 
-We review Pull Requests on Mondays and Wednesdays.
+<details><summary>Privacy is important to us</summary><br/>
 
-If you would like to work on an issue comment on it.
+We've taken steps to ensure that your users' privacy is respected.<hr /></details>
 
-[Github Flow]: https://guides.github.com/introduction/flow/
-### Running in Gitpod
+<details><summary>Security Roles</summary><br/>
 
-1.  Fork the Repository.
-2.  Goto your fork.
-3.  Configure a PostgresDB
+Table and field level roles by default are set so you can simply give them out and not figure them out.<hr /></details>
 
-      This is a bit more involved but you'll need a database **somewhere** either on your machine or hosted somewhere.  I generally set up a https://railway.app postgressql database
+<details><summary>Row Level Security</summary><br/>
 
-     -  Provision a PostgreSQL project.
-     -  Click on PostgreSQL, then Connect.
-     -  Copy the Postgres Connection URL
-4.  Set up your [environment variables](https://gitpod.io/variables) in gitpod.
-      |Name|Scope|Value|
-      |---|---|---|
-      | DATABASE_URL | yourName/tskr | Connection String from above |
-      | SESSION_SECRET | yourName/tskr | Well set this later |
-3.  [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer)
-5.  When the terminal comes do the following.
-6.  Push your schema to your database via `yarn rw prisma migrate dev`.
-4.  Generate a new secret via `yarn rw g secret`.
-5.  Copy that string and set it in the varables for gitpod.
-6.  Stop your workspace via the menu.  Then relaunch it.
+Row Level Security is hard, we a convention for how to do this that makes sense.<hr /></details>
 
-### Running locally
+<details><summary>Automate with rules</summary><br/>
+
+Rules are api side logic that run before and after create, read, update and delete operations.<hr /></details>
+
+<details><summary>Accessibility</summary><br/>
+
+We use Chakra-UI to make these sites as accessible as possible.<hr /></details>
+
+<details><summary>Forms and Lists</summary><br/>
+
+When generating pages and components from models, we build out sortable, searchable, filterable lists, and common forms.<hr /></details>
+
+<details><summary>Own your data</summary><br/>
+
+When you own it, you can do whatever you want with it. That's a tool hard to replace when you give away your keys.<hr /></details>
+<br/>
+
+# Roadmap
+
+- [x] Authentication Targets
+   - [x] dbAuth
+   - [x] Auth0
+   - [ ] Clerk
+   - [ ] Azure Active Directory
+   - [ ] Magic.Link
+   - [ ] Supabase
+- [x] Security
+   - [x] Table level security
+   - [x] Field level security
+   - [x] Row level security
+   - [x] Roles controlled on your database applied from the group to the user
+   - [x] Field level security
+      - [x] Field data on Read can be hidden (by modifying returned data)
+      - [x] Field data on ReadAll can be hidden (by modifying returned data)
+      - [x] Field data on Create OR Update can be rejected (by changing status from 'success')
+      - [x] Field data on Create OR Update can be removed (by deleting incoming data)
+   - [x] Secure by default
+      - [x] We've included roles when you generate new models to control who can Create, Read, Update, and Delete
+      - [x] Protective steps to mitigate XSS, and Clickjacking have been taken
+- [ ] Email Providers
+   - [x] Mailgun
+   - [ ] Mailchimp
+   - [ ] Mailjet
+   - [ ] Nodemailer
+   - [ ] Sendinblue
+   - [ ] Sendgrid
+   - [ ] Amazon SES
+- [ ] Privacy
+   - [x] No third-party data gets your data
+   - [x] Users' emails/usernames masked by directives
+   - [x] By default, users' can delete their accounts
+
+# Getting Started, want to give it a go?
+
+You have a few options here.
+
+1.  You can play around on the demo site, <https://demo.tskr.io> with logins and passwords matching for admin, manager, and employee.
+2.  Goto [Tskr.io] and click `Deploy to Netlify` to build your repo with proper environment variables.
+3.  [Use this template](https://github.com/tskrio/tskr/generate) to get started.  This will generate a Gitpod build to get you up and running.  You will still need a postgres connection URL for your database.
+
+## Running locally
 
 1.  Fork the Repository.
 2.  Clone your fork
@@ -128,3 +160,34 @@ If you would like to work on an issue comment on it.
     - Create a GroupRole with group's ID, and role of `admin`
 
     From here on out, you can create groups, and users in the browser, but the initial user and rights needed to be set up.  There's an issue with seeding on windows which is why these instructrions are ... long.
+
+## Running in Gitpod
+
+1.  Fork the Repository.
+2.  Goto your fork.
+3.  Configure a PostgresDB
+
+      This is a bit more involved but you'll need a database **somewhere** either on your machine or hosted somewhere.  I generally set up a https://railway.app postgressql database
+
+     -  Provision a PostgreSQL project.
+     -  Click on PostgreSQL, then Connect.
+     -  Copy the Postgres Connection URL
+4.  Set up your [environment variables](https://gitpod.io/variables) in gitpod.
+      |Name|Scope|Value|
+      |---|---|---|
+      | DATABASE_URL | yourName/tskr | Connection String from above |
+      | SESSION_SECRET | yourName/tskr | Well set this later |
+3.  [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer)
+5.  When the terminal comes do the following.
+6.  Push your schema to your database via `yarn rw prisma migrate dev`.
+4.  Generate a new secret via `yarn rw g secret`.
+5.  Copy that string and set it in the varables for gitpod.
+6.  Stop your workspace via the menu.  Then relaunch it.
+
+# Troubleshooting
+
+Right now, sometimes when setting this up for the first time, permissions aren't always added.  I have an issue to make this better, but until then here's how to get around it.
+
+1.  Goto prisma's studio by running this on your command line; `yarn rw prisma studio`
+2.  Verify you have a user you created or admin is there.  If missing, spin up `yarn rw dev` and Sign up and try again.
+3.  Still stuck? Verify there's group roles associated to the user and group in question.  If missing, create a group in prisma studio, and a group role of admin.

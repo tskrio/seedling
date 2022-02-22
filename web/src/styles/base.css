@@ -6,7 +6,7 @@
 
 
 #redwood-app {
-  color: var(--color-dark);
+  /*color: var(--color-dark);*/
   grid-template-areas:
    "nav nav"
    "aside main"

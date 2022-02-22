@@ -41,7 +41,7 @@ const Routes = () => {
           <Set wrap={LogsLayout}>
             <Route path="/logs/new" page={LogNewLogPage} name="newLog" />
             <Route path="/logs/{id}/edit" page={LogEditLogPage} name="editLog" />
-            <Route path="/logs/{id}" page={LogLogPage} name="log" />
+            <Route path="/logs/{id}" page={LogEditLogPage} name="log" />
             <Route path="/logs" page={LogLogsPage} name="logs" />
           </Set>
           <Set wrap={PropertiesLayout}>
