@@ -2,7 +2,7 @@ import mjml2html from 'mjml'
 export const render = ({ name }) => {
   return mjml2html(mjml(name), {})
 }
-let mjml = (name) => {
+let mjml = (name, brand, loginUrl) => {
   return `<mjml>
   <mj-body>
     <mj-raw>
@@ -10,7 +10,7 @@ let mjml = (name) => {
     </mj-raw>
     <mj-section background-color="#f0f0f0">
       <mj-column>
-        <mj-text font-style="italic" font-size="20px" color="#626262">Tskr</mj-text>
+        <mj-text font-style="italic" font-size="20px" color="#626262">${brand}</mj-text>
       </mj-column>
     </mj-section>
     <mj-raw>
@@ -21,7 +21,7 @@ let mjml = (name) => {
         <mj-text align="center" color="#fff" font-size="20px" font-family="Open Sans">
           ${name}, thanks for signing up
         </mj-text>
-        <mj-button background-color="#fff" color="#2f855a" href="https://demo.tskr.io/login">Log in</mj-button>
+        <mj-button background-color="#fff" color="#2f855a" href="${loginUrl}">Log in</mj-button>
       </mj-column>
     </mj-section>
     <mj-raw>
@@ -29,12 +29,12 @@ let mjml = (name) => {
     </mj-raw>
     <mj-section background-color="#fafafa">
       <mj-column width="400px">
-        <mj-text font-style="italic" font-size="20px" font-family="Helvetica Neue" color="#626262">What is Tskr?</mj-text>
-        <mj-text color="#525252">Tskr is a low-to-no cost accessible automation tool for forms and lists.  If you like to know where your data is.  Self hosted, or on the cloud somewhere, you can choose, this is great.  We have some guiding principals below.</mj-text>
+        <mj-text font-style="italic" font-size="20px" font-family="Helvetica Neue" color="#626262">What is ${brand}?</mj-text>
+        <mj-text color="#525252">${brand} is a low-to-no cost accessible automation tool for forms and lists.  If you like to know where your data is.  Self hosted, or on the cloud somewhere, you can choose, this is great.  We have some guiding principals below.</mj-text>
         <mj-text color="#525252">Low to no cost.  How can this be possible?  Well, with the work the <a href="https://redwoodjs.com">RedwoodJS</a> team put in it's possible.  Hosts like <a href="https://netlify.com">Netlify</a>, <a href="https://vercel.com">Vercel</a>, and <a href="https://onrender.com">Render</a> help too!</mj-text>
         <mj-text color="#525252">Accessible. This is something needed from the beginning.  So it's here.  Right now, it means we're using <a href="https://chakra-ui.com">Chakra UI</a> to help on this front, but I'm sure there's other improvements we can take.</mj-text>
         <mj-text color="#525252">For anyone. Eh, this is still a work in progress. You still need to be able to do some coding to stand this up, but someday, you won't need to.</mj-text>
-        <mj-text color="#525252">With smart permissions. Our generators default roles for field and tables, but we're <a href="https://github.com/tskrio/tskr/issues/100">still working on row level access</a>.</mj-text>
+        <mj-text color="#525252">With smart permissions. Our generators default roles for field and tables, but we're <a href="https://github.com/tskrio/seedling/issues/100">still working on row level access</a>.</mj-text>
 
         <mj-button background-color="#2f855a" href="#">Learn how it works here (video)</mj-button>
       </mj-column>
@@ -47,7 +47,7 @@ let mjml = (name) => {
         <!-- Left image -->
       </mj-raw>
       <mj-column>
-        <mj-image width="200px" src="https://demo.tskr.io/jace.jpeg"></mj-image>
+        <mj-image width="200px" src="${welcomeImageUrl}"></mj-image>
       </mj-column>
       <mj-raw>
         <!-- right paragraph -->
@@ -64,11 +64,11 @@ let mjml = (name) => {
     <mj-section background-color="#2f855a">
       <mj-column width="400px">
         <mj-text font-style="italic" font-size="20px" font-family="Helvetica Neue" color="#fff">How can you help?</mj-text>
-<mj-button background-color="#fff" href="https://github.com/tskrio/tskr" color="#2f855a">Star the repo</mj-button>
+<mj-button background-color="#fff" href="https://github.com/tskrio/seedling" color="#2f855a">Star the repo</mj-button>
         <mj-button background-color="#fff" href="mailto:jace@tskr.io" color="#2f855a">Tell me what you think</mj-button>
         <mj-button background-color="#fff" href="https://tskr.io/" color="#2f855a">Try it out (Deploy to Netlify)</mj-button>
         <!--<mj-button background-color="#fff" href="https://tskr.io/" color="#2f855a">Try it out (Deploy to Render)</mj-button>-->
-        <mj-button background-color="#fff" href="https://github.com/tskrio/tskr#contributing" color="#2f855a">Take a stab at contributing</mj-button>
+        <mj-button background-color="#fff" href="https://github.com/tskrio/seedling#contributing" color="#2f855a">Take a stab at contributing</mj-button>
       </mj-column>
       <mj-column>
         ???
