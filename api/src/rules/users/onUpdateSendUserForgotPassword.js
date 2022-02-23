@@ -26,8 +26,8 @@ module.exports = {
       let client = await email({ provider: 'mailgun' })
       let code = data.resetToken
       let resetLink = `https://${client.domain}/reset-password?resetToken=${data.resetToken}`
-
-      let rendered = render({ name, code, resetLink })
+      let brand = 'Seedling';
+      let rendered = render({ name, code, resetLink, brand })
       await client.send(
         {
           to: to,

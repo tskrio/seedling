@@ -1,4 +1,4 @@
-Tskr is the beginning of your next project.  It builds on RedwoodJS with some conventions that will save you time at the cost of choice.  However, if you're prototyping you may not want to choose how auth, email, and automation are built in and would rather just write the code that adds value.
+Seedling is the beginning of your next project.  It builds on RedwoodJS with some conventions that will save you time at the cost of choice.  However, if you're prototyping you may not want to choose how auth, email, and automation are built in and would rather just write the code that adds value.
 
 # Technologies
 
@@ -93,20 +93,20 @@ When you own it, you can do whatever you want with it. That's a tool hard to rep
 
 You have a few options here.
 
-1.  You can play around on the demo site, <https://demo.tskr.io> with logins and passwords matching for admin, manager, and employee.
-2.  Goto [Tskr.io] and click `Deploy to Netlify` to build your repo with proper environment variables.
-3.  [Use this template](https://github.com/tskrio/tskr/generate) to get started.  This will generate a Gitpod build to get you up and running.  You will still need a postgres connection URL for your database.
+1.  You can play around on the demo site, <https://seedling.tskr.io> with logins and passwords matching for admin, manager, and employee.
+2.  Goto [seedling.tskr.io] and click `Deploy to Netlify` to build your repo with proper environment variables.
+3.  [Use this template](https://github.com/tskrio/seedling/generate) to get started.  This will generate a Gitpod build to get you up and running.  You will still need a postgres connection URL for your database.
 
 ## Running locally
 
 1.  Fork the Repository.
 2.  Clone your fork
     ```bash
-    git clone https://github.com/tskrio/tskr.git tskr
+    git clone https://github.com/tskrio/seedling.git seedling
     ```
 3. Go to the project directory
    ```bash
-   cd tskr
+   cd seedling
    ```
 4. Install dependencies
    ```bash
@@ -175,8 +175,8 @@ You have a few options here.
 4.  Set up your [environment variables](https://gitpod.io/variables) in gitpod.
       |Name|Scope|Value|
       |---|---|---|
-      | DATABASE_URL | yourName/tskr | Connection String from above |
-      | SESSION_SECRET | yourName/tskr | Well set this later |
+      | DATABASE_URL | yourName/seedling | Connection String from above |
+      | SESSION_SECRET | yourName/seedling | Well set this later |
 3.  [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer)
 5.  When the terminal comes do the following.
 6.  Push your schema to your database via `yarn rw prisma migrate dev`.
