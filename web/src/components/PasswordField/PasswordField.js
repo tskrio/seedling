@@ -34,6 +34,7 @@ const PasswordField = ({ field, errors, register }) => {
         />
         <InputRightElement width="4.5rem">
           <Button
+            rounded={'full'}
             h="1.75rem"
             size="sm"
             onClick={handleClick}

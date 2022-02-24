@@ -6,7 +6,7 @@ import Footer from 'src/components/Footer'
 import { Fragment } from 'react'
 const Standard = ({ children }) => {
   const { isAuthenticated, currentUser } = useAuth()
-  const brand = 'Tskr'
+  const brand = 'Seedling'
   let myProps = {
     brand,
     isAuthenticated,

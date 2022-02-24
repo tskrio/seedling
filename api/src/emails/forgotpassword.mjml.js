@@ -2,7 +2,7 @@ import mjml2html from 'mjml'
 export const render = ({ name, resetLink }) => {
   return mjml2html(mjml(name, resetLink), {})
 }
-let mjml = (name, resetLink) => {
+let mjml = (name, resetLink, brand) => {
   return `<mjml>
   <mj-body>
     <mj-raw>
@@ -10,7 +10,7 @@ let mjml = (name, resetLink) => {
     </mj-raw>
     <mj-section background-color="#f0f0f0">
       <mj-column>
-        <mj-text font-style="italic" font-size="20px" color="#626262">Tskr</mj-text>
+        <mj-text font-style="italic" font-size="20px" color="#626262">${brand}</mj-text>
       </mj-column>
     </mj-section>
     <mj-raw>

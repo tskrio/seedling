@@ -109,7 +109,7 @@ const Welcome = () => {
   return (
     <Box p={4} backgroundColor={'white'}>
       <Stack spacing={4} as={Container} maxW={'3xl'} textAlign={'center'}>
-        <Heading fontSize={'3xl'}>Welcome to Tskr</Heading>
+        <Heading fontSize={'3xl'}>Welcome to Seedling</Heading>
         <Text color={'gray.600'} fontSize={'xl'}>
           These important features are critical to building a great solution.
         </Text>
