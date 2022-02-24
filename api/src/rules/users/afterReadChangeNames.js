@@ -1,5 +1,5 @@
 module.exports = {
-  active: true, //           controls if this runs
+  active: false, //           controls if this runs
   order: 10, //              controls the order this runs
   when: ['after'], //        used to filter rules to run
   operation: ['read'], //    used to filter rules to run

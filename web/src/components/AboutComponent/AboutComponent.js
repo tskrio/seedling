@@ -5,6 +5,7 @@ import { navigate } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 import { Fragment, useState } from 'react'
 import Welcome from 'src/components/Welcome'
+import DeployButton from 'src/components/DeployButton'
 const AboutComponent = ({ auth0 /*, isAuthenticated, currentUser*/ }) => {
   const { isAuthenticated } = useAuth()
 
@@ -93,6 +94,7 @@ const AboutComponent = ({ auth0 /*, isAuthenticated, currentUser*/ }) => {
         >
           How It Works
         </Button>
+        <DeployButton />
       </CallToActionWithVideo>
     </Box>
   )
