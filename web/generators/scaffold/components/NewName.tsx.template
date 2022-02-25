@@ -38,7 +38,8 @@ const New${singularPascalName} = () => {
   <% editableColumns.forEach(column => { %>{
       name: '<%= column.name %>',
       prettyName: '<%= column.label %>',
-      <% if(column.isRequired) { %>required: 'This is required',<% } %>
+      <% if (column.default){ %>defaultValue: '<%= column.default %>',<%}%>
+      <% if (column.type === "Boolean"){ %>type: 'boolean'<%}%><% if(column.isRequired && column.type !== "Boolean") { %>required: 'This is required',<% } %>
       <% if (column.type === "Int" && column.isId === false){ %>// If this is a reference you probably want this below
       // uncomment and edit below to your needs
       // type: 'reference',

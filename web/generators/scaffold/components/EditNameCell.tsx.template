@@ -73,7 +73,7 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
       <% editableColumns.forEach(column => { %>{
       name: '<%= column.name %>',
       prettyName: '<%= column.label %>',
-      <% if(column.isRequired) { %>required: 'This is required',<% } %>
+      <% if (column.type === "Boolean"){ %>type: 'boolean'<%}%><% if(column.isRequired && column.type !== "Boolean") { %>required: 'This is required',<% } %>
       <% if (column.type === "Int" && column.isId === false){ %>// If this is a reference you probably want this below
       // update the query above "Edit${singularPascalName}ById"
       // to include the referenced data
@@ -87,8 +87,9 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
       //   query Find_referencedModelHere_From${pluralPascalName}(
       //     $filter: String
       //     $skip: Int
+      //     $take: Int
       //   ) {
-      //     search: _referencedPluralModelHere_(filter: $filter, skip: $skip) {
+      //     search: _referencedPluralModelHere_(filter: $filter, skip: $skip, take: $take) {
       //       count
       //       take
       //       skip
