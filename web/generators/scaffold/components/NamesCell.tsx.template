@@ -93,7 +93,7 @@ export const Success = ({
     if (isSmallScreen) setColumns(returnFirstAndLast(columns))
     if (!isSmallScreen) setColumns(initialColumns)
   }, [isSmallScreen, setColumns, initialColumns])
-  return <Fragment>
+  return <Box p={3} backgroundColor={'white'}>
     <Heading>${pluralPascalName} ({data.count})</Heading>
      <Flex>
         <Box>
@@ -165,5 +165,5 @@ export const Success = ({
           take={take}
         />
       </Center>
-  </Fragment>
+  </Box>
 }

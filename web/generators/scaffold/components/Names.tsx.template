@@ -11,7 +11,7 @@ export const initialColumns = [
   filterOut,<% if (column.isId){ %>link: (givenId) => {
     return routes.${singularRouteName}({ id: givenId })
   },<% } %>
-  <% if (column.type === "Int"){ %>dataType: 'integer',<% } %><% if (column.type === "DateTime"){ %>dataType: 'timestamp',<% } %>
+  <% if (column.type === "Int"){ %>dataType: 'integer',<% } %><% if (column.type === "DateTime"){ %>dataType: 'timestamp',<% } %><% if (column.type === "Boolean"){ %>dataType: 'boolean',<% } %>
   <% if (column.type === "Int" && column.isId === false){ %>// If this is a reference
     // you may want to show a field
     // instead of the number here.

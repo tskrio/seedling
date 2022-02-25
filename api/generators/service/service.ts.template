@@ -4,20 +4,16 @@
 import { db } from 'src/lib/db'
 import { UserInputError } from '@redwoodjs/graphql-server'
 import {
-  //executeBeforeCreateRules,
   executeBeforeCreateRulesV2,
-  //executeAfterCreateRules,
   executeAfterCreateRulesV2,
-
   executeBeforeReadAllRulesV2,
-  //executeAfterReadAllRules,
   executeAfterReadAllRulesV2,
-  executeBeforeReadRules,
-  executeAfterReadRules,
-  executeBeforeUpdateRules,
-  executeAfterUpdateRules,
-  executeBeforeDeleteRules,
-  executeAfterDeleteRules,
+  executeBeforeReadRulesV2,
+  executeAfterReadRulesV2,
+  executeBeforeUpdateRulesV2,
+  executeAfterUpdateRulesV2,
+  executeBeforeDeleteRulesV2,
+  executeAfterDeleteRulesV2,
 } from 'src/lib/rules'
 
 let table = '${singularCamelName}'
@@ -81,18 +77,16 @@ export const ${pluralCamelName} = async ({ filter, skip, orderBy, q, take }) => 
 
 export const ${singularCamelName} = async ({ id }: Prisma.${singularPascalName}WhereUniqueInput) => {
   try {
-    let result = await executeBeforeReadRules(table, {
-      id,
-      status: { code: 'success', message: '' },
-    })
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
+    let { where } = await executeBeforeReadRulesV2({ table, id })
+    if (!where /* if where is falsy, return { id } */) {
+      where = { id }
     }
-    let readRecord = await db[table].findUnique({
-      where: { id },
+    let readRecord = await db[table].findUnique({ where })
+    let { record } = await executeAfterReadRulesV2({
+      table,
+      data: readRecord,
     })
-    readRecord = executeAfterReadRules(table, readRecord)
-    return readRecord
+    return record
   } catch (error) {
     throw new UserInputError(error.message)
   }
@@ -104,41 +98,47 @@ interface Update${singularPascalName}Args extends Prisma.${singularPascalName}Wh
 
 export const update${singularPascalName} = async ({ id, input }: Update${singularPascalName}Args) => {
   try {
-    let result = await executeBeforeUpdateRules(table, {
+    let { data, where } = await executeBeforeUpdateRulesV2({
+      table,
+      data: input,
       id,
-      input,
-      status: { code: 'success', message: '' },
     })
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
+    if (!where) {
+      // if where is falsy, return { id }
+      where = { id }
     }
-    let updatedRecord = await db[table].update({
-      data: result.input,
-      where: { id },
+    let updatedRecord = await db[table].update({ data, where })
+
+    let { record } = await executeAfterUpdateRulesV2({
+      table,
+      data: updatedRecord,
+      id,
     })
-    updatedRecord = executeAfterUpdateRules(table, updatedRecord)
-    return updatedRecord
+    return { ...record }
   } catch (error) {
     throw new UserInputError(error.message)
   }
 }
 
 export const delete${singularPascalName} = async ({ id }: Prisma.${singularPascalName}WhereUniqueInput) => {
-  try {
-    let result = await executeBeforeDeleteRules(table, {
+ try {
+    let { where } = await executeBeforeDeleteRulesV2({
+      table,
       id,
-      status: { code: 'success', message: '' },
     })
-    if (result.status.code !== 'success') {
-      throw new UserInputError(result.status.message)
+    if (!where /* if where is falsy, return { id } */) {
+      where = { id }
     }
     let deletedRecord = await db[table].delete({
       where: { id },
     })
-    deletedRecord = executeAfterDeleteRules(table, deletedRecord)
+
+    await executeAfterDeleteRulesV2({ table, data: deletedRecord })
     return deletedRecord
   } catch (error) {
-    throw new UserInputError(error.message)
+    let lastLine =
+      error.message.split('\n')[error.message.split('\n').length - 1]
+    throw new UserInputError(lastLine)
   }
 }<% } %>
 
