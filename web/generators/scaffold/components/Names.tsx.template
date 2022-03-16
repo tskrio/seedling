@@ -11,11 +11,11 @@ export const initialColumns = [
   filterOut,<% if (column.isId){ %>link: (givenId) => {
     return routes.${singularRouteName}({ id: givenId })
   },<% } %>
-  <% if (column.type === "Int"){ %>dataType: 'integer',<% } %><% if (column.type === "DateTime"){ %>dataType: 'timestamp',<% } %>
+  <% if (column.type === "Int"){ %>dataType: 'integer',<% } %><% if (column.type === "DateTime"){ %>dataType: 'timestamp',<% } %><% if (column.type === "Boolean"){ %>dataType: 'boolean',<% } %>
   <% if (column.type === "Int" && column.isId === false){ %>// If this is a reference
     // you may want to show a field
     // instead of the number here.
-    // todo that remove type,
+    // to do that remove type,
     // updated your query on the cell to include the model
     // update the accessor to a name not used by a column
     // and add;
@@ -46,7 +46,7 @@ const ${pluralPascalName}List = () => {
   let [columns, setColumns] = useState(initialColumns) // default columns
   let [skip, setSkip] = useState(0) // default reocrds to jump
   let [take, setTake] = useState(10) // default records to take
-  let [query, setQuery] = useState(/*{ entity: 'email' }*/) // default query // TODO: Fix this doesnt work
+  let [query, setQuery] = useState(/*{ entity: 'email' }*/) // default query
   let [fuzzyQuery, setFuzzyQuery] = useState('') // default fuzzy query
   let roles = {
     createRecord: '${singularPascalName.toLowerCase()}Create',

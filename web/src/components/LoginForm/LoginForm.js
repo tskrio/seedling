@@ -65,7 +65,9 @@ const LoginForm = () => {
             <Button
               mt={4}
               w={'100%'}
-              colorScheme="teal"
+              rounded={'full'}
+              backgroundColor={'green'}
+              color={'white'}
               isLoading={isSubmitting}
               type="submit"
             >
@@ -75,6 +77,11 @@ const LoginForm = () => {
           <Flex>
             <Box pl="4">
               <Button
+                backgroundColor={'green.900'}
+                rounded={'full'}
+                size={'lg'}
+                fontWeight={'normal'}
+                px={6}
                 onClick={() => {
                   navigate(routes.forgotPassword())
                 }}
@@ -85,6 +92,11 @@ const LoginForm = () => {
             <Spacer />
             <Box pr="4">
               <Button
+                backgroundColor={'green.900'}
+                rounded={'full'}
+                size={'lg'}
+                fontWeight={'normal'}
+                px={6}
                 onClick={() => {
                   navigate(routes.signup())
                 }}

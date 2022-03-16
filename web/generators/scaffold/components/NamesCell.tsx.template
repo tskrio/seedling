@@ -93,14 +93,14 @@ export const Success = ({
     if (isSmallScreen) setColumns(returnFirstAndLast(columns))
     if (!isSmallScreen) setColumns(initialColumns)
   }, [isSmallScreen, setColumns, initialColumns])
-  return <Fragment>
+  return <Box p={3} backgroundColor={'white'}>
     <Heading>${pluralPascalName} ({data.count})</Heading>
      <Flex>
         <Box>
           {${pluralCamelName}.q !== null && (
             <Button
               leftIcon={<MdKeyboardBackspace />}
-              colorScheme="teal"
+              colorScheme="green"
               variant="solid"
               onClick={() => {
                 setQuery('')
@@ -115,7 +115,7 @@ export const Success = ({
         <Spacer />
         <Button
           leftIcon={<MdAdd />}
-          colorScheme="teal"
+          colorScheme="green"
           variant="solid"
           onClick={() => {
             navigate(routes.${newRouteName}())
@@ -165,5 +165,5 @@ export const Success = ({
           take={take}
         />
       </Center>
-  </Fragment>
+  </Box>
 }

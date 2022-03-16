@@ -8,7 +8,7 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "^0.42.1"
+    "@redwoodjs/core": "^0.46.1-canary.15"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
@@ -22,8 +22,6 @@
     "seed": "yarn rw exec seed"
   },
   "scripts": {
-    "start": "docker-compose down && docker-compose up -d && sudo chown -R $(whoami):$(whoami) . && rw dev",
-    "postgres:up": "docker-compose up -d && sudo chown -R $(whoami):$(whoami) .",
-    "postgres:down": "docker-compose down"
+    "start": "rw dev"
   }
 }

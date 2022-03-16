@@ -141,7 +141,7 @@ const FormComponent = ({
                 <Flex>
                   <Button
                     mt={4}
-                    colorScheme="teal"
+                    colorScheme="green"
                     isLoading={isSubmitting}
                     type="submit"
                   >

@@ -105,7 +105,11 @@ const ResetPasswordForm = ({ wait, resetToken }) => {
                 <Button
                   mt={4}
                   w={'100%'}
-                  colorScheme="teal"
+                  backgroundColor={'green'}
+                  rounded={'full'}
+                  size={'lg'}
+                  fontWeight={'normal'}
+                  px={6}
                   isLoading={isSubmitting}
                   type="submit"
                 >

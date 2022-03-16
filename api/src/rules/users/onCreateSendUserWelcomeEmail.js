@@ -11,15 +11,16 @@ module.exports = {
   command: async function ({ data }) {
     console.log('data')
     try {
-      let rendered = render({ name: data.name })
+      let brand = "Seedling"
+      let rendered = render({ name: data.name, loginUrl: "https://seedling.tskr.io/login", brand, welcomeImageUrl: "https://seedling.tskr.io/jace.jpeg" })
       let client = await email({ provider: 'mailgun' })
       if (!client.error) {
         await client?.send(
           {
             to: data.email,
-            from: `Tskr <jace@${client.domain}>`,
+            from: `${brand} <jace@${client.domain}>`,
             'h:Reply-To': `jace@$tskr.io`, //not working
-            subject: `Welcome to Tskr`,
+            subject: `Welcome to ${brand}`,
             html: rendered.html,
           },
           (error, body) => {
