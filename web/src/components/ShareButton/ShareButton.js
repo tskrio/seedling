@@ -9,7 +9,7 @@ const ShareButton = ({ column, row }) => {
         navigator
           .share({
             title: item.title,
-            text: `${item.title} from https://news.jace.pro`,
+            text: `${item.title} from ${window.location.origin}`,
             url: item.url,
           })
           .then(() => {

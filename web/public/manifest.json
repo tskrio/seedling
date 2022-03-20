@@ -1,10 +1,10 @@
 {
-    "name": "news.jace.pro",
-    "short_name": "sn-news",
+    "name": "Seedling",
+    "short_name": "seedling",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
-    "description": "ServiceNow News on the Hour",
+    "description": "A template to build your apps",
     "dir": "ltr",
     "categories": "news",
     "lang": "en",
