@@ -8,7 +8,6 @@ module.exports = {
   table: 'user',
   file: __filename,
   command: async function ({ data }) {
-    console.log('in log delete rule', data)
     await log(`Deleted ${data.name}`, `api\\${__filename.split('\\dist\\')[1]}`)
     return { data }
   },

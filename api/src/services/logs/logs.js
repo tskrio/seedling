@@ -1,14 +1,11 @@
 import { db } from 'src/lib/db'
 import { UserInputError } from '@redwoodjs/graphql-server'
 import {
-  //executeBeforeCreateRules,
   executeBeforeCreateRulesV2,
-  //executeAfterCreateRules,
   executeAfterCreateRulesV2,
   executeBeforeReadAllRulesV2,
-  //executeAfterReadAllRules,
   executeAfterReadAllRulesV2,
-  executeBeforeReadRules,
+  executeBeforeReadRules,//TODO: UPDATE THIS TO USE NEW FUNCTIONS
   executeAfterReadRules,
   executeBeforeUpdateRules,
   executeAfterUpdateRules,

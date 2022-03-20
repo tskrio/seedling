@@ -23,10 +23,9 @@ module.exports = {
     // if admin or groupMemberRead, return the record
     // status.code = 'NOOOOOOO'
     // return
-    console.log(context.currentUser)
     let roles = context.currentUser.roles
     if (roles.includes('admin') || roles.includes('groupMemberRead')) {
-      console.log('user has roles to see all members of', roles)
+      // 'user has roles to see all members of'
       where.push({ id })
       return { where }
     }

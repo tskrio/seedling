@@ -1,7 +1,6 @@
 import { Link, navigate } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 import {
-  Button,
   Box,
   Flex,
   Tbody,
@@ -11,10 +10,12 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Badge,
 } from '@chakra-ui/react'
-import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
-import { useMutation } from '@redwoodjs/web'
-import { toast } from '@redwoodjs/web/toast'
+import { HamburgerIcon } from '@chakra-ui/icons'
+import ShareButton from '../ShareButton/ShareButton'
+import EditButton from '../EditButton/EditButton'
+import DeleteButton from '../DeleteButton/DeleteButton'
 
 const TableRows = ({
   columns,
@@ -25,34 +26,8 @@ const TableRows = ({
   displayColumn,
   model,
 }) => {
-  const { hasRole /*currentUser*/ } = useAuth()
-  let handleDeleteItem = (event) => {
-    let id = parseInt(event.target.value, 10)
-    let foundRow = data.results?.filter((user) => {
-      return user.id === id
-    })
-    let question = `Are you sure you want to delete ${foundRow[0][displayColumn]}?`
-    if (confirm(question)) {
-      deleteRecord({ variables: { id } })
-    }
-  }
+  const { hasRole } = useAuth()
 
-  const [deleteRecord] = useMutation(deleteMutation, {
-    onError: (error) => {
-      toast.error(error.message || `Error - not deleted`)
-    },
-    onCompleted: (del) => {
-      toast.success(`Deleted ${del.deletedRow[displayColumn]}`)
-      console.log(del)
-      setData({
-        ...data,
-        results: data.results?.filter((row) => {
-          return !(row.id === del.deletedRow.id)
-        }),
-        count: data.count - 1,
-      })
-    },
-  })
   let menu = (row, column) => {
     let value = row[column.accessor]
     if (column.field) value = row[column.accessor][column.field]
@@ -109,6 +84,16 @@ const TableRows = ({
     return <></>
   }
   let element = (row, column) => {
+    let buttonProps = {
+      column,
+      row,
+      roles,
+      data,
+      setData,
+      hasRole,
+      deleteMutation, //only needed for delete
+      displayColumn, //only needed for delete
+    }
     let nestedElements = row[column?.accessor]?.length
     if (column.aggregate && column.link)
       return <Link to={column.link(row.id)}>{nestedElements}</Link>
@@ -140,7 +125,9 @@ const TableRows = ({
           <Box p="2">
             <Link title={row[column.accessor]} to={column.link(row.id)}>
               {column.dataType === 'timestamp' && (
-                <>{new Date(row[column.accessor]).toLocaleString()} </>
+                <Badge>
+                  {new Date(row[column.accessor]).toLocaleString('en-CA')}{' '}
+                </Badge>
               )}
               {column.dataType !== 'timestamp' && <>{row[column.accessor]}</>}
             </Link>
@@ -148,33 +135,34 @@ const TableRows = ({
         </>
       )
     if (column.dataType === 'timestamp')
-      return <Box p="2">{new Date(row[column.accessor]).toLocaleString()}</Box>
+      return (
+        <Badge colorScheme={'white'}>
+          {new Date(row[column.accessor]).toLocaleString()}
+        </Badge>
+      )
+    if (column.dataType === 'boolean') {
+      let bool = 'false'
+      if (row[column.accessor] === true) bool = 'true'
+      return <Box p="2">{bool}</Box>
+    }
     if (row?.[column.accessor])
       return (
         <>
           {menu(row, column)}
-          <Box p="2">{row[column.accessor]}</Box>
+          <Box p="2">{row[column.accessor].toString()}</Box>
         </>
       )
 
     if (column.accessor === 'actions') {
-      if (hasRole([roles.deleteRecord].concat(['admin']))) {
-        return (
-          <Box p="2">
-            <Button
-              value={row.id}
-              onClick={handleDeleteItem}
-              leftIcon={<CloseIcon />}
-              colorScheme="red"
-              variant="solid"
-              type="button"
-              size="sm"
-            >
-              Remove
-            </Button>
-          </Box>
-        )
-      }
+      return (
+        <Box p="2">
+          <Flex gap={1}>
+            <ShareButton {...buttonProps} />
+            <EditButton {...buttonProps} />
+            <DeleteButton {...buttonProps} />
+          </Flex>
+        </Box>
+      )
     }
   }
 

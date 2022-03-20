@@ -11,7 +11,7 @@ import {
   BreadcrumbLink,
 } from '@chakra-ui/react'
 
-import { SearchIcon } from '@chakra-ui/icons'
+import { CloseIcon, SearchIcon } from '@chakra-ui/icons'
 
 const TableQuery = ({
   setQuery,
@@ -32,7 +32,15 @@ const TableQuery = ({
     setFuzzyQuery(searchInput.current.value)
     setSkip(0)
 
-    navigate(link(''))
+    //navigate(link(''))
+  }
+  let handleClearQuery = () => {
+    params.delete('q')
+    //setQuery('')
+    setFuzzyQuery('')
+    setSkip(0)
+
+    //navigate(link(''))
   }
   let handleSearchKeyDown = (event) => {
     //
@@ -41,7 +49,7 @@ const TableQuery = ({
       setFuzzyQuery(searchInput.current.value)
       setSkip(0)
 
-      navigate(link(''))
+      //navigate(link(''))
     }
   }
   let query = JSON.parse(rawQuery)
@@ -55,7 +63,7 @@ const TableQuery = ({
     <Fragment>
       <SimpleGrid columns={1} spacingX="40px" spacingY="20px">
         <Box pt={1} pb={1}>
-          <Flex>
+          <Flex gap={1}>
             <Input
               placeholder={inputPlaceholder || 'Search'}
               ref={searchInput}
@@ -68,6 +76,14 @@ const TableQuery = ({
               aria-label="Search database"
               onClick={handleSearchButton}
               icon={<SearchIcon />}
+              colorScheme={'green'}
+            />
+
+            <IconButton
+              aria-label="Reset Query"
+              onClick={handleClearQuery}
+              icon={<CloseIcon />}
+              colorScheme={'red'}
             />
           </Flex>
         </Box>

@@ -1,6 +1,7 @@
 import { logger } from 'src/lib/logger'
 import { email } from 'src/lib/email'
 import { render } from 'src/emails/welcomeemail.mjml.js'
+import { getProperty } from 'src/lib/util'
 module.exports = {
   active: true,
   order: 100,
@@ -11,8 +12,14 @@ module.exports = {
   command: async function ({ data }) {
     console.log('data')
     try {
-      let brand = "Seedling"
-      let rendered = render({ name: data.name, loginUrl: "https://seedling.tskr.io/login", brand, welcomeImageUrl: "https://seedling.tskr.io/jace.jpeg" })
+      let brand = (await getProperty('brand')) || 'Undefined'
+      let domain = (await getProperty('domain')) || 'https://example.com'
+      let rendered = render({
+        name: data.name,
+        loginUrl: `${domain}/login`,
+        brand,
+        welcomeImageUrl: `${domain}/jace.jpeg`,
+      })
       let client = await email({ provider: 'mailgun' })
       if (!client.error) {
         await client?.send(

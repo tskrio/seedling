@@ -118,13 +118,13 @@ const Welcome = () => {
       <Container maxW={'6xl'} mt={10}>
         <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={10}>
           {features.map((feature) => (
-            <HStack key={feature.id} align={'top'}>
+            <HStack key={feature.title} align={'top'}>
               <Box color={'green.400'} px={2}>
                 <Icon as={CheckIcon} />
               </Box>
               <VStack align={'start'}>
                 <Text fontWeight={600}>{feature.title}</Text>
-                <Text color={'gray.600'}>{feature.text}</Text>
+                <Box color={'gray.600'}>{feature.text}</Box>
               </VStack>
             </HStack>
           ))}

@@ -47,6 +47,11 @@ export const initialColumns = [
     canReset: true,
     canExport: true,
     canSetTake: true,
+    canEdit: true,
+    editLink: (givenId) => {
+      return routes.user({ id: givenId })
+    },
+    canDelete: true,
   },
 ]
 

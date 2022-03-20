@@ -11,7 +11,6 @@ module.exports = {
         m.value = m.value.substr(0, 3) + '...'
       }
     })
-    console.log(data)
     return { data, status }
   },
 }

@@ -1,44 +1,35 @@
-# Commands to start on workspace startup
-tasks:
-  - name: Dev Server
-    init: |
-      openMode: split-left
-      nvm install 14
-      nvm use 14
-      nvm alias default 14
-      eval $(gp env -e RWJS_DEV_API_URL="http://localhost")
-      yarn install
-      yarn rw exec seed
-    command: |
-      nvm install 14
-      nvm use 14
-      nvm alias default 14
-      yarn rw dev --forward="--client-web-socket-url $(gp url 8910 | sed -e "s/https/wss/g")"
-  - name: Terminal
-    openMode: split-right
-    command: |
-      echo -e "\n\n\033[94m ======================================================" && echo -e "\n\033[33m ⌛ Please wait until the dev server is running on the left-side terminal. \n " &&  echo -e "\n\033[94m ======================================================\n\n"
-# Ports to expose on workspace startup
-ports:
-  - port: 8911
-    onOpen: ignore
-    visibility: public
-  - port: 8910
-    onOpen: notify
+# To learn about this file, please see https://www.gitpod.io/docs/references/gitpod-yml
 
-github:
-  prebuilds:
-    # enable for the default branch (defaults to true)
-    master: true
-    # enable for all branches in this repo (defaults to false)
-    branches: true
-    # enable for pull requests coming from this repo (defaults to true)
-    pullRequests: true
-    # enable for pull requests coming from forks (defaults to false)
-    pullRequestsFromForks: true
-    # add a check to pull requests (defaults to true)
-    addCheck: true
-    # add a "Review in Gitpod" button as a comment to pull requests (defaults to false)
-    addComment: false
-    # add a "Review in Gitpod" button to the pull request's description (defaults to false)
-    addBadge: false
+# NOTE: Use Gitod's PostgreSQL image once https://github.com/gitpod-io/workspace-images/issues/705 is fixed
+#image: gitpod/workspace-postgres
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - init: |
+      rm ./renovate.json
+      yarn install
+    command: yarn redwood dev
+
+ports:
+  - port: 5432
+    name: PostgreSQL database
+    onOpen: ignore
+  - port: 8910
+    name: RedoodJS web application
+    onOpen: open-browser
+  - port: 8911
+    name: Serverless functions
+    onOpen: ignore
+
+vscode:
+  extensions:
+    - "dbaeumer.vscode-eslint"
+    - "eamodio.gitlens"
+    # - "ofhumanbondage.react-proptypes-intellisense" - Not published to Open VSX (yet)
+    - "mgmcdermott.vscode-language-babel"
+    - "wix.vscode-import-cost"
+    - "pflannery.vscode-versionlens"
+    - "editorconfig.editorconfig"
+    - "prisma.prisma"
+    - "graphql.vscode-graphql"
