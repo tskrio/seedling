@@ -1,3 +1,5 @@
+import { log } from 'src/lib/util'
+
 module.exports = {
   active: true, //           controls if this runs
   order: 10, //              controls the order this runs
@@ -21,7 +23,7 @@ module.exports = {
           OR: [JSON.parse(q)],
         })
       } catch (error) {
-        console.log('cannot parse from rule', error)
+        log('cannot parse from rule - groupMembersReadAllRules')
       }
     }
     return { where }

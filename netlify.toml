@@ -19,6 +19,7 @@ functions = "api/dist/functions"
   from = "/*"
   to = "/index.html"
   status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
@@ -27,4 +28,4 @@ functions = "api/dist/functions"
     X-Content-Type-Options = "nosniff"
     Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
     Referrer-Policy = "same-origin"
-    Content-Security-Policy = "default-src 'none'; connect-src 'self'; img-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; frame-ancestors 'self'; base-uri 'self' "
+    Content-Security-Policy = "default-src 'none'; manifest-src 'self'; worker-src 'self'; connect-src 'self'; img-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; frame-ancestors 'self'; base-uri 'self';"

@@ -6,7 +6,8 @@ import {
   Flex,
   HStack,
   VStack,
-  Icon,
+  Button,
+  Spacer,
   useColorModeValue,
   Drawer,
   DrawerContent,
@@ -18,7 +19,7 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react'
-import { NavLink, routes, navigate } from '@redwoodjs/router'
+import { routes, navigate } from '@redwoodjs/router'
 import {
   MdGroups,
   MdPerson,
@@ -35,17 +36,7 @@ import {
   MdSettingsApplications,
 } from 'react-icons/md'
 import { useAuth } from '@redwoodjs/auth'
-// interface LinkItemProps {
-//   name: string;
-//   icon: IconType;
-// }
-//const LinkItems: Array<LinkItemProps> = [
-
-// export default function SidebarWithHeader({
-//   children,
-// }: {
-//   children: ReactNode;
-// }) {
+import NavItem from '../NavItem/NavItem'
 const SidebarWithHeader = ({ brand, children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
@@ -82,7 +73,7 @@ const SidebarWithHeader = ({ brand, children }) => {
 
 //const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 const SidebarContent = ({ brand, onClose, ...rest }) => {
-  const { hasRole } = useAuth()
+  const { hasRole, isAuthenticated } = useAuth()
   const LinkItems = [
     { name: 'Home', icon: MdHome, navigateTo: 'home' },
     { name: 'Users', icon: MdPerson, role: 'userRead', navigateTo: 'users' },
@@ -125,11 +116,17 @@ const SidebarContent = ({ brand, onClose, ...rest }) => {
     },
     { name: 'Logout', icon: MdLogout, navigateTo: 'logout' },
   ].filter((item) => {
-    return hasRole(item.role) || hasRole('admin') || !item.role
+    if (item?.requireAuth === true && isAuthenticated) {
+      return (
+        item?.requireAuth === true || hasRole(item.role) || hasRole('admin')
+      )
+    }
+    return hasRole(item.role) || hasRole('admin')
   })
 
   return (
     <Box
+      overflowY={'scroll'}
       transition="3s ease"
       bg={useColorModeValue('white', 'gray.900')}
       borderRight="1px"
@@ -147,6 +144,9 @@ const SidebarContent = ({ brand, onClose, ...rest }) => {
       </Flex>
       {LinkItems.map((link) => (
         <NavItem
+          pt={0}
+          pb={0}
+          size={'sm'}
           key={link.name}
           icon={link.icon}
           navigateTo={link.navigateTo}
@@ -158,56 +158,8 @@ const SidebarContent = ({ brand, onClose, ...rest }) => {
     </Box>
   )
 }
-
-// interface NavItemProps extends FlexProps {
-//   icon: IconType;
-//   children: ReactText;
-// }
-// const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
-const NavItem = ({ icon, navigateTo, children, ...rest }) => {
-  return (
-    <NavLink
-      to={routes[navigateTo]()}
-      className="link"
-      activeClassName="activeLink"
-      style={{ textDecoration: 'none' }}
-      _focus={{ boxShadow: 'none' }}
-    >
-      <Flex
-        align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        cursor="pointer"
-        _hover={{
-          bg: 'cyan.400',
-          color: 'white',
-        }}
-        {...rest}
-      >
-        {icon && (
-          <Icon
-            mr="4"
-            fontSize="16"
-            _groupHover={{
-              color: 'white',
-            }}
-            as={icon}
-          />
-        )}
-        {children}
-      </Flex>
-    </NavLink>
-  )
-}
-
-// interface MobileProps extends FlexProps {
-//   onOpen: () => void;
-// }
-// const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 const MobileNav = ({ brand, onOpen, ...rest }) => {
-  const { currentUser, logOut } = useAuth()
+  const { isAuthenticated, currentUser, logOut } = useAuth()
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -227,7 +179,7 @@ const MobileNav = ({ brand, onOpen, ...rest }) => {
         aria-label="open menu"
         icon={<MdMenu />}
       />
-
+      <Spacer />
       <Text
         display={{ base: 'flex', md: 'none' }}
         fontSize="2xl"
@@ -236,6 +188,7 @@ const MobileNav = ({ brand, onOpen, ...rest }) => {
       >
         {brand}
       </Text>
+      <Spacer />
 
       <HStack spacing={{ base: '0', md: '6' }}>
         <IconButton
@@ -245,52 +198,58 @@ const MobileNav = ({ brand, onOpen, ...rest }) => {
           icon={<MdDoorbell />}
         />
         <Flex alignItems={'center'}>
-          <Menu>
-            <MenuButton
-              py={2}
-              transition="all 0.3s"
-              _focus={{ boxShadow: 'none' }}
+          {!isAuthenticated && (
+            <Button
+              backgroundColor={'green'}
+              onClick={() => {
+                navigate(routes.login())
+              }}
             >
-              <HStack>
-                <VStack
-                  display={{ base: 'none', md: 'flex' }}
-                  alignItems="flex-start"
-                  spacing="1px"
-                  ml="2"
-                >
-                  <Text fontSize="sm">{currentUser.name}</Text>
-                  {/*<Text fontSize="xs" color="gray.600">
-                    {JSON.stringify(currentUser)}
-                  </Text>*/}
-                </VStack>
-                <Box display={{ base: 'none', md: 'flex' }}>
-                  <MdOutlineKeyboardArrowDown />
+              Log in
+            </Button>
+          )}
+          {isAuthenticated && (
+            <Menu>
+              <MenuButton
+                py={2}
+                transition="all 0.3s"
+                _focus={{ boxShadow: 'none' }}
+              >
+                <HStack>
+                  <VStack
+                    display={{ base: 'none', md: 'flex' }}
+                    alignItems="flex-start"
+                    spacing="1px"
+                    ml="2"
+                  >
+                    <Text fontSize="sm">{currentUser?.name || 'You'}</Text>
+                  </VStack>
+                  <Box display={{ base: 'none', md: 'flex' }}>
+                    <MdOutlineKeyboardArrowDown />
+                  </Box>
+                </HStack>
+              </MenuButton>
+              <MenuList>
+                <Box>
+                  <MenuItem
+                    onClick={() => {
+                      navigate(routes.myProfile())
+                    }}
+                  >
+                    Profile
+                  </MenuItem>
+                  <MenuDivider />
                 </Box>
-              </HStack>
-            </MenuButton>
-            <MenuList
-              bg={useColorModeValue('white', 'gray.900')}
-              borderColor={useColorModeValue('gray.200', 'gray.700')}
-            >
-              <MenuItem
-                onClick={() => {
-                  navigate(routes.myProfile())
-                }}
-              >
-                Profile
-              </MenuItem>
-              <MenuItem>Settings</MenuItem>
-              <MenuItem>Billing</MenuItem>
-              <MenuDivider />
-              <MenuItem
-                onClick={() => {
-                  logOut()
-                }}
-              >
-                Sign out
-              </MenuItem>
-            </MenuList>
-          </Menu>
+                <MenuItem
+                  onClick={() => {
+                    logOut()
+                  }}
+                >
+                  Sign out
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          )}
         </Flex>
       </HStack>
     </Flex>
