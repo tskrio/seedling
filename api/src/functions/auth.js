@@ -49,7 +49,7 @@ export const handler = async (event, context) => {
 
     // How long a user will remain logged in, in seconds
     // expires: 60 * 60 * 24 * 365 * 10, // 10 years
-    expires: 60 * 60 * 1, // 1 hour
+    expires: 60 * 60 * 8, // 8 hour
   }
   const resetPasswordOptions = {
     handler: (/*user*/) => {

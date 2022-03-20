@@ -56,6 +56,7 @@ const CookieModal = () => {
                     Cookies.set('acceptCookies', true, {
                       secure: true,
                       sameSite: 'strict',
+                      expires: 364, //a year
                     })
                     setCookies(true)
                   }}

@@ -10,6 +10,7 @@ import {
   Select,
   Spacer,
   Flex,
+  Switch,
 } from '@chakra-ui/react'
 import { useAuth } from '@redwoodjs/auth'
 import { Fragment } from 'react'
@@ -59,6 +60,7 @@ const FormComponent = ({
           {...register(field.name, {
             required: field?.required || false,
             minLength: field.minLength,
+            onChange: field?.onChange,
           })}
           defaultValue={record?.[field.name] || field.defaultValue}
         />
@@ -67,6 +69,32 @@ const FormComponent = ({
         </FormErrorMessage>
       </FormControl>
     )
+    if (field.type === 'boolean') {
+      html = (
+        <FormControl
+          pt={field.pt}
+          key={field.name}
+          isInvalid={errors[field.name]}
+          display="flex"
+          alignItems="center"
+        >
+          <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
+          <Switch
+            colorScheme="green"
+            id={field.name}
+            readOnly={field.readOnly || false}
+            {...register(field.name, {
+              required: field?.required || false,
+            })}
+            defaultChecked={record?.[field.name] || field.defaultValue}
+            //isChecked={record?.[field.name] || field.defaultValue}
+          />
+          <FormErrorMessage>
+            {errors[field.name] && errors[field.name].message}
+          </FormErrorMessage>
+        </FormControl>
+      )
+    }
     if (field.type === 'password') {
       html = (
         <PasswordField
@@ -85,6 +113,48 @@ const FormComponent = ({
       } catch (error) {
         console.error(error)
       }
+    }
+    if (field.type === 'dateTime') {
+      //Original(2022-03-10T16:41:06.000Z)
+      //Displayed(2022-03-10T10:41)
+      let transformedDefault = false
+      let padToTwo = (value) => {
+        if (typeof value !== 'string') value = value.toString()
+        if (value.length === 2) return value
+        return value.padStart(2, 0)
+      }
+      if (record?.[field.name] || field.defaultValue) {
+        let fieldDate = new Date(record?.[field.name] || field.defaultValue)
+        transformedDefault = `${fieldDate.getFullYear()}-${padToTwo(
+          fieldDate.getMonth() + 1
+        )}-${padToTwo(fieldDate.getDate())}T${padToTwo(
+          fieldDate.getHours()
+        )}:${padToTwo(fieldDate.getMinutes())}`
+      }
+      html = (
+        <FormControl
+          pt={field.pt}
+          key={field.name}
+          isInvalid={errors[field.name]}
+        >
+          <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
+          <Input
+            id={field.name}
+            placeholder={field.placeholder || '...' || ''}
+            readOnly={field.readOnly || false}
+            type={'datetime-local'}
+            {...register(field.name, {
+              required: field?.required || false,
+              minLength: field.minLength,
+              onChange: field?.onChange,
+            })}
+            defaultValue={transformedDefault}
+          />
+          <FormErrorMessage>
+            {errors[field.name] && errors[field.name].message}
+          </FormErrorMessage>
+        </FormControl>
+      )
     }
     if (field.type === 'select') {
       html = (
