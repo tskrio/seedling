@@ -9,6 +9,10 @@ tasks:
   - init: |
       rm ./renovate.json
       yarn install
+      yarn rw prisma db push
+      yarn rw exec seed
+      export SESSION_SECRET=`tr -dc A-Za-z0-9 </dev/urandom | head -c 64 ; echo ''`
+      eval $(gp env -e)
     command: yarn redwood dev
 
 ports:
