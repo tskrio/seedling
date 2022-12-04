@@ -1,11 +1,14 @@
+import { Fragment, useState } from 'react'
+
 import { Box, Button } from '@chakra-ui/react'
+
+import { useAuth } from '@redwoodjs/auth'
+import { navigate } from '@redwoodjs/router'
+
 import { PlayIcon } from 'src/components/CallToActionWithVideo/'
 import CallToActionWithVideo from 'src/components/CallToActionWithVideo/'
-import { navigate } from '@redwoodjs/router'
-import { useAuth } from '@redwoodjs/auth'
-import { Fragment, useState } from 'react'
-import Welcome from 'src/components/Welcome'
 import DeployButton from 'src/components/DeployButton'
+import Welcome from 'src/components/Welcome'
 const AboutComponent = ({ auth0 /*, isAuthenticated, currentUser*/ }) => {
   const { isAuthenticated } = useAuth()
 

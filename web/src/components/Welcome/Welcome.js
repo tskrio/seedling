@@ -1,3 +1,4 @@
+import { CheckIcon } from '@chakra-ui/icons'
 import {
   Box,
   Container,
@@ -9,7 +10,6 @@ import {
   HStack,
   VStack,
 } from '@chakra-ui/react'
-import { CheckIcon } from '@chakra-ui/icons'
 /*const logo = (
   <Box
     ref={svgRef}

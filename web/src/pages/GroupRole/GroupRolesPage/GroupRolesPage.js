@@ -1,6 +1,8 @@
-import GroupRoles from 'src/components/GroupRole/GroupRoles'
 import { Fragment } from 'react'
+
 import { MetaTags } from '@redwoodjs/web'
+
+import GroupRoles from 'src/components/GroupRole/GroupRoles'
 
 const GroupRolesPage = () => {
   return (

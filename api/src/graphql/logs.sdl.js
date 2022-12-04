@@ -30,11 +30,13 @@ export const schema = gql`
   input CreateLogInput {
     message: String!
     source: String!
+    context: String!
   }
 
   input UpdateLogInput {
     message: String
     source: String
+    context: String
   }
 
   type Mutation {

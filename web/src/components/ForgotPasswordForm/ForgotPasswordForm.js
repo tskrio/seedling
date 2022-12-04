@@ -1,3 +1,5 @@
+import { useState, Fragment, useEffect } from 'react'
+
 import {
   Button,
   Flex,
@@ -5,12 +7,14 @@ import {
   Stack,
   useColorModeValue,
 } from '@chakra-ui/react'
-import { useState, Fragment, useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+
 import { useAuth } from '@redwoodjs/auth'
 import { navigate, routes } from '@redwoodjs/router'
 import { toast, Toaster } from '@redwoodjs/web/toast'
+
 import FormComponent from 'src/components/FormComponent'
-import { useForm } from 'react-hook-form'
+
 const ForgotPasswordForm = () => {
   const [submitted, setSubmitted] = useState(false)
   const [username, setUsername] = useState()

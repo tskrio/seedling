@@ -1,15 +1,17 @@
-import { AuthProvider } from '@redwoodjs/auth'
 import { Auth0Client } from '@auth0/auth0-spa-js'
 import {
   ChakraProvider,
   ColorModeScript /*, extendTheme*/,
 } from '@chakra-ui/react'
-import { theme } from './chakraUiTheme'
+
+import { AuthProvider } from '@redwoodjs/auth'
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
 import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
+
+import { theme } from './chakraUiTheme'
 
 //import 'src/scaffold.css'
 //import 'src/reset.css'

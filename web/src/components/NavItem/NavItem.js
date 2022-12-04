@@ -1,4 +1,5 @@
 import { Flex, Icon } from '@chakra-ui/react'
+
 import { NavLink, routes } from '@redwoodjs/router'
 const NavItem = ({ icon, navigateTo, query, children, ...rest }) => {
   if (!query) {

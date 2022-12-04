@@ -1,5 +1,4 @@
-import { Link, navigate } from '@redwoodjs/router'
-import { useAuth } from '@redwoodjs/auth'
+import { HamburgerIcon } from '@chakra-ui/icons'
 import {
   Box,
   Flex,
@@ -12,10 +11,13 @@ import {
   MenuItem,
   Badge,
 } from '@chakra-ui/react'
-import { HamburgerIcon } from '@chakra-ui/icons'
-import ShareButton from '../ShareButton/ShareButton'
-import EditButton from '../EditButton/EditButton'
+
+import { useAuth } from '@redwoodjs/auth'
+import { Link, navigate } from '@redwoodjs/router'
+
 import DeleteButton from '../DeleteButton/DeleteButton'
+import EditButton from '../EditButton/EditButton'
+import ShareButton from '../ShareButton/ShareButton'
 
 const TableRows = ({
   columns,

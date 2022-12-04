@@ -1,13 +1,17 @@
 /* eslint-disable no-console */
-const dotenv = require('dotenv')
-dotenv.config()
-const { PrismaClient } = require('@prisma/client')
-const db = new PrismaClient()
-import { users, bulkUsers } from './seedFiles/userSeed'
+
+import { PrismaClient } from '@prisma/client'
+
 import { groups } from './seedFiles/groupSeed'
 import { messages } from './seedFiles/messageSeed'
 import { properties } from './seedFiles/propertySeed'
+import { users, bulkUsers } from './seedFiles/userSeed'
 
+const dotenv = require('dotenv')
+dotenv.config()
+//const { PrismaClient } = require('@prisma/client')
+
+const db = new PrismaClient()
 async function main() {
   await db.groupRole.deleteMany({})
   for (let group of groups) {

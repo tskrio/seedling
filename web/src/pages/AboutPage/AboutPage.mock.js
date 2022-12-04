@@ -4,7 +4,7 @@ export const standard = () => {
     isAuthenticated: true,
 
     currentUser: {
-      name: "Jace"
+      name: 'Jace',
     },
-  };
-};
+  }
+}

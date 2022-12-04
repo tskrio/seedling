@@ -7,7 +7,6 @@ image:
 
 tasks:
   - init: |
-      rm ./renovate.json
       yarn install
       yarn rw prisma db push
       yarn rw exec seed

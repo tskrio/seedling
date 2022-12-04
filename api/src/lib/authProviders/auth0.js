@@ -1,7 +1,8 @@
-import { db } from '../db.js'
 import {
   AuthenticationError /*, ForbiddenError*/,
 } from '@redwoodjs/graphql-server'
+
+import { db } from '../db.js'
 export const getUser = async (
   session /*, { token, type, event, context }*/
 ) => {

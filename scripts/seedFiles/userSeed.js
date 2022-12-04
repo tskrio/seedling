@@ -1,7 +1,8 @@
+import Chance from 'chance'
+
 const dotenv = require('dotenv')
 dotenv.config()
 
-import Chance from 'chance'
 const chance = new Chance()
 let total = 100
 let _users = []

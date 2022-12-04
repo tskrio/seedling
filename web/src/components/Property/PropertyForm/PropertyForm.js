@@ -6,13 +6,13 @@ import {
   TextField,
   Submit,
 } from '@redwoodjs/forms'
-
+/*
 const formatDatetime = (value) => {
   if (value) {
     return value.replace(/:\d{2}\.\d{3}\w/, '')
   }
 }
-
+*/
 const PropertyForm = (props) => {
   const onSubmit = (data) => {
     props.onSave(data, props?.property?.id)

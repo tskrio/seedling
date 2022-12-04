@@ -8,17 +8,19 @@
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
 import { Set, Router, Route, Private } from '@redwoodjs/router'
+
+import GroupMembersLayout from 'src/layouts/GroupMembersLayout'
+import GroupRolesLayout from 'src/layouts/GroupRolesLayout'
+import GroupsLayout from 'src/layouts/GroupsLayout'
 import LogsLayout from 'src/layouts/LogsLayout'
 import MessagesLayout from 'src/layouts/MessagesLayout'
-import PropertiesLayout from 'src/layouts/PropertiesLayout'
-import GroupRolesLayout from 'src/layouts/GroupRolesLayout'
-import UsersLayout from 'src/layouts/UsersLayout'
-import GroupMembersLayout from 'src/layouts/GroupMembersLayout'
-import GroupsLayout from 'src/layouts/GroupsLayout'
 import PreferencesLayout from 'src/layouts/PreferencesLayout'
-import Standard from './layouts/Standard/Standard'
+import PropertiesLayout from 'src/layouts/PropertiesLayout'
+import UsersLayout from 'src/layouts/UsersLayout'
 import AboutPage from 'src/pages/AboutPage'
 import HomePage from 'src/pages/HomePage'
+
+import Standard from './layouts/Standard/Standard'
 
 const Routes = () => {
   return (

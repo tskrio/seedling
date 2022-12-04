@@ -6,13 +6,13 @@ import {
   NumberField,
   Submit,
 } from '@redwoodjs/forms'
-
+/*
 const formatDatetime = (value) => {
   if (value) {
     return value.replace(/:\d{2}\.\d{3}\w/, '')
   }
 }
-
+*/
 const GroupMemberForm = (props) => {
   const onSubmit = (data) => {
     props.onSave(data, props?.groupMember?.id)
