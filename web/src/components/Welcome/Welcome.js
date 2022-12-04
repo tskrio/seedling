@@ -57,53 +57,44 @@ const Welcome = () => {
   const features = [
     {
       title: 'Convention over configuration',
-      text: 'We want a clear way to solve most problems, if it can be solved it should be done in a repeatable way.',
+      text: 'We provide a clear way to solve most problems, with a repeatable and predictable approach.'
     },
     {
       title: 'Authentication providers',
-      text: 'Today we support dbAuth, and Auth0.  Just change your environment variables to switch.',
+      text: 'We support dbAuth and Auth0, allowing you to switch between providers with ease.'
     },
     {
       title: 'Beautiful Responsive Emails',
-      text: 'No one likes the minefield that is email.  MJML helps build your templates and make them beautiful on every client.',
+      text: 'Our emails are designed to be beautiful and look great on all platforms, using MJML.'
     },
     {
       title: 'Privacy is important to us',
-      text: "We've taken steps to ensure that your users' privacy is respected.",
+      text: "We take steps to ensure that your users' privacy is respected and secure."
     },
     {
       title: 'Security Roles',
-      text: 'Table and field level roles by default are set so you can simply give them out and not figure them out.',
+      text: 'Table and field level roles are set by default, allowing you to easily manage access.'
     },
     {
       title: 'Row Level Security',
-      text: 'Row Level Security is hard, we a convention for how to do this that makes sense.',
+      text: 'We provide a convention for implementing row level security that makes sense.'
     },
     {
       title: 'Automate with rules',
-      text: 'Rules are api side logic that run before and after create, read, update and delete operations.',
+      text: 'Rules are API-side logic that run before and after create, read, update and delete operations.'
     },
     {
       title: 'Accessibility',
-      text: 'We use Chakra-UI to make these sites as accessible as possible.',
+      text: 'We use Chakra-UI to make our sites as accessible as possible.'
     },
     {
       title: 'Forms and Lists',
-      text: 'When generating pages and components from models, we build out sortable, searchable, filterable lists, and common forms.',
+      text: 'We generate pages and components from models with sortable, searchable and filterable lists, and common forms.'
     },
     {
       title: 'Own your data',
-      text: (
-        <>
-          When you own it, you can do{' '}
-          <Text display={'inline'} fontWeight={'bold'}>
-            whatever
-          </Text>{' '}
-          you want with it. That{"'"}s a tool hard to replace when you give away
-          your keys.
-        </>
-      ),
-    },
+      text: 'When you own your data, you can do whatever you want with it - giving you complete control.'
+    }
   ]
 
   return (
