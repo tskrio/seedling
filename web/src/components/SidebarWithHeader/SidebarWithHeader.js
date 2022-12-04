@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {
   IconButton,
   Box,
@@ -19,7 +20,6 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react'
-import { routes, navigate } from '@redwoodjs/router'
 import {
   MdGroups,
   MdPerson,
@@ -35,7 +35,10 @@ import {
   MdOutlineKeyboardArrowDown,
   MdSettingsApplications,
 } from 'react-icons/md'
+
 import { useAuth } from '@redwoodjs/auth'
+import { routes, navigate } from '@redwoodjs/router'
+
 import NavItem from '../NavItem/NavItem'
 const SidebarWithHeader = ({ brand, children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()

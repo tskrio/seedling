@@ -1,6 +1,6 @@
-import { logger } from 'src/lib/logger'
-import { email } from 'src/lib/email'
 import { render } from 'src/emails/forgotpassword.mjml.js'
+import { email } from 'src/lib/email'
+import { logger } from 'src/lib/logger'
 import { getProperty, log } from 'src/lib/util'
 module.exports = {
   active: true,

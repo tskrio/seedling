@@ -9,7 +9,7 @@ export const watchAndLog = (() => {
       // could be either 'rename' or 'change'. new file event and delete
       // also generally emit 'rename'
 
-      console.log(allRules)
+      //console.log(allRules)
       console.log(filename)
     }
   })

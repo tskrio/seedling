@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import {
   Button,
   Flex,
@@ -7,11 +9,12 @@ import {
   Box,
   Spacer,
 } from '@chakra-ui/react'
-import { Toaster, toast } from '@redwoodjs/web/toast'
-import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+
 import { useAuth } from '@redwoodjs/auth'
 import { navigate, routes } from '@redwoodjs/router'
-import { useForm } from 'react-hook-form'
+import { Toaster, toast } from '@redwoodjs/web/toast'
+
 import FormComponent from 'src/components/FormComponent'
 const LoginForm = () => {
   const { isAuthenticated, logIn } = useAuth()

@@ -1,6 +1,9 @@
 import { routes } from '@redwoodjs/router'
+
 import { Fragment, useState } from 'react'
+
 import PreferencesCell from 'src/components/Preference/PreferencesCell'
+
 import { showMatching, filterOut } from '/src/lib/atomicFunctions'
 export const initialColumns = [
   {

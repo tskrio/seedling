@@ -1,8 +1,10 @@
+import { UserInputError } from '@redwoodjs/graphql-server'
+
+import allRules from 'src/rules/**/**.{js,ts}'
+
 import { logger } from 'src/lib/logger'
 import { log } from 'src/lib/util'
-import { UserInputError } from '@redwoodjs/graphql-server'
 // let timeRemaining = 10000
-import allRules from 'src/rules/**/**.{js,ts}'
 // let shortenFile = (fileName) => {
 //   // return everything after /rules/
 //   let regex = /(.+\/rules)(.+)/gm

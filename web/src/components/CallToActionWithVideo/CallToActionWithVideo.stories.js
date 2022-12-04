@@ -1,5 +1,6 @@
-import CallToActionWithVideo from './CallToActionWithVideo'
 import { useState } from 'react'
+
+import CallToActionWithVideo from './CallToActionWithVideo'
 
 export const Generated = () => {
   let header = { lineOne: 'Accessible', lineTwo: 'Automation' }

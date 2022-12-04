@@ -1,10 +1,11 @@
-import PasswordField from './PasswordField'
 import { useForm } from 'react-hook-form'
+
+import PasswordField from './PasswordField'
 export const Generated = () => {
   const {
-    handleSubmit,
+    //handleSubmit,
     register,
-    formState: { errors, isSubmitting },
+    formState: { errors /*, isSubmitting*/ },
   } = useForm()
   let field = {
     name: 'customPassword',

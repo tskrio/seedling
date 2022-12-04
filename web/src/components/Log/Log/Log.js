@@ -1,8 +1,9 @@
+import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes, navigate } from '@redwoodjs/router'
-import { DELETE_LOG_MUTATION } from 'src/components/Log/EditLogCell'
 
+import { DELETE_LOG_MUTATION } from 'src/components/Log/EditLogCell'
+/*
 const jsonDisplay = (obj) => {
   return (
     <pre>
@@ -10,7 +11,7 @@ const jsonDisplay = (obj) => {
     </pre>
   )
 }
-
+*/
 const timeTag = (datetime) => {
   return (
     <time dateTime={datetime} title={datetime}>
@@ -18,11 +19,11 @@ const timeTag = (datetime) => {
     </time>
   )
 }
-
+/*
 const checkboxInputTag = (checked) => {
   return <input type="checkbox" checked={checked} disabled />
 }
-
+*/
 const Log = ({ log }) => {
   const [deleteLog] = useMutation(DELETE_LOG_MUTATION, {
     onCompleted: () => {

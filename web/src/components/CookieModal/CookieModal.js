@@ -1,4 +1,5 @@
-import Cookies from 'js-cookie'
+import { useState, useRef, useEffect, Fragment } from 'react'
+
 import {
   Box,
   Flex,
@@ -12,8 +13,7 @@ import {
   DrawerHeader,
   useDisclosure,
 } from '@chakra-ui/react'
-
-import { useState, useRef, useEffect, Fragment } from 'react'
+import Cookies from 'js-cookie'
 
 const CookieModal = () => {
   let previouslyAccepted = Cookies.get('acceptCookies') == 'true'

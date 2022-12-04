@@ -1,6 +1,8 @@
+//import { routes } from '@redwoodjs/router'
+
 import ShareButton from './ShareButton'
-import { showMatching, filterOut } from '/src/lib/atomicFunctions'
-import { routes } from '@redwoodjs/router'
+
+//import { showMatching, filterOut } from '/src/lib/atomicFunctions'
 export const generated = () => {
   let column = {
     Header: '⚙️',

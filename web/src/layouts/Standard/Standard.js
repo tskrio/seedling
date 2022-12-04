@@ -1,9 +1,12 @@
-import AboutPage from 'src/pages/AboutPage'
-import CookieModal from 'src/components/CookieModal'
-import { useAuth } from '@redwoodjs/auth'
-import SidebarWithHeader from 'src/components/SidebarWithHeader'
-import Footer from 'src/components/Footer'
 import { Fragment } from 'react'
+
+import { useAuth } from '@redwoodjs/auth'
+
+import CookieModal from 'src/components/CookieModal'
+import Footer from 'src/components/Footer'
+import SidebarWithHeader from 'src/components/SidebarWithHeader'
+import AboutPage from 'src/pages/AboutPage'
+
 const Standard = ({ children /*, isAuthenticated, currentUser*/ }) => {
   const brand = 'Seedling' //TODO: USE PROPERTY OR ENV VARIABLE
   const { isAuthenticated, currentUser } = useAuth()

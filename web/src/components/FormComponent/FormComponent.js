@@ -1,3 +1,5 @@
+import { Fragment } from 'react'
+
 import {
   Input,
   Alert,
@@ -12,8 +14,9 @@ import {
   Flex,
   Switch,
 } from '@chakra-ui/react'
+
 import { useAuth } from '@redwoodjs/auth'
-import { Fragment } from 'react'
+
 import PasswordField from '../PasswordField/PasswordField'
 import ReferenceField from '../ReferenceField/ReferenceField'
 const FormComponent = ({

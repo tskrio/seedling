@@ -1,11 +1,12 @@
-import { db } from 'src/lib/db'
 import { UserInputError } from '@redwoodjs/graphql-server'
+
+import { db } from 'src/lib/db'
 import {
   executeBeforeCreateRulesV2,
   executeAfterCreateRulesV2,
   executeBeforeReadAllRulesV2,
   executeAfterReadAllRulesV2,
-  executeBeforeReadRules,//TODO: UPDATE THIS TO USE NEW FUNCTIONS
+  executeBeforeReadRules, //TODO: UPDATE THIS TO USE NEW FUNCTIONS
   executeAfterReadRules,
   executeBeforeUpdateRules,
   executeAfterUpdateRules,
@@ -65,6 +66,7 @@ export const logs = async ({ filter, skip, orderBy, q, take }) => {
       take: _take,
       skip,
       q: JSON.stringify(where),
+      status,
     }
   } catch (error) {
     throw new UserInputError(error.message)

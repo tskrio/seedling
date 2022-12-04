@@ -1,6 +1,7 @@
+import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { Link, routes, navigate } from '@redwoodjs/router'
+
 import { DELETE_PREFERENCE_MUTATION } from 'src/components/Preference/EditPreferenceCell'
 
 // const jsonDisplay = (obj) => {

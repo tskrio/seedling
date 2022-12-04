@@ -1,8 +1,11 @@
-import GroupMembers from 'src/components/GroupMember/GroupMembers'
 import { Fragment } from 'react'
-import EditUserCell from 'src/components/User/EditUserCell'
-import Preferences from 'src/components/Preference/Preferences'
+
 import { Tabs, TabList, Tab, TabPanel, TabPanels } from '@chakra-ui/react'
+
+import GroupMembers from 'src/components/GroupMember/GroupMembers'
+import Preferences from 'src/components/Preference/Preferences'
+import EditUserCell from 'src/components/User/EditUserCell'
+
 const EditUserPage = ({ id }) => {
   return (
     <Fragment>

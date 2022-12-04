@@ -1,6 +1,8 @@
-import { Box } from '@chakra-ui/react'
-import { Toaster } from '@redwoodjs/web/toast'
 import { Fragment } from 'react'
+
+import { Box } from '@chakra-ui/react'
+
+import { Toaster } from '@redwoodjs/web/toast'
 
 const LogsLayout = ({ children }) => {
   return (

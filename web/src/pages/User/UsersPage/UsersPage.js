@@ -1,6 +1,8 @@
-import Users from 'src/components/User/Users'
 import { Fragment } from 'react'
+
 import { MetaTags } from '@redwoodjs/web'
+
+import Users from 'src/components/User/Users'
 
 const UsersPage = () => {
   return (
