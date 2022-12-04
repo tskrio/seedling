@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import {
   Button,
@@ -19,7 +21,6 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
 const DeployButton = () => {
   function randomString(len, charSet) {
     charSet =

@@ -1,3 +1,5 @@
+import { useEffect, useState, Fragment } from 'react'
+
 import {
   Button,
   Flex,
@@ -5,11 +7,12 @@ import {
   Stack,
   useColorModeValue,
 } from '@chakra-ui/react'
-import { useEffect, useState, Fragment } from 'react'
+import { useForm } from 'react-hook-form'
+
 import { useAuth } from '@redwoodjs/auth'
 import { navigate, routes } from '@redwoodjs/router'
 import { toast, Toaster } from '@redwoodjs/web/toast'
-import { useForm } from 'react-hook-form'
+
 import FormComponent from 'src/components/FormComponent'
 const SignupForm = () => {
   const [submitted, setSubmitted] = useState(false)

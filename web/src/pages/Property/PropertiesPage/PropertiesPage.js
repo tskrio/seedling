@@ -1,6 +1,8 @@
-import Properties from 'src/components/Property/Properties'
 import { Fragment } from 'react'
+
 import { MetaTags } from '@redwoodjs/web'
+
+import Properties from 'src/components/Property/Properties'
 
 const PropertiesPage = () => {
   return (

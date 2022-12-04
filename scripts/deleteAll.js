@@ -1,5 +1,5 @@
 // To access your database
-import { db } from '$api/src/lib/db'
+/*import { db } from '$api/src/lib/db'
 
 export default async ({ args }) => {
   // Your script here...
@@ -12,3 +12,4 @@ export default async ({ args }) => {
   await db.property.deleteMany({})
   await db.message.deleteMany({})
 }
+*/

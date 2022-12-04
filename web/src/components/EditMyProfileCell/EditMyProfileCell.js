@@ -1,12 +1,15 @@
+import { Fragment } from 'react'
+
+import { Button, Flex, Spacer } from '@chakra-ui/react'
+import { useForm } from 'react-hook-form'
+
+import { useAuth } from '@redwoodjs/auth'
+import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { navigate, routes } from '@redwoodjs/router'
+
 import FormComponent from 'src/components/FormComponent'
-import { Fragment } from 'react'
-import { useAuth } from '@redwoodjs/auth'
-import { useForm } from 'react-hook-form'
 import FormSkeleton from 'src/components/FormSkeleton/FormSkeleton'
-import { Button, Flex, Spacer } from '@chakra-ui/react'
 
 export const QUERY = gql`
   query getMyProfile {

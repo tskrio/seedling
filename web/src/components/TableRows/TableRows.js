@@ -1,5 +1,4 @@
-import { Link, navigate } from '@redwoodjs/router'
-import { useAuth } from '@redwoodjs/auth'
+import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
 import {
   Button,
   Box,
@@ -12,7 +11,9 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react'
-import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
+
+import { useAuth } from '@redwoodjs/auth'
+import { Link, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 

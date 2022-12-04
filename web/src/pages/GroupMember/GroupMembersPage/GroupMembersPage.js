@@ -1,6 +1,8 @@
-import GroupMembers from 'src/components/GroupMember/GroupMembers'
 import { Fragment } from 'react'
+
 import { MetaTags } from '@redwoodjs/web'
+
+import GroupMembers from 'src/components/GroupMember/GroupMembers'
 
 const GroupMembersPage = () => {
   return (

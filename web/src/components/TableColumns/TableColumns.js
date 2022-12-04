@@ -1,4 +1,13 @@
 import { Fragment } from 'react'
+
+import {
+  TriangleUpIcon,
+  TriangleDownIcon,
+  CloseIcon,
+  RepeatIcon,
+  ChevronDownIcon,
+  // DownloadIcon,
+} from '@chakra-ui/icons'
 import {
   Tr,
   Th,
@@ -10,14 +19,6 @@ import {
   Text,
   Box,
 } from '@chakra-ui/react'
-import {
-  TriangleUpIcon,
-  TriangleDownIcon,
-  CloseIcon,
-  RepeatIcon,
-  ChevronDownIcon,
-  // DownloadIcon,
-} from '@chakra-ui/icons'
 const TableColumns = ({
   columns,
   orderBy,

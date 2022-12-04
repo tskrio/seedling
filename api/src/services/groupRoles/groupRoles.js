@@ -1,5 +1,6 @@
-import { db } from 'src/lib/db'
 import { UserInputError } from '@redwoodjs/graphql-server'
+
+import { db } from 'src/lib/db'
 import {
   executeBeforeCreateRulesV2,
   executeAfterCreateRulesV2,

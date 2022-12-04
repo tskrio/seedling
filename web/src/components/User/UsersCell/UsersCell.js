@@ -1,5 +1,5 @@
-import { navigate, routes, useLocation } from '@redwoodjs/router'
 import { Fragment, useEffect, useState } from 'react'
+
 import {
   Flex,
   Table,
@@ -11,13 +11,17 @@ import {
   useMediaQuery,
   Center,
 } from '@chakra-ui/react'
-import TableColumns from 'src/components/TableColumns'
-import TableQuery from 'src/components/TableQuery'
-import TablePagination from 'src/components/TablePagination'
-import TableRows from 'src/components/TableRows/TableRows'
-import { DELETE_USER_MUTATION } from 'src/components/User/EditUserCell'
 import { MdAdd, MdKeyboardBackspace } from 'react-icons/md'
+
+import { navigate, routes, useLocation } from '@redwoodjs/router'
+
+import TableColumns from 'src/components/TableColumns'
+import TablePagination from 'src/components/TablePagination'
+import TableQuery from 'src/components/TableQuery'
+import TableRows from 'src/components/TableRows/TableRows'
 import TableSkeleton from 'src/components/TableSkeleton/TableSkeleton'
+import { DELETE_USER_MUTATION } from 'src/components/User/EditUserCell'
+
 export const beforeQuery = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { search } = useLocation()

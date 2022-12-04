@@ -8,17 +8,19 @@
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
 import { Set, Router, Route, Private } from '@redwoodjs/router'
+
+import GroupMembersLayout from 'src/layouts/GroupMembersLayout'
+import GroupRolesLayout from 'src/layouts/GroupRolesLayout'
+import GroupsLayout from 'src/layouts/GroupsLayout'
 import LogsLayout from 'src/layouts/LogsLayout'
 import MessagesLayout from 'src/layouts/MessagesLayout'
-import PropertiesLayout from 'src/layouts/PropertiesLayout'
-import GroupRolesLayout from 'src/layouts/GroupRolesLayout'
-import UsersLayout from 'src/layouts/UsersLayout'
-import GroupMembersLayout from 'src/layouts/GroupMembersLayout'
-import GroupsLayout from 'src/layouts/GroupsLayout'
 import PreferencesLayout from 'src/layouts/PreferencesLayout'
-import Standard from './layouts/Standard/Standard'
+import PropertiesLayout from 'src/layouts/PropertiesLayout'
+import UsersLayout from 'src/layouts/UsersLayout'
 import AboutPage from 'src/pages/AboutPage'
 import HomePage from 'src/pages/HomePage'
+
+import Standard from './layouts/Standard/Standard'
 
 const Routes = () => {
   return (
@@ -52,10 +54,10 @@ const Routes = () => {
           </Set>
 
           <Set wrap={GroupsLayout}>
-            <Private unauthenticated="home" role={['admin', 'groupCreate']}>
+            <Private unauthenticated="home" roles={['admin', 'groupCreate']}>
               <Route path="/groups/new" page={GroupNewGroupPage} name="newGroup" />
             </Private>
-            <Private unauthenticated="home" role={['admin', 'groupUpdate', 'groupRead']}>
+            <Private unauthenticated="home" roles={['admin', 'groupUpdate', 'groupRead']}>
               <Route path="/groups/{id:Int}" page={GroupEditGroupPage} name="group" />
               <Route path="/groups" page={GroupGroupsPage} name="groups" />
             </Private>
@@ -70,28 +72,28 @@ const Routes = () => {
             </Private>
           </Set>
           <Set wrap={UsersLayout}>
-            <Private unauthenticated="home" role={['admin', 'userCreate']}>
+            <Private unauthenticated="home" roles={['admin', 'userCreate']}>
               <Route path="/users/new" page={UserNewUserPage} name="newUser" />
             </Private>
-            <Private unauthenticated="home" role={['admin', 'userUpdate', 'userRead']}>
+            <Private unauthenticated="home" roles={['admin', 'userUpdate', 'userRead']}>
               <Route path="/users/{id:Int}" page={UserEditUserPage} name="user" />
               <Route path="/users" page={UserUsersPage} name="users" />
             </Private>
           </Set>
           <Set wrap={GroupMembersLayout}>
-            <Private unauthenticated="home" role={['admin', 'groupMemberCreate']}>
+            <Private unauthenticated="home" roles={['admin', 'groupMemberCreate']}>
               <Route path="/group-members/new" page={GroupMemberNewGroupMemberPage} name="newGroupMember" />
             </Private>
-            <Private unauthenticated="home" role={['admin', 'groupMemberUpdate', 'groupMemberRead']}>
+            <Private unauthenticated="home" roles={['admin', 'groupMemberUpdate', 'groupMemberRead']}>
               <Route path="/group-members/{id:Int}" page={GroupMemberEditGroupMemberPage} name="groupMember" />
               <Route path="/group-members" page={GroupMemberGroupMembersPage} name="groupMembers" />
             </Private>
           </Set>
           <Set wrap={GroupRolesLayout}>
-            <Private unauthenticated="home" role={['admin', 'groupRoleCreate']}>
+            <Private unauthenticated="home" roles={['admin', 'groupRoleCreate']}>
               <Route path="/group-roles/new" page={GroupRoleNewGroupRolePage} name="newGroupRole" />
             </Private>
-            <Private unauthenticated="home" role={['admin', 'groupRoleUpdate', 'groupRoleRead']}>
+            <Private unauthenticated="home" roles={['admin', 'groupRoleUpdate', 'groupRoleRead']}>
               <Route path="/group-roles/{id:Int}" page={GroupRoleEditGroupRolePage} name="groupRole" />
               <Route path="/group-roles" page={GroupRoleGroupRolesPage} name="groupRoles" />
             </Private>

@@ -1,6 +1,7 @@
+import Standard from 'src/layouts/Standard'
+
 import AboutPage from './AboutPage'
 import { standard } from './AboutPage.mock'
-import Standard from 'src/layouts/Standard'
 import 'src/scaffold.css'
 import 'src/reset.css'
 import 'src/index.css'

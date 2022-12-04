@@ -1,5 +1,7 @@
+//import { UserInputError } from '@redwoodjs/graphql-server'
+
 import { db } from 'src/lib/db'
-import { UserInputError } from '@redwoodjs/graphql-server'
+
 import { deleteUser, updateUser, user } from '../users/users'
 
 export const myProfile = async () => {

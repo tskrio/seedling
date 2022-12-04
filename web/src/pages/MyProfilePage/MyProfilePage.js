@@ -1,7 +1,9 @@
 import { Fragment } from 'react'
+
 //import Preferences from 'src/components/Preference/Preferences'
 //import { Tabs, TabList, Tab, TabPanel, TabPanels } from '@chakra-ui/react'
 import { MetaTags } from '@redwoodjs/web'
+
 import EditMyProfile from 'src/components/EditMyProfileCell/EditMyProfileCell'
 //import { useAuth } from '@redwoodjs/auth'
 

@@ -2,7 +2,7 @@ import mjml2html from 'mjml'
 export const render = ({ name }) => {
   return mjml2html(mjml(name), {})
 }
-let mjml = (name, brand, loginUrl) => {
+let mjml = (name, brand, loginUrl, welcomeImageUrl) => {
   return `<mjml>
   <mj-body>
     <mj-raw>

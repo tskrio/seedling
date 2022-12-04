@@ -1,6 +1,8 @@
-import Preferences from 'src/components/Preference/Preferences'
 import { Fragment } from 'react'
+
 import { MetaTags } from '@redwoodjs/web'
+
+import Preferences from 'src/components/Preference/Preferences'
 
 const PreferencesPage = () => {
   return (

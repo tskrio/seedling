@@ -1,5 +1,6 @@
-import { navigate, useLocation } from '@redwoodjs/router'
 import { Fragment, useRef } from 'react'
+
+import { SearchIcon } from '@chakra-ui/icons'
 import {
   SimpleGrid,
   IconButton,
@@ -11,7 +12,7 @@ import {
   BreadcrumbLink,
 } from '@chakra-ui/react'
 
-import { SearchIcon } from '@chakra-ui/icons'
+import { navigate, useLocation } from '@redwoodjs/router'
 
 const TableQuery = ({
   setQuery,

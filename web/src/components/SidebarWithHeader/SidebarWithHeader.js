@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {
   IconButton,
   Box,
@@ -18,7 +19,6 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react'
-import { NavLink, routes, navigate } from '@redwoodjs/router'
 import {
   MdGroups,
   MdPerson,
@@ -34,7 +34,9 @@ import {
   MdOutlineKeyboardArrowDown,
   MdSettingsApplications,
 } from 'react-icons/md'
+
 import { useAuth } from '@redwoodjs/auth'
+import { NavLink, routes, navigate } from '@redwoodjs/router'
 // interface LinkItemProps {
 //   name: string;
 //   icon: IconType;

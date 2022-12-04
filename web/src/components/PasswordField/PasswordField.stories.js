@@ -1,5 +1,6 @@
-import PasswordField from './PasswordField'
 import { useForm } from 'react-hook-form'
+
+import PasswordField from './PasswordField'
 export const Generated = () => {
   const {
     handleSubmit,

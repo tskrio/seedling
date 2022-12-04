@@ -1,4 +1,5 @@
 import { useAuth } from '@redwoodjs/auth'
+
 import AboutComponent from 'src/components/AboutComponent'
 const AboutPage = () => {
   const { currentUser, isAuthenticated } = useAuth()

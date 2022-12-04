@@ -1,4 +1,5 @@
 import { MetaTags } from '@redwoodjs/web'
+
 import ForgotPasswordForm from 'src/components/ForgotPasswordForm'
 
 const ForgotPasswordPage = () => {

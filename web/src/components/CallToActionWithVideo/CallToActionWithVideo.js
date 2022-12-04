@@ -1,3 +1,5 @@
+import { Fragment } from 'react'
+
 import {
   Container,
   Stack,
@@ -12,7 +14,7 @@ import {
   //  IconProps,
   useColorModeValue,
 } from '@chakra-ui/react'
-import { Fragment } from 'react'
+
 import VimeoEmbed from 'src/components/VimeoEmbed'
 export default function CallToActionWithVideo({
   children,

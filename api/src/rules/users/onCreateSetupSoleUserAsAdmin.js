@@ -1,6 +1,6 @@
-import { logger } from 'src/lib/logger'
 import { db } from 'src/lib/db'
 import { groups, properties } from 'src/lib/initialRecords'
+import { logger } from 'src/lib/logger'
 module.exports = {
   active: true,
   order: 10,

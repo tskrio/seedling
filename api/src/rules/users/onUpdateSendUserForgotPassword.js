@@ -1,6 +1,6 @@
-import { logger } from 'src/lib/logger'
-import { email } from 'src/lib/email'
 import { render } from 'src/emails/forgotpassword.mjml.js'
+import { email } from 'src/lib/email'
+import { logger } from 'src/lib/logger'
 import { log } from 'src/lib/util'
 module.exports = {
   active: true,
@@ -26,7 +26,7 @@ module.exports = {
       let client = await email({ provider: 'mailgun' })
       let code = data.resetToken
       let resetLink = `https://${client.domain}/reset-password?resetToken=${data.resetToken}`
-      let brand = 'Seedling';
+      let brand = 'Seedling'
       let rendered = render({ name, code, resetLink, brand })
       await client.send(
         {

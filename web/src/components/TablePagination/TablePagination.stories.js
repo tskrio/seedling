@@ -1,5 +1,6 @@
-import TablePagination from './TablePagination'
 import { useState } from 'react'
+
+import TablePagination from './TablePagination'
 export const Generated = () => {
   let [skip, setSkip] = useState(0) // default reocrds to jump
   let [take, setTake] = useState(10) // default records to take

@@ -1,6 +1,8 @@
-import Logs from 'src/components/Log/Logs'
 import { Fragment } from 'react'
+
 import { MetaTags } from '@redwoodjs/web'
+
+import Logs from 'src/components/Log/Logs'
 
 const LogsPage = () => {
   return (

@@ -1,6 +1,8 @@
-import Messages from 'src/components/Message/Messages'
 import { Fragment } from 'react'
+
 import { MetaTags } from '@redwoodjs/web'
+
+import Messages from 'src/components/Message/Messages'
 
 const MessagesPage = () => {
   return (

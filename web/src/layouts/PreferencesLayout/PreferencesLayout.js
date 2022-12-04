@@ -1,11 +1,13 @@
-import { Box } from '@chakra-ui/react'
-import { Toaster } from '@redwoodjs/web/toast'
 import { Fragment } from 'react'
+
+import { Box } from '@chakra-ui/react'
+
+import { Toaster } from '@redwoodjs/web/toast'
 const PreferencesLayout = ({ children }) => {
   return (
     <Fragment>
       <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
-      <Box p={4} background={"white"}>
+      <Box p={4} background={'white'}>
         {children}
       </Box>
     </Fragment>

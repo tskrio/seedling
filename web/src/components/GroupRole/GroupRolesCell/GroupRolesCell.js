@@ -1,5 +1,5 @@
-import { navigate, routes, useLocation } from '@redwoodjs/router'
 import { Fragment, useEffect, useState } from 'react'
+
 import {
   SimpleGrid,
   Flex,
@@ -12,12 +12,15 @@ import {
   useMediaQuery,
   Center,
 } from '@chakra-ui/react'
-import TableColumns from 'src/components/TableColumns'
-import TableQuery from 'src/components/TableQuery'
-import TablePagination from 'src/components/TablePagination'
-import TableRows from 'src/components/TableRows/TableRows'
-import { DELETE_GROUP_ROLE_MUTATION } from 'src/components/GroupRole/EditGroupRoleCell'
 import { MdAdd, MdKeyboardBackspace } from 'react-icons/md'
+
+import { navigate, routes, useLocation } from '@redwoodjs/router'
+
+import { DELETE_GROUP_ROLE_MUTATION } from 'src/components/GroupRole/EditGroupRoleCell'
+import TableColumns from 'src/components/TableColumns'
+import TablePagination from 'src/components/TablePagination'
+import TableQuery from 'src/components/TableQuery'
+import TableRows from 'src/components/TableRows/TableRows'
 import TableSkeleton from 'src/components/TableSkeleton/TableSkeleton'
 
 export const beforeQuery = (props) => {

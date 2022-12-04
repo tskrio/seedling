@@ -1,3 +1,5 @@
+# Seedling
+
 Seedling is the beginning of your next project.  It builds on RedwoodJS with some conventions that will save you time at the cost of choice.  However, if you're prototyping you may not want to choose how auth, email, and automation are built in and would rather just write the code that adds value.
 
 # Technologies
