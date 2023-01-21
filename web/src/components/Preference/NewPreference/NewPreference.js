@@ -11,7 +11,7 @@ import FormComponent from 'src/components/FormComponent'
 const CREATE_PREFERENCE_MUTATION = gql`
   mutation CreatePreferenceMutation($input: CreatePreferenceInput!) {
     createPreference(input: $input) {
-      id
+      cuid
     }
   }
 `
@@ -31,11 +31,15 @@ const NewPreference = () => {
   )
 
   const onSubmit = (data) => {
+    console.log({ function: 'onSubmit', data })
     onSave(data)
   }
 
   const onSave = (input) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.user) })
+    console.log({ function: 'onSave', input })
+    const castInput = Object.assign(
+      input /*{ userCuid: parseInt(input.user) }*/
+    )
     delete castInput.user
     createPreference({ variables: { input: castInput } })
   }
@@ -51,14 +55,12 @@ const NewPreference = () => {
     },
 
     {
-      name: 'user',
+      name: 'userCuid',
       prettyName: 'User',
       required: 'This is required',
-      // If this is a reference you probably want this below
-      // uncomment and edit below to your needs
       type: 'reference',
       display: 'name',
-      value: 'id',
+      value: 'cuid',
       QUERY: gql`
         query FindUsersFromPreferences(
           $filter: String
@@ -70,7 +72,7 @@ const NewPreference = () => {
             take
             skip
             results {
-              id
+              cuid
               name
             }
           }

@@ -5,11 +5,11 @@ module.exports = {
   operation: ['update', 'create'],
   table: 'group',
   file: __filename,
-  command: async function ({ data, status }) {
+  command: async function ({ data, status, cuid }) {
     if (data.name == 'test') {
       status.code = 'failure'
       status.message = 'no groups named test'
-      return { status }
     }
+    return { data, status, cuid }
   },
 }

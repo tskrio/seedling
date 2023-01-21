@@ -1,11 +1,11 @@
 export const schema = gql`
   type GroupRole {
-    id: Int!
+    cuid: String!
     createdAt: DateTime!
     updatedAt: DateTime!
     role: String!
-    groupId: Int!
-    group: Group!
+    groupCuid: String!
+    Group: Group!
   }
 
   type GroupRoles {
@@ -25,26 +25,26 @@ export const schema = gql`
       q: String
     ): GroupRoles! @requireAuth(roles: ["groupRoleRead", "admin"])
 
-    groupRole(id: Int!): GroupRole
+    groupRole(cuid: String!): GroupRole
       @requireAuth(roles: ["groupRoleRead", "admin"])
   }
 
   input CreateGroupRoleInput {
     role: String!
-    groupId: Int!
+    groupCuid: String!
   }
 
   input UpdateGroupRoleInput {
     role: String
-    groupId: Int
+    groupCuid: String
   }
 
   type Mutation {
     createGroupRole(input: CreateGroupRoleInput!): GroupRole!
       @requireAuth(roles: ["groupRoleCreate", "admin"])
-    updateGroupRole(id: Int!, input: UpdateGroupRoleInput!): GroupRole!
+    updateGroupRole(cuid: String!, input: UpdateGroupRoleInput!): GroupRole!
       @requireAuth(roles: ["groupRoleUpdate", "admin"])
-    deleteGroupRole(id: Int!): GroupRole!
+    deleteGroupRole(cuid: String!): GroupRole!
       @requireAuth(roles: ["groupRoleDelete", "admin"])
   }
 `

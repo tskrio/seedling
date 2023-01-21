@@ -19,14 +19,14 @@ module.exports = {
    * @param {object} q // string from URL maybe malformed Object
    * @returns
    */
-  command: async function ({ where, id }) {
+  command: async function ({ where, cuid }) {
     if (context.currentUser.roles.includes('userRead')) {
-      where.push({ id: context.currentUser.id }) // required for all queries
+      where.push({ cuid: context.currentUser.cuid }) // required for all queries
       //return where
-      return { where, id }
+      return { where, cuid }
     }
-    where.push({ id })
+    where.push({ cuid })
 
-    return { where, id }
+    return { where, cuid }
   },
 }

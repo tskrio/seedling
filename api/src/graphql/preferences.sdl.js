@@ -1,11 +1,11 @@
 export const schema = gql`
   type Preference {
-    id: Int!
+    cuid: String!
     createdAt: DateTime!
     updatedAt: DateTime!
     entity: String!
     value: String
-    userId: Int!
+    userCuid: String!
     user: User!
   }
 
@@ -26,28 +26,28 @@ export const schema = gql`
       q: String
     ): Preferences! @requireAuth(roles: ["preferenceRead", "admin"])
 
-    preference(id: Int!): Preference
+    preference(cuid: String!): Preference
       @requireAuth(roles: ["preferenceRead", "admin"])
   }
 
   input CreatePreferenceInput {
     entity: String!
     value: String
-    userId: Int!
+    userCuid: String!
   }
 
   input UpdatePreferenceInput {
     entity: String
     value: String
-    userId: Int
+    userCuid: String
   }
 
   type Mutation {
     createPreference(input: CreatePreferenceInput!): Preference!
       @requireAuth(roles: ["preferenceCreate", "admin"])
-    updatePreference(id: Int!, input: UpdatePreferenceInput!): Preference!
+    updatePreference(cuid: String!, input: UpdatePreferenceInput!): Preference!
       @requireAuth(roles: ["preferenceUpdate", "admin"])
-    deletePreference(id: Int!): Preference!
+    deletePreference(cuid: String!): Preference!
       @requireAuth(roles: ["preferenceDelete", "admin"])
   }
 `

@@ -19,20 +19,20 @@ module.exports = {
    * @param {object} q // string from URL maybe malformed Object
    * @returns
    */
-  command: async function ({ status, where, id }) {
+  command: async function ({ status, where, cuid }) {
     // if admin or groupMemberRead, return the record
     // status.code = 'NOOOOOOO'
     // return
     let roles = context.currentUser.roles
     if (roles.includes('admin') || roles.includes('groupMemberRead')) {
       // 'user has roles to see all members of'
-      where.push({ id })
+      where.push({ cuid })
       return { where }
     }
     // otherwise if the user has this membership, return it
     if (
       context.currentUser.GroupMember.filter((membership) => {
-        return id === membership.id
+        return cuid === membership.cuid
       }).length === 0
     ) {
       status.code = 'hacking!?'

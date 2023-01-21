@@ -121,7 +121,7 @@ export const handler = async (event, context) => {
     // `id` is whatever column you use to uniquely identify a user (probably
     // something like `id` or `userId` or even `email`)
     authFields: {
-      id: 'id',
+      id: 'cuid',
       username: 'username',
       hashedPassword: 'hashedPassword',
       salt: 'salt',

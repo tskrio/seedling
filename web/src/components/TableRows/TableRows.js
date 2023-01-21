@@ -98,14 +98,14 @@ const TableRows = ({
     }
     let nestedElements = row[column?.accessor]?.length
     if (column.aggregate && column.link)
-      return <Link to={column.link(row.id)}>{nestedElements}</Link>
+      return <Link to={column.link(row.cuid)}>{nestedElements}</Link>
     if (column.aggregate) return { nestedElements }
     if (column.reference && column.link) {
       return (
         <>
           {menu(row, column)}
           <Box p="2">
-            <Link to={column.link(row[column.accessor].id)}>
+            <Link to={column.link(row[column.accessor].cuid)}>
               {row[column.accessor][column.field]}
             </Link>
           </Box>
@@ -125,7 +125,7 @@ const TableRows = ({
         <>
           {menu(row, column)}
           <Box p="2">
-            <Link title={row[column.accessor]} to={column.link(row.id)}>
+            <Link title={row[column.accessor]} to={column.link(row.cuid)}>
               {column.dataType === 'timestamp' && (
                 <Badge>
                   {new Date(row[column.accessor]).toLocaleString('en-CA')}{' '}
@@ -172,10 +172,10 @@ const TableRows = ({
     <Tbody>
       {data.results?.map((row) => {
         return (
-          <tr className={`${row.id}_row`} key={row.id}>
+          <tr className={`${row.cuid}_row`} key={row.cuid}>
             {columns.map((column) => {
               return (
-                <Td key={`${row.id}_${column.accessor}`}>
+                <Td key={`${row.cuid}_${column.accessor}`}>
                   <Flex>{element(row, column)}</Flex>
                 </Td>
               )

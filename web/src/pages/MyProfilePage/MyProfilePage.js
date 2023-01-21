@@ -19,7 +19,7 @@ const MyProfilePage = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Preferences initialQuery={`{"userId": ${currentUser.id}}`} />
+            <Preferences initialQuery={`{"userCuid": ${currentUser.cuid}}`} />
           </TabPanel>
         </TabPanels>
       </Tabs>*/}

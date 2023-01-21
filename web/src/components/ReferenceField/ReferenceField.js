@@ -44,9 +44,11 @@ const ReferenceField = ({ field, register }) => {
   let options = data?.search?.results?.map((option) => {
     try {
       if (option[field.value] !== field.defaultValue) {
+        let optionKey = `${field.name}-${option.cuid}`
+        let optionValue = option[field.value]
         return (
-          <option key={option.id} value={option[field.value]}>
-            {option[field.display]} - {option[field.value]}
+          <option key={optionKey} value={optionValue}>
+            {option[field.display]}
           </option>
         )
       }
@@ -67,6 +69,7 @@ const ReferenceField = ({ field, register }) => {
             <IconButton
               ml={2}
               mr={2}
+              colorScheme="green"
               size={'sm'}
               aria-label="Filter"
               icon={<MdFilterAlt />}

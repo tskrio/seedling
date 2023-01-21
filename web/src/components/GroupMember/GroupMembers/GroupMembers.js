@@ -6,19 +6,19 @@ import GroupMembersCell from 'src/components/GroupMember/GroupMembersCell'
 
 import { showMatching, filterOut } from '/src/lib/atomicFunctions'
 export const initialColumns = [
-  //{
-  //  Header: 'Id',
-  //  accessor: 'id',
-  //  showMatching,
-  //  filterOut,
-  //  link: (givenId) => {
-  //    return routes.groupMember({ id: givenId })
-  //  },
-  //  dataType: 'integer',
-  //},
+  {
+    Header: 'Id',
+    accessor: 'cuid',
+    showMatching,
+    filterOut,
+    link: (givenId) => {
+      return routes.groupMember({ cuid: givenId })
+    },
+    dataType: 'integer',
+  },
   {
     Header: 'User',
-    accessor: 'user',
+    accessor: 'User',
     showMatching,
     filterOut,
     canSort: false,
@@ -28,13 +28,13 @@ export const initialColumns = [
     link: (givenId) => {
       // e.g. return routes._insertPluralModelHere_({ q: {"id": givenId}})
       // e.g. return routes.users({ q: `{"id": }` })// link to a list w/the query
-      return routes.user({ id: givenId }) // link to the record
+      return routes.user({ cuid: givenId }) // link to the record
     },
   },
 
   {
     Header: 'Group',
-    accessor: 'group',
+    accessor: 'Group',
     showMatching,
     filterOut,
     canSort: false,
@@ -44,7 +44,7 @@ export const initialColumns = [
     link: (givenId) => {
       // e.g. return routes._insertPluralModelHere_({ q: {"id": givenId}})
       // e.g. return routes.users({ q: `{"id": }` })// link to a list w/the query
-      return routes.group({ id: givenId }) // link to the record
+      return routes.group({ cuid: givenId }) // link to the record
     },
   },
 
@@ -60,7 +60,7 @@ export const initialColumns = [
 ]
 
 const GroupMembersList = ({ initialQuery }) => {
-  let [orderBy, setOrderBy] = useState({ id: 'asc' }) // default order
+  let [orderBy, setOrderBy] = useState({ createdAt: 'asc' }) // default order
   let [columns, setColumns] = useState(initialColumns) // default columns
   let [skip, setSkip] = useState(0) // default reocrds to jump
   let [take, setTake] = useState(10) // default records to take

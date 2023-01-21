@@ -12,7 +12,7 @@ export const schema = gql`
   }
   input OrderByInput {
     "on everything"
-    id: Sort
+    cuid: Sort
     "on everything"
     createdAt: Sort
     "on everything"

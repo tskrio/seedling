@@ -1,9 +1,9 @@
 import Group from 'src/components/Group/Group'
 
 export const QUERY = gql`
-  query FindGroupById($id: Int!) {
-    group: group(id: $id) {
-      id
+  query FindGroupById($cuid: String!) {
+    group: group(cuid: $cuid) {
+      cuid
       createdAt
       updatedAt
       name

@@ -1,7 +1,7 @@
 import EditPreferenceCell from 'src/components/Preference/EditPreferenceCell'
 
-const EditPreferencePage = ({ id }) => {
-  return <EditPreferenceCell id={id} />
+const EditPreferencePage = ({ cuid }) => {
+  return <EditPreferenceCell cuid={cuid} />
 }
 
 export default EditPreferencePage

@@ -168,5 +168,5 @@ export const ${singularCamelName} = async ({ id }: Prisma.${singularPascalName}W
 <% if (relations.length) { %>
 
 export const ${singularPascalName} = {<% relations.forEach(relation => { %>
-  ${relation}: (_obj, { root }: ResolverArgs<ReturnType<typeof ${singularCamelName}>>) => db[table].findUnique({ where: { id: root.id } }).${relation}(),<% }) %>
+  ${relation}: (_obj, { root }: ResolverArgs<ReturnType<typeof ${singularCamelName}>>) => db[table].findUnique({ where: { cuid: root.cuid } }).${relation}(),<% }) %>
 }<% } %>

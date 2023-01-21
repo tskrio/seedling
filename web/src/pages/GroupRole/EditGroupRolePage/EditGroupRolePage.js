@@ -1,7 +1,7 @@
 import EditGroupRoleCell from 'src/components/GroupRole/EditGroupRoleCell'
 
-const EditGroupRolePage = ({ id }) => {
-  return <EditGroupRoleCell id={id} />
+const EditGroupRolePage = ({ cuid }) => {
+  return <EditGroupRoleCell cuid={cuid} />
 }
 
 export default EditGroupRolePage

@@ -8,43 +8,42 @@ module.exports = {
   operation: ['create'],
   table: 'user',
   file: __filename,
-  command: async function ({ record }) {
+  command: async function ({ data }) {
     try {
+      console.log({ function: 'onCreateSetupSoleUserAsAdmin', data })
       // if this is the only user, make them an admin
       // on create, check if this is the only user, if so,
       // create a admin group
       // create a admin group role
       // create a group membership
+      let adminGroupId = 'qx784aq3cef0rsf5yytif7fq'
       const users = await db.user.findMany({})
       if (users.length === 1) {
         for (let group of groups) {
           await db.group.upsert({
-            where: { id: group.id },
+            where: { cuid: group.cuid },
             update: group,
             create: group,
           })
         }
-        await db.groupRole.create({
-          data: {
-            role: 'admin',
-            groupId: 1,
-          },
-        })
+        let groupMemberDate = {
+          userCuid: data.cuid,
+          groupCuid: adminGroupId,
+        }
         await db.groupMember.create({
-          data: {
-            userId: record.id,
-            groupId: 1,
-          },
+          data: groupMemberDate,
         })
         for (let property of properties) {
-          await db.property.create({
-            data: property,
+          await db.property.upsert({
+            where: { name: property.name },
+            create: property,
+            update: property,
           })
         }
       }
     } catch (e) {
       logger.error(e)
     }
-    return await { record }
+    return await { data }
   },
 }

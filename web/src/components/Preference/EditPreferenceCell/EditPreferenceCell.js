@@ -10,37 +10,40 @@ import FormComponent from 'src/components/FormComponent'
 import FormSkeleton from 'src/components/FormSkeleton/FormSkeleton'
 
 export const QUERY = gql`
-  query EditPreferenceById($id: Int!) {
-    preference: preference(id: $id) {
-      id
+  query EditPreferenceById($cuid: String!) {
+    preference: preference(cuid: $cuid) {
+      cuid
       createdAt
       updatedAt
       entity
       value
-      userId
+      userCuid
       user {
-        id
+        cuid
         name
       }
     }
   }
 `
 const UPDATE_PREFERENCE_MUTATION = gql`
-  mutation UpdatePreferenceMutation($id: Int!, $input: UpdatePreferenceInput!) {
-    updatePreference(id: $id, input: $input) {
-      id
+  mutation UpdatePreferenceMutation(
+    $cuid: String!
+    $input: UpdatePreferenceInput!
+  ) {
+    updatePreference(cuid: $cuid, input: $input) {
+      cuid
       createdAt
       updatedAt
       entity
       value
-      userId
+      userCuid
     }
   }
 `
 export const DELETE_PREFERENCE_MUTATION = gql`
-  mutation DeletePreferenceMutation($id: Int!) {
-    deletedRow: deletePreference(id: $id) {
-      id
+  mutation DeletePreferenceMutation($cuid: String!) {
+    deletedRow: deletePreference(cuid: $cuid) {
+      cuid
       entity
     }
   }
@@ -67,11 +70,14 @@ export const Success = ({ preference }) => {
   )
 
   const onSubmit = (data) => {
-    onSave(data, preference.id)
+    onSave(data, preference.cuid)
   }
-  const onSave = (input, id) => {
-    const castInput = Object.assign(input, { userId: parseInt(input.userId) })
-    updatePreference({ variables: { id, input: castInput } })
+  const onSave = (input, cuid) => {
+    console.log({ function: 'onSave', input, cuid })
+    const castInput = Object.assign(input, {
+      userCuid: input.userCuid,
+    })
+    updatePreference({ variables: { cuid, input: castInput } })
   }
 
   const [deletePreference] = useMutation(DELETE_PREFERENCE_MUTATION, {
@@ -82,27 +88,25 @@ export const Success = ({ preference }) => {
   })
 
   const onDelete = (id) => {
+    let cuid = preference.cuid
     if (confirm('Are you sure you want to delete Preference ' + id + '?')) {
-      deletePreference({ variables: { id } })
+      deletePreference({ variables: { cuid } })
     }
   }
   const fields = [
     {
-      // {"name":"entity","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":false,"type":"String","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"Entity","component":"TextField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
       name: 'entity',
       prettyName: 'Entity',
       required: 'This is required',
     },
 
     {
-      // {"name":"value","kind":"scalar","isList":false,"isRequired":false,"isUnique":false,"isId":false,"isReadOnly":false,"type":"String","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"Value","component":"TextField","defaultProp":"defaultValue","deserilizeFunction":"","validation":null,"listDisplayFunction":"truncate"}
       name: 'value',
       prettyName: 'Value',
     },
 
     {
-      // {"name":"userId","kind":"scalar","isList":false,"isRequired":true,"isUnique":false,"isId":false,"isReadOnly":true,"type":"Int","hasDefaultValue":false,"isGenerated":false,"isUpdatedAt":false,"label":"User id","component":"NumberField","defaultProp":"defaultValue","deserilizeFunction":"","validation":"{{ required: true }}","listDisplayFunction":"truncate"}
-      name: 'userId',
+      name: 'userCuid',
       prettyName: 'User id',
       required: 'This is required',
       // If this is a reference you probably want this below
@@ -111,8 +115,8 @@ export const Success = ({ preference }) => {
       // and uncomment and edit below to your needs
       type: 'reference',
       display: 'name',
-      value: 'id',
-      defaultValue: preference.user.id,
+      value: 'cuid',
+      defaultValue: preference.user.cuid,
       defaultDisplay: preference.user.name,
       QUERY: gql`
         query FindUserFromPreferences($filter: String, $skip: Int, $take: Int) {
@@ -121,7 +125,7 @@ export const Success = ({ preference }) => {
             take
             skip
             results {
-              id
+              cuid
               name
             }
           }
@@ -142,7 +146,7 @@ export const Success = ({ preference }) => {
   return (
     <Fragment>
       <MetaTags
-        title={`preference.id`}
+        title={`preference.cuid`}
         description="Replace me with 155 charactes about this page"
       />
 

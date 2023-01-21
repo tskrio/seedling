@@ -1,13 +1,13 @@
 import GroupRole from 'src/components/GroupRole/GroupRole'
 
 export const QUERY = gql`
-  query FindGroupRoleById($id: Int!) {
-    groupRole: groupRole(id: $id) {
-      id
+  query FindGroupRoleById($cuid: String!) {
+    groupRole: groupRole(cuid: $cuid) {
+      cuid
       createdAt
       updatedAt
       role
-      groupId
+      groupCuid
     }
   }
 `

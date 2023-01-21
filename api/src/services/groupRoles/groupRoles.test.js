@@ -14,7 +14,7 @@ describe('groupRoles', () => {
   })
 
   scenario('returns a single groupRole', async (scenario) => {
-    const result = await groupRole({ id: scenario.groupRole.one.id })
+    const result = await groupRole({ id: scenario.groupRole.one.cuid })
 
     expect(result).toEqual(scenario.groupRole.one)
   })
@@ -24,19 +24,19 @@ describe('groupRoles', () => {
       input: {
         updatedAt: '2022-01-15T22:45:02Z',
         role: 'String',
-        groupId: scenario.groupRole.two.groupId,
+        groupCuid: scenario.groupRole.two.groupCuid,
       },
     })
 
     expect(result.updatedAt).toEqual('2022-01-15T22:45:02Z')
     expect(result.role).toEqual('String')
-    expect(result.groupId).toEqual(scenario.groupRole.two.groupId)
+    expect(result.groupCuid).toEqual(scenario.groupRole.two.groupCuid)
   })
 
   scenario('updates a groupRole', async (scenario) => {
-    const original = await groupRole({ id: scenario.groupRole.one.id })
+    const original = await groupRole({ id: scenario.groupRole.one.cuid })
     const result = await updateGroupRole({
-      id: original.id,
+      id: original.cuid,
       input: { updatedAt: '2022-01-16T22:45:02Z' },
     })
 
@@ -44,8 +44,8 @@ describe('groupRoles', () => {
   })
 
   scenario('deletes a groupRole', async (scenario) => {
-    const original = await deleteGroupRole({ id: scenario.groupRole.one.id })
-    const result = await groupRole({ id: original.id })
+    const original = await deleteGroupRole({ id: scenario.groupRole.one.cuid })
+    const result = await groupRole({ id: original.cuid })
 
     expect(result).toEqual(null)
   })

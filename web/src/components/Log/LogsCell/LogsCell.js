@@ -55,7 +55,7 @@ export const QUERY = gql`
       skip
       q
       results {
-        id
+        cuid
         createdAt
         message
         source

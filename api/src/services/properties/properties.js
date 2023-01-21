@@ -69,11 +69,11 @@ export const properties = async ({ filter, skip, orderBy, q, take }) => {
   }
 }
 
-export const property = async ({ id }) => {
+export const property = async ({ cuid }) => {
   try {
-    let { where } = await executeBeforeReadRulesV2({ table, id })
-    if (!where /* if where is falsy, return { id } */) {
-      where = { id }
+    let { where } = await executeBeforeReadRulesV2({ table, cuid })
+    if (!where /* if where is falsy, return { cuid } */) {
+      where = { cuid }
     }
     let readRecord = await db[table].findUnique({ where })
     let { record } = await executeAfterReadRulesV2({
@@ -86,23 +86,23 @@ export const property = async ({ id }) => {
   }
 }
 
-export const updateProperty = async ({ id, input }) => {
+export const updateProperty = async ({ cuid, input }) => {
   try {
     let { data, where } = await executeBeforeUpdateRulesV2({
       table,
       data: input,
-      id,
+      cuid,
     })
     if (!where) {
-      // if where is falsy, return { id }
-      where = { id }
+      // if where is falsy, return { cuid }
+      where = { cuid }
     }
     let updatedRecord = await db[table].update({ data, where })
 
     let { record } = await executeAfterUpdateRulesV2({
       table,
       data: updatedRecord,
-      id,
+      cuid,
     })
     return { ...record }
   } catch (error) {
@@ -110,17 +110,17 @@ export const updateProperty = async ({ id, input }) => {
   }
 }
 
-export const deleteProperty = async ({ id }) => {
+export const deleteProperty = async ({ cuid }) => {
   try {
     let { where } = await executeBeforeDeleteRulesV2({
       table,
-      id,
+      cuid,
     })
-    if (!where /* if where is falsy, return { id } */) {
-      where = { id }
+    if (!where /* if where is falsy, return { cuid } */) {
+      where = { cuid }
     }
     let deletedRecord = await db[table].delete({
-      where: { id },
+      where: { cuid },
     })
 
     await executeAfterDeleteRulesV2({ table, data: deletedRecord })

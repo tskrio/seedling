@@ -6,10 +6,10 @@ import GroupMembers from 'src/components/GroupMember/GroupMembers'
 import Preferences from 'src/components/Preference/Preferences'
 import EditUserCell from 'src/components/User/EditUserCell'
 
-const EditUserPage = ({ id }) => {
+const EditUserPage = ({ cuid }) => {
   return (
     <Fragment>
-      <EditUserCell id={id} />
+      <EditUserCell cuid={cuid} />
       <Tabs isLazy variant="enclosed">
         <TabList>
           <Tab>Group Members</Tab>
@@ -17,10 +17,10 @@ const EditUserPage = ({ id }) => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <GroupMembers initialQuery={`{"userId": ${id}}`} />
+            <GroupMembers initialQuery={`{"userCuid": "${cuid}"}`} />
           </TabPanel>
           <TabPanel>
-            <Preferences initialQuery={`{"userId": ${id}}`} />
+            <Preferences initialQuery={`{"userCuid": "${cuid}"}`} />
           </TabPanel>
         </TabPanels>
       </Tabs>

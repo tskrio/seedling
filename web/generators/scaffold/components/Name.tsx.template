@@ -44,7 +44,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
     <>
       <div className="rw-segment">
         <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">${singularPascalName} {${singularCamelName}.id} Detail</h2>
+          <h2 className="rw-heading rw-heading-secondary">${singularPascalName} {${singularCamelName}.cuid} Detail</h2>
         </header>
         <table className="rw-table">
           <tbody>
@@ -61,7 +61,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
       </div>
       <nav className="rw-button-group">
         <Link
-          to={routes.${editRouteName}({ id: ${singularCamelName}.id })}
+          to={routes.${editRouteName}({ id: ${singularCamelName}.cuid })}
           className="rw-button rw-button-blue"
         >
           Edit
@@ -69,7 +69,7 @@ const ${singularPascalName} = ({ ${singularCamelName} }) => {
         <button
           type="button"
           className="rw-button rw-button-red"
-          onClick={() => onDeleteClick(${singularCamelName}.id)}
+          onClick={() => onDeleteClick(${singularCamelName}.cuid)}
         >
           Delete
         </button>

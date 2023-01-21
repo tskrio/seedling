@@ -15,7 +15,7 @@ const formatDatetime = (value) => {
 
 const ${singularPascalName}Form = (props) => {
   const onSubmit = (data) => {
-    props.onSave(data, props?.${singularCamelName}?.id)
+    props.onSave(data, props?.${singularCamelName}?.cuid)
   }
 
   return (

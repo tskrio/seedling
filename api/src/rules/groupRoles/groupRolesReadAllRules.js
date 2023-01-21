@@ -6,6 +6,7 @@ module.exports = {
   table: 'groupRole', //         used to filter rules to run
   file: __filename, //       used for logging
   command: async function ({ where, filter, q }) {
+    console.log({ function: 'groupRolesReadAllRules', where, filter, q })
     // if (!context.currentUser.roles.includes('admin')) {
     //   where.push({ entity: 'jace' }) // required for all queries
     // }

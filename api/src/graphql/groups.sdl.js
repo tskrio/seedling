@@ -1,6 +1,6 @@
 export const schema = gql`
   type Group {
-    id: Int!
+    cuid: String!
     createdAt: DateTime!
     updatedAt: DateTime!
     name: String!
@@ -26,7 +26,7 @@ export const schema = gql`
       q: String
     ): Groups! @requireAuth(roles: ["groupRead", "admin"])
 
-    group(id: Int!): Group @requireAuth(roles: ["groupRead", "admin"])
+    group(cuid: String!): Group @requireAuth(roles: ["groupRead", "admin"])
   }
 
   input CreateGroupInput {
@@ -42,8 +42,9 @@ export const schema = gql`
   type Mutation {
     createGroup(input: CreateGroupInput!): Group!
       @requireAuth(roles: ["groupCreate", "admin"])
-    updateGroup(id: Int!, input: UpdateGroupInput!): Group!
+    updateGroup(cuid: String!, input: UpdateGroupInput!): Group!
       @requireAuth(roles: ["groupUpdate", "admin"])
-    deleteGroup(id: Int!): Group! @requireAuth(roles: ["groupDelete", "admin"])
+    deleteGroup(cuid: String!): Group!
+      @requireAuth(roles: ["groupDelete", "admin"])
   }
 `

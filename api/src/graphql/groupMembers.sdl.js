@@ -1,12 +1,12 @@
 export const schema = gql`
   type GroupMember {
-    id: Int!
+    cuid: String!
     createdAt: DateTime!
     updatedAt: DateTime!
-    userId: Int!
-    groupId: Int!
-    group: Group!
-    user: User!
+    userCuid: String!
+    groupCuid: String!
+    Group: Group!
+    User: User!
   }
 
   type GroupMembers {
@@ -26,26 +26,28 @@ export const schema = gql`
       q: String
     ): GroupMembers! @requireAuth(roles: ["groupMemberRead", "admin"])
 
-    groupMember(id: Int!): GroupMember
+    groupMember(cuid: String!): GroupMember
       @requireAuth(roles: ["groupMemberRead", "admin"])
   }
 
   input CreateGroupMemberInput {
-    userId: Int!
-    groupId: Int!
+    userCuid: String!
+    groupCuid: String!
   }
 
   input UpdateGroupMemberInput {
-    userId: Int
-    groupId: Int
+    userCuid: String
+    groupCuid: String
   }
 
   type Mutation {
     createGroupMember(input: CreateGroupMemberInput!): GroupMember!
       @requireAuth(roles: ["groupMemberCreate", "admin"])
-    updateGroupMember(id: Int!, input: UpdateGroupMemberInput!): GroupMember!
-      @requireAuth(roles: ["groupMemberUpdate", "admin"])
-    deleteGroupMember(id: Int!): GroupMember!
+    updateGroupMember(
+      cuid: String!
+      input: UpdateGroupMemberInput!
+    ): GroupMember! @requireAuth(roles: ["groupMemberUpdate", "admin"])
+    deleteGroupMember(cuid: String!): GroupMember!
       @requireAuth(roles: ["groupMemberDelete", "admin"])
   }
 `

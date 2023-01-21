@@ -7,9 +7,9 @@ module.exports = {
   operation: ['delete'],
   table: 'group',
   file: __filename,
-  command: async function ({ id, status }) {
+  command: async function ({ cuid, status }) {
     let record = await db.group.findUnique({
-      where: { id },
+      where: { cuid },
     })
     if (
       record.name == 'Administrators' ||
@@ -19,6 +19,6 @@ module.exports = {
       status.code = 'failure'
       status.message = `${record.name} are protected, cannot delete`
     }
-    return await { id, status }
+    return await { cuid, status }
   },
 }

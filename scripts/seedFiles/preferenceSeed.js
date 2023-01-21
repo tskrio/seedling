@@ -17,7 +17,7 @@ let preferenceSeed = users.map((user) => {
   return preferences.map((preference) => {
     return {
       id: preferenceId++,
-      userId: user.id,
+      userCuid: user.cuid,
       name: preference.name,
       display: preference.display,
       value: preference.value,

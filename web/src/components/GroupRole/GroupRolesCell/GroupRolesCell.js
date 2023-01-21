@@ -40,7 +40,7 @@ export const beforeQuery = (props) => {
   }
 }
 // Looks like you have some foreign keys
-// ["groupId"] you may want to update the query
+// ["groupCuid"] you may want to update the query
 // below to include the related values
 export const QUERY = gql`
   query FindGroupRoles(
@@ -62,13 +62,13 @@ export const QUERY = gql`
       skip
       q
       results {
-        id
+        cuid
         createdAt
         updatedAt
         role
-        groupId
-        group {
-          id
+        groupCuid
+        Group {
+          cuid
           name
         }
       }

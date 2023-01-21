@@ -10,7 +10,7 @@ export const initialColumns = [
     Header: 'Name',
     accessor: 'name',
     link: (givenId) => {
-      return routes.user({ id: givenId })
+      return routes.user({ cuid: givenId })
     },
     showMatching,
     filterOut,
@@ -25,7 +25,7 @@ export const initialColumns = [
   //  aggregate: true,
   //  model: 'group',
   //  link: (givenId) => {
-  //    return routes.groupMembers({ q: `{"userId":${givenId}}` })
+  //    return routes.groupMembers({ q: `{"userCuid":${givenId}}` })
   //  },
   //},
   {
@@ -36,9 +36,9 @@ export const initialColumns = [
     model: 'preference',
     field: 'entity',
     link: (givenId) => {
-      //q={%22AND%22:{%22userID%22:%20620}}
-      //q={"AND":[{"userId":{"equals":620}}]}
-      return routes.preferences({ q: `{"userId":${givenId}}` })
+      //q={%22AND%22:{%22userCuid%22:%20620}}
+      //q={"AND":[{"userCuid":{"equals":620}}]}
+      return routes.preferences({ q: `{"userCuid":${givenId}}` })
     },
   },
 
@@ -59,7 +59,7 @@ export const initialColumns = [
 ]
 
 const UsersList = () => {
-  let [orderBy, setOrderBy] = useState({ id: 'asc' }) // default order
+  let [orderBy, setOrderBy] = useState({ createdAt: 'asc' }) // default order
   let [columns, setColumns] = useState(initialColumns) // default columns
   let [skip, setSkip] = useState(0) // default reocrds to jump
   let [take, setTake] = useState(10) // default records to take

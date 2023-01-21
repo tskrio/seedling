@@ -9,9 +9,9 @@ import { toast } from '@redwoodjs/web/toast'
 import FormComponent from 'src/components/FormComponent'
 import FormSkeleton from 'src/components/FormSkeleton/FormSkeleton'
 export const QUERY = gql`
-  query EditGroupById($id: Int!) {
-    group: group(id: $id) {
-      id
+  query EditGroupById($cuid: String!) {
+    group: group(cuid: $cuid) {
+      cuid
       createdAt
       updatedAt
       name
@@ -20,9 +20,9 @@ export const QUERY = gql`
   }
 `
 const UPDATE_GROUP_MUTATION = gql`
-  mutation UpdateGroupMutation($id: Int!, $input: UpdateGroupInput!) {
-    updateGroup(id: $id, input: $input) {
-      id
+  mutation UpdateGroupMutation($cuid: String!, $input: UpdateGroupInput!) {
+    updateGroup(cuid: $cuid, input: $input) {
+      cuid
       createdAt
       updatedAt
       name
@@ -31,9 +31,9 @@ const UPDATE_GROUP_MUTATION = gql`
   }
 `
 export const DELETE_GROUP_MUTATION = gql`
-  mutation DeleteGroupMutation($id: Int!) {
-    deletedRow: deleteGroup(id: $id) {
-      id
+  mutation DeleteGroupMutation($cuid: String!) {
+    deletedRow: deleteGroup(cuid: $cuid) {
+      cuid
       name
     }
   }
@@ -57,10 +57,10 @@ export const Success = ({ group }) => {
   })
 
   const onSubmit = (data) => {
-    onSave(data, group.id)
+    onSave(data, group.cuid)
   }
-  const onSave = (input, id) => {
-    updateGroup({ variables: { id, input } })
+  const onSave = (input, cuid) => {
+    updateGroup({ variables: { cuid, input } })
   }
 
   const [deleteGroup] = useMutation(DELETE_GROUP_MUTATION, {
@@ -70,9 +70,10 @@ export const Success = ({ group }) => {
     },
   })
 
-  const onDelete = (id) => {
-    if (confirm('Are you sure you want to delete Group ' + id + '?')) {
-      deleteGroup({ variables: { id } })
+  const onDelete = (/*id*/) => {
+    let cuid = group.cuid
+    if (confirm('Are you sure you want to delete Group ' + group.name + '?')) {
+      deleteGroup({ variables: { cuid } })
     }
   }
   const fields = [
@@ -101,7 +102,7 @@ export const Success = ({ group }) => {
   return (
     <Fragment>
       <MetaTags
-        title={`group.id`}
+        title={`group.cuid`}
         description="Replace me with 155 charactes about this page"
       />
 

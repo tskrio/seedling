@@ -1,7 +1,7 @@
 import EditPropertyCell from 'src/components/Property/EditPropertyCell'
 
-const EditPropertyPage = ({ id }) => {
-  return <EditPropertyCell id={id} />
+const EditPropertyPage = ({ cuid }) => {
+  return <EditPropertyCell cuid={cuid} />
 }
 
 export default EditPropertyPage
