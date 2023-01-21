@@ -1,0 +1,17 @@
+[
+  {
+    "cuid": "zwwl4y4ey32rudgz0ta3msex",
+    "name": "Admins",
+    "description": "Admins"
+  },
+  {
+    "cuid":"aty14w7ld02lvu2pyvc6jsye",
+    "name": "Manaagers",
+    "description": "Managers"
+  },
+  {
+    "cuid": "she06pgs4tptq6efjm8eju37",
+    "name": "Employees",
+    "description": "Employees"
+  }
+]

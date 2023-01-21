@@ -1,0 +1,34 @@
+[
+  {
+    "cuid": "cld3p530y000yqwgu01ptcri5",
+    "name": "Adam Admin",
+    "username": "admin",
+    "email": "admin@example.com",
+    "hashedPassword": "5f5f56d40b9ae6bf2abfd7804e97e607f9d7432feebb6371849f2676a5058999",
+    "salt": "881aed4f5703af38eaaab6e788d8e860"
+  },
+  {
+    "cuid": "cld3p530y000zqwgue29ibx9l",
+    "name": "Mike Manager",
+    "username": "manager",
+    "email": "manager@example.com",
+    "hashedPassword": "4536e33d926d3ea79cfed471a61b679041231cc132f672362aca1554fbba88cf",
+    "salt": "881aed4f5703af38eaaab6e788d8e860"
+  },
+  {
+    "cuid": "cld3p530z0010qwgu201n0ugi",
+    "name": "Eve Employee",
+    "username": "employee",
+    "email": "employee@example.com",
+    "hashedPassword": "01328ad2d2463d077f3e2f5dace839eff9eaf86e6d41b2d579df8c33a552f594",
+    "salt": "3e6780c35a4e5ad17aafc7a6230b1163"
+  },
+  {
+    "cuid": "cld3p530z0011qwguftgy0r6l",
+    "name": "Tron",
+    "username": "tron",
+    "email": "tron@encom.com",
+    "hashedPassword": "01328ad2d2463d077f3e2f5dace839eff9eaf86e6d41b2d579df8c33a552f594",
+    "salt": "3e6780c35a4e5ad17aafc7a6230b1163"
+  }
+]
