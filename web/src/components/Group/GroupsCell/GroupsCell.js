@@ -62,7 +62,7 @@ export const QUERY = gql`
       skip
       q
       results {
-        id
+        cuid
         createdAt
         updatedAt
         name

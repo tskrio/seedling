@@ -11,7 +11,7 @@ import FormComponent from 'src/components/FormComponent'
 const CREATE_USER_MUTATION = gql`
   mutation CreateUserMutation($input: CreateUserInput!) {
     createUser(input: $input) {
-      id
+      cuid
     }
   }
 `

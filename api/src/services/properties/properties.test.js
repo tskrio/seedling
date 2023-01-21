@@ -14,7 +14,7 @@ describe('properties', () => {
   })
 
   scenario('returns a single property', async (scenario) => {
-    const result = await property({ id: scenario.property.one.id })
+    const result = await property({ id: scenario.property.one.cuid })
 
     expect(result).toEqual(scenario.property.one)
   })
@@ -29,9 +29,9 @@ describe('properties', () => {
   })
 
   scenario('updates a property', async (scenario) => {
-    const original = await property({ id: scenario.property.one.id })
+    const original = await property({ id: scenario.property.one.cuid })
     const result = await updateProperty({
-      id: original.id,
+      id: original.cuid,
       input: { updatedAt: '2022-01-23T05:12:49Z' },
     })
 
@@ -39,8 +39,8 @@ describe('properties', () => {
   })
 
   scenario('deletes a property', async (scenario) => {
-    const original = await deleteProperty({ id: scenario.property.one.id })
-    const result = await property({ id: original.id })
+    const original = await deleteProperty({ id: scenario.property.one.cuid })
+    const result = await property({ id: original.cuid })
 
     expect(result).toEqual(null)
   })

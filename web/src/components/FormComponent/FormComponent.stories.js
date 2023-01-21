@@ -15,7 +15,7 @@ export const generated = () => {
   //  const CREATE_GROUP_MUTATION = gql`
   //    mutation CreateGroupMutation($input: CreateGroupInput!) {
   //      createGroup(input: $input) {
-  //        id
+  //        cuid
   //      }
   //    }
   //  `

@@ -16,7 +16,7 @@ async function main() {
   await db.groupRole.deleteMany({})
   for (let group of groups) {
     await db.group.upsert({
-      where: { id: group.id },
+      where: { cuid: group.cuid },
       update: group,
       create: group,
     })

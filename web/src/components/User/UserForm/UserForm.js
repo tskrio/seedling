@@ -16,7 +16,7 @@ const formatDatetime = (value) => {
 
 const UserForm = (props) => {
   const onSubmit = (data) => {
-    props.onSave(data, props?.user?.id)
+    props.onSave(data, props?.user?.cuid)
   }
 
   return (

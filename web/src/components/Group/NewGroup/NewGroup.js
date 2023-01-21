@@ -11,7 +11,7 @@ import FormComponent from 'src/components/FormComponent'
 const CREATE_GROUP_MUTATION = gql`
   mutation CreateGroupMutation($input: CreateGroupInput!) {
     createGroup(input: $input) {
-      id
+      cuid
     }
   }
 `

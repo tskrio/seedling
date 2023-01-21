@@ -10,9 +10,9 @@ import { toast } from '@redwoodjs/web/toast'
 import FormComponent from 'src/components/FormComponent'
 import FormSkeleton from 'src/components/FormSkeleton/FormSkeleton'
 export const QUERY = gql`
-  query EditUserById($id: Int!) {
-    user: user(id: $id) {
-      id
+  query EditUserById($cuid: String!) {
+    user: user(cuid: $cuid) {
+      cuid
       createdAt
       updatedAt
       name
@@ -21,9 +21,9 @@ export const QUERY = gql`
   }
 `
 const UPDATE_USER_MUTATION = gql`
-  mutation UpdateUserMutation($id: Int!, $input: UpdateUserInput!) {
-    updateUser(id: $id, input: $input) {
-      id
+  mutation UpdateUserMutation($cuid: String!, $input: UpdateUserInput!) {
+    updateUser(cuid: $cuid, input: $input) {
+      cuid
       createdAt
       updatedAt
       name
@@ -32,9 +32,9 @@ const UPDATE_USER_MUTATION = gql`
   }
 `
 export const DELETE_USER_MUTATION = gql`
-  mutation DeleteUserMutation($id: Int!) {
-    deletedRow: deleteUser(id: $id) {
-      id
+  mutation DeleteUserMutation($cuid: String!) {
+    deletedRow: deleteUser(cuid: $cuid) {
+      cuid
       name
     }
   }
@@ -67,10 +67,10 @@ export const Success = ({ user }) => {
     if (data.resetTokenExpiresAt === '') {
       delete data.resetTokenExpiresAt
     }
-    onSave(data, user.id)
+    onSave(data, user.cuid)
   }
-  const onSave = (input, id) => {
-    updateUser({ variables: { id, input } })
+  const onSave = (input, cuid) => {
+    updateUser({ variables: { cuid, input } })
   }
 
   const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
@@ -84,9 +84,9 @@ export const Success = ({ user }) => {
   })
 
   const onDelete = () => {
-    let id = user.id
+    let cuid = user.cuid
     if (confirm('Are you sure you want to delete this user?')) {
-      deleteUser({ variables: { id } })
+      deleteUser({ variables: { cuid } })
     }
   }
   const fields = [
@@ -102,7 +102,7 @@ export const Success = ({ user }) => {
       defaultValue: { foo: 'bar' },
     },
   ]
-  // if (currentUser.id === user.id) {
+  // if (currentUser.cuid === user.cuid) {
   //   fields.push({
   //     name: 'hashedPassword',
   //     prettyName: 'Password',
@@ -111,7 +111,7 @@ export const Success = ({ user }) => {
   //     minLength: { value: 4, message: 'Minimum length should be 4' },
   //   })
   // }
-  if (hasRole(['admin'] || currentUser.id === user.id)) {
+  if (hasRole(['admin'] || currentUser.cuid === user.cuid)) {
     fields.push({
       prettyName: 'Email',
       name: 'email',
@@ -145,7 +145,7 @@ export const Success = ({ user }) => {
   return (
     <Fragment>
       <MetaTags
-        title={`user.id`}
+        title={`user.cuid`}
         description="Replace me with 155 charactes about this page"
       />
 

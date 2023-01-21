@@ -16,7 +16,7 @@ const formatDatetime = (value) => {
 */
 const GroupRoleForm = (props) => {
   const onSubmit = (data) => {
-    props.onSave(data, props?.groupRole?.id)
+    props.onSave(data, props?.groupRole?.cuid)
   }
 
   return (
@@ -47,21 +47,21 @@ const GroupRoleForm = (props) => {
         <FieldError name="role" className="rw-field-error" />
 
         <Label
-          name="groupId"
+          name="groupCuid"
           className="rw-label"
           errorClassName="rw-label rw-label-error"
         >
-          Group id
+          Group cuid
         </Label>
         <NumberField
-          name="groupId"
-          defaultValue={props.groupRole?.groupId}
+          name="groupCuid"
+          defaultValue={props.groupRole?.groupCuid}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
 
-        <FieldError name="groupId" className="rw-field-error" />
+        <FieldError name="groupCuid" className="rw-field-error" />
 
         <div className="rw-button-group">
           <Submit disabled={props.loading} className="rw-button rw-button-blue">

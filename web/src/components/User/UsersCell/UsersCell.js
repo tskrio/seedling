@@ -55,16 +55,16 @@ export const QUERY = gql`
       skip
       q
       results {
-        id
+        cuid
         createdAt
         updatedAt
         name
         #GroupMember @include(if: $canSeeGroupMembers) {
         #GroupMember {
-        #  id
+        #  cuid
         #}
         Preference {
-          id
+          cuid
         }
       }
     }

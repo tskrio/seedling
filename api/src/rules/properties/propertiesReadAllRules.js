@@ -13,7 +13,7 @@ module.exports = {
       where.push({
         OR: [
           // not required
-          { entity: { contains: filter, mode: 'insensitive' } },
+          { name: { contains: filter, mode: 'insensitive' } },
           //{ username: { contains: filter, mode: 'insensitive' } },
           { value: { contains: filter, mode: 'insensitive' } },
         ],

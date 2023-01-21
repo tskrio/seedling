@@ -14,7 +14,7 @@ describe('messages', () => {
   })
 
   scenario('returns a single message', async (scenario) => {
-    const result = await message({ id: scenario.message.one.id })
+    const result = await message({ id: scenario.message.one.cuid })
 
     expect(result).toEqual(scenario.message.one)
   })
@@ -36,9 +36,9 @@ describe('messages', () => {
   })
 
   scenario('updates a message', async (scenario) => {
-    const original = await message({ id: scenario.message.one.id })
+    const original = await message({ id: scenario.message.one.cuid })
     const result = await updateMessage({
-      id: original.id,
+      id: original.cuid,
       input: { updatedAt: '2022-01-16T20:50:43Z' },
     })
 
@@ -46,8 +46,8 @@ describe('messages', () => {
   })
 
   scenario('deletes a message', async (scenario) => {
-    const original = await deleteMessage({ id: scenario.message.one.id })
-    const result = await message({ id: original.id })
+    const original = await deleteMessage({ id: scenario.message.one.cuid })
+    const result = await message({ id: original.cuid })
 
     expect(result).toEqual(null)
   })

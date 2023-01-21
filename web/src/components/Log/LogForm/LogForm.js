@@ -15,7 +15,7 @@ const formatDatetime = (value) => {
 */
 const LogForm = (props) => {
   const onSubmit = (data) => {
-    props.onSave(data, props?.log?.id)
+    props.onSave(data, props?.log?.cuid)
   }
 
   return (

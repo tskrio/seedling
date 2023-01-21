@@ -10,7 +10,7 @@ export const initialColumns = [
     Header: 'Entity',
     accessor: 'entity',
     link: (givenId) => {
-      return routes.editMessage({ id: givenId })
+      return routes.message({ cuid: givenId })
     },
 
     showMatching,
@@ -42,7 +42,7 @@ export const initialColumns = [
 ]
 
 const MessagesList = () => {
-  let [orderBy, setOrderBy] = useState({ id: 'asc' }) // default order
+  let [orderBy, setOrderBy] = useState({ createdAt: 'asc' }) // default order
   let [columns, setColumns] = useState(initialColumns) // default columns
   let [skip, setSkip] = useState(0) // default reocrds to jump
   let [take, setTake] = useState(10) // default records to take

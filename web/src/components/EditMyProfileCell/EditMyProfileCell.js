@@ -23,7 +23,7 @@ export const QUERY = gql`
 const UPDATE_MY_PROFILE_MUTATION = gql`
   mutation UpdateMyProfileMutation($input: UpdateUserInput!) {
     updateMyProfile(input: $input) {
-      id
+      cuid
       name
       email
     }
@@ -32,7 +32,7 @@ const UPDATE_MY_PROFILE_MUTATION = gql`
 export const DELETE_MY_PROFILE_MUTATION = gql`
   mutation DeleteMyProfileMutation {
     deletedRow: deleteMyProfile {
-      id
+      cuid
       name
     }
   }
@@ -117,7 +117,7 @@ export const Success = ({ myProfile }) => {
   return (
     <Fragment>
       <MetaTags
-        title={`user.id`}
+        title={`user.cuid`}
         description="Replace me with 155 charactes about this page"
       />
       <FormComponent

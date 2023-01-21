@@ -14,7 +14,7 @@ describe('groupMembers', () => {
   })
 
   scenario('returns a single groupMember', async (scenario) => {
-    const result = await groupMember({ id: scenario.groupMember.one.id })
+    const result = await groupMember({ id: scenario.groupMember.one.cuid })
 
     expect(result).toEqual(scenario.groupMember.one)
   })
@@ -23,20 +23,20 @@ describe('groupMembers', () => {
     const result = await createGroupMember({
       input: {
         updatedAt: '2022-01-16T02:53:54Z',
-        userId: scenario.groupMember.two.userId,
-        groupId: scenario.groupMember.two.groupId,
+        userCuid: scenario.groupMember.two.userCuid,
+        groupCuid: scenario.groupMember.two.groupCuid,
       },
     })
 
     expect(result.updatedAt).toEqual('2022-01-16T02:53:54Z')
-    expect(result.userId).toEqual(scenario.groupMember.two.userId)
-    expect(result.groupId).toEqual(scenario.groupMember.two.groupId)
+    expect(result.userCuid).toEqual(scenario.groupMember.two.userCuid)
+    expect(result.groupCuid).toEqual(scenario.groupMember.two.groupCuid)
   })
 
   scenario('updates a groupMember', async (scenario) => {
-    const original = await groupMember({ id: scenario.groupMember.one.id })
+    const original = await groupMember({ id: scenario.groupMember.one.cuid })
     const result = await updateGroupMember({
-      id: original.id,
+      id: original.cuid,
       input: { updatedAt: '2022-01-17T02:53:54Z' },
     })
 
@@ -45,10 +45,10 @@ describe('groupMembers', () => {
 
   scenario('deletes a groupMember', async (scenario) => {
     const original = await deleteGroupMember({
-      id: scenario.groupMember.one.id,
+      id: scenario.groupMember.one.cuid,
     })
 
-    const result = await groupMember({ id: original.id })
+    const result = await groupMember({ id: original.cuid })
 
     expect(result).toEqual(null)
   })

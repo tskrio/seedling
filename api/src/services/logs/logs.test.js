@@ -8,7 +8,7 @@ describe('logs', () => {
   })
 
   scenario('returns a single log', async (scenario) => {
-    const result = await log({ id: scenario.log.one.id })
+    const result = await log({ id: scenario.log.one.cuid })
 
     expect(result).toEqual(scenario.log.one)
   })
@@ -23,9 +23,9 @@ describe('logs', () => {
   })
 
   scenario('updates a log', async (scenario) => {
-    const original = await log({ id: scenario.log.one.id })
+    const original = await log({ id: scenario.log.one.cuid })
     const result = await updateLog({
-      id: original.id,
+      id: original.cuid,
       input: { message: 'String2' },
     })
 
@@ -33,8 +33,8 @@ describe('logs', () => {
   })
 
   scenario('deletes a log', async (scenario) => {
-    const original = await deleteLog({ id: scenario.log.one.id })
-    const result = await log({ id: original.id })
+    const original = await deleteLog({ id: scenario.log.one.cuid })
+    const result = await log({ id: original.cuid })
 
     expect(result).toEqual(null)
   })

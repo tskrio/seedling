@@ -1,7 +1,7 @@
 import { db } from 'src/lib/db'
-export const getProperty = async (entity) => {
+export const getProperty = async (name) => {
   let record = await db.property.findFirst({
-    where: { entity: entity },
+    where: { name: name },
   })
   if (!record) return false
   return record.value

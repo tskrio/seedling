@@ -15,7 +15,7 @@ const formatDatetime = (value) => {
 */
 const GroupForm = (props) => {
   const onSubmit = (data) => {
-    props.onSave(data, props?.group?.id)
+    props.onSave(data, props?.Group?.cuid)
   }
 
   return (

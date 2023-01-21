@@ -10,7 +10,7 @@ export const initialColumns = [
     Header: 'Created at',
     accessor: 'createdAt',
     link: (givenId) => {
-      return routes.log({ id: givenId })
+      return routes.log({ cuid: givenId })
     },
     showMatching,
     filterOut,

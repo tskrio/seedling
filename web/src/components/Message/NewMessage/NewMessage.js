@@ -11,7 +11,7 @@ import FormComponent from 'src/components/FormComponent'
 const CREATE_MESSAGE_MUTATION = gql`
   mutation CreateMessageMutation($input: CreateMessageInput!) {
     message: createMessage(input: $input) {
-      id
+      cuid
       entity
     }
   }
@@ -23,7 +23,7 @@ const NewMessage = () => {
     {
       onCompleted: (data) => {
         toast.success(`Message "${data.message.entity}" created`)
-        //navigate(routes.editMessage({ id: data.message.id }))
+        //navigate(routes.editMessage({ id: data.message.cuid }))
         navigate(routes.messages())
       },
       onError: (error) => {

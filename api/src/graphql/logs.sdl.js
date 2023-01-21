@@ -1,6 +1,6 @@
 export const schema = gql`
   type Log {
-    id: String!
+    cuid: String!
     createdAt: DateTime!
     message: String!
     source: String!
@@ -24,7 +24,7 @@ export const schema = gql`
       q: String
     ): Logs! @requireAuth(roles: ["logRead", "admin"])
 
-    log(id: String!): Log @requireAuth(roles: ["logRead", "admin"])
+    log(cuid: String!): Log @requireAuth(roles: ["logRead", "admin"])
   }
 
   input CreateLogInput {
@@ -42,8 +42,8 @@ export const schema = gql`
   type Mutation {
     createLog(input: CreateLogInput!): Log!
       @requireAuth(roles: ["logCreate", "admin"])
-    updateLog(id: String!, input: UpdateLogInput!): Log!
+    updateLog(cuid: String!, input: UpdateLogInput!): Log!
       @requireAuth(roles: ["logUpdate", "admin"])
-    deleteLog(id: String!): Log! @requireAuth(roles: ["logDelete", "admin"])
+    deleteLog(cuid: String!): Log! @requireAuth(roles: ["logDelete", "admin"])
   }
 `

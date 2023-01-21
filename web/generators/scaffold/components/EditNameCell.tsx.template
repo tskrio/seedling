@@ -11,23 +11,22 @@ import { Fragment, useState } from 'react'
 import ${singularPascalName}Form from '${importComponentNameForm}'
 
 export const QUERY = gql`
-  query Edit${singularPascalName}ById($id: ${idType}!) {
-    ${singularCamelName}: ${singularCamelName}(id: $id) {<% columns.forEach(column => { %>
+  query Edit${singularPascalName}ById($cuid: ${idType}!) {
+    ${singularCamelName}: ${singularCamelName}(cuid: $cuid) {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>
     }
   }
 `
 const UPDATE_${singularConstantName}_MUTATION = gql`
-  mutation Update${singularPascalName}Mutation($id: ${idType}!, $input: Update${singularPascalName}Input!) {
-    update${singularPascalName}(id: $id, input: $input) {<% columns.forEach(column => { %>
+  mutation Update${singularPascalName}Mutation($cuid: ${idType}!, $input: Update${singularPascalName}Input!) {
+    update${singularPascalName}(cuid: $cuid, input: $input) {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>
     }
   }
 `
 export const DELETE_${singularConstantName}_MUTATION = gql`
-  mutation Delete${singularPascalName}Mutation($id: Int!) {
-    deletedRow: delete${singularPascalName}(id: $id) {
-      id
+  mutation Delete${singularPascalName}Mutation($cuid: String!) {
+    deletedRow: delete${singularPascalName}(cuid: $cuid) {\scuid
     }
   }
 `
@@ -50,7 +49,7 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
   })
 
   const onSubmit = (data) => {
-    onSave(data, ${singularCamelName}.id)
+    onSave(data, ${singularCamelName}.cuid)
   }
   const onSave = (input, id) => {<% if (intForeignKeys.length) { %>
     const castInput = Object.assign(input, { <% intForeignKeys.forEach(key => { %>${key}: parseInt(input.${key}), <% }) %>})<% } %>
@@ -81,7 +80,7 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
       // type: 'reference',
       // display: 'name',
       // value: 'id',
-      // defaultValue: ${singularPascalName.toLowerCase()}._referencedModelHere_.id,
+      // defaultValue: ${singularPascalName.toLowerCase()}._referencedModelHere_.cuid,
       // defaultDisplay: ${singularPascalName.toLowerCase()}._referencedModelHere_._displayColumn_,
       // QUERY: gql`
       //   query Find_referencedModelHere_From${pluralPascalName}(
@@ -94,7 +93,7 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
       //       take
       //       skip
       //       results {
-      //         id
+      //\scuid
       //         name
       //       }
       //     }
@@ -116,7 +115,7 @@ export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singula
   return (
     <Fragment>
       <MetaTags
-        title={`${singularCamelName}.id`}
+        title={`${singularCamelName}.cuid`}
         description="Replace me with 155 charactes about this page"
         />
       <FormComponent

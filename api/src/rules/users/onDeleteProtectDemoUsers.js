@@ -6,9 +6,9 @@ module.exports = {
   operation: ['delete'],
   table: 'user',
   file: __filename,
-  command: async function ({ id, status }) {
+  command: async function ({ cuid, status }) {
     let record = await db.user.findUnique({
-      where: { id },
+      where: { cuid },
     })
     if (
       record.email == 'admin@example.com' ||
@@ -18,6 +18,6 @@ module.exports = {
       status.code = 'failure'
       status.message = `${record.name} are protected, cannot delete`
     }
-    return await { id, status }
+    return await { cuid, status }
   },
 }

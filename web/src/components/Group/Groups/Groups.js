@@ -34,7 +34,7 @@ export const initialColumns = [
     Header: 'Name',
     accessor: 'name',
     link: (givenId) => {
-      return routes.group({ id: givenId })
+      return routes.group({ cuid: givenId })
     },
     showMatching,
     filterOut,
@@ -59,7 +59,7 @@ export const initialColumns = [
 ]
 
 const GroupsList = () => {
-  let [orderBy, setOrderBy] = useState({ id: 'asc' }) // default order
+  let [orderBy, setOrderBy] = useState({ createdAt: 'asc' }) // default order
   let [columns, setColumns] = useState(initialColumns) // default columns
   let [skip, setSkip] = useState(0) // default reocrds to jump
   let [take, setTake] = useState(10) // default records to take

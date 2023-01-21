@@ -7,12 +7,12 @@ import PropertiesCell from 'src/components/Property/PropertiesCell'
 import { showMatching, filterOut } from '/src/lib/atomicFunctions'
 export const initialColumns = [
   {
-    Header: 'Entity',
-    accessor: 'entity',
+    Header: 'Name',
+    accessor: 'name',
     showMatching,
     filterOut,
     link: (givenId) => {
-      return routes.property({ id: givenId })
+      return routes.property({ cuid: givenId })
     },
   },
 
@@ -42,7 +42,7 @@ export const initialColumns = [
 ]
 
 const PropertiesList = () => {
-  let [orderBy, setOrderBy] = useState({ id: 'asc' }) // default order
+  let [orderBy, setOrderBy] = useState({ createdAt: 'asc' }) // default order
   let [columns, setColumns] = useState(initialColumns) // default columns
   let [skip, setSkip] = useState(0) // default reocrds to jump
   let [take, setTake] = useState(10) // default records to take
@@ -70,7 +70,7 @@ const PropertiesList = () => {
         setQuery={setQuery}
         fuzzyQuery={fuzzyQuery}
         setFuzzyQuery={setFuzzyQuery}
-        displayColumn="entity"
+        displayColumn="name"
         roles={roles}
       />
     </Fragment>

@@ -1,9 +1,9 @@
 import User from 'src/components/User/User'
 
 export const QUERY = gql`
-  query FindUserById($id: Int!) {
-    user: user(id: $id) {
-      id
+  query FindUserById($cuid: String!) {
+    user: user(cuid: $cuid) {
+      cuid
       createdAt
       updatedAt
       email

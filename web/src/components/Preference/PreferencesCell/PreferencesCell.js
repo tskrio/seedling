@@ -6,6 +6,7 @@ import {
   TableCaption,
   Heading,
   Box,
+  Text,
   Button,
   Spacer,
   useMediaQuery,
@@ -39,7 +40,7 @@ export const beforeQuery = (props) => {
   }
 }
 // Looks like you have some foreign keys
-// ["userId"] you may want to update the query
+// ["userCuid"] you may want to update the query
 // below to include the related values
 export const QUERY = gql`
   query FindPreferences(
@@ -61,14 +62,14 @@ export const QUERY = gql`
       skip
       q
       results {
-        id
+        cuid
         createdAt
         updatedAt
         entity
         value
-        userId
+        userCuid
         user {
-          id
+          cuid
           name
         }
       }

@@ -12,7 +12,7 @@ const EditButton = ({ row, column, roles }) => {
           aria-label="Edit"
           value={JSON.stringify(row)}
           onClick={() => {
-            navigate(column.editLink(row.id))
+            navigate(column.editLink(row.cuid))
           }}
           icon={<MdEditNote />}
           colorScheme="green"

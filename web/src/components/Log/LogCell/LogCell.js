@@ -1,9 +1,9 @@
 import Log from 'src/components/Log/Log'
 
 export const QUERY = gql`
-  query FindLogById($id: String!) {
-    log: log(id: $id) {
-      id
+  query FindLogById($cuid: String!) {
+    log: log(cuid: $cuid) {
+      cuid
       createdAt
       message
       source

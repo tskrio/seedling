@@ -73,10 +73,10 @@ export const logs = async ({ filter, skip, orderBy, q, take }) => {
   }
 }
 
-export const log = async ({ id }) => {
+export const log = async ({ cuid }) => {
   try {
     let result = await executeBeforeReadRules(table, {
-      id,
+      cuid,
       status: { code: 'success', message: '' },
     })
 
@@ -84,7 +84,7 @@ export const log = async ({ id }) => {
       throw new UserInputError(result.status.message)
     }
     let readRecord = await db[table].findUnique({
-      where: { id },
+      where: { cuid },
     })
 
     readRecord = executeAfterReadRules(table, readRecord)
@@ -94,10 +94,10 @@ export const log = async ({ id }) => {
   }
 }
 
-export const updateLog = async ({ id, input }) => {
+export const updateLog = async ({ cuid, input }) => {
   try {
     let result = await executeBeforeUpdateRules(table, {
-      id,
+      cuid,
       input,
       status: { code: 'success', message: '' },
     })
@@ -107,7 +107,7 @@ export const updateLog = async ({ id, input }) => {
     }
     let updatedRecord = await db[table].update({
       data: result.input,
-      where: { id },
+      where: { cuid },
     })
 
     updatedRecord = executeAfterUpdateRules(table, updatedRecord)
@@ -117,10 +117,10 @@ export const updateLog = async ({ id, input }) => {
   }
 }
 
-export const deleteLog = async ({ id }) => {
+export const deleteLog = async ({ cuid }) => {
   try {
     let result = await executeBeforeDeleteRules(table, {
-      id,
+      cuid,
       status: { code: 'success', message: '' },
     })
 
@@ -128,7 +128,7 @@ export const deleteLog = async ({ id }) => {
       throw new UserInputError(result.status.message)
     }
     let deletedRecord = await db[table].delete({
-      where: { id },
+      where: { cuid },
     })
 
     deletedRecord = executeAfterDeleteRules(table, deletedRecord)

@@ -37,19 +37,17 @@ const Routes = () => {
           <Route path="/my-profile" page={MyProfilePage} name="myProfile" />
           <Set wrap={MessagesLayout}>
             <Route path="/messages/new" page={MessageNewMessagePage} name="newMessage" />
-            <Route path="/messages/{id:Int}" page={MessageEditMessagePage} name="editMessage" />
+            <Route path="/messages/{cuid}" page={MessageEditMessagePage} name="message" />
             <Route path="/messages" page={MessageMessagesPage} name="messages" />
           </Set>
           <Set wrap={LogsLayout}>
             <Route path="/logs/new" page={LogNewLogPage} name="newLog" />
-            <Route path="/logs/{id}/edit" page={LogEditLogPage} name="editLog" />
-            <Route path="/logs/{id}" page={LogEditLogPage} name="log" />
+            <Route path="/logs/{cuid}" page={LogEditLogPage} name="log" />
             <Route path="/logs" page={LogLogsPage} name="logs" />
           </Set>
           <Set wrap={PropertiesLayout}>
             <Route path="/properties/new" page={PropertyNewPropertyPage} name="newProperty" />
-            <Route path="/properties/{id:Int}/edit" page={PropertyEditPropertyPage} name="editProperty" />
-            <Route path="/properties/{id:Int}" page={PropertyEditPropertyPage} name="property" />
+            <Route path="/properties/{cuid}" page={PropertyEditPropertyPage} name="property" />
             <Route path="/properties" page={PropertyPropertiesPage} name="properties" />
           </Set>
 
@@ -58,7 +56,7 @@ const Routes = () => {
               <Route path="/groups/new" page={GroupNewGroupPage} name="newGroup" />
             </Private>
             <Private unauthenticated="home" role={['admin', 'groupUpdate', 'groupRead']}>
-              <Route path="/groups/{id:Int}" page={GroupEditGroupPage} name="group" />
+              <Route path="/groups/{cuid}" page={GroupEditGroupPage} name="group" />
               <Route path="/groups" page={GroupGroupsPage} name="groups" />
             </Private>
           </Set>
@@ -67,7 +65,7 @@ const Routes = () => {
               <Route path="/preferences/new" page={PreferenceNewPreferencePage} name="newPreference" />
             </Private>
             <Private unauthenticated="home">
-              <Route path="/preferences/{id:Int}" page={PreferenceEditPreferencePage} name="preference" />
+              <Route path="/preferences/{cuid}" page={PreferenceEditPreferencePage} name="preference" />
               <Route path="/preferences" page={PreferencePreferencesPage} name="preferences" />
             </Private>
           </Set>
@@ -76,7 +74,7 @@ const Routes = () => {
               <Route path="/users/new" page={UserNewUserPage} name="newUser" />
             </Private>
             <Private unauthenticated="home" role={['admin', 'userUpdate', 'userRead']}>
-              <Route path="/users/{id:Int}" page={UserEditUserPage} name="user" />
+              <Route path="/users/{cuid}" page={UserEditUserPage} name="user" />
               <Route path="/users" page={UserUsersPage} name="users" />
             </Private>
           </Set>
@@ -85,7 +83,7 @@ const Routes = () => {
               <Route path="/group-members/new" page={GroupMemberNewGroupMemberPage} name="newGroupMember" />
             </Private>
             <Private unauthenticated="home" role={['admin', 'groupMemberUpdate', 'groupMemberRead']}>
-              <Route path="/group-members/{id:Int}" page={GroupMemberEditGroupMemberPage} name="groupMember" />
+              <Route path="/group-members/{cuid}" page={GroupMemberEditGroupMemberPage} name="groupMember" />
               <Route path="/group-members" page={GroupMemberGroupMembersPage} name="groupMembers" />
             </Private>
           </Set>
@@ -94,7 +92,7 @@ const Routes = () => {
               <Route path="/group-roles/new" page={GroupRoleNewGroupRolePage} name="newGroupRole" />
             </Private>
             <Private unauthenticated="home" role={['admin', 'groupRoleUpdate', 'groupRoleRead']}>
-              <Route path="/group-roles/{id:Int}" page={GroupRoleEditGroupRolePage} name="groupRole" />
+              <Route path="/group-roles/{cuid}" page={GroupRoleEditGroupRolePage} name="groupRole" />
               <Route path="/group-roles" page={GroupRoleGroupRolesPage} name="groupRoles" />
             </Private>
           </Set>

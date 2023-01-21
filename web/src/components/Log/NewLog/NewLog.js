@@ -11,7 +11,7 @@ import FormComponent from 'src/components/FormComponent'
 const CREATE_LOG_MUTATION = gql`
   mutation CreateLogMutation($input: CreateLogInput!) {
     createLog(input: $input) {
-      id
+      cuid
     }
   }
 `
@@ -52,7 +52,6 @@ const NewLog = () => {
       prettyName: 'Context',
       required: 'This is required',
     },
-
   ]
 
   const roles = {

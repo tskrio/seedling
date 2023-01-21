@@ -7,15 +7,15 @@ module.exports = {
   operation: ['delete'],
   table: 'user',
   file: __filename,
-  command: async function ({ id, status }) {
+  command: async function ({ cuid, status }) {
     let record = await db.user.findUnique({
-      where: { id },
+      where: { cuid },
     })
 
     if (record?.name?.toLowerCase() === 'tron') {
       status.code = 'error'
       status.message = `You can't delete ${record?.name}, he fights for the user`
     }
-    return { id, status }
+    return { cuid, status }
   },
 }

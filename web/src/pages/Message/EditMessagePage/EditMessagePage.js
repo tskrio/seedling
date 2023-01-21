@@ -1,7 +1,7 @@
 import EditMessageCell from 'src/components/Message/EditMessageCell'
 
-const EditMessagePage = ({ id }) => {
-  return <EditMessageCell id={id} />
+const EditMessagePage = ({ cuid }) => {
+  return <EditMessageCell cuid={cuid} />
 }
 
 export default EditMessagePage

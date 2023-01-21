@@ -15,7 +15,7 @@ const formatDatetime = (value) => {
 */
 const MessageForm = (props) => {
   const onSubmit = (data) => {
-    props.onSave(data, props?.message?.id)
+    props.onSave(data, props?.message?.cuid)
   }
 
   return (

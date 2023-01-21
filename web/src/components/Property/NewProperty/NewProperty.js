@@ -11,7 +11,7 @@ import FormComponent from 'src/components/FormComponent'
 const CREATE_PROPERTY_MUTATION = gql`
   mutation CreatePropertyMutation($input: CreatePropertyInput!) {
     createProperty(input: $input) {
-      id
+      cuid
     }
   }
 `
@@ -39,7 +39,7 @@ const NewProperty = () => {
   }
   const fields = [
     {
-      name: 'entity',
+      name: 'name',
       prettyName: 'Entity',
       required: 'This is required',
     },

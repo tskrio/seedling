@@ -69,11 +69,11 @@ export const groupMembers = async ({ filter, skip, orderBy, q, take }) => {
   }
 }
 
-export const groupMember = async ({ id }) => {
+export const groupMember = async ({ cuid }) => {
   try {
-    let { where } = await executeBeforeReadRulesV2({ table, id })
+    let { where } = await executeBeforeReadRulesV2({ table, cuid })
     if (!where /* if where is falsy, return { id } */) {
-      where = { id }
+      where = { cuid }
     }
     let readRecord = await db[table].findUnique({ where })
     let { record } = await executeAfterReadRulesV2({
@@ -86,23 +86,23 @@ export const groupMember = async ({ id }) => {
   }
 }
 
-export const updateGroupMember = async ({ id, input }) => {
+export const updateGroupMember = async ({ cuid, input }) => {
   try {
     let { data, where } = await executeBeforeUpdateRulesV2({
       table,
       data: input,
-      id,
+      cuid,
     })
     if (!where) {
       // if where is falsy, return { id }
-      where = { id }
+      where = { cuid }
     }
     let updatedRecord = await db[table].update({ data, where })
 
     let { record } = await executeAfterUpdateRulesV2({
       table,
       data: updatedRecord,
-      id,
+      cuid,
     })
     return { ...record }
   } catch (error) {
@@ -110,17 +110,17 @@ export const updateGroupMember = async ({ id, input }) => {
   }
 }
 
-export const deleteGroupMember = async ({ id }) => {
+export const deleteGroupMember = async ({ cuid }) => {
   try {
     let { where } = await executeBeforeDeleteRulesV2({
       table,
-      id,
+      cuid,
     })
     if (!where /* if where is falsy, return { id } */) {
-      where = { id }
+      where = { cuid }
     }
     let deletedRecord = await db[table].delete({
-      where: { id },
+      where: { cuid },
     })
 
     await executeAfterDeleteRulesV2({ table, data: deletedRecord })
@@ -133,8 +133,12 @@ export const deleteGroupMember = async ({ id }) => {
 }
 
 export const GroupMember = {
-  group: (_obj, { root }) =>
-    db[table].findUnique({ where: { id: root.id } }).group(),
-  user: (_obj, { root }) =>
-    db[table].findUnique({ where: { id: root.id } }).user(),
+  Group: (_obj, { root }) => {
+    console.log({ function: 'GroupMember.Group', root })
+    return db[table].findUnique({ where: { cuid: root.cuid } }).Group()
+  },
+  User: (_obj, { root }) => {
+    console.log({ function: 'GroupMember.User', root })
+    return db[table].findUnique({ where: { cuid: root.cuid } }).User()
+  },
 }

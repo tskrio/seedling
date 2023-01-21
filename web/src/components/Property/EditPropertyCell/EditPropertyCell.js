@@ -9,34 +9,37 @@ import { toast } from '@redwoodjs/web/toast'
 import FormComponent from 'src/components/FormComponent'
 import FormSkeleton from 'src/components/FormSkeleton/FormSkeleton'
 export const QUERY = gql`
-  query EditPropertyById($id: Int!) {
-    property: property(id: $id) {
-      id
+  query EditPropertyById($cuid: String!) {
+    property: property(cuid: $cuid) {
+      cuid
       createdAt
       updatedAt
-      entity
+      name
       type
       value
     }
   }
 `
 const UPDATE_PROPERTY_MUTATION = gql`
-  mutation UpdatePropertyMutation($id: Int!, $input: UpdatePropertyInput!) {
-    updateProperty(id: $id, input: $input) {
-      id
+  mutation UpdatePropertyMutation(
+    $cuid: String!
+    $input: UpdatePropertyInput!
+  ) {
+    updateProperty(cuid: $cuid, input: $input) {
+      cuid
       createdAt
       updatedAt
-      entity
+      name
       type
       value
     }
   }
 `
 export const DELETE_PROPERTY_MUTATION = gql`
-  mutation DeletePropertyMutation($id: Int!) {
-    deletedRow: deleteProperty(id: $id) {
-      id
-      entity
+  mutation DeletePropertyMutation($cuid: String!) {
+    deletedRow: deleteProperty(cuid: $cuid) {
+      cuid
+      name
     }
   }
 `
@@ -62,10 +65,11 @@ export const Success = ({ property }) => {
   )
 
   const onSubmit = (data) => {
-    onSave(data, property.id)
+    console.log({ function: 'onSubmit', data, property })
+    onSave(data, property.cuid)
   }
-  const onSave = (input, id) => {
-    updateProperty({ variables: { id, input } })
+  const onSave = (input, cuid) => {
+    updateProperty({ variables: { cuid, input } })
   }
 
   const [deleteProperty] = useMutation(DELETE_PROPERTY_MUTATION, {
@@ -73,17 +77,21 @@ export const Success = ({ property }) => {
       toast.success('Property deleted')
       navigate(routes.properties())
     },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
 
-  const onDelete = (id) => {
-    if (confirm('Are you sure you want to delete Property ' + id + '?')) {
-      deleteProperty({ variables: { id } })
+  const onDelete = (cuid) => {
+    console.log({ function: 'onDelete', property })
+    if (confirm('Are you sure you want to delete Property ' + cuid + '?')) {
+      deleteProperty({ variables: { cuid: property.cuid } })
     }
   }
   const fields = [
     {
-      name: 'entity',
-      prettyName: 'Entity',
+      name: 'name',
+      prettyName: 'Name',
       required: 'This is required',
     },
 
@@ -113,7 +121,7 @@ export const Success = ({ property }) => {
   return (
     <Fragment>
       <MetaTags
-        title={`property.id`}
+        title={`${property.cuid}`}
         description="Replace me with 155 charactes about this page"
       />
 

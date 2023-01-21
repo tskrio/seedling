@@ -1,6 +1,6 @@
 export const schema = gql`
   type Message {
-    id: Int!
+    cuid: String!
     createdAt: DateTime!
     updatedAt: DateTime!
     language: String!
@@ -25,7 +25,8 @@ export const schema = gql`
       q: String
     ): Messages! @requireAuth(roles: ["messageRead", "admin"])
 
-    message(id: Int!): Message @requireAuth(roles: ["messageRead", "admin"])
+    message(cuid: String!): Message
+      @requireAuth(roles: ["messageRead", "admin"])
   }
 
   input CreateMessageInput {
@@ -43,9 +44,9 @@ export const schema = gql`
   type Mutation {
     createMessage(input: CreateMessageInput!): Message!
       @requireAuth(roles: ["messageCreate", "admin"])
-    updateMessage(id: Int!, input: UpdateMessageInput!): Message!
+    updateMessage(cuid: String!, input: UpdateMessageInput!): Message!
       @requireAuth(roles: ["messageUpdate", "admin"])
-    deleteMessage(id: Int!): Message!
+    deleteMessage(cuid: String!): Message!
       @requireAuth(roles: ["messageDelete", "admin"])
   }
 `

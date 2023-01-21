@@ -70,11 +70,11 @@ export const groups = async ({ filter, skip, orderBy, q, take }) => {
   }
 }
 
-export const group = async ({ id }) => {
+export const group = async ({ cuid }) => {
   try {
-    let { where } = await executeBeforeReadRulesV2({ table, id })
-    if (!where /* if where is falsy, return { id } */) {
-      where = { id }
+    let { where } = await executeBeforeReadRulesV2({ table, cuid })
+    if (!where /* if where is falsy, return { cuid } */) {
+      where = { cuid }
     }
     let readRecord = await db[table].findUnique({ where })
     let { record } = await executeAfterReadRulesV2({
@@ -87,41 +87,43 @@ export const group = async ({ id }) => {
   }
 }
 
-export const updateGroup = async ({ id, input }) => {
+export const updateGroup = async ({ cuid, input }) => {
   try {
+    console.log({ function: 'updateGroup', cuid, input })
     let { data, where } = await executeBeforeUpdateRulesV2({
       table,
       data: input,
-      id,
+      cuid,
     })
     if (!where) {
-      // if where is falsy, return { id }
-      where = { id }
+      // if where is falsy, return { cuid }
+      where = { cuid }
     }
+    console.log({ function: 'updateGroup after before rules', data, where })
     let updatedRecord = await db[table].update({ data, where })
 
     let { record } = await executeAfterUpdateRulesV2({
       table,
       data: updatedRecord,
-      id,
+      cuid,
     })
     return { ...record }
   } catch (error) {
-    throw new UserInputError(error.message)
+    throw new UserInputError({ error })
   }
 }
 
-export const deleteGroup = async ({ id }) => {
+export const deleteGroup = async ({ cuid }) => {
   try {
     let { where } = await executeBeforeDeleteRulesV2({
       table,
-      id,
+      cuid,
     })
-    if (!where /* if where is falsy, return { id } */) {
-      where = { id }
+    if (!where /* if where is falsy, return { cuid } */) {
+      where = { cuid }
     }
     let deletedRecord = await db[table].delete({
-      where: { id },
+      where: { cuid },
     })
 
     await executeAfterDeleteRulesV2({ table, data: deletedRecord })
@@ -135,7 +137,7 @@ export const deleteGroup = async ({ id }) => {
 
 export const Group = {
   GroupMember: (_obj, { root }) =>
-    db[table].findUnique({ where: { id: root.id } }).GroupMember(),
+    db[table].findUnique({ where: { cuid: root.cuid } }).GroupMember(),
   GroupRole: (_obj, { root }) =>
-    db[table].findUnique({ where: { id: root.id } }).GroupRole(),
+    db[table].findUnique({ where: { cuid: root.cuid } }).GroupRole(),
 }

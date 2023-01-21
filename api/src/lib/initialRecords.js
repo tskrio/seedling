@@ -1,6 +1,6 @@
 export const groups = [
   {
-    id: 1,
+    cuid: 'qx784aq3cef0rsf5yytif7fq',
     name: 'Administrators',
     description: 'Can CRUD all records.',
     GroupRole: {
@@ -13,17 +13,17 @@ export const groups = [
 
 export const properties = [
   {
-    entity: 'email',
+    name: 'email',
     type: 'string',
     value: 'inactive',
   },
   {
-    entity: 'MAILGUN_DOMAIN',
+    name: 'MAILGUN_DOMAIN',
     type: 'string',
     value: 'replaceMe',
   },
   {
-    entity: 'MAILGUN_API_KEY',
+    name: 'MAILGUN_API_KEY',
     type: 'string',
     value: 'replaceMe',
   },

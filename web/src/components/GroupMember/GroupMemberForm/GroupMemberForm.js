@@ -15,7 +15,7 @@ const formatDatetime = (value) => {
 */
 const GroupMemberForm = (props) => {
   const onSubmit = (data) => {
-    props.onSave(data, props?.groupMember?.id)
+    props.onSave(data, props?.groupMember?.cuid)
   }
 
   return (
@@ -29,38 +29,38 @@ const GroupMemberForm = (props) => {
         />
 
         <Label
-          name="userId"
+          name="userCuid"
           className="rw-label"
           errorClassName="rw-label rw-label-error"
         >
-          User id
+          User cuid
         </Label>
         <NumberField
-          name="userId"
-          defaultValue={props.groupMember?.userId}
+          name="userCuid"
+          defaultValue={props.groupMember?.userCuid}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
 
-        <FieldError name="userId" className="rw-field-error" />
+        <FieldError name="userCuid" className="rw-field-error" />
 
         <Label
-          name="groupId"
+          name="groupCuid"
           className="rw-label"
           errorClassName="rw-label rw-label-error"
         >
-          Group id
+          Group cuid
         </Label>
         <NumberField
-          name="groupId"
-          defaultValue={props.groupMember?.groupId}
+          name="groupCuid"
+          defaultValue={props.groupMember?.groupCuid}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
 
-        <FieldError name="groupId" className="rw-field-error" />
+        <FieldError name="groupCuid" className="rw-field-error" />
 
         <div className="rw-button-group">
           <Submit disabled={props.loading} className="rw-button rw-button-blue">

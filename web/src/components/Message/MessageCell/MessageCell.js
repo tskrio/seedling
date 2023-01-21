@@ -1,9 +1,9 @@
 import Message from 'src/components/Message/Message'
 
 export const QUERY = gql`
-  query FindMessageById($id: Int!) {
-    message: message(id: $id) {
-      id
+  query FindMessageById($cuid: String!) {
+    message: message(cuid: $cuid) {
+      cuid
       createdAt
       updatedAt
       language

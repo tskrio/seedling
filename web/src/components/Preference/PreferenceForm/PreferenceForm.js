@@ -16,7 +16,7 @@ const formatDatetime = (value) => {
 */
 const PreferenceForm = (props) => {
   const onSubmit = (data) => {
-    props.onSave(data, props?.preference?.id)
+    props.onSave(data, props?.preference?.cuid)
   }
 
   return (
@@ -63,21 +63,21 @@ const PreferenceForm = (props) => {
         <FieldError name="value" className="rw-field-error" />
 
         <Label
-          name="userId"
+          name="userCuid"
           className="rw-label"
           errorClassName="rw-label rw-label-error"
         >
-          User id
+          User cuid
         </Label>
         <NumberField
-          name="userId"
-          defaultValue={props.preference?.userId}
+          name="userCuid"
+          defaultValue={props.preference?.userCuid}
           className="rw-input"
           errorClassName="rw-input rw-input-error"
           validation={{ required: true }}
         />
 
-        <FieldError name="userId" className="rw-field-error" />
+        <FieldError name="userCuid" className="rw-field-error" />
 
         <div className="rw-button-group">
           <Submit disabled={props.loading} className="rw-button rw-button-blue">

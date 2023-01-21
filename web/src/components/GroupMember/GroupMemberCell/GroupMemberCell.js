@@ -1,13 +1,13 @@
 import GroupMember from 'src/components/GroupMember/GroupMember'
 
 export const QUERY = gql`
-  query FindGroupMemberById($id: Int!) {
-    groupMember: groupMember(id: $id) {
-      id
+  query FindGroupMemberById($cuid: String!) {
+    groupMember: groupMember(cuid: $cuid) {
+      cuid
       createdAt
       updatedAt
-      userId
-      groupId
+      userCuid
+      groupCuid
     }
   }
 `

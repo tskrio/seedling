@@ -9,7 +9,7 @@ module.exports = {
     if (data.name == '') {
       status.code = 'failure'
       status.message = 'Name is required (server validation)'
-      return { status }
     }
+    return { data, status }
   },
 }

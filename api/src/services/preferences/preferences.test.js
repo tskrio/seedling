@@ -14,7 +14,7 @@ describe('preferences', () => {
   })
 
   scenario('returns a single preference', async (scenario) => {
-    const result = await preference({ id: scenario.preference.one.id })
+    const result = await preference({ id: scenario.preference.one.cuid })
 
     expect(result).toEqual(scenario.preference.one)
   })
@@ -24,19 +24,19 @@ describe('preferences', () => {
       input: {
         updatedAt: '2022-01-15T22:17:11Z',
         entity: 'String',
-        userId: scenario.preference.two.userId,
+        userCuid: scenario.preference.two.userCuid,
       },
     })
 
     expect(result.updatedAt).toEqual('2022-01-15T22:17:11Z')
     expect(result.entity).toEqual('String')
-    expect(result.userId).toEqual(scenario.preference.two.userId)
+    expect(result.userCuid).toEqual(scenario.preference.two.userCuid)
   })
 
   scenario('updates a preference', async (scenario) => {
-    const original = await preference({ id: scenario.preference.one.id })
+    const original = await preference({ id: scenario.preference.one.cuid })
     const result = await updatePreference({
-      id: original.id,
+      id: original.cuid,
       input: { updatedAt: '2022-01-16T22:17:11Z' },
     })
 
@@ -44,8 +44,10 @@ describe('preferences', () => {
   })
 
   scenario('deletes a preference', async (scenario) => {
-    const original = await deletePreference({ id: scenario.preference.one.id })
-    const result = await preference({ id: original.id })
+    const original = await deletePreference({
+      id: scenario.preference.one.cuid,
+    })
+    const result = await preference({ id: original.cuid })
 
     expect(result).toEqual(null)
   })
