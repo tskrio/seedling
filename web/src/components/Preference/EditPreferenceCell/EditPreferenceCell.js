@@ -18,7 +18,7 @@ export const QUERY = gql`
       entity
       value
       userCuid
-      user {
+      User {
         cuid
         name
       }

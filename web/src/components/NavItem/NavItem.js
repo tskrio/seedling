@@ -1,13 +1,17 @@
 import { Flex, Icon } from '@chakra-ui/react'
 
 import { NavLink, routes } from '@redwoodjs/router'
-const NavItem = ({ icon, navigateTo, query, children, ...rest }) => {
+const NavItem = ({ icon, navigateTo, query, children, table, ...rest }) => {
+  let route = routes?.[navigateTo] || routes?.list({table})
+  if (typeof table!=='undefined'){
+    query = {table}
+  }
   if (!query) {
     query = {}
   }
   return (
     <NavLink
-      to={routes?.[navigateTo](query)}
+      to={route}
       className="link"
       activeClassName="activeLink"
       style={{ textDecoration: 'none' }}

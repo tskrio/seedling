@@ -8,7 +8,7 @@
 [web]
   title = "Seedling"
   port = 8910
-  apiUrl = "/.netlify/functions"
+  apiUrl = "/.redwood/functions"
 [api]
   port = 8911
 [browser]

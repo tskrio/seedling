@@ -36,7 +36,7 @@ import {
   MdSettingsApplications,
 } from 'react-icons/md'
 
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 import { routes, navigate } from '@redwoodjs/router'
 
 import NavItem from '../NavItem/NavItem'
@@ -78,46 +78,46 @@ const SidebarWithHeader = ({ brand, children }) => {
 const SidebarContent = ({ brand, onClose, ...rest }) => {
   const { hasRole, isAuthenticated } = useAuth()
   const LinkItems = [
-    { name: 'Home', icon: MdHome, navigateTo: 'home' },
-    { name: 'Users', icon: MdPerson, role: 'userRead', navigateTo: 'users' },
-    { name: 'Groups', icon: MdGroups, role: 'groupRead', navigateTo: 'groups' },
+    //{ name: 'Home', icon: MdHome, navigateTo: 'home' },
+    { name: 'Users', icon: MdPerson, role: 'userRead', table: 'users' },
+    { name: 'Groups', icon: MdGroups, role: 'groupRead', table: 'groups' },
     {
       name: 'Group Members',
       icon: MdPersonOutline,
       role: 'groupMemberRead',
-      navigateTo: 'groupMembers',
+      table: 'group-members',
     },
     {
       name: 'Group roles',
       icon: MdWork,
       role: 'groupRoleRead',
-      navigateTo: 'groupRoles',
+      table: 'group-roles',
     },
     {
       name: 'Preferences',
       icon: MdRoomPreferences,
       roles: 'preferenceRead',
-      navigateTo: 'preferences',
+      table: 'preferences',
     },
     {
       name: 'Properties',
       icon: MdSettings,
       role: 'propertyRead',
-      navigateTo: 'properties',
+      table: 'properties',
     },
     {
       name: 'Messages',
       icon: MdLanguage,
       role: 'messageRead',
-      navigateTo: 'messages',
+      table: 'messages',
     },
     {
       name: 'Logs',
       icon: MdSettingsApplications,
       role: 'admin',
-      navigateTo: 'logs',
+      table: 'logs',
     },
-    { name: 'Logout', icon: MdLogout, navigateTo: 'logout' },
+    //{ name: 'Logout', icon: MdLogout, navigateTo: 'logout' },
   ].filter((item) => {
     if (item?.requireAuth === true && isAuthenticated) {
       return (
@@ -153,6 +153,8 @@ const SidebarContent = ({ brand, onClose, ...rest }) => {
           key={link.name}
           icon={link.icon}
           navigateTo={link.navigateTo}
+          query={link.query}
+          table={link.table}
           onClick={onClose}
         >
           {link.name}

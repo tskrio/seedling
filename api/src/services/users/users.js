@@ -1,3 +1,5 @@
+import CryptoJS from 'crypto-js'
+
 import { UserInputError } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
@@ -15,6 +17,64 @@ import {
 } from 'src/lib/rules'
 
 let table = 'user'
+
+export const generateLoginToken = async ({ email }) => {
+  console.log({ function: 'generateLoginToken', email })
+  try {
+    // look up if the user exists
+    let lookupUser = await db[table].findFirst({ where: { email } })
+    console.log({ lookupUser })
+    if (!lookupUser) return { message: 'Login Request received' }
+
+    // here we're going to generate a random password of 6 numbers, then hash it properly
+    let randomNumber = (() => {
+      let number = Math.floor(Math.random() * 1000000)
+      if (number < 100000) number = number + 100000
+      return number.toString()
+    })()
+    console.log({ randomNumber })
+    // because we're really just modifying how dbauth worked we have a salt
+    // and a hashedPassword.  We're going to use the salt to hash the random number
+    // and then store that in the hashedPassword field
+    // first we'll generate a new salt
+    let salt = (() => {
+      let charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+      charSet += 'abcdefghijklmnopqrstuvwxyz'
+      charSet += '0123456789'
+      let randomString = ''
+      for (var i = 0; i < 30; i++) {
+        var randomPoz = Math.floor(Math.random() * charSet.length)
+        randomString += charSet.substring(randomPoz, randomPoz + 1)
+      }
+      return randomString
+    })()
+    console.log({ salt })
+    // now we'll hash the random number with the salt
+    let loginToken = CryptoJS.PBKDF2(randomNumber, salt, {
+      keySize: 256 / 32,
+    }).toString()
+    console.log({ loginToken })
+    // now we'll update the user with the new salt and hashedPassword
+    let loginTokenExpiresAt = new Date()
+    loginTokenExpiresAt.setMinutes(loginTokenExpiresAt.getMinutes() + 15)
+    await updateUser({
+      cuid: lookupUser.cuid,
+      input: {
+        salt,
+        //hashedPassword, // TODO: REmove
+        loginToken,
+        loginTokenExpiresAt,
+        _unencryptedToken: randomNumber,
+        _email: lookupUser.email,
+      },
+    })
+    return { message: 'Login Request received' }
+  } catch (error) {
+    console.log({ error })
+    throw new UserInputError(error.message)
+  }
+}
+
 
 export const createUser = async ({ input }) => {
   try {

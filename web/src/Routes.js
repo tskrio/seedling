@@ -21,13 +21,14 @@ import AboutPage from 'src/pages/AboutPage'
 import HomePage from 'src/pages/HomePage'
 
 import Standard from './layouts/Standard/Standard'
-
+import  { useAuth } from 'src/auth'
 const Routes = () => {
   return (
-    <Router>
+    <Router useAuth={useAuth}>
       <Route path="/forgot-password" whileLoadingAuth={() => <>Loading...</>} page={ForgotPasswordPage} name="forgotPassword" />
       <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
-      <Route path="/login" page={LoginPage} name="login" />
+      {/*<Route path="/login" page={LoginPage} name="login" />*/}
+      <Route path="/login" page={Login2Page} name="login" />
       <Route path="/signup" page={SignupPage} name="signup" />
       <Set wrap={Standard}>
         <Route path="/logout" page={LogoutPage} name="logout" />
@@ -38,17 +39,14 @@ const Routes = () => {
           <Set wrap={MessagesLayout}>
             <Route path="/messages/new" page={MessageNewMessagePage} name="newMessage" />
             <Route path="/messages/{cuid}" page={MessageEditMessagePage} name="message" />
-            <Route path="/messages" page={MessageMessagesPage} name="messages" />
           </Set>
           <Set wrap={LogsLayout}>
             <Route path="/logs/new" page={LogNewLogPage} name="newLog" />
             <Route path="/logs/{cuid}" page={LogEditLogPage} name="log" />
-            <Route path="/logs" page={LogLogsPage} name="logs" />
           </Set>
           <Set wrap={PropertiesLayout}>
             <Route path="/properties/new" page={PropertyNewPropertyPage} name="newProperty" />
             <Route path="/properties/{cuid}" page={PropertyEditPropertyPage} name="property" />
-            <Route path="/properties" page={PropertyPropertiesPage} name="properties" />
           </Set>
 
           <Set wrap={GroupsLayout}>
@@ -57,7 +55,6 @@ const Routes = () => {
             </Private>
             <Private unauthenticated="home" role={['admin', 'groupUpdate', 'groupRead']}>
               <Route path="/groups/{cuid}" page={GroupEditGroupPage} name="group" />
-              <Route path="/groups" page={GroupGroupsPage} name="groups" />
             </Private>
           </Set>
           <Set wrap={PreferencesLayout}>
@@ -66,7 +63,6 @@ const Routes = () => {
             </Private>
             <Private unauthenticated="home">
               <Route path="/preferences/{cuid}" page={PreferenceEditPreferencePage} name="preference" />
-              <Route path="/preferences" page={PreferencePreferencesPage} name="preferences" />
             </Private>
           </Set>
           <Set wrap={UsersLayout}>
@@ -75,7 +71,6 @@ const Routes = () => {
             </Private>
             <Private unauthenticated="home" role={['admin', 'userUpdate', 'userRead']}>
               <Route path="/users/{cuid}" page={UserEditUserPage} name="user" />
-              <Route path="/users" page={UserUsersPage} name="users" />
             </Private>
           </Set>
           <Set wrap={GroupMembersLayout}>
@@ -84,7 +79,6 @@ const Routes = () => {
             </Private>
             <Private unauthenticated="home" role={['admin', 'groupMemberUpdate', 'groupMemberRead']}>
               <Route path="/group-members/{cuid}" page={GroupMemberEditGroupMemberPage} name="groupMember" />
-              <Route path="/group-members" page={GroupMemberGroupMembersPage} name="groupMembers" />
             </Private>
           </Set>
           <Set wrap={GroupRolesLayout}>
@@ -92,9 +86,18 @@ const Routes = () => {
               <Route path="/group-roles/new" page={GroupRoleNewGroupRolePage} name="newGroupRole" />
             </Private>
             <Private unauthenticated="home" role={['admin', 'groupRoleUpdate', 'groupRoleRead']}>
-              <Route path="/group-roles/{cuid}" page={GroupRoleEditGroupRolePage} name="groupRole" />
-              <Route path="/group-roles" page={GroupRoleGroupRolesPage} name="groupRoles" />
+              {/*<Route path="/group-roles/{cuid}" page={GroupRoleEditGroupRolePage} name="groupRole" />*/}
             </Private>
+          </Set>
+          <Set>
+            {/*<Route path="/list/users" page={AboutPage} name="list" />{/*this is how to override one*/}
+            <Route path="/list/{table}/{params...}" page={ListPage} name="list" />
+            <Route path="/list/{table}" page={ListPage} name="list" />
+
+
+            <Route path="/form/{table}/{cuid}" page={FormPage} name="formEdit" />
+            <Route path="/form/{table}" page={FormPage} name="form" />
+
           </Set>
         </Private>
       </Set>

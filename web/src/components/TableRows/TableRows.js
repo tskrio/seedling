@@ -12,7 +12,7 @@ import {
   Badge,
 } from '@chakra-ui/react'
 
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 import { Link, navigate } from '@redwoodjs/router'
 
 import DeleteButton from '../DeleteButton/DeleteButton'

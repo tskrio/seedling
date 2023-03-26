@@ -15,10 +15,11 @@ import {
   Switch,
 } from '@chakra-ui/react'
 
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 
 import PasswordField from '../PasswordField/PasswordField'
 import ReferenceField from '../ReferenceField/ReferenceField'
+import ReferenceField2 from '../ReferenceField2/ReferenceField2'
 const FormComponent = ({
   record,
   fields,
@@ -29,6 +30,8 @@ const FormComponent = ({
   handleSubmit,
   register,
   formState: { errors, isSubmitting },
+  formData,
+  setFormData,
   children,
 }) => {
   const { hasRole /*currentUser*/ } = useAuth()
@@ -48,6 +51,8 @@ const FormComponent = ({
       throw `Multiple fields with name "${field}" are present`
   })
   let fieldsHtml = fields.map((field) => {
+    let label = field?.prettyName || field?.definition?.label || field?.name
+    let type = field?.definition?.type || field?.type
     field.pt = 2
     let html = (
       <FormControl
@@ -55,11 +60,19 @@ const FormComponent = ({
         key={field.name}
         isInvalid={errors[field.name]}
       >
-        <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
+        <FormLabel htmlFor={field.name}>{label}</FormLabel>
+        <details>
+        <summary>Debuging</summary>
+        <pre>{JSON.stringify(field, null, 2)}</pre>
+        </details>
         <Input
           id={field.name}
           placeholder={field.placeholder || '...' || ''}
           readOnly={field.readOnly || false}
+          onChange={(e) => {
+            setFormData(formData, field.name, e.target.value)
+          }}
+
           {...register(field.name, {
             required: field?.required || false,
             minLength: field.minLength,
@@ -72,7 +85,7 @@ const FormComponent = ({
         </FormErrorMessage>
       </FormControl>
     )
-    if (field.type === 'boolean') {
+    if (type === 'boolean') {
       html = (
         <FormControl
           pt={field.pt}
@@ -80,8 +93,11 @@ const FormComponent = ({
           isInvalid={errors[field.name]}
           display="flex"
           alignItems="center"
+          onChange={(e) => {
+            setFormData(formData, field.name, e.target.value)
+          }}
         >
-          <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
+          <FormLabel htmlFor={field.name}>{label}</FormLabel>
           <Switch
             colorScheme="green"
             id={field.name}
@@ -98,17 +114,20 @@ const FormComponent = ({
         </FormControl>
       )
     }
-    if (field.type === 'password') {
+    if (type === 'password') {
       html = (
         <PasswordField
           key={field.name}
           field={field}
           errors={errors}
           register={register}
+          onChange={(e) => {
+            setFormData(formData, field.name, e.target.value)
+          }}
         />
       )
     }
-    if (field.type === 'reference') {
+    if (type === 'reference') {
       try {
         html = (
           <ReferenceField key={field.name} field={field} register={register} />
@@ -117,7 +136,25 @@ const FormComponent = ({
         console.error(error)
       }
     }
-    if (field.type === 'dateTime') {
+    if (type === 'reference2') {
+      try {
+        html = (
+          <ReferenceField2
+            key={field.name}
+            field={field}
+            register={register}
+            record={record?.[field?.name]}
+            onChange={(e) => {
+              console.log('reference2', e.target.value, )
+            setFormData(formData, field?.name, e.target.value)
+          }}
+            />
+        )
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    if (type === 'dateTime') {
       //Original(2022-03-10T16:41:06.000Z)
       //Displayed(2022-03-10T10:41)
       let transformedDefault = false
@@ -140,7 +177,7 @@ const FormComponent = ({
           key={field.name}
           isInvalid={errors[field.name]}
         >
-          <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
+          <FormLabel htmlFor={field.name}>{label}</FormLabel>
           <Input
             id={field.name}
             placeholder={field.placeholder || '...' || ''}
@@ -159,12 +196,21 @@ const FormComponent = ({
         </FormControl>
       )
     }
-    if (field.type === 'select') {
+    if (type === 'select') {
+      let options = field?.definition?.options || field?.options
+      // make options an array of objects
+      if (typeof options?.[0] === 'string') {
+        options = options.map((option) => {
+          return { value: option, label: option }
+        })
+      }
       html = (
         <FormControl pt={2} key={field.name} isInvalid={errors[field.name]}>
-          <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
+          <FormLabel htmlFor={field.name}>{label}</FormLabel>
+          <pre>Default: {record?.[field.name]}</pre>
           <Select
             defaultValue={record?.[field.name]}
+            value={record?.[field.name]}
             id={field.name}
             name={field.name}
             {...register(field.name, {
@@ -173,13 +219,15 @@ const FormComponent = ({
             })}
           >
             <option>Pick one</option>
-            {field.options.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
+
             {field.defaultOption}
-            {field.options}
+            {options?.map((option) => {
+              return (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              )
+            })}
           </Select>
           <FormErrorMessage>
             {errors[field.name] && errors[field.name].message}
@@ -187,7 +235,7 @@ const FormComponent = ({
         </FormControl>
       )
     }
-    if (field.type === 'json') {
+    if (type === 'json') {
       html = (
         <pre key={field.name}>
           {JSON.stringify(record?.[field.name], null, '  ')}

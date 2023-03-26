@@ -1,28 +1,41 @@
-import { DbAuthHandler } from '@redwoodjs/api'
+import { DbAuthHandler } from '@redwoodjs/auth-dbauth-api'
 
 import { db } from 'src/lib/db'
-import { logger } from 'src/lib/logger'
-//import { executeAfterCreateRules, executeAfterUpdateRules, executeBeforeCreateRules } from 'src/lib/rules'
-import { createUser /*, updateUser*/ } from 'src/services/users/users'
+import { createUser } from 'src/services/users/users'
+
 export const handler = async (event, context) => {
   const forgotPasswordOptions = {
-    handler: async (user) => {
-      logger.info(
-        `${user.username} forgot password /reset-password?resetToken=${user.resetToken}`
-      )
-      if (user.email === '') throw 'No email on file'
-      if (user.verified === null) throw 'Email not verified'
-      //await executeAfterUpdateRules('user', { record: user })
+    // handler() is invoked after verifying that a user was found with the given
+    // username. This is where you can send the user an email with a link to
+    // reset their password. With the default dbAuth routes and field names, the
+    // URL to reset the password will be:
+    //
+    // https://example.com/reset-password?resetToken=${user.resetToken}
+    //
+    // Whatever is returned from this function will be returned from
+    // the `forgotPassword()` function that is destructured from `useAuth()`
+    // You could use this return value to, for example, show the email
+    // address in a toast message so the user will know it worked and where
+    // to look for the email.
+    handler: (user) => {
       return user
     },
-    expires: 60 * 60 * 24,
+
+    // How long the resetToken is valid for, in seconds (default is 24 hours)
+    expires: 60 * 60 * 24 * 60,
+
     errors: {
+      // for security reasons you may want to be vague here rather than expose
+      // the fact that the email address wasn't found (prevents fishing for
+      // valid email addresses)
       usernameNotFound: 'Username not found',
+      // if the user somehow gets around client validation
       usernameRequired: 'Username is required',
     },
   }
+
   const loginOptions = {
-    // login.handler() is called after finding the user that matches the
+    // handler() is called after finding the user that matches the
     // username/password provided at login, but before actually considering them
     // logged in. The `user` argument will be the user in the database that
     // matched the username/password.
@@ -33,37 +46,65 @@ export const handler = async (event, context) => {
     // didn't validate their email yet), throw an error and it will be returned
     // by the `logIn()` function from `useAuth()` in the form of:
     // `{ message: 'Error message' }`
-    handler: (user) => {
+    handler: async (user) => {
+      // when a user logs in we want to set a break logins so clear the salt
+      // if the loginTokenExpiresAt is set, and is in the past
+      // then throw an error to prevent the user from logging in
+      let loginTokenExpiresAt = new Date(user?.loginTokenExpiresAt)
+      console.log({ function: 'auth.js', loginTokenExpiresAt })
+      let validToken = loginTokenExpiresAt < new Date()
+      console.log({ function: 'auth.js', validToken })
+      if (validToken) {
+        throw 'Login token expired'
+      }
+      let updateUser = await db.user.update({
+        where: { cuid: user.cuid },
+        data: {
+          salt: null,
+          loginTokenExpiresAt: null,
+        },
+      })
+      console.log({ function: 'auth.js', updateUser })
       return user
     },
 
     errors: {
       usernameOrPasswordMissing: 'Both username and password are required',
-      //usernameNotFound: 'Username ${username} not found',
-      usernameNotFound: 'Incorrect username or password.',
+      usernameNotFound: 'Username ${username} not found',
       // For security reasons you may want to make this the same as the
       // usernameNotFound error so that a malicious user can't use the error
       // to narrow down if it's the username or password that's incorrect
-      // incorrectPassword: 'Incorrect password for ${username}',
-      incorrectPassword: 'Incorrect username or password.',
+      incorrectPassword: 'Incorrect passcode',
     },
 
     // How long a user will remain logged in, in seconds
-    // expires: 60 * 60 * 24 * 365 * 10, // 10 years
-    expires: 60 * 60 * 8, // 8 hour
+    expires: 60 * 60 * 24 * 365 * 10, // 10 years
   }
+
   const resetPasswordOptions = {
-    handler: (/*user*/) => {
+    // handler() is invoked after the password has been successfully updated in
+    // the database. Returning anything truthy will automatically log the user
+    // in. Return `false` otherwise, and in the Reset Password page redirect the
+    // user to the login page.
+    handler: (_user) => {
       return true
     },
+
+    // If `false` then the new password MUST be different from the current one
     allowReusedPassword: true,
+
     errors: {
+      // the resetToken is valid, but expired
       resetTokenExpired: 'resetToken is expired',
+      // no user was found with the given resetToken
       resetTokenInvalid: 'resetToken is invalid',
+      // the resetToken was not present in the URL
       resetTokenRequired: 'resetToken is required',
+      // new password is the same as the old password (apparently they did not forget it)
       reusedPassword: 'Must choose a new password',
     },
   }
+
   const signupOptions = {
     // Whatever you want to happen to your data on new user signup. Redwood will
     // check for duplicate usernames before calling this handler. At a minimum
@@ -79,33 +120,35 @@ export const handler = async (event, context) => {
     // function in the form of: `{ error: 'Error message' }`.
     //
     // If this returns anything else, it will be returned by the
-    // `signUp()` function in the form of: `{ message: 'String here' }`.
-    handler: async ({ username, hashedPassword, salt, userAttributes }) => {
-      //let user = await db.user.create({
-      //  data: {
-      //    email: username,
-      //    hashedPassword: hashedPassword,
-      //    salt: salt,
-      //    name: userAttributes.name,
-      //  },
-      //})
-      return await createUser({
+    // `signUp()` function in the form of: `{
+    // message:
+    //'String here' }`.
+    handler: ({ username, hashedPassword, salt, userAttributes }) => {
+      let user = createUser({
         input: {
           username: username,
-          hashedPassword: hashedPassword,
+          email: username,
+          ///hashedPassword: hashedPassword,
+          loginToken: hashedPassword,
           salt: salt,
           name: userAttributes.name,
-          email: userAttributes.email,
           // skipPassword: true,
         },
       })
-      //return modifiedUser.record
+      return user
+    },
+
+    // Include any format checks for password here. Return `true` if the
+    // password is valid, otherwise throw a `PasswordValidationError`.
+    // Import the error along with `DbAuthHandler` from `@redwoodjs/api` above.
+    passwordValidation: (_password) => {
+      return true
     },
 
     errors: {
       // `field` will be either "username" or "password"
       fieldMissing: '${field} is required',
-      usernameTaken: '`${username}` already in use',
+      usernameTaken: 'Username `${username}` already in use',
     },
   }
 
@@ -114,7 +157,7 @@ export const handler = async (event, context) => {
     db: db,
 
     // The name of the property you'd call on `db` to access your user table.
-    // ie. if your Prisma model is named `User` this value would be `user`, as in `db.user`
+    // i.e. if your Prisma model is named `User` this value would be `user`, as in `db.user`
     authModelAccessor: 'user',
 
     // A map of what dbAuth calls a field to what your database calls it.
@@ -123,10 +166,23 @@ export const handler = async (event, context) => {
     authFields: {
       id: 'cuid',
       username: 'username',
-      hashedPassword: 'hashedPassword',
+      hashedPassword: 'loginToken',
       salt: 'salt',
       resetToken: 'resetToken',
       resetTokenExpiresAt: 'resetTokenExpiresAt',
+    },
+
+    // Specifies attributes on the cookie that dbAuth sets in order to remember
+    // who is logged in. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#restrict_access_to_cookies
+    cookie: {
+      HttpOnly: true,
+      Path: '/',
+      SameSite: 'Strict',
+      Secure: process.env.NODE_ENV !== 'development',
+
+      // If you need to allow other domains (besides the api side) access to
+      // the dbAuth session cookie:
+      // Domain: 'example.com',
     },
 
     forgotPassword: forgotPasswordOptions,

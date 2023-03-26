@@ -170,7 +170,7 @@ export const Success = ({ groupRole }) => {
         onDelete={onDelete}
         loading={loading}
         error={error}
-        returnLink={routes.groupRoles()}
+        returnLink={routes.list({table: 'groupRoles'})}
         handleSubmit={handleSubmit}
         register={register}
         formState={{ errors, isSubmitting }}

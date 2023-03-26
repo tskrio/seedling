@@ -11,11 +11,11 @@ import {
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 import { navigate, routes } from '@redwoodjs/router'
 import { Toaster, toast } from '@redwoodjs/web/toast'
 
-import FormComponent from 'src/components/FormComponent'
+import FormComponentOld from 'src/components/FormComponentOld'
 const LoginForm = () => {
   const { isAuthenticated, logIn } = useAuth()
 
@@ -58,7 +58,7 @@ const LoginForm = () => {
       <Flex p={8} flex={1} align={'center'} justify={'center'}>
         <Stack spacing={4} w={'full'} maxW={'md'}>
           <Heading fontSize={'2xl'}>Sign in to your account</Heading>
-          <FormComponent
+          <FormComponentOld
             fields={fields}
             onSubmit={onSubmit}
             handleSubmit={handleSubmit}
@@ -76,7 +76,7 @@ const LoginForm = () => {
             >
               Login
             </Button>
-          </FormComponent>
+          </FormComponentOld>
           <Flex>
             <Box pl="4">
               <Button

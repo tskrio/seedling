@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 
 import CookieModal from 'src/components/CookieModal'
 import Footer from 'src/components/Footer'

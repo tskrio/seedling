@@ -4,23 +4,9 @@ generator client {
 }
 
 datasource db {
-  // we default this to sqlite so you can try this before you
-  // plugin in a database.. your choices for databse providers
-  // are the following
-  // PostgreSQL
-  // provider = "postgresql"
-  // MySQL
-  // provider = "mysql"
-  // SQLite // probably only for testing
-  // provider = "sqlite"
-  // url      = "file:./dev.db"
-  // MongoDB
-  // provider = "mongodb"
-  // Microsoft SQL Server
-
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  //url      = env("TEST_DATABASE_URL")
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Property {
@@ -30,6 +16,9 @@ model Property {
   name      String   @unique
   type      String   @default("string")
   value     String?
+
+  @@index([name])
+  @@index([value])
 }
 
 model Message {
@@ -41,6 +30,8 @@ model Message {
   value     String
 
   @@unique([entity, language])
+  @@index([entity])
+  @@index([value])
 }
 
 model User {
@@ -48,16 +39,17 @@ model User {
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
   name                String        @default("")
-  username            String        @unique @default("") // will have username OR subject keep masked
-  verifiedAt          DateTime? //               // used to verify account for password reset purposes and for actual access
-  // as anyone with auth0 can say I have access to any domain
-  email               String?       @default("") // not needed for accounts.. but is needed for communications
-  hashedPassword      String?       @default("") //      // used for dbAuth
-  salt                String?       @default("") //      // used for dbAuth
-  resetToken          String? //                         // used for dbAuth
-  resetTokenExpiresAt DateTime? //                       // used for dbAuth
+  username            String        @unique @default("")
+  verifiedAt          DateTime?
+  email               String        @unique
+  loginToken          String?
+  loginTokenExpiresAt DateTime?
+  salt                String?       @default("")
   GroupMember         GroupMember[] @relation("UserGroupMember")
   Preference          Preference[]  @relation("UserPreference")
+
+  @@index([email])
+  @@index([name])
 }
 
 model Preference {
@@ -70,6 +62,9 @@ model Preference {
   User      User     @relation("UserPreference", fields: [userCuid], references: [cuid], onDelete: Cascade)
 
   @@unique([entity, userCuid])
+  @@index([userCuid])
+  @@index([entity])
+  @@index([value])
 }
 
 model Group {
@@ -80,6 +75,8 @@ model Group {
   description String
   GroupMember GroupMember[]
   GroupRole   GroupRole[]
+
+  @@index([name])
 }
 
 model GroupMember {
@@ -88,10 +85,12 @@ model GroupMember {
   updatedAt DateTime @updatedAt
   userCuid  String
   groupCuid String
-  Group     Group    @relation(fields: [groupCuid], references: [cuid], onDelete: Cascade)
-  User      User     @relation("UserGroupMember", fields: [userCuid], references: [cuid], onDelete: Cascade)
+  group     Group    @relation(fields: [groupCuid], references: [cuid], onDelete: Cascade)
+  user      User     @relation("UserGroupMember", fields: [userCuid], references: [cuid], onDelete: Cascade)
 
   @@unique([userCuid, groupCuid])
+  @@index([groupCuid])
+  @@index([userCuid])
 }
 
 model GroupRole {
@@ -100,9 +99,10 @@ model GroupRole {
   updatedAt DateTime @updatedAt
   role      String
   groupCuid String
-  Group     Group    @relation(fields: [groupCuid], references: [cuid], onDelete: Cascade)
+  group     Group    @relation(fields: [groupCuid], references: [cuid], onDelete: Cascade)
 
   @@unique([groupCuid, role])
+  @@index([groupCuid])
 }
 
 model Log {

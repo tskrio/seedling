@@ -9,10 +9,11 @@ export const schema = gql`
     email: String @masked
     "Used to encrypt password with dbAuth"
     salt: String @masked
-    hashedPassword: String @masked
-    "Used to reset password with dbAuth"
-    resetToken: String @masked
-    "Controls how long a reset token is good for with dbAuth"
+    """
+    loginToken: String @masked"
+    "Used to reset password with dbAuth
+    """
+    loginTokenExpiresAt: DateTime
     resetTokenExpiresAt: DateTime
     GroupMember: [GroupMember]!
       @requireAuth(roles: ["groupMemberRead", "admin"])
@@ -34,9 +35,9 @@ export const schema = gql`
       take: Int
       orderBy: OrderByInput
       q: String
-    ): Users! @requireAuth(roles: ["userRead", "admin"])
+    ): Users! @requireAuth(roles: ["admin"])
 
-    user(cuid: String!): User @requireAuth(roles: ["userRead", "admin"])
+    user(cuid: String!): User @requireAuth(roles: ["admin"])
   }
 
   input CreateUserInput {
@@ -44,7 +45,10 @@ export const schema = gql`
     name: String!
     email: String
     salt: String
-    hashedPassword: String
+    """
+    loginToken: String
+    """
+    loginTokenExpiresAt: DateTime
   }
 
   input UpdateUserInput {
@@ -52,7 +56,14 @@ export const schema = gql`
     name: String
     email: String
     salt: String
-    hashedPassword: String
+    """
+    loginToken: String
+    """
+    loginTokenExpiresAt: DateTime
+  }
+
+  type userTokenResponse {
+    message: String!
   }
 
   type Mutation {
@@ -62,5 +73,6 @@ export const schema = gql`
       @requireAuth(roles: ["userUpdate", "admin"])
     deleteUser(cuid: String!): User!
       @requireAuth(roles: ["userDelete", "admin"])
+    generateLoginToken(email: String!): userTokenResponse! @skipAuth
   }
 `

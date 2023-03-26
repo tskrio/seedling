@@ -6,7 +6,7 @@ export const schema = gql`
     entity: String!
     value: String
     userCuid: String!
-    user: User!
+    User: User!
   }
 
   type Preferences {

@@ -1,7 +1,7 @@
 import { CloseIcon } from '@chakra-ui/icons'
 import { useToast, IconButton, Box } from '@chakra-ui/react'
 
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 import { useMutation } from '@redwoodjs/web'
 const DeleteButton = ({
   column,

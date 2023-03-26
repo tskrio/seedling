@@ -133,8 +133,8 @@ export const deletePreference = async ({ cuid }) => {
 }
 
 export const Preference = {
-  user: (_obj, { root }) => {
-    console.log({ function: 'Preference.user', root })
+  User: (_obj, { root }) => {
+    console.log({ function: 'Preference.User', root })
     return db[table].findUnique({ where: { cuid: root.cuid } }).User()
   },
 }

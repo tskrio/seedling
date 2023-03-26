@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 
 import { useForm } from 'react-hook-form'
 
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
@@ -157,7 +157,7 @@ export const Success = ({ user }) => {
         onDelete={onDelete}
         loading={loading}
         error={error}
-        returnLink={routes.users()}
+        returnLink={routes.list({table: 'users'})}
         handleSubmit={handleSubmit}
         register={register}
         formState={{ errors, isSubmitting }}

@@ -1,7 +1,7 @@
 import { Box, IconButton } from '@chakra-ui/react'
 import { MdEditNote } from 'react-icons/md'
 
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 import { navigate } from '@redwoodjs/router'
 const EditButton = ({ row, column, roles }) => {
   const { hasRole } = useAuth()

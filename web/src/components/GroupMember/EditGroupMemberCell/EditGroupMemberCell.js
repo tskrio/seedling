@@ -179,7 +179,7 @@ export const Success = ({ groupMember }) => {
         onDelete={onDelete}
         loading={loading}
         error={error}
-        returnLink={routes.groupMembers()}
+        returnLink={routes.list({ table: 'groupMembers' })}
         handleSubmit={handleSubmit}
         register={register}
         formState={{ errors, isSubmitting }}
