@@ -1,3 +1,4 @@
+import { authDecoder } from '@redwoodjs/auth-dbauth-api'
 // We only need this import 👇
 import { createGraphQLHandler } from '@redwoodjs/graphql-server'
 
@@ -11,6 +12,8 @@ import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
 
 export const handler = createGraphQLHandler({
+  authDecoder,
+
   loggerConfig: { logger, options: {} },
   getCurrentUser,
   directives,

@@ -4,14 +4,6 @@ import AboutComponent from './AboutComponent'
 //import './../../reset.css'
 //import './../../index.css'
 
-export const auth0 = () => {
-  let auth0Settings = {
-    domain: 'somedomain.com',
-    redirect: 'example.com',
-  }
-  return <AboutComponent auth0={auth0Settings} />
-}
-
 export const dbAuth = () => {
   return <AboutComponent />
 }

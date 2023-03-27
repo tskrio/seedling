@@ -4,7 +4,6 @@ export const schema = gql`
     createdAt: DateTime!
     updatedAt: DateTime!
     name: String!
-    "Used to auth for Auth0 OR dbAuth"
     username: String! @masked
     email: String @masked
     "Used to encrypt password with dbAuth"

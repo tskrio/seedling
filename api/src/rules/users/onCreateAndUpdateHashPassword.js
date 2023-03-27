@@ -20,10 +20,6 @@ module.exports = {
   file: __filename,
   command: async function ({ data, status }) {
     try {
-      //if we're using auth0 exit
-      if (process.env.AUTH0_DOMAIN) {
-        return { data, status }
-      }
 
       //if were given a password, we make a new salt, hash it and set both salt and hash
       if (data?.skipPassword) {

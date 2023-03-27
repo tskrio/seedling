@@ -24,32 +24,8 @@ while (_users.length < total) {
     },
   })
 }
-if (process.env.AUTH0_DOMAIN) {
-  _users = _users.map((user, index) => {
-    let subjectNumber = 1234567890
-    return {
-      name: user.name,
-      email: user.email,
-      username: `${chance.pickone([
-        'acme',
-        'globex',
-        'soylent',
-        'initech',
-        'umbrella',
-        'hooli',
-        'vehement',
-        'massive-dynamic',
-      ])}-oauth2|${subjectNumber - index}`,
-      Preference: user.Preference,
-    }
-  })
-}
 export const users = (() => {
-  if (process.env.AUTH0_DOMAIN) {
-    console.log('auth0_domain defined....')
-    return []
-  } else {
-    console.log('auth0_domain not defined')
+
     return [
       {
         name: 'Adam Admin',
@@ -99,8 +75,7 @@ export const users = (() => {
         salt: '3e6780c35a4e5ad17aafc7a6230b1163',
       },
     ]
-  }
-})()
+  })()
 console.log(_users[0])
 _users.push({})
 export const bulkUsers = _users

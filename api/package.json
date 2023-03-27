@@ -4,8 +4,9 @@
   "private": true,
   "dependencies": {
     "@paralleldrive/cuid2": "^2.0.0",
-    "@redwoodjs/api": "^3.5.0",
-    "@redwoodjs/graphql-server": "^3.5.0",
+    "@redwoodjs/api": "4.0.1",
+    "@redwoodjs/auth-dbauth-api": "4.0.1",
+    "@redwoodjs/graphql-server": "4.0.1",
     "crypto-js": "^4.1.1",
     "mailgun-js": "^0.22.0",
     "mjml": "^4.11.0"

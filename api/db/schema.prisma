@@ -4,23 +4,8 @@ generator client {
 }
 
 datasource db {
-  // we default this to sqlite so you can try this before you
-  // plugin in a database.. your choices for databse providers
-  // are the following
-  // PostgreSQL
-  // provider = "postgresql"
-  // MySQL
-  // provider = "mysql"
-  // SQLite // probably only for testing
-  // provider = "sqlite"
-  // url      = "file:./dev.db"
-  // MongoDB
-  // provider = "mongodb"
-  // Microsoft SQL Server
-
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  //url      = env("TEST_DATABASE_URL")
 }
 
 model Property {
@@ -50,7 +35,6 @@ model User {
   name                String        @default("")
   username            String        @unique @default("") // will have username OR subject keep masked
   verifiedAt          DateTime? //               // used to verify account for password reset purposes and for actual access
-  // as anyone with auth0 can say I have access to any domain
   email               String?       @default("") // not needed for accounts.. but is needed for communications
   hashedPassword      String?       @default("") //      // used for dbAuth
   salt                String?       @default("") //      // used for dbAuth
@@ -70,6 +54,7 @@ model Preference {
   User      User     @relation("UserPreference", fields: [userCuid], references: [cuid], onDelete: Cascade)
 
   @@unique([entity, userCuid])
+  @@index([userCuid])
 }
 
 model Group {
@@ -88,10 +73,12 @@ model GroupMember {
   updatedAt DateTime @updatedAt
   userCuid  String
   groupCuid String
-  Group     Group    @relation(fields: [groupCuid], references: [cuid], onDelete: Cascade)
+  group     Group    @relation(fields: [groupCuid], references: [cuid], onDelete: Cascade)
   User      User     @relation("UserGroupMember", fields: [userCuid], references: [cuid], onDelete: Cascade)
 
   @@unique([userCuid, groupCuid])
+  @@index([groupCuid])
+  @@index([userCuid])
 }
 
 model GroupRole {
@@ -100,9 +87,10 @@ model GroupRole {
   updatedAt DateTime @updatedAt
   role      String
   groupCuid String
-  Group     Group    @relation(fields: [groupCuid], references: [cuid], onDelete: Cascade)
+  group     Group    @relation(fields: [groupCuid], references: [cuid], onDelete: Cascade)
 
   @@unique([groupCuid, role])
+  @@index([groupCuid])
 }
 
 model Log {

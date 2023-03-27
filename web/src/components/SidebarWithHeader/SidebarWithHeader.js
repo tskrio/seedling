@@ -36,7 +36,8 @@ import {
   MdSettingsApplications,
 } from 'react-icons/md'
 
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
+
 import { routes, navigate } from '@redwoodjs/router'
 
 import NavItem from '../NavItem/NavItem'
