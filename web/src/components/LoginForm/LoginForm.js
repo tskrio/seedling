@@ -42,8 +42,8 @@ const LoginForm = () => {
   let fields = [
     {
       name: 'username',
-      prettyName: 'Email',
-      placeholder: 'deckard.cain@example.com',
+      prettyName: 'Username',
+      placeholder: 'deckard.cain',
       required: 'This is required',
     },
 
