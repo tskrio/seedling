@@ -9,7 +9,8 @@ import {
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
+
 import { navigate, routes } from '@redwoodjs/router'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 

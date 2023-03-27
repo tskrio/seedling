@@ -15,7 +15,8 @@ import {
   Switch,
 } from '@chakra-ui/react'
 
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
+
 
 import PasswordField from '../PasswordField/PasswordField'
 import ReferenceField from '../ReferenceField/ReferenceField'

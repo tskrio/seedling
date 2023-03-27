@@ -1,16 +1,5 @@
-import ResetPasswordForm from 'src/components/ResetPasswordForm'
-
-const ResetPasswordPage = ({ resetToken, wait }) => {
-  return <ResetPasswordForm resetToken={resetToken} wait={wait} />
-}
-
-export default ResetPasswordPage
-/*
 import { useEffect, useRef, useState } from 'react'
-import { useAuth } from '@redwoodjs/auth'
-import { navigate, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
-import { toast, Toaster } from '@redwoodjs/web/toast'
+
 import {
   Form,
   Label,
@@ -18,8 +7,13 @@ import {
   Submit,
   FieldError,
 } from '@redwoodjs/forms'
+import { navigate, routes } from '@redwoodjs/router'
+import { MetaTags } from '@redwoodjs/web'
+import { toast, Toaster } from '@redwoodjs/web/toast'
 
-const ResetPasswordPage = ({ resetToken, wait }) => {
+import { useAuth } from 'src/auth'
+
+const ResetPasswordPage = ({ resetToken }) => {
   const { isAuthenticated, reauthenticate, validateResetToken, resetPassword } =
     useAuth()
   const [enabled, setEnabled] = useState(true)
@@ -43,9 +37,9 @@ const ResetPasswordPage = ({ resetToken, wait }) => {
     validateToken()
   }, [])
 
-  const passwordRef = useRef()
+  const passwordRef = useRef(null)
   useEffect(() => {
-    passwordRef.current.focus()
+    passwordRef.current?.focus()
   }, [])
 
   const onSubmit = async (data) => {
@@ -76,54 +70,47 @@ const ResetPasswordPage = ({ resetToken, wait }) => {
                 Reset Password
               </h2>
             </header>
-            {wait && <>Waiting for code?</>}
-            {!wait && (
-              <>
-                <div className="rw-segment-main">
-                  <div className="rw-form-wrapper">
-                    <Form onSubmit={onSubmit} className="rw-form-wrapper">
-                      <div className="text-left">
-                        <Label
-                          name="password"
-                          className="rw-label"
-                          errorClassName="rw-label rw-label-error"
-                        >
-                          New Password
-                        </Label>
-                        <PasswordField
-                          name="password"
-                          autoComplete="new-password"
-                          className="rw-input"
-                          errorClassName="rw-input rw-input-error"
-                          disabled={!enabled}
-                          ref={passwordRef}
-                          validation={{
-                            required: {
-                              value: true,
-                              message: 'Password is required',
-                            },
-                          }}
-                        />
 
-                        <FieldError
-                          name="password"
-                          className="rw-field-error"
-                        />
-                      </div>
+            <div className="rw-segment-main">
+              <div className="rw-form-wrapper">
+                <Form onSubmit={onSubmit} className="rw-form-wrapper">
+                  <div className="text-left">
+                    <Label
+                      name="password"
+                      className="rw-label"
+                      errorClassName="rw-label rw-label-error"
+                    >
+                      New Password
+                    </Label>
+                    <PasswordField
+                      name="password"
+                      autoComplete="new-password"
+                      className="rw-input"
+                      errorClassName="rw-input rw-input-error"
+                      disabled={!enabled}
+                      ref={passwordRef}
+                      validation={{
+                        required: {
+                          value: true,
+                          message: 'New Password is required',
+                        },
+                      }}
+                    />
 
-                      <div className="rw-button-group">
-                        <Submit
-                          className="rw-button rw-button-blue"
-                          disabled={!enabled}
-                        >
-                          Submit
-                        </Submit>
-                      </div>
-                    </Form>
+                    <FieldError name="password" className="rw-field-error" />
                   </div>
-                </div>
-              </>
-            )}
+
+                  <div className="rw-button-group">
+                    <Submit
+                      className="rw-button rw-button-blue"
+                      disabled={!enabled}
+                    >
+                      Submit
+                    </Submit>
+                  </div>
+                </Form>
+              </div>
+            </div>
           </div>
         </div>
       </main>
@@ -132,4 +119,3 @@ const ResetPasswordPage = ({ resetToken, wait }) => {
 }
 
 export default ResetPasswordPage
-*/

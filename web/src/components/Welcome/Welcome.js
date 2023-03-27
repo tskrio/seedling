@@ -61,7 +61,7 @@ const Welcome = () => {
     },
     {
       title: 'Authentication providers',
-      text: 'Today we support dbAuth, and Auth0.  Just change your environment variables to switch.',
+      text: 'Today we self hosted auth.',
     },
     {
       title: 'Beautiful Responsive Emails',

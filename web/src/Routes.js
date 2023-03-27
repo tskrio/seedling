@@ -22,9 +22,11 @@ import HomePage from 'src/pages/HomePage'
 
 import Standard from './layouts/Standard/Standard'
 
+import { useAuth } from 'src/auth'
+
 const Routes = () => {
   return (
-    <Router>
+    <Router useAuth={useAuth}>
       <Route path="/forgot-password" whileLoadingAuth={() => <>Loading...</>} page={ForgotPasswordPage} name="forgotPassword" />
       <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
       <Route path="/login" page={LoginPage} name="login" />

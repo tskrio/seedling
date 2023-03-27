@@ -2,7 +2,8 @@ import { Fragment } from 'react'
 
 import { useForm } from 'react-hook-form'
 
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
+
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'

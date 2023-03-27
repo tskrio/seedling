@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import { Button, Flex, Spacer } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 import { navigate, routes } from '@redwoodjs/router'
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
@@ -98,15 +98,13 @@ export const Success = ({ myProfile }) => {
       prettyName: 'Email (required to send you details)',
       required: 'Yep',
     },
-  ]
-  if (!process.env.AUTH0_DOMAIN) {
-    fields.push({
+    {
       name: 'hashedPassword',
       prettyName: 'Password',
       required: 'Yep',
       type: 'password',
-    })
-  }
+    }
+  ]
 
   let roles = []
   const {

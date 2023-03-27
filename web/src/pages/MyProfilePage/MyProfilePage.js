@@ -5,10 +5,8 @@ import { Fragment } from 'react'
 import { MetaTags } from '@redwoodjs/web'
 
 import EditMyProfile from 'src/components/EditMyProfileCell/EditMyProfileCell'
-//import { useAuth } from '@redwoodjs/auth'
 
 const MyProfilePage = () => {
-  //const { currentUser } = useAuth()
   return (
     <Fragment>
       <MetaTags title="MyProfile" description="MyProfile page" />

@@ -1,42 +1,37 @@
-//import { parseJWT } from '@redwoodjs/api'
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 
-import { getUser as getUserAuth0 } from './authProviders/auth0.js'
 import { getUser as getUserDBAuth } from './authProviders/dbAuth'
-/**
- * Represents the user attributes returned by the decoding the
- * Authentication provider's JWT together with an optional list of roles.
- */
+import { db } from './db'
 
 /**
- * getCurrentUser returns the user information together with
- * an optional collection of roles used by requireAuth() to check
- * if the user is authenticated or has role-based access
+ * The session object sent in as the first argument to getCurrentUser() will
+ * have a single key `id` containing the unique ID of the logged in user
+ * (whatever field you set as `authFields.id` in your auth function config).
+ * You'll need to update the call to `db` below if you use a different model
+ * name or unique field name, for example:
  *
- * @param decoded - The decoded access token containing user info and JWT claims like `sub`. Note could be null.
- * @param { token, SupportedAuthTypes type } - The access token itself as well as the auth provider type
- * @param { APIGatewayEvent event, Context context } - An object which contains information from the invoker
- * such as headers and cookies, and the context information about the invocation such as IP Address
+ *   return await db.profile.findUnique({ where: { email: session.id } })
+ *                   ───┬───                       ──┬──
+ *      model accessor ─┘      unique id field name ─┘
  *
  * !! BEWARE !! Anything returned from this function will be available to the
  * client--it becomes the content of `currentUser` on the web side (as well as
  * `context.currentUser` on the api side). You should carefully add additional
- * fields to the return object only once you've decided they are safe to be seen
- * if someone were to open the Web Inspector in their browser.
- *
- * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
- *
- * @returns RedwoodUser
+ * fields to the `select` object below once you've decided they are safe to be
+ * seen if someone were to open the Web Inspector in their browser.
  */
-export const getCurrentUser = async (session, context) => {
-  let loadeduser
-  if (process.env.AUTH0_DOMAIN) {
-    loadeduser = await getUserAuth0(session, { context })
+export const getCurrentUser = async (session) => {
+  console.log({ function: 'auth.js', session })
+  if (!session || typeof session.id !== 'string') {
+    throw new Error('Invalid session')
   }
-  if (!process.env.AUTH0_DOMAIN) {
-    loadeduser = await getUserDBAuth(session, { context })
-  }
-  return loadeduser
+  //console.log({ function: 'auth.js', session })
+  return await getUserDBAuth(session, { context })
+
+  return await db.user.findUnique({
+    where: { cuid: session.id },
+    select: { cuid: true },
+  })
 }
 
 /**
@@ -56,30 +51,42 @@ export const isAuthenticated = () => {
 /**
  * Checks if the currentUser is authenticated (and assigned one of the given roles)
  *
- * @param roles: AllowedRoles - Checks if the currentUser is assigned one of these roles
+ * @param roles: {@link AllowedRoles} - Checks if the currentUser is assigned one of these roles
  *
  * @returns {boolean} - Returns true if the currentUser is logged in and assigned one of the given roles,
  * or when no roles are provided to check against. Otherwise returns false.
  */
-export const hasRole = ({ roles }) => {
+export const hasRole = (roles) => {
   if (!isAuthenticated()) {
     return false
   }
 
-  if (roles) {
-    if (Array.isArray(roles)) {
-      return context.currentUser.roles?.some((r) => roles.includes(r))
-    }
+  const currentUserRoles = context.currentUser?.roles
 
-    if (typeof roles === 'string') {
-      return context.currentUser.roles?.includes(roles)
+  if (typeof roles === 'string') {
+    if (typeof currentUserRoles === 'string') {
+      // roles to check is a string, currentUser.roles is a string
+      return currentUserRoles === roles
+    } else if (Array.isArray(currentUserRoles)) {
+      // roles to check is a string, currentUser.roles is an array
+      return currentUserRoles?.some((allowedRole) => roles === allowedRole)
     }
-
-    // roles not found
-    return false
   }
 
-  return true
+  if (Array.isArray(roles)) {
+    if (Array.isArray(currentUserRoles)) {
+      // roles to check is an array, currentUser.roles is an array
+      return currentUserRoles?.some((allowedRole) =>
+        roles.includes(allowedRole)
+      )
+    } else if (typeof currentUserRoles === 'string') {
+      // roles to check is an array, currentUser.roles is a string
+      return roles.some((allowedRole) => currentUserRoles === allowedRole)
+    }
+  }
+
+  // roles not found
+  return false
 }
 
 /**
@@ -87,21 +94,21 @@ export const hasRole = ({ roles }) => {
  * whether or not they are assigned a role, and optionally raise an
  * error if they're not.
  *
- * @param roles: AllowedRoles - When checking role membership, these roles grant access.
+ * @param roles: {@link AllowedRoles} - When checking role membership, these roles grant access.
  *
  * @returns - If the currentUser is authenticated (and assigned one of the given roles)
  *
- * @throws {AuthenticationError} - If the currentUser is not authenticated
- * @throws {ForbiddenError} If the currentUser is not allowed due to role permissions
+ * @throws {@link AuthenticationError} - If the currentUser is not authenticated
+ * @throws {@link ForbiddenError} If the currentUser is not allowed due to role permissions
  *
  * @see https://github.com/redwoodjs/redwood/tree/main/packages/auth for examples
  */
-export const requireAuth = ({ roles }) => {
+export const requireAuth = ({ roles } = {}) => {
   if (!isAuthenticated()) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
 
-  if (!hasRole({ roles })) {
+  if (roles && !hasRole(roles)) {
     throw new ForbiddenError("You don't have access to do that.")
   }
 }

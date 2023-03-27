@@ -2,14 +2,14 @@ import { Fragment, useState } from 'react'
 
 import { Box, Button } from '@chakra-ui/react'
 
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 import { navigate } from '@redwoodjs/router'
 
 import { PlayIcon } from 'src/components/CallToActionWithVideo/'
 import CallToActionWithVideo from 'src/components/CallToActionWithVideo/'
 import DeployButton from 'src/components/DeployButton'
 import Welcome from 'src/components/Welcome'
-const AboutComponent = ({ auth0 /*, isAuthenticated, currentUser*/ }) => {
+const AboutComponent = () => {
   const { isAuthenticated } = useAuth()
 
   let header = { lineOne: 'Seedling', lineTwo: 'Starter' }
@@ -19,7 +19,7 @@ const AboutComponent = ({ auth0 /*, isAuthenticated, currentUser*/ }) => {
   let imageToVideo = './desk-g04ccd6cc7_1280.webp'
   let imageAltText =
     'Find me in ./web/src/components/AboutComponent/AboutComponent.js'
-  const { loading, logIn, logOut /*, currentUser*/, type } = useAuth()
+  const { loading, logIn, logOut } = useAuth()
   let [displayVideo, setDisplayVideo] = useState(false)
 
   if (loading) {
@@ -27,9 +27,6 @@ const AboutComponent = ({ auth0 /*, isAuthenticated, currentUser*/ }) => {
     return null
   }
   let loginButtonString = 'Login'
-  if (auth0?.domain) {
-    loginButtonString = 'Login/Signup'
-  }
   let unauthenticatedCTA = (
     <Box p={3} bg={'white'}>
       <CallToActionWithVideo
@@ -41,7 +38,6 @@ const AboutComponent = ({ auth0 /*, isAuthenticated, currentUser*/ }) => {
         setDisplayVideo={setDisplayVideo}
       >
         <Fragment>
-          {!auth0?.domain && (
             <Button
               rounded={'full'}
               size={'lg'}
@@ -55,7 +51,6 @@ const AboutComponent = ({ auth0 /*, isAuthenticated, currentUser*/ }) => {
             >
               Signup
             </Button>
-          )}
           <Button
             rounded={'full'}
             size={'lg'}
@@ -63,23 +58,7 @@ const AboutComponent = ({ auth0 /*, isAuthenticated, currentUser*/ }) => {
             px={6}
             backgroundColor={'green'}
             color={'white'}
-            onClick={async () => {
-              if (type === 'auth0') {
-                if (isAuthenticated) {
-                  await logOut({ returnTo: auth0.redirect })
-                } else {
-                  const searchParams = new URLSearchParams(
-                    window.location.search
-                  )
-                  await logIn({
-                    appState: { targetUrl: searchParams.get('redirectTo') },
-                  })
-                }
-              }
-              if (type === 'dbAuth') {
-                navigate('/login')
-              }
-            }}
+            onClick={async () => { navigate('/login') }}
           >
             {loginButtonString}
           </Button>

@@ -132,8 +132,10 @@ export const deleteUser = async ({ cuid }) => {
 }
 
 export const User = {
-  GroupMember: (_obj, { root }) =>
-    db[table].findUnique({ where: { cuid: root.cuid } }).GroupMember(),
+  GroupMember: (_obj, { root }) => {
+    console.log({ function: 'service users.js', root })
+    return db[table].findUnique({ where: { cuid: root.cuid } }).GroupMember()
+  },
   Preference: (_obj, { root }) =>
     db[table].findUnique({ where: { cuid: root.cuid } }).Preference(),
 }
