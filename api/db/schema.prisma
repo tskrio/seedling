@@ -73,7 +73,7 @@ model GroupMember {
   updatedAt DateTime @updatedAt
   userCuid  String
   groupCuid String
-  group     Group    @relation(fields: [groupCuid], references: [cuid], onDelete: Cascade)
+  Group     Group    @relation(fields: [groupCuid], references: [cuid], onDelete: Cascade)
   User      User     @relation("UserGroupMember", fields: [userCuid], references: [cuid], onDelete: Cascade)
 
   @@unique([userCuid, groupCuid])
@@ -87,7 +87,7 @@ model GroupRole {
   updatedAt DateTime @updatedAt
   role      String
   groupCuid String
-  group     Group    @relation(fields: [groupCuid], references: [cuid], onDelete: Cascade)
+  Group     Group    @relation(fields: [groupCuid], references: [cuid], onDelete: Cascade)
 
   @@unique([groupCuid, role])
   @@index([groupCuid])

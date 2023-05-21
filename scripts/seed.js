@@ -1,85 +1,178 @@
-/* eslint-disable no-console */
-
-import { createId } from '@paralleldrive/cuid2'
+// To access your database
+// Append api/* to import from api and web/* to import from web
+import { db } from 'api/src/lib/db'
+import fs from 'fs'
 import { PrismaClient } from '@prisma/client'
-
-import group from './seedFiles/group.json'
-import groupMember from './seedFiles/groupMember.json'
-import groupRole from './seedFiles/groupRole.json'
-import message from './seedFiles/message.json'
-import property from './seedFiles/property.json'
-import user from './seedFiles/user.json'
+import { type } from 'os'
 
 const dotenv = require('dotenv')
 dotenv.config()
-//const { PrismaClient } = require('@prisma/client')
-const seed = {
-  group,
-  groupRole,
-  user,
-  groupMember,
-  message,
-  property,
+
+let debug = false
+let debugLogs = []
+let debugLog = (message) => {
+  debugLogs.push(message)
+  if (debug) {
+    console.log(message)
+  }
 }
-const db = new PrismaClient()
-async function main() {
-  // loop through the seed object and console.log the name of the seed object
-  // and the number of records in the seed object
-  for (const [key, value] of Object.entries(seed)) {
-    console.log(`${key}: ${value.length}`)
-    // do a db upsert for each record in the seed object
-    for (let record of value) {
-      // if the record has a createdAt or updatedAt field, convert it to a date
-      try {
-        let recordData = {
-          ...record,
-          createdAt: (() => {
-            if (record.createdAt) {
-              return new Date(record.createdAt)
-            }
-            return new Date()
-          })(),
-          updatedAt: (() => {
-            if (record.updatedAt) {
-              return new Date(record.updatedAt)
-            }
-            return new Date()
-          })(),
-        }
-        // do the upsert
-        //console.log(`upserting ${key} ${record.id}`)
-        if (record.cuid) {
-          // do upsert
-          await db[key].upsert({
-            where: { cuid: record.cuid },
-            update: recordData,
-            create: recordData,
-          })
-        } else {
-          // record has no id, show error in red
-          console.log(
-            '\x1b[31m%s\x1b[0m',
-            `Update seed file ./scripts/seedFiles/${key}.json to include id`,
-            createId()
-          )
-          console.log(`no id for ${key} ${JSON.stringify(record, null, 2)}`)
-        }
-      } catch (error) {
-        console.log(error)
-        console.log(`error upserting ${key} ${record?.id || record?.cuid}`)
-        return
+let now = (value) => new Date(value)
+
+let generateDateXDaysAgo = (days) => {
+  let date = new Date()
+  date.setDate(date.getDate() - days)
+  let year = date.getFullYear()
+  // month and day should be padded with a 0 if it's less than 10
+  let month =
+    date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1
+  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()
+  let dateString = `${year}-${month}-${day}`
+  return dateString
+}
+
+let getSeedFilesDir = () => {
+
+  let seedFilesDir = null
+
+  for (let i = 0; i < 10; i++) {
+    let dateString = generateDateXDaysAgo(i)
+    // check if directory exists
+    let dir = `./scripts/seedFiles/backup-${dateString}/`
+    //console.log('checking for seed files in', dir)
+    if (i === 10 && !fs.existsSync(dir)) {
+      console.log('no seed files found')
+      process.exit(1)
+    }
+    if (fs.existsSync(dir)) {
+      console.log('found seed files in', dir)
+      seedFilesDir = `./seedFiles/backup-${dateString}/`
+      break
+    }
+  }
+  return seedFilesDir
+}
+
+let makeUserAdmin = async ({ username }) => {
+  try {
+    if (!username) {
+      console.log('enviroment variable ADMIN_USERNAME not set')
+      return
+    }
+
+    let user = await db.user.findUnique({ where: { username } })
+    if (!user) {
+      console.log(`Cannot find user with username "${username}" when creating local admin`)
+      return
+    }
+    let group = await db.group.findUnique({ where: { name: 'Administrators' } })
+    if (!group) {
+      console.log('Cannot find Administrator\'s group when creating local admin')
+      return
+    }
+    let groupMember = { userCuid: user.cuid, groupCuid: group.cuid }
+    await db.groupMember.deleteMany({}) // delete all records
+    await db.groupMember.create({ data: groupMember })
+    let groupRole = { groupCuid: group.cuid, role: 'admin' }
+    await db.groupRole.deleteMany({}) // delete all records
+    await db.groupRole.create({ data: groupRole })
+    console.log(`Made "${username}" admin`)
+    return
+  } catch (e) {
+    console.error(e)
+    process.exit(1)
+  }
+}
+
+let seedHandler = async ({ seedObject }) => {
+
+
+  //for (const [key, value] of Object.entries(firstSeed)) {
+  for (const [key, value] of Object.entries(seedObject)) {
+    try {
+      debugLog(`${key} - ${value.length} records`)
+      console.log(`typeof db[${key}]`, typeof db[key])
+      await db?.[key]?.deleteMany({}) // delete all records
+      debugLog(`${key} - deleted ${value.length} records`)
+      let newData = []
+      for (let record of value) {
+        record.createdAt = now(record.createdAt)
+        if(record.updatedAt) record.updatedAt = now(record.updatedAt)
+        //console.log(`upserting ${key} record: ${record.cuid}`)
+        newData.push(record)
       }
+      debugLog(`${key} - bulk inserting ${newData.length} records`)
+      let fristSeedResult = await db[key].createMany({
+        data: newData,
+        skipDuplicates: true,
+      })
+      debugLog(`${key} - inserted ${fristSeedResult.count} records`)
+      if (debugLogs) {
+        let message = ''
+        debugLogs.forEach((log) => {
+          message += `${log}\n`
+        })
+        debugLogs = []
+        if (!debug) console.log(message)
+
+      }
+    } catch (error) {
+      console.log({ function: 'firstSeedCreateMany', error })
+      throw new Error(error)
     }
   }
 
-  return
+
+
 }
 
-main()
-  .catch((e) => {
-    console.error(e)
+export default async ({ args }) => {
+  console.log(':: Executing script with args ::')
+  console.log(args)
+  console.log({ "args._": args._[1] })
+  debug = args._[1] === 'debug'
+  if (debug) {
+    console.log(':: Debug mode enabled ::')
+  }
+
+
+  let seedFilesDir = getSeedFilesDir()
+  if (!seedFilesDir) {
+    console.log('no seed files found')
     process.exit(1)
-  })
-  .finally(async () => {
-    await db.$disconnect()
-  })
+  }
+  if (seedFilesDir) {
+    console.log('using seed files from', seedFilesDir)
+    // lets make a list of the seed objects we want to seed where the key is the table name
+    const firstSeed = {
+      group: require(`${seedFilesDir}Group.json`),
+      user: require(`${seedFilesDir}User.json`),
+
+    }
+    const secondSeed = {
+      log: require(`${seedFilesDir}Log.json`),
+      message: require(`${seedFilesDir}Message.json`),
+      preference: require(`${seedFilesDir}Preference.json`),
+      property: require(`${seedFilesDir}Property.json`),
+    }
+
+    //console.log('firstSeed', firstSeed)
+    const db = new PrismaClient()
+    // delete complicated tables first
+
+    // loop through the seed object and console.log the name of the seed object
+    // and the number of records in the seed object
+
+    // for users, groups we're going to upsert individual records
+    // for everything esle, we're going ot bulk insert after modifing the JSON in memory
+
+
+
+    await seedHandler({ seedObject: firstSeed })
+
+    await seedHandler({ seedObject: secondSeed })
+    // everything else
+    // now look up the admin group, and the user jacebenson
+    // then create a groupMember record for jacebenson in the admin group
+    await makeUserAdmin({ username: process.env.ADMIN_USERNAME })
+  }
+}

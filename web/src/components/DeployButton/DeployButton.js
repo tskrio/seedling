@@ -70,7 +70,7 @@ const DeployButton = () => {
         size={'xl'}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg={'white'}>
           <ModalHeader>
             <Stack direction={{ base: 'column', sm: 'row' }}>
               <Heading>One more thing</Heading>

@@ -8,8 +8,8 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/auth-dbauth-setup": "4.0.1",
-    "@redwoodjs/core": "4.0.1"
+    "@redwoodjs/auth-dbauth-setup": "5.2.1",
+    "@redwoodjs/core": "5.2.1"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
