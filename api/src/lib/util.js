@@ -12,7 +12,7 @@ export const log = async (message, source) => {
     source = 'undefined'
   }
   let safeContext = { ...context }
-  delete safeContext.request.headers.cookie // removed to remove password data
+  delete safeContext?.request?.headers?.cookie // removed to remove password data
   delete safeContext.document // removed to remove password data
   delete safeContext.event // removed to remove password data
   delete safeContext.operation // removed as its not needed

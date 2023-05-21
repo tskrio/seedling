@@ -1,17 +1,24 @@
-import { Flex, Icon } from '@chakra-ui/react'
+import { Box, Flex, Icon } from '@chakra-ui/react'
 
 import { NavLink, routes } from '@redwoodjs/router'
+
+import { ListContext } from 'src/App.js'
 const NavItem = ({ icon, navigateTo, query, children, ...rest }) => {
+  const { table, setTable } = React.useContext(ListContext)
   if (!query) {
     query = {}
+    if (rest?.table) query = { table: rest.table }
   }
+  let backgroundColor = 'transparent'
+  if (rest?.table == table) backgroundColor = 'green.200'
   return (
     <NavLink
       to={routes?.[navigateTo](query)}
-      className="link"
       activeClassName="activeLink"
-      style={{ textDecoration: 'none' }}
       _focus={{ boxShadow: 'none' }}
+      onClick={() => {
+        if (rest?.table) setTable(rest.table)
+      }}
     >
       <Flex
         align="center"
@@ -20,6 +27,7 @@ const NavItem = ({ icon, navigateTo, query, children, ...rest }) => {
         borderRadius="lg"
         role="group"
         cursor="pointer"
+        background={backgroundColor}
         _hover={{
           bg: 'cyan.400',
           color: 'white',
@@ -36,7 +44,9 @@ const NavItem = ({ icon, navigateTo, query, children, ...rest }) => {
             as={icon}
           />
         )}
-        {children}
+        <Box rounded={'md'} py={2}>
+          {children}
+        </Box>
       </Flex>
     </NavLink>
   )

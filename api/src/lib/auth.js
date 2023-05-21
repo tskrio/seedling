@@ -1,7 +1,6 @@
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 
 import { getUser as getUserDBAuth } from './authProviders/dbAuth'
-import { db } from './db'
 
 /**
  * The session object sent in as the first argument to getCurrentUser() will
@@ -25,13 +24,7 @@ export const getCurrentUser = async (session) => {
   if (!session || typeof session.id !== 'string') {
     throw new Error('Invalid session')
   }
-  //console.log({ function: 'auth.js', session })
-  return await getUserDBAuth(session, { context })
-
-  return await db.user.findUnique({
-    where: { cuid: session.id },
-    select: { cuid: true },
-  })
+  return await getUserDBAuth(session, { context });
 }
 
 /**

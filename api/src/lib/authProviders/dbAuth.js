@@ -19,7 +19,7 @@ export const getUser = async (session) => {
           select: {
             createdAt: true,
             cuid: true,
-            group: {
+            Group: {
               select: {
                 name: true,
                 cuid: true,
@@ -34,11 +34,11 @@ export const getUser = async (session) => {
         },
       },
     })
+    console.log({ function: 'dbauth.js', userData })
     // look up the group memberships of the user's groups, and roles
     let roles = userData?.GroupMember.map((member) => {
-     console.log({ function: 'dbAuth.js roles', member })
-      if (member?.group?.GroupRole) {
-        return [...member.group.GroupRole].map((role) => {
+      if (member?.Group?.GroupRole) {
+        return [...member.Group.GroupRole].map((role) => {
           return role.role
         })
       } else {
@@ -48,7 +48,7 @@ export const getUser = async (session) => {
       .join(',')
       .split(',')
     let groups = userData?.GroupMember.map((member) => {
-      return { name: member?.group?.name, cuid: member?.group?.id }
+      return { name: member?.Group?.name, cuid: member?.Group?.id }
     }) // look up the roles of the groups the user is a member of
     let foundPreferences = await db.preference.findMany({
       where: { userCuid: session.id },

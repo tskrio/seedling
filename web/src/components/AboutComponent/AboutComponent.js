@@ -1,15 +1,17 @@
 import { Fragment, useState } from 'react'
 
-import { Box, Button } from '@chakra-ui/react'
+import { Box, Button, Link } from '@chakra-ui/react'
 
-import { useAuth } from 'src/auth'
 import { navigate } from '@redwoodjs/router'
 
+import { useAuth } from 'src/auth'
 import { PlayIcon } from 'src/components/CallToActionWithVideo/'
 import CallToActionWithVideo from 'src/components/CallToActionWithVideo/'
-import DeployButton from 'src/components/DeployButton'
 import Welcome from 'src/components/Welcome'
-const AboutComponent = () => {
+import DeployButton from 'src/components/DeployButton'
+
+//import InstallExtension from '../InstallExtension/InstallExtension'
+const AboutComponent = ({ auth0 /*, isAuthenticated, currentUser*/ }) => {
   const { isAuthenticated } = useAuth()
 
   let header = { lineOne: 'Seedling', lineTwo: 'Starter' }
@@ -19,7 +21,7 @@ const AboutComponent = () => {
   let imageToVideo = './desk-g04ccd6cc7_1280.webp'
   let imageAltText =
     'Find me in ./web/src/components/AboutComponent/AboutComponent.js'
-  const { loading, logIn, logOut } = useAuth()
+  const { loading, logIn, logOut /*, currentUser*/, type } = useAuth()
   let [displayVideo, setDisplayVideo] = useState(false)
 
   if (loading) {
@@ -27,6 +29,9 @@ const AboutComponent = () => {
     return null
   }
   let loginButtonString = 'Login'
+  if (auth0?.domain) {
+    loginButtonString = 'Login/Signup'
+  }
   let unauthenticatedCTA = (
     <Box p={3} bg={'white'}>
       <CallToActionWithVideo
@@ -49,19 +54,8 @@ const AboutComponent = () => {
                 navigate('/signup')
               }}
             >
-              Signup
+              Sign up!
             </Button>
-          <Button
-            rounded={'full'}
-            size={'lg'}
-            fontWeight={'normal'}
-            px={6}
-            backgroundColor={'green'}
-            color={'white'}
-            onClick={async () => { navigate('/login') }}
-          >
-            {loginButtonString}
-          </Button>
         </Fragment>
         <Button
           rounded={'full'}

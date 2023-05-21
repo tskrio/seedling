@@ -133,8 +133,8 @@ export const deleteGroupMember = async ({ cuid }) => {
 }
 
 export const GroupMember = {
-  group: (_obj, { root }) =>
-    db[table].findUnique({ where: { cuid: root.cuid } }).group(),
-  user: (_obj, { root }) =>
-    db[table].findUnique({ where: { cuid: root.cuid } }).user(),
+  Group: (_obj, { root }) =>
+    db[table].findUnique({ where: { cuid: root.cuid } }).Group(),
+  User: (_obj, { root }) =>
+    db[table].findUnique({ where: { cuid: root.cuid } }).User(),
 }
