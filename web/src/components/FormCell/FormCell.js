@@ -17,7 +17,6 @@ import { MetaTags, useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 
 import AutoResizeTextarea from 'src/components/AutoResizeTextarea'
-import Lookup from 'src/components/Lookup'
 import LookupCell from 'src/components/LookupCell'
 import { tableNames } from 'src/lib/atomicFunctions'
 export const QUERY = gql`
@@ -262,20 +261,14 @@ export const Success = ({ record, onClose }) => {
                 setWhere(`${field?.definition?.display}/contains/${value}`)
               }, 500)
             }
-            /*
-
-                          <Lookup
-                            table={field?.type}
-                            field={field?.definition?.display}
-                            id={field.name}
-                            //TODO: This does not work
-                            defaultValue={record?.result?.[field.name] || field?.definition?.defaultValue || ''}
-                          />
-                          */
-            // end from lookup.js
 
             return (
               <FormControl key={`formcell-${field.name}-${index}`}>
+
+              <details>
+                    <summary>Debug Field {field.definition.field || field.name}</summary>
+                    <pre>{JSON.stringify(field, null, 2)}</pre>
+                  </details>
                 <FormLabel>{field?.definition?.label || field.name}</FormLabel>
                 {fieldType === 'text' && (
                   <Input
@@ -293,12 +286,9 @@ export const Success = ({ record, onClose }) => {
                     }
                   />
                 )}
+
                 {fieldType === 'textarea' && (
                   <Box>
-                  <details>
-                    <summary>Debug Field</summary>
-                    <pre>{JSON.stringify(field, null, 2)}</pre>
-                  </details>
                   <AutoResizeTextarea
                     id={field.name}
                     {...register(field.name)}

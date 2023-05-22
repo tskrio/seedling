@@ -33,7 +33,7 @@ const CookieModal = () => {
       {!acceptedCookies && (
         <Drawer placement={placement} onClose={onClose} isOpen={isOpen}>
           <DrawerOverlay />
-          <DrawerContent>
+          <DrawerContent bg={'white'}>
             <DrawerHeader borderBottomWidth="1px">Your Privacy</DrawerHeader>
             <DrawerBody>
               <Box pb={4}>

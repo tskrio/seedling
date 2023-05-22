@@ -35,11 +35,14 @@ export const definitions = {
     },
     User: {
       label: 'User',
+      field: 'userCuid',
       canSort: true,
       canFilter: true,
       canShowMatching: true,
       display: 'name',
       value: 'cuid',
+      order: 100,
+      type: 'reference',
     },
   },
   Property: {
