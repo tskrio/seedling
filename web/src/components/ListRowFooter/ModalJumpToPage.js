@@ -29,7 +29,7 @@ const JumpToPageModal = ({ isOpen, onClose, currentPage }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent bg={'white'}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Jump to Page</ModalHeader>
           <ModalCloseButton />

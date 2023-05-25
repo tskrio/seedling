@@ -10,6 +10,20 @@ export const definitions = {
    * defaultOptions (for simple lists) array of strings or objects with label and value
    *
    */
+  Page: {
+    title: {
+      label: 'Title',
+      canSort: true,
+    },
+    slug: {
+      label: 'Slug',
+      canSort: true,
+    },
+    content: {
+      label: 'Content',
+      type: 'code',
+    }
+  },
   User: {
     username: {
       label: 'User Name',

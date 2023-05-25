@@ -98,14 +98,30 @@ let seedHandler = async ({ seedObject }) => {
         record.createdAt = now(record.createdAt)
         if(record.updatedAt) record.updatedAt = now(record.updatedAt)
         //console.log(`upserting ${key} record: ${record.cuid}`)
+        if(key === 'log'){
+          record.context = JSON.stringify(record.context)
+        }
         newData.push(record)
       }
       debugLog(`${key} - bulk inserting ${newData.length} records`)
-      let fristSeedResult = await db[key].createMany({
-        data: newData,
-        skipDuplicates: true,
-      })
-      debugLog(`${key} - inserted ${fristSeedResult.count} records`)
+      let outputOfFirstSeed = null;
+      console.log({DATABASE_URL: process.env.DATABASE_URL})
+      let isPostgres = process.env.DATABASE_URL.includes('postgresql:')
+      console.log({isPostgres})
+      if(process.env.DATABASE_URL.includes('postgresql:')){
+        outputOfFirstSeed = await db[key].createMany({
+          data: newData,
+          skipDuplicates: true,
+        })
+      } else {
+        //loop trhough and create each record
+        outputOfFirstSeed = {count: 0}
+        for(let record of newData){
+          await db[key].create({data: record})
+          outputOfFirstSeed.count++
+        }
+      }
+      debugLog(`${key} - inserted ${outputOfFirstSeed.count} records`)
       if (debugLogs) {
         let message = ''
         debugLogs.forEach((log) => {

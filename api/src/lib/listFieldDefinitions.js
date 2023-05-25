@@ -1,4 +1,14 @@
 export const definitions = {
+  Page: {
+    title: {
+      label: 'Title',
+      canSort: true,
+    },
+    slug: {
+      label: 'Slug',
+      canSort: true,
+    }
+  },
   User: {
     username: {
       label: 'User Name',
@@ -30,6 +40,16 @@ export const definitions = {
       value: 'cuid',
       reference: true,
     },
+    createdBy: {
+      label: 'Created By',
+      //canSort: true,
+      //canFilter: true,
+      //canShowMatching: true,
+      //display: 'name',
+      //value: 'cuid',
+      //table: 'User',
+      //reference: true,
+    }
   },
   Property: {
     name: {

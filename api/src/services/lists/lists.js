@@ -6,18 +6,8 @@ import { UserInputError } from '@redwoodjs/graphql-server'
 import { db } from 'src/lib/db'
 import { definitions as fieldDefinitions } from 'src/lib/formFieldDefinitions'
 import { definitions as listDefinitions } from 'src/lib/listFieldDefinitions'
-import {
-  executeBeforeCreateRulesV2,
-  executeAfterCreateRulesV2,
-  executeBeforeReadAllRulesV2,
-  executeAfterReadAllRulesV2,
-  executeBeforeReadRulesV2,
-  executeAfterReadRulesV2,
-  executeBeforeUpdateRulesV2,
-  executeAfterUpdateRulesV2,
-  executeBeforeDeleteRulesV2,
-  executeAfterDeleteRulesV2,
-} from 'src/lib/rules'
+import { executeRules } from 'src/lib/rules'
+let isPostgres = process.env.DATABASE_URL.includes('postgresql:')
 let getFieldsAndSelect = async ({ table, formDefinition, listDefinition }) => {
   let returnObj = {}
   let dmmf = await db._getDmmf()
@@ -91,10 +81,45 @@ let getFieldsAndSelect = async ({ table, formDefinition, listDefinition }) => {
 }
 
 export const createRecord = async ({ table, data }) => {
-  let create = await db[table].create({ data })
+  // TODO: run before create rules
+  let { data: modifiedData, status: beforeStatus } = await executeRules({
+    table,
+    data,
+    when: 'before',
+    operation: 'create',
+  })
+  console.log({ modifiedData, beforeStatus })
+  if (beforeStatus.code !== 'success') {
+    return {
+      table,
+      result: [],
+      message: 'Failed to create record',
+      status: 'error',
+    }
+  }
+  let create = await db[table].create({ data: modifiedData })
+  console.log({ create })
+  let { data: postModifiedData, status: afterStatus } = await executeRules({
+    table,
+    data: create,
+    when: 'after',
+  })
+  console.log({ postModifiedData, afterStatus })
+  if (afterStatus.code !== 'success') {
+    return {
+      table,
+      result: [],
+      message: 'Failed after create record',
+      status: 'error',
+    }
+  }
+  // TODO: run after create rules
+  // return the record with message, and status
   return {
     table,
     result: [create],
+    message: 'Successfully created record',
+    status: 'success',
   }
 }
 
@@ -121,10 +146,12 @@ export const readRecord = async ({ table, cuid }) => {
   let record = null
   // trigger before read rules
   if (cuid) {
+    // TODO: run before read rules
     record = await db[pascalTable].findUnique({
       where: { cuid },
       select: returnObj.select,
     })
+    // TODO: run after read rules
   }
   // trigger after read rules
   returnObj.result = record
@@ -208,7 +235,9 @@ export const readRecords = async ({
             }
             if (caseInsensitive) {
               returnObj.filter[key][operator] = value
-              returnObj.filter[key].mode = 'insensitive'
+              if(isPostgres){
+                returnObj.filter[key].mode = 'insensitive'
+              }
             }
           }
           // if the key includes a '.' then we need to split it and add it to the filter
@@ -222,7 +251,9 @@ export const readRecords = async ({
             }
             if (caseInsensitive) {
               returnObj.filter[relation][field][operator] = value
-              returnObj.filter[relation][field].mode = 'insensitive'
+              if(isPostgres){
+                returnObj.filter[relation][field].mode = 'insensitive'
+              }
             }
           }
         }
@@ -246,9 +277,8 @@ export const readRecords = async ({
     returnObj.fields = fields
     returnObj.select = select
 
-    // rewrite rules engine...run before read rules here
+    // TODO: before readall rules
 
-    // before readall rules
     returnObj.total = await db[table].count({
       where: returnObj.filter,
     })
@@ -259,25 +289,7 @@ export const readRecords = async ({
       orderBy: returnObj.order,
       select: returnObj.select,
     })
-    // after readall rules
-    // rewrite rules engine...run after read rules here
-    //if (table === 'User') {
-    //  returnObj.results = returnObj.results.map((result) => {
-    //    let emailDomain = result.username.split('@')[1]
-    //    let emailAddress = result.username.split('@')[0]
-    //    //lets hide the center of the email address
-    //    // keep 2 characters at the beginning and 2 characters at the end
-    //    let email = emailAddress.substring(0, 2) + '...'
-    //    result.username = email + '@' + emailDomain
-    //    if (result.name.includes('@')) {
-    //      result.name = result.name.split('@')[0] + '@...'
-    //    }
-    //    return result
-    //  })
-    //}
-
-    // now lets try to get the records....
-    // first thing... we need to modify the talbe to be singular...
+    // TODO: after readall rules
 
     return { ...returnObj }
   } catch (error) {
@@ -291,11 +303,12 @@ export const readRecords = async ({
 }
 
 export const updateRecord = async ({ table, cuid, data }) => {
-  // we need to update the record and return it
+  // TODO: before update rules
   let update = await db[table].update({
     where: { cuid },
     data: data,
   })
+  // TODO: after update rules
   return {
     table,
     cuid,
@@ -303,9 +316,11 @@ export const updateRecord = async ({ table, cuid, data }) => {
   }
 }
 export const deleteRecord = async ({ table, cuid }) => {
+  // TODO: before delete rules
   let deleted = await db[table].delete({
     where: { cuid },
   })
+  // TODO: after delete rules
   return {
     table,
     cuid,

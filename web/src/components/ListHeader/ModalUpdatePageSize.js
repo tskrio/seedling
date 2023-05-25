@@ -17,7 +17,7 @@ const UpdatePageSizeModal = ({ isOpen, onClose }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent bg={'white'}>
         <ModalHeader>Select Page Size</ModalHeader>
         <ModalCloseButton />
         <ModalBody>

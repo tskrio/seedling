@@ -1,4 +1,6 @@
 import { UserInputError } from '@redwoodjs/graphql-server'
+import { camelCase } from 'camel-case'
+import pluralize from 'pluralize'
 
 import allRules from 'src/rules/**/**.{js,ts}'
 
@@ -12,20 +14,59 @@ import { log } from 'src/lib/util'
 // }
 let loadRules = async (allRules, table, when, operation) => {
   let arrRules = Object.keys(allRules).map((k) => allRules[k])
-  arrRules.sort((a, b) => a.order - b.order)
-  arrRules = arrRules.filter((rule) => {
-    if (
-      rule.active &&
-      rule.table === table &&
-      rule.when.includes(when) &&
-      rule.operation.includes(operation)
-    ) {
+  arrRules.sort((a, b) => a?.order - b?.order)
+  console.log({ function: 'loadRules', allRulesLength: arrRules.length})
+  // lets filter out rules that are on this table.
+  table = camelCase(pluralize(table, 1), { pascalCase: false })
+  console.log({ function: 'loadRules', table, when, operation})
+  let tableRules = arrRules.filter((rule) => {
+    // table could be plural, or singular or in pascal case.
+    // rules needs to be in singular pascal case.
+    // so we need to convert table to singular pascal case.
+    // we also need to include rules that run in all cases
+    if ( rule.table === table || rule.table === 'all' ) {
       return true
     } else {
       return false
     }
   })
-  arrRules = arrRules.filter((rule) => {
+  console.log({ tableRulesLength: tableRules.length})
+  // lets filter out rules that are not active.
+  let activeRules = tableRules.filter((rule) => {
+    if ( rule.active ) {
+      return true
+    } else {
+      return false
+    }
+  })
+  console.log({ activeRulesLength: activeRules.length})
+  // lets filter out rules that are not included in the when array.
+  // e.g. rule file has a when ['before', 'after']
+  // but when we are calling this we only pass a string like 'before'
+  let whenRules = activeRules.filter((rule) => {
+    if( rule.when.includes(when) ) {
+      return true
+    } else {
+      return false
+    }
+  })
+  console.log({ whenRulesLength: whenRules.length})
+  // lets filter out rules that are not included in the operation array.
+  // e.g. rule file has a operation ['create', 'update']
+  // but when we are calling this we only pass a string like 'create'
+  let operationRules = whenRules.filter((rule) => {
+    console.log({ ruleOperation: rule.operation, operation })
+    if( rule.operation.includes(operation) ) {
+      return true
+    } else {
+      return false
+    }
+  })
+  console.log({ operationRulesLength: operationRules.length})
+  operationRules.forEach((rule) => {
+    console.log({ rule: rule.file })
+  })
+  let rulesWithRequiredFields = operationRules.filter((rule) => {
     let requiredFields = [
       'order',
       'when',
@@ -54,7 +95,7 @@ let loadRules = async (allRules, table, when, operation) => {
   //})
   //let message = [arrRules.length, table, when, operation]
   //logger.info(`${message.join(' ')} rules loaded \n${ruleNames.join('\n')}`)
-  return (await arrRules) || []
+  return (await rulesWithRequiredFields) || []
 }
 let exitWhenNotSuccess = (status) => {
   if (status.code != 'success') {
@@ -66,6 +107,33 @@ let exitWhenNotSuccess = (status) => {
     throw new UserInputError(status?.message || `Error in ${status?.file}`)
   }
 }
+
+
+export const executeRules = async ({
+  table,
+  when,
+  operation,
+  data,
+  cuid,
+  page,
+  where,
+  skip,
+  orderBy,
+  take
+}) => {
+  let rules = await loadRules(allRules, table, when, operation)
+  console.log({ rulesLength: rules.length })
+  console.log({ firstRule: rules[0]})
+  let status = { code: 'success', message: '' }
+  rules.forEach(async (rule) => {
+    console.log({ message: 'running rule on this data', file: rule.file, data })
+    await rule.command({ data, cuid, page, where, skip, orderBy, take, status })
+    console.log({ message: 'rule completed on this data', file: rule.file, data })
+  })
+  exitWhenNotSuccess(status)
+  return { data, cuid, page, where, skip, orderBy, take, status }
+}
+
 /**
  * Runs the rules before create across all models
  * @param {string} table - the model you're running rules for

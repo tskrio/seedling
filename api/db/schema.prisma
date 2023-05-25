@@ -4,6 +4,7 @@ generator client {
 }
 
 datasource db {
+  //provider = "sqlite"
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
@@ -12,6 +13,8 @@ model Property {
   cuid      String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  createdBy String? //               // used to track who created the account
+  updatedBy String? //               // used to track who updated the account
   name      String   @unique
   type      String   @default("string")
   value     String?
@@ -21,6 +24,8 @@ model Message {
   cuid      String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  createdBy String? //               // used to track who created the account
+  updatedBy String? //               // used to track who updated the account
   language  String
   entity    String
   value     String
@@ -32,6 +37,8 @@ model User {
   cuid                String        @id @default(cuid())
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
+  createdBy           String? //               // used to track who created the account
+  updatedBy           String? //               // used to track who updated the account
   name                String        @default("")
   username            String        @unique @default("") // will have username OR subject keep masked
   verifiedAt          DateTime? //               // used to verify account for password reset purposes and for actual access
@@ -48,6 +55,8 @@ model Preference {
   cuid      String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  createdBy String? //               // used to track who created the account
+  updatedBy String? //               // used to track who updated the account
   entity    String
   value     String?
   userCuid  String
@@ -61,6 +70,8 @@ model Group {
   cuid        String        @id @default(cuid())
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
+  createdBy   String? //               // used to track who created the account
+  updatedBy   String? //               // used to track who updated the account
   name        String        @unique
   description String
   GroupMember GroupMember[]
@@ -71,6 +82,8 @@ model GroupMember {
   cuid      String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  createdBy String? //               // used to track who created the account
+  updatedBy String? //               // used to track who updated the account
   userCuid  String
   groupCuid String
   Group     Group    @relation(fields: [groupCuid], references: [cuid], onDelete: Cascade)
@@ -85,6 +98,8 @@ model GroupRole {
   cuid      String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  createdBy String? //               // used to track who created the account
+  updatedBy String? //               // used to track who updated the account
   role      String
   groupCuid String
   Group     Group    @relation(fields: [groupCuid], references: [cuid], onDelete: Cascade)
@@ -96,7 +111,25 @@ model GroupRole {
 model Log {
   cuid      String   @id @default(cuid())
   createdAt DateTime @default(now())
-  context   Json
+  updatedAt DateTime @updatedAt
+  createdBy String? //               // used to track who created the account
+  updatedBy String? //               // used to track who updated the account
+  context   String
   message   String
   source    String
+}
+
+model Page {
+  cuid      String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String? //               // used to track who created the account
+  updatedBy String? //               // used to track who updated the account
+  slug      String
+  title     String
+  content   String
+
+  @@unique([slug])
+  @@index([slug])
+  @@index([title])
 }

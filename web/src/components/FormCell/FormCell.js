@@ -289,6 +289,7 @@ export const Success = ({ record, onClose }) => {
 
                 {fieldType === 'textarea' && (
                   <Box>
+                  ...
                   <AutoResizeTextarea
                     id={field.name}
                     {...register(field.name)}
@@ -329,6 +330,8 @@ export const Success = ({ record, onClose }) => {
                       //defaultValue={lookUpValue}
                       //readOnly={true}
                       display={'none'}
+                      defaultValue={record?.result?.[field.name].cuid ||
+                      field?.definition?.defaultValue || ''}
                       {...register(field.definition.field, {
                         required: field?.definition?.required || false,
                         maxLength: field?.definition?.maxLength || 255,

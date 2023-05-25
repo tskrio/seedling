@@ -30,16 +30,16 @@ export const schema = gql`
       orderBy: String
       filter: JSON
       results: [JSON]
-    ): List! @requireAuth(roles: ["activityRead", "admin"])
+    ): List! @requireAuth
     readRecord(table: String!, cuid: String): Form!
-      @requireAuth(roles: ["activityRead", "admin"])
+      @requireAuth
   }
   type Mutation {
     createRecord(table: String!, data: JSON!): Form!
-      @requireAuth(roles: ["activityCreate", "admin"])
+      @requireAuth
     updateRecord(table: String!, cuid: String!, data: JSON!): Form!
-      @requireAuth(roles: ["activityUpdate", "admin"])
+      @requireAuth
     deleteRecord(table: String!, cuid: String!): Form!
-      @requireAuth(roles: ["activityDelete", "admin"])
+      @requireAuth
   }
 `

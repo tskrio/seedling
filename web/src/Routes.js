@@ -11,7 +11,7 @@ import { Set, Router, Route, Private } from '@redwoodjs/router'
 
 import AboutPage from 'src/pages/AboutPage'
 import HomePage from 'src/pages/HomePage'
-
+import ThePage from 'src/pages/ThePage'
 import Standard from './layouts/Standard/Standard'
 
 import { useAuth } from 'src/auth'
@@ -24,13 +24,14 @@ const Routes = () => {
       <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
       <Route path="/login" page={LoginPage} name="login" />
       <Route path="/signup" page={SignupPage} name="signup" />
+      <Route path="/{slug}" page={ThePage} name="page" />
       <Set wrap={Standard}>
         <Route path="/logout" page={LogoutPage} name="logout" />
         <Route path="/" page={HomePage} name="home" />
+
         <Private unauthenticated="home">
           <Route path="/about" page={AboutPage} name="about" />
           <Route path="/my-profile" page={MyProfilePage} name="myProfile" />
-
           <Set>
             {/*<Route path="/list/users" page={AboutPage} name="list" />{/*this is how to override one*/}
             {/*<Route path="/list/{table}/{params...}" page={ListPage} name="list" />

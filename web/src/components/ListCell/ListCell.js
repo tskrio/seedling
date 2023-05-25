@@ -9,10 +9,13 @@ import {
   Tbody,
   Flex,
   Spacer,
+  IconButton,
+  useDisclosure
 } from '@chakra-ui/react'
-
+import { EditIcon, QuestionIcon } from '@chakra-ui/icons'
 import { tableNames } from 'src/lib/atomicFunctions'
-
+import ModalEditRow from '../ListRow/ModalEditRow'
+import FormCell from 'src/components/FormCell'
 import ListHeader from '../ListHeader/ListHeader'
 import ListRow from '../ListRow/ListRow'
 import ListRowFooter from '../ListRowFooter/ListRowFooter'
@@ -79,6 +82,7 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ data }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   //console.log({ file: 'listcell.js', data })
   //return <div>SUCCESS???<Box fontFamily={'monospace'} whiteSpace={'pre-wrap'}>{JSON.stringify(records, null, 2)}</Box></div>
   // lets loop over the data
@@ -122,7 +126,11 @@ export const Success = ({ data }) => {
         <ListRowFooter total={data.total} />
       </Box>
       <Box display={{ base: 'block', md: 'none', lg: 'none' }}>
-        <ListHeader table={data.table} count={data.results.length} />
+        <ListHeader
+          table={data.table}
+          count={data.results.length}
+          total={data.total}
+        />
         <SimpleGrid>
           {data.results.map((record) => {
             let cardKey = `card-${record.cuid}`
@@ -133,33 +141,46 @@ export const Success = ({ data }) => {
                 border={'1px solid black'}
                 rounded={'md'}
                 p={2}
+                bg={'white'}
               >
-                {Object.keys(record).map((key) => {
-                  if (key !== 'cuid') {
-                    let value = record[key]
-                    if (value?.length > 20) {
-                      value = value.substring(0, 17)
-                      value += '...'
-                    }
-                    return (
-                      <Box key={`${cardKey}-${key}`}>
-                        {/*<Flex>
-                            {key}
-                            <Spacer />
-                            <Box>
-                              {value}
-                            </Box>
-                          </Flex>*/}
-                        <Box border={'1px solid black'}></Box>
-                      </Box>
-                    )
-                  }
-                })}
+              <Flex gap={1}>
+              <Box>
+              <IconButton
+            colorScheme="blue"
+            icon={<EditIcon />}
+            onClick={onOpen}
+          />
+          <ModalEditRow
+            isOpen={isOpen}
+            onClose={onClose}
+            title={`Edit ${data.table}`}
+          >
+            <FormCell table={data.table} cuid={record.cuid} />
+          </ModalEditRow>
               </Box>
+
+                {data.fields.map((field) => {
+                  let value = record[field.name]?.name || record[field.name]
+                  if (field.type === 'DateTime') value = new Date(value).toLocaleString()
+// return a box on a new line for each field
+                  return (
+                    <Box
+                      key={`${cardKey}-${field.name}`}
+                      fontFamily={'monospace'}
+                      dipaly={'block'}
+                      whiteSpace={'pre-wrap'}
+                    >
+                      {field.name}: {value}
+                    </Box>
+                  )
+                })}
+                </Flex>
+              </Box>
+
             )
           })}
         </SimpleGrid>
-        <ListRowFooter />
+        <ListRowFooter total={data.total} />
       </Box>
     </Box>
   )

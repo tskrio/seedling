@@ -19,6 +19,7 @@
     "@redwoodjs/forms": "5.2.1",
     "@redwoodjs/router": "5.2.1",
     "@redwoodjs/web": "5.2.1",
+    "chakra-ui-markdown-renderer": "^4.1.0",
     "chance": "^1.1.8",
     "gsap": "^3.9.1",
     "js-cookie": "^3.0.1",
@@ -26,8 +27,12 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.3.1",
+    "react-markdown": "^8.0.7",
     "react-table": "^7.7.0",
-    "react-textarea-autosize": "^8.4.1"
+    "react-textarea-autosize": "^8.4.1",
+    "rehype-raw": "^6.1.1",
+    "rehype-sanitize": "^5.0.1",
+    "remark-gfm": "^3.0.1"
   },
   "devDependencies": {
     "@chakra-ui/react": "^2.0.0",

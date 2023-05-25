@@ -9,6 +9,7 @@ import { PlayIcon } from 'src/components/CallToActionWithVideo/'
 import CallToActionWithVideo from 'src/components/CallToActionWithVideo/'
 import Welcome from 'src/components/Welcome'
 import DeployButton from 'src/components/DeployButton'
+import { CheckIcon, EmailIcon } from '@chakra-ui/icons'
 
 //import InstallExtension from '../InstallExtension/InstallExtension'
 const AboutComponent = ({ auth0 /*, isAuthenticated, currentUser*/ }) => {
@@ -53,6 +54,7 @@ const AboutComponent = ({ auth0 /*, isAuthenticated, currentUser*/ }) => {
               onClick={() => {
                 navigate('/signup')
               }}
+              leftIcon={<EmailIcon />}
             >
               Sign up!
             </Button>
@@ -63,14 +65,16 @@ const AboutComponent = ({ auth0 /*, isAuthenticated, currentUser*/ }) => {
           fontWeight={'normal'}
           px={6}
           colorScheme={'blue'}
+          //onClick={() => {
+          //  setDisplayVideo(true)
+          //}}
           onClick={() => {
-            setDisplayVideo(true)
+            navigate('/login')
           }}
-          leftIcon={<PlayIcon h={4} w={4} color={'gray.400'} />}
+          leftIcon={<CheckIcon />}
         >
-          How It Works
+          Login
         </Button>
-        <DeployButton />
       </CallToActionWithVideo>
     </Box>
   )

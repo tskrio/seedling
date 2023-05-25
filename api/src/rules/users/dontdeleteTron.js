@@ -1,3 +1,4 @@
+import { requireAuth } from 'src/lib/auth'
 import { db } from 'src/lib/db'
 
 module.exports = {
