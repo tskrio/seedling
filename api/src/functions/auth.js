@@ -16,7 +16,7 @@ export const handler = async (event, context) => {
           resetToken: user.resetToken,
         },
       })
-      log(
+      console.log(
         `${user.username} forgot password /reset-password?resetToken=${user.resetToken}`,
         `api/src/functions/auth.js`
       )
@@ -106,7 +106,7 @@ export const handler = async (event, context) => {
           salt: salt,
           name: userAttributes.name,
           email: userAttributes.email,
-          // skipPassword: true,
+          skipPassword: true,
         },
       })
       //return modifiedUser.record

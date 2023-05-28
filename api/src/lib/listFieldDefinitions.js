@@ -1,4 +1,26 @@
 export const definitions = {
+  SideBarItem: {
+    name: {
+      label: 'Name',
+    },
+    type: {
+      label: 'Type',
+    },
+    link: {
+      label: 'Link',
+    },
+    icon: {
+      label: 'Icon',
+    },
+    order: {
+      label: 'Order',
+      canSort: true,
+    },
+    iconFamily: {
+      label: 'Icon Family',
+    },
+  },
+
   Page: {
     title: {
       label: 'Title',

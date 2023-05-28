@@ -1,3 +1,4 @@
+scripts/seedFiles/*
 api/db/postgres-test-data
 .idea
 .DS_Store

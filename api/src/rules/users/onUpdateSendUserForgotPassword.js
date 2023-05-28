@@ -9,15 +9,19 @@ module.exports = {
   operation: ['update'],
   file: __filename,
   table: 'user',
-  command: async function ({ data }) {
+  command: async function ({ data, status }) {
     try {
-      if (!data.resetToken) return { data }
+      if (!data.resetToken) return { data, status }
       if (new Date(data.resetTokenExpiresAt) < new Date()) return { data }
       let to = data.email
       let name = data.name
       let client = await email({ provider: 'mailgun' })
       let code = data.resetToken
-      let resetLink = `https://${client.domain}/reset-password?resetToken=${data.resetToken}`
+      let site = ((domain) => {
+        if(!domain) return 'http://localhost:8910'
+        return `https://${domain}`
+      })()
+      let resetLink = `${site}/reset-password?resetToken=${data.resetToken}`
       let brand = (await getProperty('brand')) || 'Undefined'
       if (data.email === '') {
         // if data is blank, log the link for debugging
@@ -32,7 +36,7 @@ module.exports = {
         {
           to: to,
           from: `Tskr <jace@${client.domain}>`,
-          'h:Reply-To': `jace@$tskr.io`, //not working
+          'h:Reply-To': `jace@${client.domain}`, //not working
           subject: `Your password reset code`,
           html: rendered.html,
         },
@@ -45,6 +49,6 @@ module.exports = {
       logger.error(e)
       log(e.message)
     }
-    return await { data }
+    return await { data, status }
   },
 }

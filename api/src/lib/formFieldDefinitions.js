@@ -1,3 +1,36 @@
+import * as FaIcons from 'react-icons/fa';
+const FaIconsKeys = Object.keys(FaIcons);
+let FaIconsMap = FaIconsKeys.map((icon)=>{
+  return {
+    label: icon,
+    value: icon
+  }
+})
+import * as SiIcons from 'react-icons/si';
+const SiIconsKeys = Object.keys(SiIcons)
+let SiIconsMap = SiIconsKeys.map((icon)=>{
+  return {
+    label: icon,
+    value: icon
+  }
+})
+import * as MdIcons from 'react-icons/md';
+const MdIconsKeys = Object.keys(MdIcons)
+let MdIconsMap = MdIconsKeys.map((icon)=>{
+  return {
+    label: icon,
+    value: icon
+  }
+})
+
+
+let getFaIconOptions = () => {
+    // return an array of objects with label and value
+    return Object.keys(FaIcons).map((icon) => ({
+      label: icon,
+      value: icon,
+    }))
+  }
 export const definitions = {
   /**
    * Options
@@ -10,6 +43,52 @@ export const definitions = {
    * defaultOptions (for simple lists) array of strings or objects with label and value
    *
    */
+  SideBarItem: {
+    name: {
+      label: 'Name',
+    },
+    type: {
+      label: 'Type',
+      type: 'select',
+      options: [
+        { label: 'Pick something', value: '' },
+        { label: 'Internal Link', value: 'link' },
+        { label: 'External Link', value: 'externalLink' },
+      ]
+    },
+    link: {
+      label: 'Link',
+    },
+    icon: {
+      label: 'Icon',
+      type: 'select',
+      options: [
+        { label: 'Pick something', value: '' },
+        ...FaIconsMap,
+        ...SiIconsMap,
+        ...MdIconsMap,
+      ],
+    },
+    order: {
+      label: 'Order',
+      type: 'number',
+    },
+    iconFamily: {
+      label: 'Icon Family',
+      type: 'select',
+      //options: [//this also works
+      //  'admin','user','guest'
+      //]
+      options: [
+        { label: 'Pick The Icon family (first two letters) from icon', value: '' },
+        { label: 'Material Design', value: 'MdIcons' },
+        { label: 'Simple Icons', value: 'SiIcons' },
+        { label: 'Font Awesome', value: 'FaIcons' },
+      ],
+      value: 'cuid',
+    },
+  },
+
   Page: {
     title: {
       label: 'Title',

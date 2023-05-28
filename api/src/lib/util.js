@@ -16,6 +16,7 @@ export const log = async (message, source) => {
   delete safeContext.document // removed to remove password data
   delete safeContext.event // removed to remove password data
   delete safeContext.operation // removed as its not needed
+  safeContext = JSON.stringify(safeContext)
   await db.log.create({
     data: {
       message,

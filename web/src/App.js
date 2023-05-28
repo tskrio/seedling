@@ -28,8 +28,9 @@ const App = () => {
   React.useEffect(() => {
     if (table) {
       let url = `/list/${table}/page/${page}/take/${take}`
-      if (where) url += `/where/${where}`
       if (orderBy) url += `/orderBy/${orderBy}`
+      if (where) url += `/where/${where}`
+
       window.history.pushState({}, '', url)
     }
   }, [table, page, take, where, orderBy, records])

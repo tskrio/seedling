@@ -20,6 +20,21 @@ model Property {
   value     String?
 }
 
+model SideBarItem {
+  cuid       String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  createdBy  String? //               // used to track who created the account
+  updatedBy  String? //               // used to track who updated the account
+  name       String
+  icon       String?
+  iconFamily String?
+  link       String?
+  order      Int
+  active     Boolean  @default(true)
+  type       String   @default("link")
+}
+
 model Message {
   cuid      String   @id @default(cuid())
   createdAt DateTime @default(now())

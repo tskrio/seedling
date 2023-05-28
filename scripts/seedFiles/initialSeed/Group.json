@@ -1,0 +1,23 @@
+[
+  {
+    "cuid": "zwwl4y4ey32rudgz0ta3msex",
+    "createdAt": "2023-01-21T05:57:37.056Z",
+    "updatedAt": "2023-01-21T05:57:37.056Z",
+    "name": "Administrators",
+    "description": "Admins"
+  },
+  {
+    "cuid": "aty14w7ld02lvu2pyvc6jsye",
+    "createdAt": "2023-01-21T05:57:37.841Z",
+    "updatedAt": "2023-01-21T05:57:37.841Z",
+    "name": "Managers",
+    "description": "Managers"
+  },
+  {
+    "cuid": "she06pgs4tptq6efjm8eju37",
+    "createdAt": "2023-01-21T05:57:37.927Z",
+    "updatedAt": "2023-05-21T02:46:48.908Z",
+    "name": "Employees",
+    "description": "Employees"
+  }
+]

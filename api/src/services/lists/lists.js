@@ -174,7 +174,7 @@ export const readRecords = async ({
     returnObj.where = where
     returnObj.skip = skip
     returnObj.orderBy = orderBy || 'cuid/desc'
-
+    console.log({ where })
     // lets parse the filter
     returnObj.filter = {}
     // if the where is not blank
@@ -200,7 +200,10 @@ export const readRecords = async ({
       ]
       // now lets loop through the whereArray
       whereArray.forEach((item, index) => {
+        // this needs to take into account the type form dmmf
+        // TODO: use DMMF to deterine the expectd type, today we are assuming based on the value
         let caseInsensitive = false
+        console.log({ item, index })
         if (whereArray.length % 3 !== 0) {
           throw new Error('Invalid where clause')
         }
@@ -213,15 +216,17 @@ export const readRecords = async ({
             }
           })
           let value = whereArray[index + 2]
+          console.log({ key, operator, value })
+          // if value fails isNaN, then we need to convert it to a number
+          if (!isNaN(value)) {
+            value = Number(value)
+          }
           // now we need to handle the value and convert it to the correct type
           // if the value is 'true' or 'false', then we need to convert it to a boolean
           if (value === 'true' || value === 'false') {
             value = value === 'true' ? true : false
           }
-          // if value fails isNaN, then we need to convert it to a number
-          if (!isNaN(value)) {
-            value = Number(value)
-          }
+
           // if the vlue is a string, then we need to decode it
           if (typeof value === 'string') {
             value = decodeURIComponent(value)
@@ -240,6 +245,7 @@ export const readRecords = async ({
               }
             }
           }
+          console.log({ filter: returnObj.filter[key] })
           // if the key includes a '.' then we need to split it and add it to the filter
           if (key.includes('.')) {
             let relation = key.split('.')[0]
@@ -278,8 +284,8 @@ export const readRecords = async ({
     returnObj.select = select
 
     // TODO: before readall rules
-
-    returnObj.total = await db[table].count({
+    console.log({ returnObj })
+    returnObj.total = await db[table]?.count({
       where: returnObj.filter,
     })
     returnObj.results = await db[table].findMany({

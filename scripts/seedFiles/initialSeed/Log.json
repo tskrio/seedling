@@ -1,0 +1,190 @@
+[
+  {
+    "cuid": "clfahifxi0000gu3o4nahekbc",
+    "createdAt": "2023-03-16T02:20:56.742Z",
+    "context": {
+      "query": "mutation CreateMessageMutation($input: CreateMessageInput!) {\n  message: createMessage(input: $input) {\n    cuid\n    entity\n    __typename\n  }\n}",
+      "request": {},
+      "variables": {
+        "input": {
+          "value": "test",
+          "entity": "test",
+          "language": "werw"
+        }
+      },
+      "currentUser": {
+        "cuid": "cld3p530y000yqwgu01ptcri5",
+        "name": "Adam Admin",
+        "email": "admin@example.com",
+        "roles": [
+          "admin"
+        ],
+        "groups": [
+          {}
+        ],
+        "messages": {},
+        "Preference": [
+          {
+            "entity": "adfasdf"
+          }
+        ],
+        "GroupMember": [
+          {
+            "cuid": "b3sopwedtwed8fusyqnr1y0f",
+            "Group": {
+              "cuid": "zwwl4y4ey32rudgz0ta3msex",
+              "name": "Admins",
+              "GroupRole": [
+                {
+                  "role": "admin"
+                }
+              ]
+            },
+            "createdAt": "2023-01-21T05:57:38.431Z"
+          }
+        ],
+        "preferences": {
+          "adfasdf": "werwer",
+          "language": "en"
+        }
+      },
+      "operationName": "CreateMessageMutation",
+      "requestContext": {
+        "callbackWaitsForEmptyEventLoop": false
+      }
+    },
+    "message": "no entity named test",
+    "source": "api\\undefined"
+  },
+  {
+    "cuid": "clfq56xk00002gud83ii4n5ks",
+    "createdAt": "2023-03-27T01:20:23.137Z",
+    "context": {
+      "params": {
+        "query": "mutation DeleteUserMutation($cuid: String!) {\n  deletedRow: deleteUser(cuid: $cuid) {\n    cuid\n    name\n    __typename\n  }\n}",
+        "variables": {
+          "cuid": "clfq56q830000gud87c4ajbcb"
+        },
+        "operationName": "DeleteUserMutation"
+      },
+      "request": {
+        "size": 0,
+        "follow": 20,
+        "counter": 0,
+        "timeout": 0,
+        "compress": true,
+        "optionsSignal": {}
+      },
+      "currentUser": {
+        "cuid": "cld3p530y000yqwgu01ptcri5",
+        "name": "Adam Admin",
+        "email": "admin@example.com",
+        "roles": [
+          "admin"
+        ],
+        "groups": [
+          {
+            "name": "Admins"
+          }
+        ],
+        "messages": {},
+        "Preference": [
+          {
+            "entity": "adfasdf"
+          }
+        ],
+        "GroupMember": [
+          {
+            "cuid": "b3sopwedtwed8fusyqnr1y0f",
+            "group": {
+              "cuid": "zwwl4y4ey32rudgz0ta3msex",
+              "name": "Admins",
+              "GroupRole": [
+                {
+                  "role": "admin"
+                }
+              ]
+            },
+            "createdAt": "2023-01-21T05:57:38.431Z"
+          }
+        ],
+        "preferences": {
+          "adfasdf": "werwer",
+          "language": "en"
+        }
+      },
+      "requestContext": {
+        "callbackWaitsForEmptyEventLoop": false
+      }
+    },
+    "message": "Deleted Victoria N",
+    "source": "api\\rules\\users\\onDeleteLogIt.js"
+  },
+  {
+    "cuid": "clfq591qo0000gujobjonek3l",
+    "createdAt": "2023-03-27T01:22:01.872Z",
+    "context": {
+      "params": {
+        "query": "mutation CreateGroupMutation($input: CreateGroupInput!) {\n  createGroup(input: $input) {\n    cuid\n    __typename\n  }\n}",
+        "variables": {
+          "input": {
+            "name": "asdf",
+            "description": "asdf"
+          }
+        },
+        "operationName": "CreateGroupMutation"
+      },
+      "request": {
+        "size": 0,
+        "follow": 20,
+        "counter": 0,
+        "timeout": 0,
+        "compress": true,
+        "optionsSignal": {}
+      },
+      "currentUser": {
+        "cuid": "cld3p530y000yqwgu01ptcri5",
+        "name": "Adam Admin",
+        "email": "admin@example.com",
+        "roles": [
+          "admin"
+        ],
+        "groups": [
+          {
+            "name": "Admins"
+          }
+        ],
+        "messages": {},
+        "Preference": [
+          {
+            "entity": "adfasdf"
+          }
+        ],
+        "GroupMember": [
+          {
+            "cuid": "b3sopwedtwed8fusyqnr1y0f",
+            "group": {
+              "cuid": "zwwl4y4ey32rudgz0ta3msex",
+              "name": "Admins",
+              "GroupRole": [
+                {
+                  "role": "admin"
+                }
+              ]
+            },
+            "createdAt": "2023-01-21T05:57:38.431Z"
+          }
+        ],
+        "preferences": {
+          "adfasdf": "werwer",
+          "language": "en"
+        }
+      },
+      "requestContext": {
+        "callbackWaitsForEmptyEventLoop": false
+      }
+    },
+    "message": "Groups are for the many, try \"asdfs\" plural.",
+    "source": "api\\undefined"
+  }
+]

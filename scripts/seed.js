@@ -40,12 +40,19 @@ let getSeedFilesDir = () => {
     let dir = `./scripts/seedFiles/backup-${dateString}/`
     //console.log('checking for seed files in', dir)
     if (i === 10 && !fs.existsSync(dir)) {
-      console.log('no seed files found')
+      console.log('no dated seed files found')
       process.exit(1)
     }
     if (fs.existsSync(dir)) {
       console.log('found seed files in', dir)
       seedFilesDir = `./seedFiles/backup-${dateString}/`
+      break
+    }
+    // use initial seed files
+    // check if directory ./scripts/seedFiles/initialSeed/
+    seedFilesDir = './seedFiles/initialSeed/'
+    if (fs.existsSync(seedFilesDir)) {
+      console.log('found seed files in', seedFilesDir)
       break
     }
   }
@@ -105,7 +112,7 @@ let seedHandler = async ({ seedObject }) => {
       }
       debugLog(`${key} - bulk inserting ${newData.length} records`)
       let outputOfFirstSeed = null;
-      console.log({DATABASE_URL: process.env.DATABASE_URL})
+      //console.log({DATABASE_URL: process.env.DATABASE_URL})
       let isPostgres = process.env.DATABASE_URL.includes('postgresql:')
       console.log({isPostgres})
       if(process.env.DATABASE_URL.includes('postgresql:')){
@@ -162,14 +169,16 @@ export default async ({ args }) => {
     const firstSeed = {
       group: require(`${seedFilesDir}Group.json`),
       user: require(`${seedFilesDir}User.json`),
-
     }
+    debugLog('fristseed loaded')
     const secondSeed = {
       log: require(`${seedFilesDir}Log.json`),
       message: require(`${seedFilesDir}Message.json`),
       preference: require(`${seedFilesDir}Preference.json`),
       property: require(`${seedFilesDir}Property.json`),
+      sideBarItem: require(`${seedFilesDir}SideBarItem.json`),
     }
+
 
     //console.log('firstSeed', firstSeed)
     const db = new PrismaClient()
@@ -186,6 +195,22 @@ export default async ({ args }) => {
     await seedHandler({ seedObject: firstSeed })
 
     await seedHandler({ seedObject: secondSeed })
+
+    await (async ()=>{
+      // lets create a page record for the site...
+      // we're going to copy the readme.md content into a page record
+      // page's have a cuid, title, and content
+      let readMeContent = fs.readFileSync('./README.md', 'utf8')
+      let page = {
+        cuid: 'cli6u6c2g000cgusgmvf8nd3z',
+        slug: 'about',
+        title: 'About',
+        content: readMeContent,
+      }
+      await db.page.deleteMany({}) // delete all records
+      await db.page.create({ data: page })
+
+    })()
     // everything else
     // now look up the admin group, and the user jacebenson
     // then create a groupMember record for jacebenson in the admin group
