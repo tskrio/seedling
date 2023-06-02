@@ -45,7 +45,7 @@ let getFieldsAndSelect = async ({ table, formDefinition, listDefinition }) => {
   }
   returnObj.fields = fields.map((field) => {
     // if the field is a named property in the listFields, then we return ...values
-    //console.log({ field })
+    console.log({ field })
     if (definedFields[field.name]) {
       return {
         ...field,

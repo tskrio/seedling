@@ -195,6 +195,32 @@ const FormComponent = ({
         </pre>
       )
     }
+    if (field.type === 'json-editable') {
+      html = (
+        <FormControl pt={2} key={field.name} isInvalid={errors[field.name]}>
+          <FormLabel htmlFor={field.name}>{field.prettyName}</FormLabel>
+          <Textarea
+            font={'monospace'}
+            id={field.name}
+            placeholder={field.placeholder || '...' || ''}
+            readOnly={field.readOnly || false}
+            {...register(field.name, {
+              required: field?.required || false,
+              minLength: field.minLength,
+              onChange: field?.onChange,
+            })}
+            defaultValue={JSON.stringify(
+              record?.[field.name] || field.defaultValue,
+              null,
+              '  '
+            )}
+          />
+          <FormErrorMessage>
+            {errors[field.name] && errors[field.name].message}
+          </FormErrorMessage>
+        </FormControl>
+      )
+    }
     return html
   })
   return (

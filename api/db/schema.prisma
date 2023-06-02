@@ -146,3 +146,14 @@ model Page {
   @@index([slug])
   @@index([title])
 }
+
+model FormDefinition {
+  cuid      String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+  updatedBy String?
+  table     String   @unique
+  title     String
+  content   String
+}

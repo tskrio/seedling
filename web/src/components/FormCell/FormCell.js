@@ -20,6 +20,8 @@ import { toast, Toaster } from '@redwoodjs/web/toast'
 import AutoResizeTextarea from 'src/components/AutoResizeTextarea'
 import LookupCell from 'src/components/LookupCell'
 import { tableNames } from 'src/lib/atomicFunctions'
+import IconPicker from '../IconPicker/IconPicker'
+import { useEffect } from 'react'
 export const QUERY = gql`
   query FindRecord($table: String!, $cuid: String) {
     record: readRecord(table: $table, cuid: $cuid) {
@@ -65,7 +67,6 @@ let DELETE_RECORD_MUTATION = gql`
   }
 `
 export const beforeQuery = ({ table, cuid }) => {
-  console.log({ file: 'formcell.js', function: 'beforeQuery', table, cuid })
   //let { pascalTable } = tableNames({ table })
   let camelTable = camelCase(table, { pascalCase: false })
   let pluralTable = pluralize(camelTable, 2)
@@ -97,8 +98,7 @@ export const Failure = ({ error }) => (
   </div>
 )
 
-export const Success = ({ record, onClose }) => {
-  console.log({ file: 'formcell.js', function: 'Success', record, onClose })
+export const Success = ({ record, onClose, table, emptyTable }) => {
   // Prep the form for submission
   const methods = useForm()
   const {
@@ -106,8 +106,22 @@ export const Success = ({ record, onClose }) => {
     register,
     setValue,
     getValues,
-    formState: { errors, isSubmitting },
+    formState: { isDirty, dirtyFields, errors, isSubmitting },
   } = methods
+    // lets make a client script for the 'formDefinitions' table that when the form is loaded, sets the value to the
+  // to the table name
+  let [updateCount, setUpdateCount] = React.useState(0)
+  useEffect(() => {
+    // onload scripts here
+    let loadedValues = getValues()
+    console.log({function: 'useEffect', loadedValues, dirtyFields, emptyTable, table})
+    if(emptyTable === 'test') {
+      setValue('table', loadedValues.table || table)
+      setValue('content', loadedValues.content || `{\n\t"table":""\n}`)
+    }
+    loadedValues = getValues()
+  }, [updateCount])
+//
   const [updateRecord, { loading, error }] = useMutation(
     UPDATE_RECORD_MUTATION,
     {
@@ -245,6 +259,8 @@ export const Success = ({ record, onClose }) => {
             <summary>Debug Form Result</summary>
             <pre>{JSON.stringify(record.result, null, 2)}</pre>
           </details>
+          <details>
+            <summary>Debug Form Values</summary>
           <Box border={'1px solid black'} p={2} m={2} rounded={'md'}>
             <Text>Generally Hidden</Text>
             <FormControl>
@@ -256,6 +272,7 @@ export const Success = ({ record, onClose }) => {
               <Input readOnly={true} defaultValue={record.cuid} />
             </FormControl>
           </Box>
+          </details>
           {record.fields.map((field, index) => {
             let fieldType = field?.definition?.type || 'text'
 
@@ -286,7 +303,9 @@ export const Success = ({ record, onClose }) => {
                 setWhere(`${field?.definition?.display}/contains/${value}`)
               }, 500)
             }
-
+            let defaultValue = record?.result?.[field.name] ||
+                      field?.definition?.defaultValue ||
+                      ''
             return (
               <FormControl key={`formcell-${field.name}-${index}`}>
 
@@ -302,27 +321,21 @@ export const Success = ({ record, onClose }) => {
                       required: field?.definition?.required || false,
                       maxLength: field?.definition?.maxLength || 255,
                       minLength: field?.definition?.minLength || 0,
-                      onChange: field?.definition?.onChange || null,
+                      onChange: ()=>{
+                        setUpdateCount(updateCount+1)
+                        field?.definition?.onChange || null
+                      }
                     })}
-                    defaultValue={
-                      record?.result?.[field.name] ||
-                      field?.definition?.defaultValue ||
-                      ''
-                    }
+                    defaultValue={defaultValue}
                   />
                 )}
 
                 {fieldType === 'textarea' && (
                   <Box>
-                    ...
                     <AutoResizeTextarea
                       id={field.name}
                       {...register(field.name)}
-                      defaultValue={
-                        record?.result?.[field.name] ||
-                        field?.definition?.defaultValue ||
-                        ''
-                      }
+                      defaultValue={defaultValue}
                     />
                     {/*
                   <Textarea
@@ -341,11 +354,7 @@ export const Success = ({ record, onClose }) => {
                     id={field.name}
                     fontFamily={'mono'}
                     {...register(field.name)}
-                    defaultValue={
-                      record?.result?.[field.name] ||
-                      field?.definition?.defaultValue ||
-                      ''
-                    }
+                    defaultValue={defaultValue}
                   />
                 )}
                 {fieldType === 'reference' && (
@@ -389,11 +398,7 @@ export const Success = ({ record, onClose }) => {
                       minLength: field?.definition?.minLength || 0,
                       onChange: field?.definition?.onChange || null,
                     })}
-                    defaultValue={
-                      record?.result?.[field.name] ||
-                      field?.definition?.defaultValue ||
-                      ''
-                    }
+                    defaultValue={defaultValue}
                   />
                 )}
                 {fieldType === 'select' && (
@@ -405,11 +410,7 @@ export const Success = ({ record, onClose }) => {
                       minLength: field?.definition?.minLength || 0,
                       onChange: field?.definition?.onChange || null,
                     })}
-                    defaultValue={
-                      record?.result?.[field.name] ||
-                      field?.definition?.defaultValue ||
-                      ''
-                    }
+                    defaultValue={defaultValue}
                   >
                     {field?.definition?.options?.map((option, index) => {
                       return (

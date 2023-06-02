@@ -19,7 +19,6 @@ import { useAuth } from 'src/auth'
 const Routes = () => {
   return (
     <Router useAuth={useAuth}>
-      <Route path="/form" page={FormPage} name="form" />
       <Route path="/forgot-password" whileLoadingAuth={() => <>Loading...</>} page={ForgotPasswordPage} name="forgotPassword" />
       <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
       <Route path="/login" page={LoginPage} name="login" />
@@ -33,6 +32,9 @@ const Routes = () => {
           <Route path="/about" page={AboutPage} name="about" />
           <Route path="/my-profile" page={MyProfilePage} name="myProfile" />
           <Set>
+             <Route path="/form/{table}/{cuid:String}" page={FormPage} name="form" />
+             <Route path="/form/{table}" page={FormPage} name="form" />
+
             {/*<Route path="/list/users" page={AboutPage} name="list" />{/*this is how to override one*/}
             {/*<Route path="/list/{table}/{params...}" page={ListPage} name="list" />
             <Route path="/list/{table}" page={ListPage} name="list" />
@@ -61,8 +63,8 @@ const Routes = () => {
             {/*<Route path="/list/{table}/{params...}" page={ListPage} name="list" />*/}
             {/*<Route path="/list/{table}" page={ListPage} name="list" />*/}
 
-            <Route path="/form/{table}/{cuid}" page={FormPage} name="formEdit" />
-            <Route path="/form/{table}" page={FormPage} name="form" />
+            {/*<Route path="/form/{table}/{cuid}" page={FormPage} name="formEdit" />*/}
+            {/*<Route path="/form/{table}" page={FormPage} name="form" />*/}
           </Set>
         </Private>
       </Set>

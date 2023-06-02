@@ -1,4 +1,16 @@
 export const definitions = {
+  FormDefinition: {
+    table: {
+      label: 'Table',
+    },
+    title: {
+      label: 'Title',
+    },
+    content: {
+      label: 'Content',
+      type: 'textarea',
+    },
+  },
   SideBarItem: {
     name: {
       label: 'Name',

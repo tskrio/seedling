@@ -43,6 +43,19 @@ export const definitions = {
    * defaultOptions (for simple lists) array of strings or objects with label and value
    *
    */
+  FormDefinition: {
+    //✅
+    table: {
+      label: 'Table',
+    },
+    title: {
+      label: 'TitleForForm',
+    },
+    content: {
+      label: 'Content',
+      type: 'textarea',
+    },
+  },
   SideBarItem: {
     name: {
       label: 'Name',
@@ -90,6 +103,7 @@ export const definitions = {
   },
 
   Page: {
+    //✅
     title: {
       label: 'Title',
       canSort: true,
@@ -104,6 +118,7 @@ export const definitions = {
     }
   },
   User: {
+    //✅
     username: {
       label: 'User Name',
       canSort: false,
